@@ -1,3 +1,17 @@
 body {
-    padding: 10px;
+  padding: 10px;
+}
+
+
+
+.thumb-title-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-link {
+  font-size: 1.5em;
+  color: rgb(22, 57, 133);
 }
