@@ -21,6 +21,10 @@
             <input type="number" name="bid" step="0.01" min="{{ listing.price }}">
             <input type="submit" value="Place Bid">
         </form>
+        <form action="/add_to_watchlist/{{ listing.id }}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Add to Watchlist">
+        </form>
     {% endif %}
 
 </p>
