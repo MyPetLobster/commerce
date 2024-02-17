@@ -9,7 +9,18 @@
             <li>
                 <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                 <p>
-                    Current Bid: {{ listing.price }}
+                    {% if listing.active == False %}
+                        -- BIDDING CLOSED -- </br>
+                        {% for winner in winners %}
+                            {% if winner.listing == listing %}
+                                You Won! (See email for details on how to proceed.)
+                            {% else %}
+                                Winner: {{ winner.user.username }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Current Bid: {{ listing.price }}
+                    {% endif %}
                 </p>
                 <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}

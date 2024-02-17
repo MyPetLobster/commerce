@@ -25,6 +25,12 @@
             {% csrf_token %}
             <input type="submit" value="Add to Watchlist">
         </form>
+        {% if listing.user == user %}
+        <form action="/close_listing/{{ listing.id }}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Close Listing">
+        </form>
+        {% endif %}
     {% endif %}
 
 </p>

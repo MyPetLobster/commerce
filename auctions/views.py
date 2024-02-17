@@ -124,8 +124,19 @@ def listing(request, listing_id):
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
+    winners = Winner.objects.filter(user=request.user)
+    print (winners)
+    print (listings)
+
+    for listing in listings:
+        print (listing.title)
+        for winner in winners:
+            if winner.listing == listing:
+                print ("You Won")
+
     return render(request, "auctions/watchlist.html", {
-        "listings": listings
+        "listings": listings,
+        "winners": winners
     })
 
 
@@ -148,3 +159,17 @@ def remove_from_watchlist(request, listing_id):
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
         watchlist_item.delete()
         return HttpResponseRedirect(reverse("watchlist"))
+    
+
+def close_listing(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+    winner = Winner.objects.create(
+        amount=listing.price,
+        listing=listing,
+        user=highest_bid.user
+    )
+    winner.save()
+    listing.active = False
+    listing.save()
+    return HttpResponseRedirect(reverse("index"))
