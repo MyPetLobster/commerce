@@ -16,9 +16,9 @@
         </ul>
     {% endif %}
     {% if user.is_authenticated %}
-        <form action="/{{ listing.name }}/{{ listing.id }}" method="post">
+        <form action="/listing/{{ listing.id }}" method="post">
             {% csrf_token %}
-            <input type="number" name="bid" step="0.01" min="{{ listing.price }}">
+            <input type="number" name="amount" step="0.01" min="{{ listing.price }}">
             <input type="submit" value="Place Bid">
         </form>
         <form action="/add_to_watchlist/{{ listing.id }}" method="post">

@@ -104,6 +104,18 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
+    if request.method == "POST":
+        amount = request.POST["amount"]
+        bid = Bid.objects.create(
+            amount=amount,
+            listing=listing,
+            user=request.user
+        )
+        bid.save()
+        listing.price = bid.amount
+        listing.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+    
     return render(request, "auctions/listing.html", {
         "listing": listing
     })
