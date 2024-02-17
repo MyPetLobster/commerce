@@ -104,6 +104,10 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
+    try:
+        winner = Winner.objects.get(listing=listing)
+    except Winner.DoesNotExist:
+        winner = None
     if request.method == "POST":
         amount = request.POST["amount"]
         bid = Bid.objects.create(
@@ -116,8 +120,13 @@ def listing(request, listing_id):
         listing.save()
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     
+    
+    # print (f'winner - {winner.listing}')
+    # print (f'listing - {listing}')
+
     return render(request, "auctions/listing.html", {
-        "listing": listing
+        "listing": listing,
+        "winner": winner
     })
 
 
@@ -125,14 +134,14 @@ def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
     winners = Winner.objects.filter(user=request.user)
-    print (winners)
-    print (listings)
+    # print (winners)
+    # print (listings)
 
-    for listing in listings:
-        print (listing.title)
-        for winner in winners:
-            if winner.listing == listing:
-                print ("You Won")
+    # for listing in listings:
+    #     print (listing.title)
+    #     for winner in winners:
+    #         if winner.listing == listing:
+    #             print ("You Won")
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,

@@ -16,20 +16,30 @@
         </ul>
     {% endif %}
     {% if user.is_authenticated %}
-        <form action="/listing/{{ listing.id }}" method="post">
-            {% csrf_token %}
-            <input type="number" name="amount" step="0.01" min="{{ listing.price }}">
-            <input type="submit" value="Place Bid">
-        </form>
-        <form action="/add_to_watchlist/{{ listing.id }}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Add to Watchlist">
-        </form>
-        {% if listing.user == user %}
-        <form action="/close_listing/{{ listing.id }}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Close Listing">
-        </form>
+        {% if listing.active == True %}
+            <form action="/listing/{{ listing.id }}" method="post">
+                {% csrf_token %}
+                <input type="number" name="amount" step="0.01" min="{{ listing.price }}">
+                <input type="submit" value="Place Bid">
+            </form>
+            <form action="/add_to_watchlist/{{ listing.id }}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Add to Watchlist">
+            </form>
+            {% if listing.user == user %}
+            <form action="/close_listing/{{ listing.id }}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Close Listing">
+            </form>
+            {% endif %}
+        {% else %}
+            -- BIDDING CLOSED -- </br>
+            {% if winner.user == user %}
+                You Won! (See email for details on how to proceed.)
+            {% else %}
+                Winner: {{ winner.user.username }}
+            {% endif %}
+
         {% endif %}
     {% endif %}
 
