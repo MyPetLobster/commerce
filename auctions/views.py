@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,7 +13,6 @@ class ListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ['title', 'description', 'price', 'image', 'categories']
-
 
 class CommentForm(ModelForm):
     class Meta:
@@ -77,7 +77,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-
+@login_required
 def create(request):
     if request.method == "POST":
         title = request.POST["title"]
@@ -132,6 +132,7 @@ def listing(request, listing_id):
     })
 
 
+@login_required
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
@@ -143,6 +144,7 @@ def watchlist(request):
     })
 
 
+@login_required
 def add_to_watchlist(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, listing=listing)
@@ -156,6 +158,7 @@ def add_to_watchlist(request, listing_id):
     })
 
 
+@login_required
 def remove_from_watchlist(request, listing_id):
     if request.method == "POST":
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
@@ -163,6 +166,7 @@ def remove_from_watchlist(request, listing_id):
         return HttpResponseRedirect(reverse("watchlist"))
     
 
+@login_required
 def close_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
@@ -177,6 +181,7 @@ def close_listing(request, listing_id):
     return HttpResponseRedirect(reverse("index"))
 
 
+@login_required
 def comment(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     comment = request.POST["comment"]
@@ -205,7 +210,6 @@ def categories(request):
 
 
 def category(request, category_id):
-
     listings = Listing.objects.filter(categories=category_id)
     category = Category.objects.get(pk=category_id)
     return render(request, "auctions/category.html", {
