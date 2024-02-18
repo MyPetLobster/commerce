@@ -31,12 +31,10 @@ def index(request):
 def login_view(request):
     if request.method == "POST":
 
-        # Attempt to sign user in
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
 
-        # Check if authentication successful
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
@@ -66,7 +64,6 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
@@ -87,9 +84,8 @@ def create(request):
         description = request.POST["description"]
         price = request.POST["price"]
         image = request.POST["image"]
-        category_ids = request.POST.getlist("categories")  # Assuming categories are submitted as a list of IDs
+        category_ids = request.POST.getlist("categories")  
 
-        # Create the listing object
         listing = Listing.objects.create(
             title=title,
             description=description,
@@ -98,7 +94,6 @@ def create(request):
             user=request.user
         )
 
-        # Add categories to the listing using the set() method
         listing.categories.set(category_ids)
 
         return HttpResponseRedirect(reverse("index"))
@@ -141,14 +136,6 @@ def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
     winners = Winner.objects.filter(user=request.user)
-    # print (winners)
-    # print (listings)
-
-    # for listing in listings:
-    #     print (listing.title)
-    #     for winner in winners:
-    #         if winner.listing == listing:
-    #             print ("You Won")
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
@@ -171,7 +158,6 @@ def add_to_watchlist(request, listing_id):
 
 def remove_from_watchlist(request, listing_id):
     if request.method == "POST":
-        # Get the watchlist item that corresponds to the listing
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
         watchlist_item.delete()
         return HttpResponseRedirect(reverse("watchlist"))
@@ -201,7 +187,6 @@ def comment(request, listing_id):
     else:
         anonymous = False
     
-
     comment = Comment.objects.create(
         comment=comment,
         anonymous=anonymous,
