@@ -1,12 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-    Active Listings
+    All Listings
 {% endblock %}
 
 {% block navbar %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
@@ -23,7 +23,10 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>All Listings</h2>
+    <p></p>
+
+    <h3>Active Listings</h3>
     <ul>
         {% for listing in listings %}
             {% if listing.active == True %}
@@ -39,6 +42,30 @@
                     <p>Current Bid: {{ listing.price }}</br>
                     Description: {{ listing.description }}
                     </p>    
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <h3>Closed Listings</h3>
+    <ul>
+        {% for listing in listings %}
+            {% if listing.active == False %}
+                <li class="li-listing">
+                    <div class="thumb-title-div">
+                        {% if listing.image != "" %}
+                        <div class="thumb-div">
+                            <img src="{{ listing.image }}" height="100">
+                        </div>
+                        {% endif %}
+                        <a class="title-link title-link-closed" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                    </div>
+                    <p>Final Bid: {{ listing.price }}</br>
+                        Winner: {% for winner in winners %}
+                                    {% if winner.listing == listing %}
+                                        {{ winner.user.username }}
+                                    {% endif %}
+                                {% endfor %}
+                    </p>   
                 </li>
             {% endif %}
         {% endfor %}

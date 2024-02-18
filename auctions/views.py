@@ -28,6 +28,15 @@ def index(request):
     })
 
 
+def listings(request):
+    listings = Listing.objects.all()
+    winners = Winner.objects.all()
+    return render(request, "auctions/listings.html", {
+        "listings": listings,
+        "winners": winners
+    })
+
+
 def login_view(request):
     if request.method == "POST":
 
