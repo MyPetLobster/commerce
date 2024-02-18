@@ -1,3 +1,4 @@
+import math
 from datetime import datetime, timezone
 
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.forms import ModelForm
+from django.utils import timezone
 
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner
 
@@ -118,18 +120,20 @@ def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
 
-    # listing_date = listing.date
-    # current_date_time = datetime.now(timezone.utc)
+    listing_date_utc = listing.date
+    listing_date = listing_date_utc.astimezone(timezone.get_current_timezone())
+    current_date_time = timezone.now()
 
-    # seconds_remaining = 259200 - (current_date_time - listing_date).seconds
-    # hours_remaining = seconds_remaining // 3600
-    # minutes_remaining = (seconds_remaining % 3600) // 60
-    # seconds_remaining = (seconds_remaining % 3600) % 60
-    # time_remaining = f"{hours_remaining}h {minutes_remaining}m {seconds_remaining}s"
+    diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    # print(f"listing date: {listing.date}")
-    # print("TIME REMAINING")
-    # print(time_remaining)
+    if diff_seconds < 0:
+        time_left = "listing has ended"
+    else:
+        seconds_left = max(0, 259200 - diff_seconds)
+        hours_left, remainder = divmod(seconds_left, 3600)
+        minutes_left, seconds_left = divmod(remainder, 60)
+
+        time_left = f"{int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
     try:
         winner = Winner.objects.get(listing=listing)
@@ -152,7 +156,8 @@ def listing(request, listing_id):
         "listing": listing,
         "winner": winner,
         "comments": comments,
-        "comment_form": CommentForm()
+        "comment_form": CommentForm(),
+        "time_left": time_left
     })
 
 

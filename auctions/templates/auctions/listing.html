@@ -32,7 +32,8 @@
         <img src="{{ listing.image }}" height="100">
     {% endif %}
     <p>Created by: {{ listing.user.username }}</br>
-       Current Bid: {{ listing.price }}</br>
+       Current Bid: {{ listing.price }}</br>    
+       Time Left: {{ time_left }}</br>
        Description: {{ listing.description }}</br>
     
     {% if listing.categories %}
