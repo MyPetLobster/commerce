@@ -4,6 +4,24 @@
     Active Listings
 {% endblock %}
 
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="#">All Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+    </li>
+{% endblock %}
+
 {% block body %}
     <h2>Active Listings</h2>
     <ul>
