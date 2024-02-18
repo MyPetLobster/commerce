@@ -15,6 +15,7 @@
             {% endfor %}
         </ul>
     {% endif %}
+    </p>
     {% if user.is_authenticated %}
         {% if listing.active == True %}
             <form action="/listing/{{ listing.id }}" method="post">
@@ -39,10 +40,28 @@
             {% else %}
                 Winner: {{ winner.user.username }}
             {% endif %}
-
         {% endif %}
+
+        <form action="/comment/{{ listing.id }}" method="post">
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type="submit" value="Submit">
+        </form>
+
+
+
+        <h2>Comments</h2>
+        <ul>
+            {% for comment in comments %}
+                {% if comment.anonymous == True %}
+                <li>Anonymous: {{ comment.comment }}</li>
+                {% else %}
+                <li>{{ comment.user.username }}: {{ comment.comment }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
     {% endif %}
 
-</p>
 
 {% endblock %}

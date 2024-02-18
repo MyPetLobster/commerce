@@ -14,6 +14,12 @@ class ListingForm(ModelForm):
         fields = ['title', 'description', 'price', 'image', 'categories']
 
 
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment', 'anonymous']
+
+
 def index(request):
     listings = Listing.objects.all()
 
@@ -104,10 +110,13 @@ def create(request):
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
+    comments = Comment.objects.filter(listing=listing)
+
     try:
         winner = Winner.objects.get(listing=listing)
     except Winner.DoesNotExist:
         winner = None
+
     if request.method == "POST":
         amount = request.POST["amount"]
         bid = Bid.objects.create(
@@ -119,14 +128,12 @@ def listing(request, listing_id):
         listing.price = bid.amount
         listing.save()
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-    
-    
-    # print (f'winner - {winner.listing}')
-    # print (f'listing - {listing}')
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
-        "winner": winner
+        "winner": winner,
+        "comments": comments,
+        "comment_form": CommentForm()
     })
 
 
@@ -182,3 +189,24 @@ def close_listing(request, listing_id):
     listing.active = False
     listing.save()
     return HttpResponseRedirect(reverse("index"))
+
+
+def comment(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    comment = request.POST["comment"]
+    anonymous = request.POST.get("anonymous", "off")
+
+    if anonymous == "on":
+        anonymous = True
+    else:
+        anonymous = False
+    
+
+    comment = Comment.objects.create(
+        comment=comment,
+        anonymous=anonymous,
+        listing=listing,
+        user=request.user
+    )
+    comment.save()
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
