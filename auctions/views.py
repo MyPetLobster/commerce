@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -115,6 +117,19 @@ def create(request):
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
+
+    # listing_date = listing.date
+    # current_date_time = datetime.now(timezone.utc)
+
+    # seconds_remaining = 259200 - (current_date_time - listing_date).seconds
+    # hours_remaining = seconds_remaining // 3600
+    # minutes_remaining = (seconds_remaining % 3600) // 60
+    # seconds_remaining = (seconds_remaining % 3600) % 60
+    # time_remaining = f"{hours_remaining}h {minutes_remaining}m {seconds_remaining}s"
+
+    # print(f"listing date: {listing.date}")
+    # print("TIME REMAINING")
+    # print(time_remaining)
 
     try:
         winner = Winner.objects.get(listing=listing)

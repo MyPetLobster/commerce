@@ -31,17 +31,15 @@
     {% if listing.image != "" %}
         <img src="{{ listing.image }}" height="100">
     {% endif %}
-    <p>Created by: {{ listing.user.username }}</p>
-    <p>Current Bid: {{ listing.price }}</br>
+    <p>Created by: {{ listing.user.username }}</br>
+       Current Bid: {{ listing.price }}</br>
        Description: {{ listing.description }}</br>
     
     {% if listing.categories %}
         Categories: 
-        <ul>
-            {% for category in listing.categories.all %}
-                <li>{{ category }}</li>
-            {% endfor %}
-        </ul>
+        {% for category in listing.categories.all %}
+            {{ category.category }}
+        {% endfor %}
     {% endif %}
     
     </p>
