@@ -1,5 +1,9 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+    {{ Listing: listing.title }}
+{% endblock %}
+
 {% block body %}
     <h1>{{ listing.title }}</h1>
     {% if listing.image != "" %}
