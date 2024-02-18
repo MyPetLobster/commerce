@@ -1,46 +1,44 @@
-{% extends "auctions/layout.html" %}
+{% extends "auctions/layout.html" %} 
 
-{% block title %}
-    Category: {{ category.category }}
-{% endblock %}
+{% block title %} 
+Category: {{ category.category }} 
+{% endblock %} 
 
 {% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">All Listings</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-    </li>
-{% endblock %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="#">All Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+</li>
+{% endblock %} 
 
 {% block body %}
-
 <h1>{{ category.category }}</h1>
 
-<h3> #### ADD DESCRIPTION HERE ####</h3>
+<h6>{{ category.description }}</h6>
 <ul>
-    {% if not listings %}
-        <p>No listings in this category.</p>
-    {% endif %}
-    
-    {% for listing in listings %}
-        <li>
-            <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-        </li>
-    {% endfor %}
+  {% if not listings %}
+  <p>No listings in this category.</p>
+  {% endif %} {% for listing in listings %}
+  <li>
+    <a class="title-link" href="{% url 'listing' listing.id %}"
+      >{{ listing.title }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
-
 
 {% endblock %}

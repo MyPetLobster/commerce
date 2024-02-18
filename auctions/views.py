@@ -207,7 +207,8 @@ def categories(request):
 def category(request, category_id):
 
     listings = Listing.objects.filter(categories=category_id)
-
+    category = Category.objects.get(pk=category_id)
     return render(request, "auctions/category.html", {
-        "listings": listings
+        "listings": listings,
+        "category": category
     })
