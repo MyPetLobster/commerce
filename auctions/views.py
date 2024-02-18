@@ -128,6 +128,10 @@ def listing(request, listing_id):
 
     if diff_seconds < 0:
         time_left = "listing has ended"
+        if listing.active:
+            listing.active = False
+            listing.save()
+            
     else:
         seconds_left = max(0, 259200 - diff_seconds)
         hours_left, remainder = divmod(seconds_left, 3600)
