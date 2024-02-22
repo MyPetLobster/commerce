@@ -16,7 +16,7 @@ body {
 .nav-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
   justify-content: space-between;
   padding: 10px;
@@ -49,7 +49,7 @@ body {
 .thumb-title-div {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -131,6 +131,42 @@ body {
   border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
+}
+
+/* Watchlist Page */
+.watchlist-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 1px solid black;
+}
+.watchlist-content h1 {
+  position: relative;
+  left: 20px;
+}
+
+.watchlist-listing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 600px;
+  gap: 0px;
+  border: 1px solid black;
+  align-items: flex-start;
+}
+.watchlist-listing a,
+.watchlist-listing p {
+  width: 100%;
+  text-align: center;
+}
+.watchlist-listing form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
 }
 
 /*# sourceMappingURL=styles.css.map */

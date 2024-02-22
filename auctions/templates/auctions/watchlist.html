@@ -1,61 +1,52 @@
-{% extends "auctions/layout.html" %}
-
-{% block title %}
-    {{ user.username }}'s Watchlist
-{% endblock %}
-
-{% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+{% extends "auctions/layout.html" %} {% block title %} {{ user.username }}'s
+Watchlist {% endblock %} {% block navbar %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+</li>
+{% endblock %} {% block body %}
+<div class="watchlist-content">
+  <h1>{{ user.username }}'s Watchlist</h1>
+  {% if listings %}
+  <ul>
+    {% for listing in listings %}
+    <li class="watchlist-listing">
+      <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+      <p style="display: inline">
+        {% if listing.active == False %} 
+            -- BIDDING CLOSED -- 
+            {% for winner in winners %} 
+                {% if winner.listing == listing %} 
+                    You Won! (See email for details on how to proceed.) 
+                {% else %} Winner: {{ winner.user.username}} 
+                {% endif %} 
+            {% endfor %}
+        {% else %} Current Bid: {{ listing.price }}
+        {% endif %}
+      </p>
+      <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Remove from Watchlist" />
+      </form>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-    </li>
-{% endblock %}
-
-{% block body %}
-
-<h1>{{ user.username }}'s Watchlist</h1>
-{% if listings %}
-    <ul>
-        {% for listing in listings %}
-            <li>
-                <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                <p>
-                    {% if listing.active == False %}
-                        -- BIDDING CLOSED -- </br>
-                        {% for winner in winners %}
-                            {% if winner.listing == listing %}
-                                You Won! (See email for details on how to proceed.)
-                            {% else %}
-                                Winner: {{ winner.user.username }}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        Current Bid: {{ listing.price }}
-                    {% endif %}
-                </p>
-                <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" value="Remove from Watchlist">
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Your watchlist is empty.</p>
-{% endif %}
-
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Your watchlist is empty.</p>
+  {% endif %}
+</div>
 {% endblock %}

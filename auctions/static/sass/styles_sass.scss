@@ -1,7 +1,7 @@
 @mixin flex-row {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -134,8 +134,38 @@ body {
   border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
+}
 
-  label {
-    
+/* Watchlist Page */
+
+.watchlist-content {
+  @include flex-column;
+  width: 100%;
+  border: 1px solid black;
+
+  h1 {
+    position: relative;
+    left: 20px;
+  }
+}
+
+.watchlist-listing {
+  @include flex-column;
+  width: 600px;
+  gap: 0px;
+  border: 1px solid black;
+  align-items: flex-start;
+
+  a,
+  p {
+    width: 100%;
+    text-align: center;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
   }
 }
