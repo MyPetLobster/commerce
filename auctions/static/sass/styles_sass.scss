@@ -51,7 +51,7 @@ body {
   }
   .big-a {
     font-size: 1.3em;
-    }
+  }
   .small-a {
     font-size: 1em;
   }
@@ -60,13 +60,9 @@ body {
   }
 }
 
-
-
-
 .thumb-title-div {
   @include flex-row;
 }
-
 
 /* Form Styles */
 
@@ -81,5 +77,32 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999; 
+  z-index: 9999;
+}
+
+/* Listing Page */
+
+.listing-desc {
+    margin-top: 20px;
+    width: 600px;
+    border: 1px solid black;
+    padding: 20px;
+    
+}
+
+.comments-div {
+  @include flex-column;
+  margin-top: 20px;
+  width: 600px;
+  border: 1px solid black;
+
+  ul {
+    margin-top: 20px;
+    width: 100%;
+    align-items: flex-start;
+  }
+  li {
+    list-style-type: disc;
+    margin-bottom: 20px;
+  }
 }
