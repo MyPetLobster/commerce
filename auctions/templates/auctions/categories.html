@@ -26,9 +26,23 @@
     {% for category in categories %}
     <li>
       <a href="{% url 'category' category.id %}">{{ category.category }}</a>
+      <div class="description hidden">{{ category.description }}</div>
     </li>
     {% endfor %}
   </ul>
 </div>
+
+<script>
+    document.querySelectorAll(".categories-content li").forEach((li) => {
+        li.addEventListener("mouseover", () => {
+        li.querySelector(".description").classList.remove("hidden");
+        li.querySelector(".description").classList.add("visible");
+        });
+        li.addEventListener("mouseout", () => {
+        li.querySelector(".description").classList.remove("visible");
+        li.querySelector(".description").classList.add("hidden");
+        });
+    });
+</script>
 
 {% endblock %}
