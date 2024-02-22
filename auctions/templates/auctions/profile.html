@@ -28,5 +28,51 @@
 {% block body %}
 <h1>{{ user.username }}'s Yard</h1>
 
+<div class="profile-listings">
+    <h2>Active Listings</h2>
+    <ul>
+        {% for listing in user.listings.all %}
+            {% if listing.active == True %}
+                <li class="li-listing">
+                    <div class="thumb-title-div">
+                        {% if listing.image != "" %}
+                        <div class="thumb-div">
+                            <img src="{{ listing.image }}" height="100">
+                        </div>
+                        {% endif %}
+                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                    </div>
+                    <p>Current Bid: {{ listing.price }}</p>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <h2>Closed Listings</h2>
+    <ul>
+        {% for listing in user.listings.all %}
+            {% if listing.active == False %}
+                <li class="li-listing">
+                    <div class="thumb-title-div">
+                        {% if listing.image != "" %}
+                        <div class="thumb-div">
+                            <img src="{{ listing.image }}" height="100">
+                        </div>
+                        {% endif %}
+                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                </li>
+                <p>Final Bid: {{ listing.price }}</br>
+                    {% for winner in winners %}
+                        {% if winner.listing == listing %}
+                            Winner: {{ winner.user.username }}
+                        {% elif forloop.last %}
+                            No winner
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
 
 {% endblock %}

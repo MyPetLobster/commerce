@@ -202,13 +202,16 @@ def remove_from_watchlist(request, listing_id):
 @login_required
 def close_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
-    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-    winner = Winner.objects.create(
-        amount=listing.price,
-        listing=listing,
-        user=highest_bid.user
-    )
-    winner.save()
+    try:
+        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+        winner = Winner.objects.create(
+            amount=listing.price,
+            listing=listing,
+            user=highest_bid.user
+        )
+        winner.save()
+    except:
+        pass
     listing.active = False
     listing.save()
     return HttpResponseRedirect(reverse("index"))
@@ -255,8 +258,11 @@ def profile(request, user_id):
     user = User.objects.get(pk=user_id)
     listings = Listing.objects.filter(user=user)
     watchlist = Watchlist.objects.filter(user=user)
+    winners = Winner.objects.filter(listing__user=user)
+    print(winners)
     return render(request, "auctions/profile.html", {
         "user": user,
         "listings": listings,
-        "watchlist": watchlist
+        "watchlist": watchlist,
+        "winners": winners
     })
