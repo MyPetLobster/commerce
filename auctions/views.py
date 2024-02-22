@@ -112,6 +112,7 @@ def create(request):
         listing = Listing.objects.create(
             title=title,
             description=description,
+            starting_bid=price,
             price=price,
             image=image,
             user=request.user
@@ -269,7 +270,7 @@ def profile(request, user_id):
     listings = Listing.objects.filter(user=user)
     watchlist = Watchlist.objects.filter(user=user)
     winners = Winner.objects.filter(listing__user=user)
-    
+
     return render(request, "auctions/profile.html", {
         "user": user,
         "listings": listings,
