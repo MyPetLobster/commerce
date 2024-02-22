@@ -85,7 +85,9 @@
                         {% endif %}
                         <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                 </li>
-
+                {% if listing.price == listing.starting_bid %}
+                    <p>No bids</p>
+                {% else %}
                 <p>Final Bid: {{ listing.price }}</br>
                     {% for winner in winners %}
                         {% if winner.listing == listing %}
@@ -95,6 +97,7 @@
                         {% endif %}
                     {% endfor %}
                 </p>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </ul>
