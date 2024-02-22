@@ -1,0 +1,37 @@
+@mixin centered-text {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+$text-color-dark: #333;
+$text-color-light: #f4f4f4;
+$background-color-dark: #f4f4f4;
+$background-color-light: #333;
+
+body {
+  padding: 10px;
+}
+
+.nav-container {
+  @include flex-row;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+h1 {
+  padding-left: 16px;
+  font-size: 3em;
+  color: $text-color-dark;
+}
+
+.thumb-title-div {
+  @include flex-row;
+}

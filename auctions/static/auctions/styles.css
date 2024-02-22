@@ -2,7 +2,20 @@ body {
   padding: 10px;
 }
 
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 10px;
+}
 
+h1 {
+  padding-left: 16px;
+  font-size: 3em;
+  color: #333;
+}
 
 .thumb-title-div {
   display: flex;
@@ -11,7 +24,4 @@ body {
   gap: 10px;
 }
 
-.title-link {
-  font-size: 1.5em;
-  color: rgb(22, 57, 133);
-}
+/*# sourceMappingURL=styles.css.map */
