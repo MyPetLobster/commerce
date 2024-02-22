@@ -270,13 +270,15 @@ def profile(request, user_id):
     listings = Listing.objects.filter(user=user)
     watchlist = Watchlist.objects.filter(user=user)
     winners = Winner.objects.filter(listing__user=user)
+    current_user = request.user
 
     return render(request, "auctions/profile.html", {
         "user": user,
         "listings": listings,
         "watchlist": watchlist,
         "winners": winners,
-        "user_info_form": UserInfoForm(instance=user)
+        "user_info_form": UserInfoForm(instance=user),
+        "current_user": current_user
     })
 
 

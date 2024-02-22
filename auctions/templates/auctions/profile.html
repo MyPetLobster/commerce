@@ -37,8 +37,11 @@
         <li>Last Name: {{ user.last_name }}</li>
         <li>Joined: {{ user.date_joined }}</li>
     </ul>
+    {% if current_user == user %}
+        <p>Change your profile information or password below.</p>
     <button id="edit-button">Edit Profile</button>
     <button id="change-password">Change Password</button>
+    
 </div>
 
 <div id="edit-profile" class="hidden-form">
@@ -60,7 +63,7 @@
         <button type="button" id="cancel-password">Cancel</button>
     </form>
 </div>
-
+{% endif %}
 <div class="profile-listings">
     <h2>Active Listings</h2>
     <ul>
