@@ -1,6 +1,7 @@
 import math
 from datetime import datetime, timezone
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -285,3 +286,30 @@ def edit(request, user_id):
     if form.is_valid():
         form.save()
         return redirect("profile", user_id=user_id)
+    else:
+        return render(request, "auctions/profile.html", {
+            "user_info_form": form
+        })
+    
+
+@login_required
+def change_password(request, user_id):
+    user = User.objects.get(pk=user_id)
+
+    old_password = request.POST["old_password"]
+    new_password = request.POST["new_password1"]
+    new_password_confirm = request.POST["new_password2"]
+
+    if not user.check_password(old_password):
+        messages.error(request, "Old password is incorrect")
+        return redirect("profile", user_id=user_id)
+
+    if new_password != new_password_confirm:
+        messages.error(request, "Passwords do not match")
+        return redirect("profile", user_id=user_id)
+    
+    user.set_password(new_password)
+    user.save()
+    
+    messages.success(request, "Password changed successfully")
+    return redirect("profile", user_id=user_id)

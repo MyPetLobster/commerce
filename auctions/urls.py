@@ -19,4 +19,5 @@ urlpatterns = [
     path('listings', views.listings, name="listings"),
     path('profile/<int:user_id>', views.profile, name='profile'),
     path('edit/<int:user_id>', views.edit, name='edit'),
+    path('change_password/<int:user_id>', views.change_password, name='change_password'),
 ]

@@ -8,6 +8,17 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
+        {% if messages %}
+            <div class="message">
+                <p>
+                    {% for message in messages %}
+                        {{ message }}</br>
+                    {% endfor %}
+                </p>
+                <a href="#" class="del-msg">&times;</a>
+            </div>
+
+        {% endif %}
         <h1>Yard Sale</h1>
         <div class="nav-container">
             <ul class="nav">
@@ -41,3 +52,16 @@
         {% endblock %}
     </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.del-msg').onclick = function() {
+            this.parentElement.style.display = 'none';
+        }
+    });
+
+
+    setTimeout(function() {
+        document.querySelector('.message').style.display = 'none';
+    }, 3000);
+</script>
