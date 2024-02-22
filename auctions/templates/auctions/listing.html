@@ -29,7 +29,8 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ listing.title }}</h1>
+<div class="page-content">
+    <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
         <img src="{{ listing.image }}" height="100">
@@ -97,8 +98,6 @@
                 {% endif %}
             {% endfor %}
         </ul>
-
     {% endif %}
-
-
+</div>
 {% endblock %}

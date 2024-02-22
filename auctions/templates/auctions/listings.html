@@ -26,10 +26,11 @@
 {% endblock %}
 
 {% block body %}
-    <h2>All Listings</h2>
+<div class="page-content">
+    <h1 class="page-heading-h1">All Listings</h1>
     <p></p>
 
-    <h3>Active Listings</h3>
+    <h3 class="page-heading-h3">Active Listings</h3>
     <ul>
         {% for listing in listings %}
             {% if listing.active == True %}
@@ -40,16 +41,17 @@
                             <img src="{{ listing.image }}" height="100">
                         </div>
                         {% endif %}
-                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                        <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                     </div>
-                    <p>Current Bid: {{ listing.price }}</br>
-                    Description: {{ listing.description }}
+                    <p><span class="bold">Current Bid:</span> {{ listing.price }}</br>
+                    <span class="bold">Description:</span> {{ listing.description }}</br>
+                    <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
                     </p>    
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
-    <h3>Closed Listings</h3>
+    <h3 class="page-heading-h3">Closed Listings</h3>
     <ul>
         {% for listing in listings %}
             {% if listing.active == False %}
@@ -60,17 +62,19 @@
                             <img src="{{ listing.image }}" height="100">
                         </div>
                         {% endif %}
-                        <a class="title-link title-link-closed" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                        <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                     </div>
-                    <p>Final Bid: {{ listing.price }}</br>
-                        Winner: {% for winner in winners %}
+                    <p><span class="bold">Final Bid:</span> {{ listing.price }}</br>
+                        <span class="bold">Winner:</span> {% for winner in winners %}
                                     {% if winner.listing == listing %}
-                                        {{ winner.user.username }}
+                                        {{ winner.user.username }}</br>
                                     {% endif %}
                                 {% endfor %}
+                        <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                     </p>   
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
+</div>
 {% endblock %}
