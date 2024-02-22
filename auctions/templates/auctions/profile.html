@@ -28,6 +28,26 @@
 {% block body %}
 <h1>{{ user.username }}'s Yard</h1>
 
+<div class="profile-info">
+    <h2>Information</h2>
+    <ul>
+        <li>Username: {{ user.username }}</li>
+        <li>Email: {{ user.email }}</li>
+        <li>First Name: {{ user.first_name }}</li>
+        <li>Last Name: {{ user.last_name }}</li>
+        <li>Joined: {{ user.date_joined }}</li>
+    </ul>
+    <button class="edit-button">Edit Profile</button>
+</div>
+
+<div class="edit-profile">
+    <form action="{% url 'edit' user.id %}" method="post">
+        {% csrf_token %}
+        {{ user_info_form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+</div>
+
 <div class="profile-listings">
     <h2>Active Listings</h2>
     <ul>

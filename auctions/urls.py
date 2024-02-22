@@ -18,4 +18,5 @@ urlpatterns = [
     path('category/<int:category_id>', views.category, name="category"),
     path('listings', views.listings, name="listings"),
     path('profile/<int:user_id>', views.profile, name='profile'),
+    path('edit/<int:user_id>', views.edit, name='edit'),
 ]

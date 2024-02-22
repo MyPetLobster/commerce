@@ -23,6 +23,15 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ['comment', 'anonymous']
 
+class UserInfoForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+        help_texts = {
+            'username': None,
+            'email': None,
+        }
+
 
 def index(request):
     listings = Listing.objects.all()
@@ -264,5 +273,15 @@ def profile(request, user_id):
         "user": user,
         "listings": listings,
         "watchlist": watchlist,
-        "winners": winners
+        "winners": winners,
+        "user_info_form": UserInfoForm(instance=user)
     })
+
+
+@login_required
+def edit(request, user_id):
+    user = User.objects.get(pk=user_id)
+    form = UserInfoForm(request.POST, instance=user)
+    if form.is_valid():
+        form.save()
+        return redirect("profile", user_id=user_id)
