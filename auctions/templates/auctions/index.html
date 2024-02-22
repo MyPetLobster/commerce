@@ -26,24 +26,27 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    <ul>
-        {% for listing in listings %}
-            {% if listing.active == True %}
-                <li class="li-listing">
-                    <div class="thumb-title-div">
-                        {% if listing.image != "" %}
-                        <div class="thumb-div">
-                            <img src="{{ listing.image }}" height="100">
+    <div class="page-content">
+        <h2 class="page-heading-h2">Active Listings</h2>
+        <ul>
+            {% for listing in listings %}
+                {% if listing.active == True %}
+                    <li class="li-listing">
+                        <div class="thumb-title-div">
+                            {% if listing.image != "" %}
+                            <div class="thumb-div">
+                                <img src="{{ listing.image }}" height="100">
+                            </div>
+                            {% endif %}
+                            <a class="title-link bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                         </div>
-                        {% endif %}
-                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                    </div>
-                    <p>Current Bid: {{ listing.price }}</br>
-                    Description: {{ listing.description }}
-                    </p>    
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
+                        <p><span class="bold">Current Bid:</span> {{ listing.price }}</br>
+                        <span class="bold">Description:</span> {{ listing.description }}</br>
+                        <span class="bold">Seller:</span> <a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                        </p>    
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

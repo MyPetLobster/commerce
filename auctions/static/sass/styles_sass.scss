@@ -11,10 +11,22 @@
   gap: 10px;
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 $text-color-dark: #333;
 $text-color-light: #f4f4f4;
 $background-color-dark: #f4f4f4;
 $background-color-light: #333;
+
+/* General Styles */
+.bold {
+  font-weight: bold;
+}
 
 body {
   padding: 10px;
@@ -26,27 +38,48 @@ body {
   padding: 10px;
 }
 
+.page-content {
+  @include flex-column;
+  padding: 60px;
+
+  ul {
+    width: 60%;
+  }
+  li {
+    list-style-type: none;
+    margin-bottom: 40px;
+  }
+  a {
+    font-size: 1.25em;
+  }
+  p {
+    font-size: 1em;
+  }
+}
+
 h1 {
   padding-left: 16px;
   font-size: 3em;
   color: $text-color-dark;
 }
 
+.page-heading-h2 {
+  @include centered-text;
+}
+
 .thumb-title-div {
   @include flex-row;
 }
-
-
 
 .hidden-form {
   display: none;
 }
 
 .visible-form {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999; /* Ensure it's on top of other elements */
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Ensure it's on top of other elements */
 }
