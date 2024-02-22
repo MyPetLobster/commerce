@@ -18,6 +18,9 @@
         <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
     </li>
 {% endblock %}
