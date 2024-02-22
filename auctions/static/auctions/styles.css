@@ -51,6 +51,7 @@ body {
   flex-direction: row;
   justify-content: center;
   gap: 10px;
+  justify-content: flex-start;
 }
 
 /* Form Styles */
@@ -72,7 +73,6 @@ body {
 .listing-desc {
   margin-top: 20px;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
 }
 
@@ -83,7 +83,6 @@ body {
   gap: 10px;
   margin-top: 20px;
   width: 600px;
-  border: 1px solid black;
 }
 .comments-div ul {
   margin-top: 20px;
@@ -110,12 +109,10 @@ body {
   align-items: center;
   gap: 10px;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
 }
 
 .profile-listings {
-  border: 1px solid black;
   width: 600px;
   align-items: flex-start;
 }
@@ -128,7 +125,6 @@ body {
   gap: 10px;
   align-items: flex-start;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
 }
@@ -140,7 +136,6 @@ body {
   align-items: center;
   gap: 10px;
   width: 100%;
-  border: 1px solid black;
 }
 .watchlist-content h1 {
   position: relative;
@@ -154,7 +149,6 @@ body {
   gap: 10px;
   width: 600px;
   gap: 0px;
-  border: 1px solid black;
   align-items: flex-start;
 }
 .watchlist-listing a,

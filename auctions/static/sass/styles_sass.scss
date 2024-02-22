@@ -62,6 +62,7 @@ body {
 
 .thumb-title-div {
   @include flex-row;
+  justify-content: flex-start;
 }
 
 /* Form Styles */
@@ -85,7 +86,6 @@ body {
 .listing-desc {
   margin-top: 20px;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
 }
 
@@ -93,7 +93,6 @@ body {
   @include flex-column;
   margin-top: 20px;
   width: 600px;
-  border: 1px solid black;
 
   ul {
     margin-top: 20px;
@@ -116,11 +115,9 @@ body {
 .profile-info {
   @include flex-column;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
 }
 .profile-listings {
-  border: 1px solid black;
   width: 600px;
   align-items: flex-start;
 }
@@ -131,7 +128,6 @@ body {
   @include flex-column;
   align-items: flex-start;
   width: 600px;
-  border: 1px solid black;
   padding: 20px;
   margin-top: 20px;
 }
@@ -141,7 +137,6 @@ body {
 .watchlist-content {
   @include flex-column;
   width: 100%;
-  border: 1px solid black;
 
   h1 {
     position: relative;
@@ -153,7 +148,6 @@ body {
   @include flex-column;
   width: 600px;
   gap: 0px;
-  border: 1px solid black;
   align-items: flex-start;
 
   a,
