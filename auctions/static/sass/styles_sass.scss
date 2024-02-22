@@ -163,3 +163,9 @@ body {
     margin-bottom: 40px;
   }
 }
+
+/* Categories & Category Pages */
+.categories-content, .category-content {
+  @include flex-column;
+  margin-top: 60px;
+}
