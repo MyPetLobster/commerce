@@ -11,6 +11,7 @@
 
 body {
   padding: 10px;
+  font-family: "Ubuntu", sans-serif;
 }
 
 .nav-container {
@@ -22,6 +23,17 @@ body {
   padding: 10px;
 }
 
+/* Link Styles */
+a {
+  color: #007bff;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #0056b3;
+}
+
+/* Active and All Listings Pages */
 .page-content {
   display: flex;
   flex-direction: column;
@@ -55,7 +67,7 @@ body {
 }
 
 /* Form Styles */
-/* Dynamic Form */
+/* Dynamic Form and Description */
 .hidden,
 .hidden-form {
   display: none;
