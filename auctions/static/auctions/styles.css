@@ -120,4 +120,17 @@ body {
   align-items: flex-start;
 }
 
+/* Create Listing Page */
+.create-listing-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  align-items: flex-start;
+  width: 600px;
+  border: 1px solid black;
+  padding: 20px;
+  margin-top: 20px;
+}
+
 /*# sourceMappingURL=styles.css.map */
