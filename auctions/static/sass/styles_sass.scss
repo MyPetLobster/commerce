@@ -83,11 +83,10 @@ body {
 /* Listing Page */
 
 .listing-desc {
-    margin-top: 20px;
-    width: 600px;
-    border: 1px solid black;
-    padding: 20px;
-    
+  margin-top: 20px;
+  width: 600px;
+  border: 1px solid black;
+  padding: 20px;
 }
 
 .comments-div {
@@ -105,4 +104,23 @@ body {
     list-style-type: disc;
     margin-bottom: 20px;
   }
+}
+
+/* Profile Page */
+
+.profile-page-content {
+  @include flex-column;
+  width: 100%;
+}
+
+.profile-info {
+  @include flex-column;
+  width: 600px;
+  border: 1px solid black;
+  padding: 20px;
+}
+.profile-listings {
+  border: 1px solid black;
+  width: 600px;
+  align-items: flex-start;
 }

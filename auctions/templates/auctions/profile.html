@@ -26,86 +26,81 @@
 {% endblock %}
 
 {% block body %}
-<h1>{{ user.username }}'s Yard</h1>
-
-<div class="profile-info">
+<div class="profile-page-content">
+    <h1>{{ user.username }}'s Yard</h1>
     <h2>Information</h2>
-    <ul>
-        <li>Username: {{ user.username }}</li>
-        <li>Email: {{ user.email }}</li>
-        <li>First Name: {{ user.first_name }}</li>
-        <li>Last Name: {{ user.last_name }}</li>
-        <li>Joined: {{ user.date_joined }}</li>
-    </ul>
-    {% if current_user == user %}
-        <p>Change your profile information or password below.</p>
-    <button id="edit-button">Edit Profile</button>
-    <button id="change-password">Change Password</button>
-    
-</div>
+    <div class="profile-info">
+        <ul>
+            <li>Username: {{ user.username }}</li>
+            <li>Email: {{ user.email }}</li>
+            <li>First Name: {{ user.first_name }}</li>
+            <li>Last Name: {{ user.last_name }}</li>
+            <li>Joined: {{ user.date_joined }}</li>
+        </ul>
+        {% if current_user == user %}
+        <button id="edit-button">Edit Profile</button>
+        <button id="change-password">Change Password</button>
+        
+    </div>
 
-<div id="edit-profile" class="hidden-form">
-    <form action="{% url 'edit' user.id %}" method="post">
-        {% csrf_token %}
-        {{ user_info_form.as_p }}
-        <input type="submit" value="Save">
-        <button type="button" id="cancel-button">Cancel</button>
-    </form>
-</div>
+    <div id="edit-profile" class="hidden-form">
+        <form action="{% url 'edit' user.id %}" method="post">
+            {% csrf_token %}
+            {{ user_info_form.as_p }}
+            <input type="submit" value="Save">
+            <button type="button" id="cancel-button">Cancel</button>
+        </form>
+    </div>
 
-<div id="change-password-form" class="hidden-form">
-    <form action="{% url 'change_password' user.id %}" method="post">
-        {% csrf_token %}
-        <input type="password" name="old_password" placeholder="Old Password">
-        <input type="password" name="new_password1" placeholder="New Password">
-        <input type="password" name="new_password2" placeholder="Confirm New Password">
-        <input type="submit" value="Change Password">
-        <button type="button" id="cancel-password">Cancel</button>
-    </form>
-</div>
-{% endif %}
-<div class="profile-listings">
+    <div id="change-password-form" class="hidden-form">
+        <form action="{% url 'change_password' user.id %}" method="post">
+            {% csrf_token %}
+            <input type="password" name="old_password" placeholder="Old Password">
+            <input type="password" name="new_password1" placeholder="New Password">
+            <input type="password" name="new_password2" placeholder="Confirm New Password">
+            <input type="submit" value="Change Password">
+            <button type="button" id="cancel-password">Cancel</button>
+        </form>
+    </div>
+    {% endif %}
     <h2>Active Listings</h2>
-    <ul>
-        {% for listing in user.listings.all %}
-            {% if listing.active == True %}
-                <li class="li-listing">  
-                    <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                </li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-    <h2>Closed Listings</h2>
-    <ul>
-        {% for listing in user.listings.all %}
-            {% if listing.active == False %}
-                <li class="li-listing">
-                    <div class="thumb-title-div">
-                        {% if listing.image != "" %}
-                        <div class="thumb-div">
-                            <img src="{{ listing.image }}" height="100">
-                        </div>
-                        {% endif %}
-                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                </li>
-                {% if listing.price == listing.starting_bid %}
-                    <p>No bids</p>
-                {% else %}
-                <p>Final Bid: {{ listing.price }}</br>
-                    {% for winner in winners %}
-                        {% if winner.listing == listing %}
-                            Winner: {{ winner.user.username }}
-                        {% elif forloop.last %}
-                            No winner
-                        {% endif %}
-                    {% endfor %}
-                </p>
+    <div class="profile-listings">
+        <ul>
+            {% for listing in user.listings.all %}
+                {% if listing.active == True %}
+                    <li class="li-listing">  
+                        <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                    </li>
                 {% endif %}
-            {% endif %}
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
+    </div>  
+    <h2>Closed Listings</h2>
+    <div class="profile-listings">
+        <ul>
+            {% for listing in user.listings.all %}
+                {% if listing.active == False %}
+                    <li class="li-listing">
+                            <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                    </li>
+                    {% if listing.price == listing.starting_bid %}
+                        <p style="display:inline" class="bold">No bids</p>
+                    {% else %}
+                    <p style="display:inline"><span class="bold">Final Bid:</span> {{ listing.price }}</br>
+                        {% for winner in winners %}
+                            {% if winner.listing == listing %}
+                                <span class="bold">Winner:</span> {{ winner.user.username }}
+                            {% elif forloop.last %}
+                                No winner
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 </div>
-
 
 <script>
     const editButton = document.getElementById('edit-button');
