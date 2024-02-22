@@ -66,16 +66,8 @@
     <ul>
         {% for listing in user.listings.all %}
             {% if listing.active == True %}
-                <li class="li-listing">
-                    <div class="thumb-title-div">
-                        {% if listing.image != "" %}
-                        <div class="thumb-div">
-                            <img src="{{ listing.image }}" height="100">
-                        </div>
-                        {% endif %}
-                        <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                    </div>
-                    <p>Current Bid: {{ listing.price }}</p>
+                <li class="li-listing">  
+                    <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                 </li>
             {% endif %}
         {% endfor %}
@@ -93,6 +85,7 @@
                         {% endif %}
                         <a class="title-link" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                 </li>
+
                 <p>Final Bid: {{ listing.price }}</br>
                     {% for winner in winners %}
                         {% if winner.listing == listing %}
