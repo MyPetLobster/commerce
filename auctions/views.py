@@ -249,3 +249,14 @@ def category(request, category_id):
         "listings": listings,
         "category": category
     })
+
+@login_required
+def profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    listings = Listing.objects.filter(user=user)
+    watchlist = Watchlist.objects.filter(user=user)
+    return render(request, "auctions/profile.html", {
+        "user": user,
+        "listings": listings,
+        "watchlist": watchlist
+    })

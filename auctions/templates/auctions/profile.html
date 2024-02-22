@@ -1,0 +1,32 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    {{ user.username }}'s Profile
+{% endblock %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+    </li>
+{% endblock %}
+
+{% block body %}
+<h1>{{ user.username }}'s Yard</h1>
+
+
+{% endblock %}

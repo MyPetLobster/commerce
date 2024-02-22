@@ -16,5 +16,6 @@ urlpatterns = [
     path('comment/<int:listing_id>', views.comment, name='comment'),
     path('categories', views.categories, name="categories"),
     path('category/<int:category_id>', views.category, name="category"),
-    path('listings', views.listings, name="listings")
+    path('listings', views.listings, name="listings"),
+    path('profile/<int:user_id>', views.profile, name='profile'),
 ]
