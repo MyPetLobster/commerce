@@ -167,8 +167,7 @@ body {
 }
 
 /* Categories & Category Pages */
-.categories-content,
-.category-content {
+.categories-content {
   @include flex-column;
   margin-top: 20px;
 
@@ -179,4 +178,8 @@ body {
   .description {
     text-align: center;
   }
+}
+
+.category-content {
+    @include flex-column;
 }
