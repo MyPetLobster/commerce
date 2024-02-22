@@ -35,3 +35,18 @@ h1 {
 .thumb-title-div {
   @include flex-row;
 }
+
+
+
+.hidden-form {
+  display: none;
+}
+
+.visible-form {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* Ensure it's on top of other elements */
+}

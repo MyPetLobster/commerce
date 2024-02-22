@@ -37,14 +37,15 @@
         <li>Last Name: {{ user.last_name }}</li>
         <li>Joined: {{ user.date_joined }}</li>
     </ul>
-    <button class="edit-button">Edit Profile</button>
+    <button id="edit-button">Edit Profile</button>
 </div>
 
-<div class="edit-profile">
+<div id="edit-profile" class="hidden-form">
     <form action="{% url 'edit' user.id %}" method="post">
         {% csrf_token %}
         {{ user_info_form.as_p }}
         <input type="submit" value="Save">
+        <button type="button" id="cancel-button">Cancel</button>
     </form>
 </div>
 
@@ -94,5 +95,21 @@
     </ul>
 </div>
 
+
+<script>
+    const editButton = document.getElementById('edit-button');
+    const editProfile = document.getElementById('edit-profile');
+    const cancelButton = document.getElementById('cancel-button');
+
+    editButton.addEventListener('click', () => {
+        editProfile.classList.remove('hidden-form');
+        editProfile.classList.add('visible-form');
+    });
+
+    cancelButton.addEventListener('click', () => {
+        editProfile.classList.add('hidden-form');
+        editProfile.classList.remove('visible-form');
+    });
+</script>
 
 {% endblock %}
