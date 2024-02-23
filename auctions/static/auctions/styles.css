@@ -1,6 +1,7 @@
 /* General Styles */
 .yard-sale {
-  padding-left: 16px;
+  padding: 0;
+  font-family: "Caveat", cursive;
   font-size: 3em;
   color: #333;
 }
@@ -9,9 +10,49 @@
   font-weight: bold;
 }
 
+h1,
+h2,
+h3 {
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 3.5em;
+}
+
+h2 {
+  font-size: 3em;
+}
+
+h3 {
+  font-size: 2.5em;
+  text-decoration: underline;
+}
+
 body {
   padding: 10px;
   font-family: "Ubuntu", sans-serif;
+}
+
+/* Nav and Footer Styles */
+.hero {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  font-family: "Caveat", cursive;
+  font-size: 1.75em;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.visible-hero {
+  display: block;
+}
+
+.hidden-hero {
+  display: none;
 }
 
 .nav-container {
@@ -21,6 +62,22 @@ body {
   gap: 10px;
   justify-content: space-between;
   padding: 10px;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  bottom: 0;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 0;
+}
+footer li {
+  list-style-type: none;
 }
 
 /* Link Styles */
@@ -73,11 +130,19 @@ a:hover {
   display: none;
 }
 
-.visible,
+.visible {
+  display: block;
+  position: fixed;
+  top: 43%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
 .visible-form {
   display: block;
   position: fixed;
-  top: 32%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -152,6 +217,7 @@ a:hover {
   width: 100%;
 }
 .watchlist-content h1 {
+  font-family: "Caveat", cursive;
   position: relative;
   left: 20px;
 }
@@ -186,6 +252,7 @@ a:hover {
   margin-top: 20px;
 }
 .categories-content h1 {
+  font-family: "Caveat", cursive;
   margin-bottom: 50px;
 }
 .categories-content .description {
