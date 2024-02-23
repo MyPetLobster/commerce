@@ -21,7 +21,7 @@
 
   <ul>
     {% for category in categories %}
-    <li>
+    <li class="categories-li">
       <a href="{% url 'category' category.id %}">{{ category.category }}</a>
       <div class="description hidden">{{ category.description }}</div>
     </li>

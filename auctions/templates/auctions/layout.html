@@ -10,7 +10,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     </head>
-    <body>
+    <body class="light-mode">
         {% if messages %}
             <div class="message">
                 <p>
@@ -24,8 +24,8 @@
         {% endif %}
         <div class="hero">
             <h1 class="yard-sale">Yard Sale</h1>
-            <img class="visible-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:130px">
-            <img class="hidden-hero" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:130px">
+            <img id="standard-hero" class="visible-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:130px">
+            <img id="inverted-hero" class="hidden-hero" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:130px">
         </div>
         
         <div class="nav-container">
@@ -47,14 +47,14 @@
                     </li>
                 {% endif %}
             </ul>
-            <div>
+            <div class="user-status">
                 <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 {% if user.is_authenticated %}
-                    Signed in as <strong>{{ user.username }}</strong>.
+                    Signed in as <strong>{{ user.username }}</strong>
                 {% endif %}
             </div>
         </div>
-        <hr>
+        <hr class="divider">
 
         {% block body %}
         {% endblock %}
@@ -86,4 +86,14 @@
     setTimeout(function() {
         document.querySelector('.message').style.display = 'none';
     }, 3000);
+
+
+    document.querySelector('.theme-mode-toggle').onclick = function() {
+        document.querySelector('body').classList.toggle('dark-mode');
+        document.querySelector('body').classList.toggle('light-mode');
+        document.querySelector('#standard-hero').classList.toggle('visible-hero');
+        document.querySelector('#standard-hero').classList.toggle('hidden-hero');
+        document.querySelector('#inverted-hero').classList.toggle('hidden-hero');
+        document.querySelector('#inverted-hero').classList.toggle('visible-hero');
+    }
 </script>

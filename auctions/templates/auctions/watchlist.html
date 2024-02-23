@@ -24,11 +24,18 @@ Watchlist {% endblock %} {% block navbar %}
     <li class="watchlist-listing">
       <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
       <p style="display: inline">
-        {% if listing.active == False %} -- BIDDING CLOSED -- {% for winner in
-        winners %} {% if winner.listing == listing %} You Won! (See email for
-        details on how to proceed.) {% else %} Winner: {{ winner.user.username}}
-        {% endif %} {% endfor %} {% else %} Current Bid: {{ listing.price }} {%
-        endif %}
+        {% if listing.active == False %} 
+          -- BIDDING CLOSED -- 
+          {% for winner in winners %} 
+            {% if winner.listing == listing %} 
+              You Won! (See email for details on how to proceed.) 
+            {% else %} 
+              Winner: {{ winner.user.username}}
+            {% endif %} 
+          {% endfor %} 
+        {% else %} 
+          Current Bid: {{ listing.price }} 
+        {% endif %}
       </p>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}

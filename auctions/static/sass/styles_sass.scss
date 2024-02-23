@@ -18,15 +18,23 @@ $link-color-dark: #007bff;
 $link-color-dark-hover: #0056b3;
 $link-color-light: #f4f4f4;
 $link-color-light-hover: #f4f4f4;
-$background-color-dark: #f4f4f4;
-$background-color-light: #333;
+$background-color-light: #f4f4f4;
+$background-color-dark: #333;
+
+.light-mode {
+  background-color: $background-color-light;
+  color: $text-color-dark;
+}
+.dark-mode {
+  background-color: $background-color-dark;
+  color: $text-color-light;
+}
 
 /* General Styles */
 .yard-sale {
   padding: 0;
   font-family: "Caveat", cursive;
   font-size: 3em;
-  color: $text-color-dark;
 }
 
 .bold {
@@ -46,18 +54,23 @@ h2 {
 }
 h3 {
   font-size: 2.5em;
-  text-decoration: underline;
 }
 
 body {
+  position: relative;
+  min-height: 100vh;
   padding: 10px;
   font-family: "Ubuntu", sans-serif;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+.divider {
+  background-color: $text-color-dark;
 }
 
 /* Nav and Footer Styles */
 .hero {
   @include flex-row;
-  font-family: "Caveat", cursive;
   font-size: 1.75em;
   justify-content: flex-start;
   align-items: center;
@@ -74,13 +87,20 @@ body {
   justify-content: space-between;
   padding: 10px;
 }
+.user-status {
+  @include flex-row;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px;
+}
 footer {
+  position: absolute;
+  bottom: 0;
+
   ul {
     @include flex-row;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-    justify-content: space-between;
+    width: 100vw;
+    justify-content: space-around;
     padding: 10px;
     margin-bottom: 0;
   }
@@ -101,7 +121,7 @@ a:hover {
 /* Active and All Listings Pages */
 .page-content {
   @include flex-column;
-  padding: 60px;
+  padding: 20px 40px 60px 40px;
 
   ul {
     width: 60%;
@@ -136,7 +156,7 @@ a:hover {
 
 .visible {
   display: block;
-  position: fixed;
+  position: absolute;
   top: 43%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -206,7 +226,6 @@ a:hover {
   width: 100%;
 
   h1 {
-    font-family: "Caveat", cursive;
     position: relative;
     left: 20px;
   }
@@ -238,13 +257,16 @@ a:hover {
   margin-top: 20px;
 
   h1 {
-    font-family: "Caveat", cursive;
     margin-bottom: 50px;
   }
 
   .description {
     text-align: center;
   }
+}
+
+.categories-li {
+  font-size: 0.9em;
 }
 
 .category-content {
