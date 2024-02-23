@@ -19,12 +19,19 @@ class ListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ['title', 'description', 'price', 'image', 'categories']
+        labels = {
+            'title': 'Title',
+            'description': 'Description',
+            'price': 'Starting Bid',
+            'image': 'Image URL',
+            'categories': 'Categories'
+        }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'description'}),
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.URLInput(attrs={'class': 'form-control'}),
-            'categories': forms.CheckboxSelectMultiple(),
+            'categories': forms.CheckboxSelectMultiple(attrs={'class': 'category-checkbox'}),
         }
 
 class CommentForm(ModelForm):
