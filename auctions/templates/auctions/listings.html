@@ -27,7 +27,7 @@
     <h1 class="page-heading-h1">All Listings</h1>
     <p></p>
 
-    <h3 class="page-heading-h3">Active Listings</h3>
+    <h3 class="active-listings-heading">Active Listings</h3>
     <ul>
         {% for listing in listings %}
             {% if listing.active == True %}
@@ -35,16 +35,23 @@
                     <div class="thumb-title-div">
                         {% if listing.image != "" %}
                         <div class="thumb-div">
-                            <img src="{{ listing.image }}" height="100">
+                            <img src="{{ listing.image }}" height="120">
                         </div>
                         {% endif %}
-                        <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                        <div class="list-desc-div">
+                            <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                            <p>
+                                <span class="bold">Current Bid:</span> {{ listing.price }}</br>
+                                <span class="bold">Description:</span> {{ listing.description }}</br>
+                                <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
+                            </p>    
+                        </div>
+
                     </div>
-                    <p><span class="bold">Current Bid:</span> {{ listing.price }}</br>
-                    <span class="bold">Description:</span> {{ listing.description }}</br>
-                    <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
-                    </p>    
+
                 </li>
+                <hr>
+            </br>
             {% endif %}
         {% endfor %}
     </ul>
@@ -56,20 +63,25 @@
                     <div class="thumb-title-div">
                         {% if listing.image != "" %}
                         <div class="thumb-div">
-                            <img src="{{ listing.image }}" height="100">
+                            <img src="{{ listing.image }}" height="120">
                         </div>
                         {% endif %}
-                        <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                        <div class="list-desc-div">
+                            <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                            <p>
+                                <span class="bold">Final Bid:</span> {{ listing.price }}</br>
+                                <span class="bold">Winner:</span> {% for winner in winners %}
+                                            {% if winner.listing == listing %}
+                                                {{ winner.user.username }}</br>
+                                            {% endif %}
+                                        {% endfor %}
+                                <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                            </p>   
+                        </div>
                     </div>
-                    <p><span class="bold">Final Bid:</span> {{ listing.price }}</br>
-                        <span class="bold">Winner:</span> {% for winner in winners %}
-                                    {% if winner.listing == listing %}
-                                        {{ winner.user.username }}</br>
-                                    {% endif %}
-                                {% endfor %}
-                        <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
-                    </p>   
                 </li>
+                <hr>
+            </br>
             {% endif %}
         {% endfor %}
     </ul>

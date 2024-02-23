@@ -32,16 +32,20 @@
                         <div class="thumb-title-div">
                             {% if listing.image != "" %}
                             <div class="thumb-div">
-                                <img src="{{ listing.image }}" height="100">
+                                <img src="{{ listing.image }}" height="120">
                             </div>
                             {% endif %}
-                            <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                            <div class="list-desc-div">
+                                <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                                <p>
+                                    <span class="bold">Current Bid:</span> {{ listing.price }}</br>
+                                    <span class="bold">Description:</span> {{ listing.description }}</br>
+                                    <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                </p>    
                         </div>
-                        <p><span class="bold">Current Bid:</span> {{ listing.price }}</br>
-                        <span class="bold">Description:</span> {{ listing.description }}</br>
-                        <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
-                        </p>    
                     </li>
+                    <hr>
+                    </br>
                 {% endif %}
             {% endfor %}
         </ul>

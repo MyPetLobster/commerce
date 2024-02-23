@@ -50,8 +50,8 @@ body {
   overflow-x: hidden;
 }
 
-.divider {
-  background-color: #333;
+hr {
+  background-color: #6c757d;
 }
 
 /* Nav and Footer Styles */
@@ -146,12 +146,18 @@ a:hover {
   font-size: 1em;
 }
 
+.active-listings-heading {
+  margin-bottom: 40px;
+}
+
 .thumb-title-div {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 10px;
   justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
 }
 
 /* Form Styles */
