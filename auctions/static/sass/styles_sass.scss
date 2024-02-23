@@ -14,10 +14,8 @@
 
 $text-color-dark: #333;
 $text-color-light: #f4f4f4;
-$link-color-dark: #007bff;
-$link-color-dark-hover: #0056b3;
-$link-color-light: #f4f4f4;
-$link-color-light-hover: #f4f4f4;
+$link-color: #12b9c2;
+$link-color-hover: #0d888f;
 $background-color-light: #f4f4f4;
 $background-color-dark: #333;
 $medium-gray: #6c757d;
@@ -116,11 +114,11 @@ footer {
 
 /* Link Styles */
 a {
-  color: $link-color-dark;
+  color: $link-color;
 }
 a:hover {
   text-decoration: none;
-  color: $link-color-dark-hover;
+  color: $link-color-hover;
 }
 
 /* Active and All Listings Pages */
