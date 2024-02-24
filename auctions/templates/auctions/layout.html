@@ -24,8 +24,8 @@
         {% endif %}
         <div class="hero">
             <h1 class="yard-sale">Yard Sale</h1>
-            <img id="standard-hero" class="visible-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:130px">
-            <img id="inverted-hero" class="hidden-hero" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:130px">
+            <img id="standard-hero" class="visible-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
+            <img id="inverted-hero" class="hidden-hero" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
         </div>
         
         <div class="nav-container">
@@ -47,6 +47,7 @@
                     </li>
                 {% endif %}
             </ul>
+            
             <div class="user-status">
                 <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 {% if user.is_authenticated %}
@@ -61,14 +62,14 @@
 
         <footer>
             <ul class="footer-links">
-                <li class="footer-link">
-                    <a href="https://github.com/MyPetLobster/commerce">GitHub Repo</a>
+                <li>
+                    <a class="footer-link" href="https://github.com/MyPetLobster/commerce">GitHub Repo</a>
                 </li>
-                <li class="footer-link">
-                    <a href="{% url 'index' %}">&copy; Yard Sale 2024</a>
+                <li>
+                    <a class="footer-link" href="{% url 'index' %}">&copy; Yard Sale 2024</a>
                 </li>
-                <li class="footer-link">
-                    <a class="theme-mode-toggle" href="#">Toggle Dark Mode</a>
+                <li>
+                    <a id="theme-mode-toggle" class="footer-link" href="#">Toggle Dark Mode</a>
                 </li>
             </ul>
         </footer>
@@ -97,7 +98,7 @@
         document.querySelector('#inverted-hero').classList.remove('hidden-hero');
     }
 
-    document.querySelector('.theme-mode-toggle').onclick = function() {
+    document.querySelector('#theme-mode-toggle').onclick = function() {
         document.querySelector('body').classList.toggle('dark-mode');
         document.querySelector('body').classList.toggle('light-mode');
         document.querySelector('#standard-hero').classList.toggle('visible-hero');
