@@ -36,8 +36,8 @@
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
         {% if current_user == user %}
-        <button id="edit-button">Edit Profile</button>
-        <button id="change-password">Change Password</button>
+        <button id="edit-button" class="btn btn-primary">Edit Profile</button>
+        <button id="change-password" class="btn btn-primary">Change Password</button>
         
     </div>
 
@@ -65,6 +65,11 @@
     <p></p>
     <h2>Active Listings</h2>
     <div class="profile-listings">
+        {% if user.listings.all.count == 0 %}
+            <div class="center-container">
+                <p>No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
+            </div>
+        {% endif %}
         <ul>
             {% for listing in user.listings.all %}
                 {% if listing.active == True %}
