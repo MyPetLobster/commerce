@@ -17,7 +17,7 @@ $text-color-light: #f4f4f4;
 $link-color: #1696b9;
 $link-color-hover: #0a5f76;
 $nav-color: #8c8787;
-$nav-color-hover: #0a5f76;
+$nav-color-hover: #c55176;
 $background-color-light: #f4f4f4;
 $background-color-dark: #333;
 $medium-gray: #6c757d;
@@ -36,6 +36,7 @@ $medium-gray: #6c757d;
   padding: 0;
   font-family: "Caveat", cursive;
   font-size: 2.5em;
+  color: $nav-color-hover;
 }
 
 .bold {
@@ -72,11 +73,11 @@ body {
 }
 hr {
   background-color: $medium-gray;
-  margin-bottom: 10px;
+  display: block;
+  clear: both;
 }
 
 /* Nav and Footer Styles */
-
 .nav-link,
 .logout-link,
 .footer-link {
@@ -112,6 +113,9 @@ hr {
   justify-content: flex-end;
   gap: 10px;
   padding: 10px;
+}
+.signed-in-as {
+  color: $nav-color-hover;
 }
 footer {
   position: absolute;

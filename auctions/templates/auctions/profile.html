@@ -25,6 +25,7 @@
 {% block body %}
 <div class="profile-page-content">
     <h1>{{ user.username }}'s Yard</h1>
+    <p></p>
     <h2>Information</h2>
     <div class="profile-info">
         <ul>
@@ -60,6 +61,8 @@
         </form>
     </div>
     {% endif %}
+    <p></p>
+    <p></p>
     <h2>Active Listings</h2>
     <div class="profile-listings">
         <ul>
@@ -71,6 +74,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
+        <hr>
     </div>  
     <h2>Closed Listings</h2>
     <div id="profile-closed-listings" class="profile-listings">
