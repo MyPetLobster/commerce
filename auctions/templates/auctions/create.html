@@ -29,7 +29,9 @@
             <form class="create-listing-form" action="/create" method="post">
                 {% csrf_token %}
                 {{ form }}
-                <input type="submit" value="List item">
+                <div class="center-container">
+                    <button class="btn btn-primary" type="submit">List Item</button>
+                </div>
             </form>
         </div>
     </div>

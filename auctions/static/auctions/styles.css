@@ -63,6 +63,14 @@ hr {
   font-weight: 300;
 }
 
+.center-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Nav and Footer Styles */
 .nav-link,
 .logout-link,

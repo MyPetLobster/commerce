@@ -79,9 +79,13 @@ hr {
 }
 
 .lightweight {
-    font-weight: 300;
+  font-weight: 300;
 }
 
+.center-container {
+  width: 100%;
+  @include flex-column;
+}
 
 /* Nav and Footer Styles */
 .nav-link,
@@ -190,8 +194,6 @@ footer {
   color: $nav-color-hover;
   background-color: transparent;
 }
-
-
 
 /* Link Styles */
 a {
