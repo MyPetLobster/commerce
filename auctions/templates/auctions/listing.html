@@ -33,10 +33,10 @@
         <img src="{{ listing.image }}" height="450">
     {% endif %}
     <div class="listing-desc">
-        <p><span class="bold">Created by:</span> {{ listing.user.username }}</br>
-        <span class="bold">Current Bid:</span> {{ listing.price }}</br>    
-        <span class="bold">Time Left:</span> {{ time_left }}</br>
-        <span class="bold">Description:</span> {{ listing.description }}</br>
+        <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
+        <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br>    
+        <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight">{{ time_left }}</span></br>
+        <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
         
         {% if listing.categories %}
             <span class="bold">Categories:</span> 
@@ -96,9 +96,9 @@
             <ul>
                 {% for comment in comments %}
                     {% if comment.anonymous == True %}
-                    <li>Anonymous: {{ comment.comment }}</li>
+                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</li>
                     {% else %}
-                    <li>{{ comment.user.username }}: {{ comment.comment }}</li>
+                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</li>
                     {% endif %}
                 {% endfor %}
             </ul>
