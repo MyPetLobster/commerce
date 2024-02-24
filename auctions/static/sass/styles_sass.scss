@@ -305,6 +305,13 @@ legend {
   gap: 0px;
   align-items: flex-start;
 
+  p {
+    font-size: 0.8em;
+  }
+  .btn-primary {
+    font-size: 0.7em;
+    padding: 4px 15px;
+  }
   a,
   p {
     width: 100%;

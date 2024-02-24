@@ -330,6 +330,13 @@ legend {
   gap: 0px;
   align-items: flex-start;
 }
+.watchlist-listing p {
+  font-size: 0.8em;
+}
+.watchlist-listing .btn-primary {
+  font-size: 0.7em;
+  padding: 4px 15px;
+}
 .watchlist-listing a,
 .watchlist-listing p {
   width: 100%;
