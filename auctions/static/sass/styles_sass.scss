@@ -24,7 +24,6 @@ $medium-gray: #6c757d;
 $cancel-color: #80052c;
 $cancel-color-hover: #4c0219;
 
-
 .light-mode {
   background-color: $background-color-light;
   color: $text-color-dark;
@@ -198,16 +197,19 @@ footer {
   background-color: transparent;
 }
 
-#close-listing-btn {
-    background-color: $cancel-color;
-    color: $text-color-light;
+#close-listing-btn,
+#cancel-comment {
+  background-color: $cancel-color;
+  color: $text-color-light;
 }
 #close-listing-btn:hover,
 #close-listing-btn:focus,
-#close-listing-btn:active {
-    background-color: $cancel-color-hover;
+#close-listing-btn:active,
+#cancel-comment:hover,
+#cancel-comment:focus,
+#cancel-comment:active {
+  background-color: $cancel-color-hover;
 }
-
 
 /* Link Styles */
 a {
@@ -330,7 +332,9 @@ legend {
     margin-bottom: 20px;
   }
 }
-
+.anon-checkbox {
+  accent-color: $nav-color-hover !important;
+}
 .bid-form {
   @include flex-column;
 }
@@ -400,9 +404,9 @@ legend {
   }
   .btn-primary:hover,
   .btn-primary:focus,
-  .btn-primary:active{
+  .btn-primary:active {
     background-color: $cancel-color-hover;
- }
+  }
   a,
   p {
     width: 100%;

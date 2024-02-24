@@ -38,6 +38,10 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ['comment', 'anonymous']
+        widgets = {
+            'comment': forms.Textarea(attrs={'class': 'form-control', 'id': 'comment'}),
+            'anonymous': forms.CheckboxInput(attrs={'class': 'anon-checkbox'}),
+        }
 
 class UserInfoForm(ModelForm):
     class Meta:

@@ -199,14 +199,18 @@ footer li {
   background-color: transparent;
 }
 
-#close-listing-btn {
+#close-listing-btn,
+#cancel-comment {
   background-color: #80052c;
   color: #f4f4f4;
 }
 
 #close-listing-btn:hover,
 #close-listing-btn:focus,
-#close-listing-btn:active {
+#close-listing-btn:active,
+#cancel-comment:hover,
+#cancel-comment:focus,
+#cancel-comment:active {
   background-color: #4c0219;
 }
 
@@ -343,6 +347,10 @@ legend {
 .comments-div li {
   list-style-type: disc;
   margin-bottom: 20px;
+}
+
+.anon-checkbox {
+  accent-color: #c55176 !important;
 }
 
 .bid-form {
