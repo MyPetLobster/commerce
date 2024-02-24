@@ -102,10 +102,11 @@
             <ul>
                 {% for comment in comments %}
                     {% if comment.anonymous == True %}
-                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</li>
+                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% else %}
-                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</li>
+                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% endif %}
+                    
                 {% endfor %}
             </ul>
         </div>

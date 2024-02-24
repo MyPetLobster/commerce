@@ -344,6 +344,14 @@ legend {
   text-align: center;
 }
 
+.timestamp {
+    font-size: 0.8em;
+    color: $medium-gray;
+}
+
+
+
+
 /* Profile Page */
 .profile-page-content {
   @include flex-column;

@@ -368,6 +368,11 @@ legend {
   text-align: center;
 }
 
+.timestamp {
+  font-size: 0.8em;
+  color: #6c757d;
+}
+
 /* Profile Page */
 .profile-page-content {
   display: flex;
