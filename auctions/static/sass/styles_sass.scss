@@ -21,6 +21,9 @@ $nav-color-hover: #c55176;
 $background-color-light: #f4f4f4;
 $background-color-dark: #333;
 $medium-gray: #6c757d;
+$cancel-color: #80052c;
+$cancel-color-hover: #4c0219;
+
 
 .light-mode {
   background-color: $background-color-light;
@@ -255,6 +258,22 @@ legend {
 }
 
 /* Dynamic Form and Description */
+.popup-form {
+  @include flex-column;
+  color: $text-color-light;
+  background-color: #7a9196;
+  align-items: flex-end;
+  width: auto;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+
+  label {
+    font-size: 0.9em;
+  }
+}
+
 .hidden,
 .hidden-form {
   display: none;
@@ -366,7 +385,13 @@ legend {
   .btn-primary {
     font-size: 0.7em;
     padding: 4px 15px;
+    background-color: $cancel-color;
   }
+  .btn-primary:hover,
+  .btn-primary:focus,
+  .btn-primary:active{
+    background-color: $cancel-color-hover;
+ }
   a,
   p {
     width: 100%;
@@ -415,6 +440,10 @@ legend {
   width: 600px;
   padding: 20px;
   margin-top: 20px;
+}
+
+.form-control {
+  font-size: 0.9em;
 }
 
 .form-control:focus {

@@ -42,22 +42,22 @@
     </div>
 
     <div id="edit-profile" class="hidden-form">
-        <form action="{% url 'edit' user.id %}" method="post">
+        <form class="popup-form" action="{% url 'edit' user.id %}" method="post">
             {% csrf_token %}
-            {{ user_info_form.as_p }}
-            <input type="submit" value="Save">
-            <button type="button" id="cancel-button">Cancel</button>
+            {{ user_info_form }}
+            <button class="btn btn-primary" type="submit" style="align-self:center">Save Changes</button>
+            <button class="btn btn-primary" type="button" id="cancel-button" style="align-self:center">Cancel</button>
         </form>
     </div>
 
     <div id="change-password-form" class="hidden-form">
-        <form action="{% url 'change_password' user.id %}" method="post">
+        <form class="popup-form" action="{% url 'change_password' user.id %}" method="post">
             {% csrf_token %}
-            <input type="password" name="old_password" placeholder="Old Password">
-            <input type="password" name="new_password1" placeholder="New Password">
-            <input type="password" name="new_password2" placeholder="Confirm New Password">
-            <input type="submit" value="Change Password">
-            <button type="button" id="cancel-password">Cancel</button>
+            <input class="form-control" type="password" name="old_password" placeholder="Old Password">
+            <input class="form-control" type="password" name="new_password1" placeholder="New Password">
+            <input class="form-control" type="password" name="new_password2" placeholder="Confirm New Password">
+            <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
+            <button class="btn btn-primary" type="button" id="cancel-password" style="align-self:center">Cancel</button>
         </form>
     </div>
     {% endif %}
