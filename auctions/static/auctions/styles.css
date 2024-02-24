@@ -199,6 +199,17 @@ footer li {
   background-color: transparent;
 }
 
+#close-listing-btn {
+  background-color: #80052c;
+  color: #f4f4f4;
+}
+
+#close-listing-btn:hover,
+#close-listing-btn:focus,
+#close-listing-btn:active {
+  background-color: #4c0219;
+}
+
 /* Link Styles */
 a {
   color: #1696b9;

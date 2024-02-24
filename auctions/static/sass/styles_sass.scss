@@ -198,6 +198,17 @@ footer {
   background-color: transparent;
 }
 
+#close-listing-btn {
+    background-color: $cancel-color;
+    color: $text-color-light;
+}
+#close-listing-btn:hover,
+#close-listing-btn:focus,
+#close-listing-btn:active {
+    background-color: $cancel-color-hover;
+}
+
+
 /* Link Styles */
 a {
   color: $link-color;
