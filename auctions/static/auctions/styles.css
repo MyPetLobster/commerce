@@ -323,6 +323,14 @@ legend {
   gap: 10px;
 }
 
+.bidding-closed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
 /* Profile Page */
 .profile-page-content {
   display: flex;

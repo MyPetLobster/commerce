@@ -71,12 +71,16 @@
             {% endif %}
 
         {% else %}
+        <div class="bidding-closed">
             -- BIDDING CLOSED -- </br>
             {% if winner.user == user %}
                 You Won! (See email for details on how to proceed.)
+            {% elif listing.price == listing.starting_bid %}
+                No Bids
             {% else %}
                 Winner: {{ winner.user.username }}
             {% endif %}
+        </div>
         {% endif %}
         
         <div class="comments-div">

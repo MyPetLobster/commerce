@@ -305,6 +305,11 @@ legend {
   @include flex-column;
 }
 
+.bidding-closed {
+  @include flex-column;
+  text-align: center;
+}
+
 /* Profile Page */
 .profile-page-content {
   @include flex-column;
