@@ -25,6 +25,46 @@
 {% block body %}
     <div class="page-content">
         <h2 class="page-heading-h2">Active Listings</h2>
+
+        <form
+            class="sort-by-form"
+            action="{% url 'sort' %}"
+            method="post"
+        >
+            {% csrf_token %}
+            <input type="hidden" name="sort-by" id="sort-by" value="" />
+            <input
+            type="hidden"
+            name="sort-by-direction"
+            id="sort-by-direction"
+            value=""
+            />
+        </form>
+
+
+  <div class="sort-by-container">
+    <p class="bold-menu" id="sort-by-header">Sort By:</p>
+    <p class="title-sort">
+      <span id="title-down-arrow" class="down-arrow">&darr;</span>
+      <span id="title-up-arrow" class="up-arrow">&uarr;</span>
+        Title
+    </p>                 
+    <p class="seller-sort">
+      <span id="seller-down-arrow" class="down-arrow">&darr;</span>
+      <span id="seller-up-arrow" class="up-arrow">&uarr;</span>
+        Seller
+    </p>
+    <p class="date-sort">
+      <span id="date-down-arrow" class="down-arrow">&darr;</span>
+      <span id="date-up-arrow" class="up-arrow">&uarr;</span>
+        Listing Date
+    </p>
+    <p class="price-sort">
+      <span id="price-down-arrow" class="down-arrow">&darr;</span>
+      <span id="price-up-arrow" class="up-arrow">&uarr;</span>
+        Price
+    </p>
+  </div>
         <ul>
             {% for listing in listings %}
                 {% if listing.active == True %}
@@ -50,4 +90,60 @@
             {% endfor %}
         </ul>
     </div>
+
+
+    <script>
+        // Sort-by Options - title, seller, date, price
+        // Sort-by Direction - asc, desc
+
+        const titleSort = document.querySelector(".title-sort");
+        const sellerSort = document.querySelector(".seller-sort");
+        const dateSort = document.querySelector(".date-sort");
+        const priceSort = document.querySelector(".price-sort");
+
+        const titleDownArrow = document.querySelector("#title-down-arrow");
+        const titleUpArrow = document.querySelector("#title-up-arrow");
+        const sellerDownArrow = document.querySelector("#seller-down-arrow");
+        const sellerUpArrow = document.querySelector("#seller-up-arrow");
+        const publishDownArrow = document.querySelector("#date-down-arrow");
+        const dateUpArrow = document.querySelector("#date-up-arrow");
+        const priceDownArrow = document.querySelector("#price-down-arrow");
+        const priceUpArrow = document.querySelector("#price-up-arrow");
+
+        document.addEventListener("DOMContentLoaded", function() {
+            titleSort.addEventListener("click", () => {
+                const sortBy = "title";
+                const sortByDirection = titleDownArrow.style.display === "none" ? "asc" : "desc";
+                document.querySelector("#sort-by").value = sortBy;
+                document.querySelector("#sort-by-direction").value = sortByDirection;
+                document.querySelector(".sort-by-form").submit();
+            });
+
+            sellerSort.addEventListener("click", () => {
+                const sortBy = "seller";
+                const sortByDirection = sellerDownArrow.style.display === "none" ? "asc" : "desc";
+                document.querySelector("#sort-by").value = sortBy;
+                document.querySelector("#sort-by-direction").value = sortByDirection;
+                document.querySelector(".sort-by-form").submit();
+            });
+
+            dateSort.addEventListener("click", () => {
+                const sortBy = "date";
+                const sortByDirection = publishDownArrow.style.display === "none" ? "asc" : "desc";
+                document.querySelector("#sort-by").value = sortBy;
+                document.querySelector("#sort-by-direction").value = sortByDirection;
+                document.querySelector(".sort-by-form").submit();
+            });
+
+            priceSort.addEventListener("click", () => {
+                const sortBy = "price";
+                const sortByDirection = priceDownArrow.style.display === "none" ? "asc" : "desc";
+                document.querySelector("#sort-by").value = sortBy;
+                document.querySelector("#sort-by-direction").value = sortByDirection;
+                document.querySelector(".sort-by-form").submit();
+            });
+
+        })
+
+    </script>
 {% endblock %}

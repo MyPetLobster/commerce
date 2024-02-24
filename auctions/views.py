@@ -61,7 +61,7 @@ class UserInfoForm(ModelForm):
 
 def index(request):
     listings = Listing.objects.all()
-
+    print(listings)
     return render(request, "auctions/index.html" , {
         "listings": listings
     })
@@ -341,3 +341,45 @@ def change_password(request, user_id):
     
     messages.success(request, "Password changed successfully")
     return redirect("profile", user_id=user_id)
+
+
+def sort(request):
+    # Sort Form Fields: Title, Seller, Date, Price
+    # Sort Order: Ascending, Descending
+    sort_by = request.POST["sort-by"]
+    sort_by_direction = request.POST["sort-by-direction"]
+
+    print(sort_by)
+    print(sort_by_direction)
+
+    listings = Listing.objects.all()
+
+    if sort_by == "title":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("title")
+        else:
+            listings = listings.order_by("-title")
+    elif sort_by == "seller":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("user")
+        else:
+            listings = listings.order_by("-user")
+    elif sort_by == "date":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("date")
+        else:
+            listings = listings.order_by("-date")
+    elif sort_by == "price":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("price")
+        else:
+            listings = listings.order_by("-price")
+    else:
+        listings = listings
+        
+    print(listings)
+
+    return render(request, "auctions/index.html", {
+        "listings": listings
+    })
+    
