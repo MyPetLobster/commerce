@@ -53,6 +53,7 @@ body {
 
 hr {
   background-color: #6c757d;
+  margin-bottom: 10px;
 }
 
 /* Nav and Footer Styles */
@@ -263,6 +264,13 @@ legend {
 .profile-listings {
   width: 600px;
   align-items: flex-start;
+}
+
+#profile-closed-listings {
+  margin-bottom: 60px;
+}
+#profile-closed-listings li {
+  margin-top: 4px;
 }
 
 /* Create Listing Page */
