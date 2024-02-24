@@ -51,14 +51,15 @@
 
             <form action="/add_to_watchlist/{{ listing.id }}" method="post">
                 {% csrf_token %}
-                <input type="submit" value="Add to Watchlist">
+                <button class="btn btn-primary" type="submit">Add to Watchlist</button>
             </form>
+            <p></p>
 
             {% if listing.user != user %}
-                <form action="/listing/{{ listing.id }}" method="post">
+                <form class="bid-form" action="/listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
-                    <input type="number" name="amount" step="0.01" min="{{ listing.price }}">
-                    <input type="submit" value="Place Bid">
+                    <input class="form-control" type="number" name="amount" step="0.01" min="{{ listing.price }}">
+                    <button class="btn btn-primary" type="submit">Place Bid</button>
                 </form>
             {% endif %}
 
@@ -82,7 +83,7 @@
             <h2>Comments</h2>
 
             {% if listing.active == True %}
-                <button id="comment-button">Leave a Comment</button>
+                <button class="btn btn-primary" id="comment-button">Leave a Comment</button>
                 <form id="comment-form" class="hidden-form" action="/comment/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     {{ comment_form }}
