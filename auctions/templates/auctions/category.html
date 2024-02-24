@@ -30,10 +30,11 @@ Category: {{ category }}
 <div class="category-content">
   <h1>{{ category.category }}</h1>
   <h6>{{ category.description }}</h6>
-  <ul>
-    {% if not listings %}
+  {% if not listings %}
     <p>No listings in this category.</p>
-    {% endif %} {% for listing in listings %}
+  {% endif %} 
+  <ul>
+    {% for listing in listings %}
     <li>
       <a class="title-link" href="{% url 'listing' listing.id %}"
         >{{ listing.title }}</a
