@@ -38,6 +38,9 @@
     <div class="listing-desc">
         <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
             <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br> 
+            {% if user_bid != None %}
+                <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ user_bid.amount }}</span></br>
+            {% endif %}
             <span class="bold">Time Left:&nbsp;&nbsp;</span><span id="countdown" class="lightweight"></span></br>
             <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
         {% if listing.categories %}
