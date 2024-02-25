@@ -96,52 +96,63 @@
         // Sort-by Options - title, seller, date, price
         // Sort-by Direction - asc, desc
 
-        const titleSort = document.querySelector(".title-sort");
-        const sellerSort = document.querySelector(".seller-sort");
-        const dateSort = document.querySelector(".date-sort");
-        const priceSort = document.querySelector(".price-sort");
-
         const titleDownArrow = document.querySelector("#title-down-arrow");
         const titleUpArrow = document.querySelector("#title-up-arrow");
         const sellerDownArrow = document.querySelector("#seller-down-arrow");
         const sellerUpArrow = document.querySelector("#seller-up-arrow");
-        const publishDownArrow = document.querySelector("#date-down-arrow");
+        const dateDownArrow = document.querySelector("#date-down-arrow");
         const dateUpArrow = document.querySelector("#date-up-arrow");
         const priceDownArrow = document.querySelector("#price-down-arrow");
         const priceUpArrow = document.querySelector("#price-up-arrow");
 
         document.addEventListener("DOMContentLoaded", function() {
-            titleSort.addEventListener("click", () => {
-                const sortBy = "title";
-                const sortByDirection = titleDownArrow.style.display === "none" ? "asc" : "desc";
-                document.querySelector("#sort-by").value = sortBy;
-                document.querySelector("#sort-by-direction").value = sortByDirection;
-                document.querySelector(".sort-by-form").submit();
-            });
+            // Determine if page is loaded with a sort-by option
 
-            sellerSort.addEventListener("click", () => {
-                const sortBy = "seller";
-                const sortByDirection = sellerDownArrow.style.display === "none" ? "asc" : "desc";
-                document.querySelector("#sort-by").value = sortBy;
-                document.querySelector("#sort-by-direction").value = sortByDirection;
-                document.querySelector(".sort-by-form").submit();
-            });
 
-            dateSort.addEventListener("click", () => {
-                const sortBy = "date";
-                const sortByDirection = publishDownArrow.style.display === "none" ? "asc" : "desc";
-                document.querySelector("#sort-by").value = sortBy;
-                document.querySelector("#sort-by-direction").value = sortByDirection;
-                document.querySelector(".sort-by-form").submit();
-            });
 
-            priceSort.addEventListener("click", () => {
-                const sortBy = "price";
-                const sortByDirection = priceDownArrow.style.display === "none" ? "asc" : "desc";
-                document.querySelector("#sort-by").value = sortBy;
-                document.querySelector("#sort-by-direction").value = sortByDirection;
+
+            titleDownArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "title";
+                document.querySelector("#sort-by-direction").value = "asc";
                 document.querySelector(".sort-by-form").submit();
             });
+            titleUpArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "title";
+                document.querySelector("#sort-by-direction").value = "desc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            sellerDownArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "seller";
+                document.querySelector("#sort-by-direction").value = "asc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            sellerUpArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "seller";
+                document.querySelector("#sort-by-direction").value = "desc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            dateDownArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "date";
+                document.querySelector("#sort-by-direction").value = "asc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            dateUpArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "date";
+                document.querySelector("#sort-by-direction").value = "desc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            priceDownArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "price";
+                document.querySelector("#sort-by-direction").value = "asc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            priceUpArrow.addEventListener("click", () => {
+                document.querySelector("#sort-by").value = "price";
+                document.querySelector("#sort-by-direction").value = "desc";
+                document.querySelector(".sort-by-form").submit();
+            });
+            
+            
 
         })
 
