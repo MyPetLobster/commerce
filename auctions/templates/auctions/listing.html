@@ -50,7 +50,7 @@
         {% if listing.categories %}
             <span class="bold">Categories:</span> 
             {% for category in listing.categories.all %}
-                {{ category.category }}
+                <a href="{% url 'category' category.id %}">{{ category.category }}</a> 
             {% endfor %}
         {% endif %}
         </p>
