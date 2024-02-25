@@ -263,6 +263,11 @@ a:hover {
   gap: 20px;
 }
 
+.down-arrow,
+.up-arrow {
+  display: none;
+}
+
 /* Form Styles */
 legend {
   font-size: 1em;
