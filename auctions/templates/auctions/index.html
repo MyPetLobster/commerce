@@ -42,29 +42,12 @@
         </form>
 
 
-  <div class="sort-by-container">
-    <p class="bold-menu" id="sort-by-header">Sort By:</p>
-    <p id="title-sort">
-        <span id="title-down-arrow" class="down-arrow">&darr;</span>
-        <span id="title-up-arrow" class="up-arrow">&uarr;</span>
-        <span id="title-text">Title</span>
-    </p>                 
-    <p id="seller-sort">
-        <span id="seller-down-arrow" class="down-arrow">&darr;</span>
-        <span id="seller-up-arrow" class="up-arrow">&uarr;</span>
-        <span id="seller-text">Seller</span>    
-    </p>
-    <p id="date-sort">
-        <span id="date-down-arrow" class="down-arrow">&darr;</span>
-        <span id="date-up-arrow" class="up-arrow">&uarr;</span>
-        <span id="date-text">Listing Date</span>
-    </p>
-    <p id="price-sort">
-        <span id="price-down-arrow" class="down-arrow">&darr;</span>
-        <span id="price-up-arrow" class="up-arrow">&uarr;</span>
-        <span id="price-text">Price</span>
-    </p>
-  </div>
+        <div class="sort-by-container">
+        <p class="sort-by-option" data-sort-by="title">Title</p>
+        <p class="sort-by-option" data-sort-by="seller">Seller</p>
+        <p class="sort-by-option" data-sort-by="date">Listing Date</p>
+        <p class="sort-by-option" data-sort-by="price">Price</p>
+        </div>
         <ul>
             {% for listing in listings %}
                 {% if listing.active == True %}
@@ -93,151 +76,45 @@
 
 
     <script>
-        // Sort-by Options - title, seller, date, price
-        // Sort-by Direction - asc, desc
-
-        const titleSort = document.querySelector("#title-sort");
-        const sellerSort = document.querySelector("#seller-sort");
-        const dateSort = document.querySelector("#date-sort");
-        const priceSort = document.querySelector("#price-sort");
-
-        const titleDownArrow = document.querySelector("#title-down-arrow");
-        const titleUpArrow = document.querySelector("#title-up-arrow");
-        const sellerDownArrow = document.querySelector("#seller-down-arrow");
-        const sellerUpArrow = document.querySelector("#seller-up-arrow");
-        const dateDownArrow = document.querySelector("#date-down-arrow");
-        const dateUpArrow = document.querySelector("#date-up-arrow");
-        const priceDownArrow = document.querySelector("#price-down-arrow");
-        const priceUpArrow = document.querySelector("#price-up-arrow");
-
         document.addEventListener("DOMContentLoaded", function() {
-            // Determine if page is loaded with a sort-by option
-            sortBy = localStorage.getItem("sort-by");
-            if (sortBy) {
-                direction = localStorage.getItem("sort-by-direction");
-                if (direction === "asc") {
-                    document.querySelector(`#${sortBy}-up-arrow`).style.display = "none";
-                    document.querySelector(`#${sortBy}-down-arrow`).style.display = "inline";
-                } else {
-                    document.querySelector(`#${sortBy}-up-arrow`).style.display = "inline";
-                    document.querySelector(`#${sortBy}-down-arrow`).style.display = "none";
-                }
+        const sortByOptions = document.querySelectorAll(".sort-by-option");
 
+        sortByOptions.forEach(option => {
+            option.addEventListener("click", function() {
+            const sortBy = this.dataset.sortBy;
+            const direction = localStorage.getItem("sort-by-direction") === "asc" ? "desc" : "asc";
+            localStorage.setItem("sort-by", sortBy);
+            localStorage.setItem("sort-by-direction", direction);
+            document.querySelector("#sort-by").value = sortBy;
+            document.querySelector("#sort-by-direction").value = direction;
+            document.querySelector(".sort-by-form").submit();
+            });
+        });
 
-                
+        const updateSortUI = () => {
+            const sortBy = localStorage.getItem("sort-by");
+            const direction = localStorage.getItem("sort-by-direction");
 
-                if (sortBy === "date") {
-                    if (direction === "asc") {
-                        document.querySelector(`#${sortBy}-text`).innerHTML = `Listing Date (Oldest First)`;
-                        document.querySelector(`#${sortBy}-up-arrow`).style.display = "inline";
-                        document.querySelector(`#${sortBy}-down-arrow`).style.display = "none";
-                    } else {
-                        document.querySelector(`#${sortBy}-text`).innerHTML = `Listing Date (Newest First)`;
-                        document.querySelector(`#${sortBy}-up-arrow`).style.display = "none";
-                        document.querySelector(`#${sortBy}-down-arrow`).style.display = "inline";
-                    }
+            sortByOptions.forEach(option => {
+            const optionSortBy = option.dataset.sortBy;
+            if (optionSortBy === sortBy) {
+                option.classList.add("sort-by-active");
+                if (sortBy === "title" || sortBy === "seller") {
+                    option.innerHTML = `${direction === "asc" ? `&darr; ${option.innerHTML} (A-Z)` : `&uarr; ${option.innerHTML} (Z-A)`}`;
+                } else if (sortBy === "date") {
+                    option.innerHTML = `${direction === "asc" ? `&uarr; ${option.innerHTML} (Old-New)` : `&darr; ${option.innerHTML} (New-Old)`}`;
+                } else if (sortBy === "price") {
+                    option.innerHTML = `${direction === "asc" ? `&darr; ${option.innerHTML} (Low-High)` : `&uarr; ${option.innerHTML} (High-Low)`}`;
                 }
-                else if (sortBy === "price") {
-                    if (direction === "asc") {
-                        document.querySelector(`#${sortBy}-text`).innerHTML = `Price (Low to High)`;
-                    } else {
-                        document.querySelector(`#${sortBy}-text`).innerHTML = `Price (High to Low)`;
-                    }
-                }
-                else {
-                    if (direction === "asc") {
-                        directionWord = "(A-Z)";
-                    } else {
-                        directionWord = "(Z-A)";
-                    }
-                    capitalSortBy = sortBy.charAt(0).toUpperCase() + sortBy.slice(1);
-                    document.querySelector(`#${sortBy}-text`).innerHTML = `${capitalSortBy} ${directionWord}`
-                }
-                
-                document.querySelector(`#${sortBy}-text`).style.fontWeight = "bold";
+            } else {
+                option.classList.remove("sort-by-active");
             }
+            });
+        };
 
-            titleSort.onclick = function() {
-                sortBy = "title";
-                localStorage.setItem("sort-by", sortBy);
-                direction = localStorage.getItem("sort-by-direction");
-                if (direction === "asc") {
-                    localStorage.setItem("sort-by-direction", "desc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "desc";
-                    titleUpArrow.style.display = "none";
-                    titleDownArrow.style.display = "inline";
-                } else {
-                    localStorage.setItem("sort-by-direction", "asc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "asc";
-                    titleUpArrow.style.display = "inline";
-                    titleDownArrow.style.display = "none";
-                }
-                document.querySelector(".sort-by-form").submit();
-            };
-
-            sellerSort.onclick = function() {
-                sortBy = "seller";
-                localStorage.setItem("sort-by", sortBy);
-                direction = localStorage.getItem("sort-by-direction");
-                if (direction === "asc") {
-                    localStorage.setItem("sort-by-direction", "desc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "desc";
-                    sellerUpArrow.style.display = "none";
-                    sellerDownArrow.style.display = "inline";
-                } else {
-                    localStorage.setItem("sort-by-direction", "asc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "asc";
-                    sellerUpArrow.style.display = "inline";
-                    sellerDownArrow.style.display = "none";
-                }
-                document.querySelector(".sort-by-form").submit();
-            };
-
-            dateSort.onclick = function() {
-                sortBy = "date";
-                localStorage.setItem("sort-by", sortBy);
-                direction = localStorage.getItem("sort-by-direction");
-                if (direction === "asc") {
-                    localStorage.setItem("sort-by-direction", "desc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "desc";
-                    dateUpArrow.style.display = "none";
-                    dateDownArrow.style.display = "inline";
-                } else {
-                    localStorage.setItem("sort-by-direction", "asc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "asc";
-                    dateUpArrow.style.display = "inline";
-                    dateDownArrow.style.display = "none";
-                }
-                document.querySelector(".sort-by-form").submit();
-            };
-
-            priceSort.onclick = function() {
-                sortBy = "price";
-                localStorage.setItem("sort-by", sortBy);
-                direction = localStorage.getItem("sort-by-direction");
-                if (direction === "asc") {
-                    localStorage.setItem("sort-by-direction", "desc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "desc";
-                    priceUpArrow.style.display = "none";
-                    priceDownArrow.style.display = "inline";
-                } else {
-                    localStorage.setItem("sort-by-direction", "asc");
-                    document.querySelector("#sort-by").value = sortBy;
-                    document.querySelector("#sort-by-direction").value = "asc";
-                    priceUpArrow.style.display = "inline";
-                    priceDownArrow.style.display = "none";
-                }
-                document.querySelector(".sort-by-form").submit();
-            };
-        
-        })
+        updateSortUI();
+        });
+   
 
     </script>
 {% endblock %}
