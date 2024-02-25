@@ -196,11 +196,12 @@ def listing(request, listing_id):
         listing.save()
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     
-    # Find out if current user bid on the listing, set their bid to variable user_bid if so
     try:
         user_bid = Bid.objects.get(user=request.user, listing=listing)
+        difference = listing.price - user_bid.amount
     except:
         user_bid = None
+        difference = None
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -208,7 +209,8 @@ def listing(request, listing_id):
         "comments": comments,
         "comment_form": CommentForm(),
         "time_left": time_left,
-        "user_bid": user_bid
+        "user_bid": user_bid,
+        "difference": difference
     })
 
 
