@@ -4,6 +4,7 @@
 <html lang="en">
     <head>
         <title>{% block title %}Auctions{% endblock %}</title>
+        <script src="{% static 'auctions/base.js' %}" defer></script>
         {% block script %}{% endblock %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
@@ -80,36 +81,3 @@
         </footer>
     </body>
 </html>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('.del-msg').onclick = function() {
-            this.parentElement.style.display = 'none';
-        }
-    });
-
-    setTimeout(function() {
-        document.querySelector('.message').style.display = 'none';
-    }, 3000);
-
-
-    // Check if the user has a theme preference and set it when page loads
-    if (localStorage.getItem('theme') === 'dark') {
-        document.querySelector('body').classList.add('dark-mode');
-        document.querySelector('body').classList.remove('light-mode');
-        document.querySelector('#standard-hero').classList.add('hidden-hero');
-        document.querySelector('#standard-hero').classList.remove('visible-hero');
-        document.querySelector('#inverted-hero').classList.add('visible-hero');
-        document.querySelector('#inverted-hero').classList.remove('hidden-hero');
-    }
-
-    document.querySelector('#theme-mode-toggle').onclick = function() {
-        document.querySelector('body').classList.toggle('dark-mode');
-        document.querySelector('body').classList.toggle('light-mode');
-        document.querySelector('#standard-hero').classList.toggle('visible-hero');
-        document.querySelector('#standard-hero').classList.toggle('hidden-hero');
-        document.querySelector('#inverted-hero').classList.toggle('hidden-hero');
-        document.querySelector('#inverted-hero').classList.toggle('visible-hero');
-        localStorage.setItem('theme', document.querySelector('body').classList.contains('dark-mode') ? 'dark' : 'light');
-    }
-</script>
