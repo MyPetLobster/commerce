@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'auctions/sort.js' %}"></script>
+    <script src="{% static 'auctions/sort.js' %}" defer></script>
 {% endblock %}
 
 {% block navbar %}
@@ -33,7 +33,8 @@
     <h1 class="page-heading-h1">All Listings</h1>
     <p></p>
 
-    <h3 class="active-listings-heading">Active Listings</h3>
+    <h3 id="active-listings" class="active-listings-heading">Active Listings</h3>
+    <h6 id="go-to-closed">(go to closed listings)</h6>
     <form
         class="sort-by-form"
         action="{% url 'sort' %}"
@@ -84,7 +85,7 @@
             {% endif %}
         {% endfor %}
     </ul>
-    <h3 class="page-heading-h3">Closed Listings</h3>
+    <h3 id="closed-listings" class="page-heading-h3">Closed Listings</h3>
     <form
         class="sort-by-form"
         action="{% url 'sort' %}"
@@ -136,5 +137,6 @@
             {% endif %}
         {% endfor %}
     </ul>
+    <p><span id="back-to-top">Back to top</span></p>
 </div>
 {% endblock %}

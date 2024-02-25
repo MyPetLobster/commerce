@@ -50,4 +50,24 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   updateSortUI();
+
+  const activeListings = document.getElementById("active-listings");
+  const closedListings = document.getElementById("closed-listings");
+  const goToClosed = document.getElementById("go-to-closed");
+  const backToTop = document.getElementById("back-to-top");
+
+  if (goToClosed) {
+    goToClosed.addEventListener("click", () => {
+      closedListings.scrollIntoView();
+    });
+  }
+
+  backToTop.addEventListener("click", () => {
+    activeListings.scrollIntoView();
+  });
 });
+
+
+
+
+
