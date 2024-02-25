@@ -1,46 +1,55 @@
-{% extends "auctions/layout.html" %} 
-
-{% block title %} 
-Category: {{ category }} 
-{% endblock %} 
-
-{% block navbar %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
-  </li>
-  <li class="nav-item">
-      <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
-  </li>
-{% endblock %} 
-
-{% block body %}
+{% extends "auctions/layout.html" %} {% block title %} Category: {{ category }}
+{% endblock %} {% block navbar %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+</li>
+{% endblock %} {% block body %}
 
 <div class="category-content">
   <h1>{{ category.category }}</h1>
   <h6>{{ category.description }}</h6>
   {% if not listings %}
-    <p>No listings in this category.</p>
-  {% endif %} 
+  <p>No listings in this category.</p>
+  {% endif %}
   <ul>
     {% for listing in listings %}
     <li>
       <a class="title-link" href="{% url 'listing' listing.id %}"
         >{{ listing.title }}</a
       >
+      <p class="listing-desc hidden-desc">
+        {{ listing.title }} - {{ listing.description|truncatechars:125 }} - ${{listing.price }}
+      </p>
     </li>
     {% endfor %}
   </ul>
 </div>
+
+<script>
+  document.querySelectorAll(".title-link").forEach((link) => {
+    link.addEventListener("mouseover", () => {
+      link.nextElementSibling.classList.toggle("hidden-desc");
+      link.nextElementSibling.classList.toggle("visible-desc");
+    });
+    link.addEventListener("mouseout", () => {
+      link.nextElementSibling.classList.toggle("hidden-desc");
+      link.nextElementSibling.classList.toggle("visible-desc");
+    });
+  });
+</script>
 {% endblock %}

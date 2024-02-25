@@ -512,6 +512,23 @@ legend {
   gap: 10px;
 }
 
+.hidden-desc {
+  display: none;
+}
+
+.visible-desc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  background-color: rgba(197, 81, 118, 0.679);
+  border-radius: 8px;
+  font-size: 0.8em;
+}
+
 /* Login and Register Pages */
 .auth-page-content {
   display: flex;
