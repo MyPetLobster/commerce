@@ -38,17 +38,8 @@
     <div class="listing-desc">
         <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
             <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br> 
-        {% if time_left_level == 0 %}
-            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight">{{ time_left }}</span></br>
-        {% elif time_left_level == 1 %} 
-            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:yellow">{{ time_left }}</span></br> 
-        {% elif time_left_level == 2 %}
-            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:orange">{{ time_left }}</span></br> 
-        {% elif time_left_level == 3 %}
-            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:red">{{ time_left }}</span></br>
-        {% endif %}
-        <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
-        
+            <span class="bold">Time Left:&nbsp;&nbsp;</span><span id="countdown" class="lightweight"></span></br>
+            <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
         {% if listing.categories %}
             <span class="bold">Categories:</span> 
             {% for category in listing.categories.all %}
@@ -140,5 +131,57 @@
             commentForm.classList.add('hidden-form');
         }
     });
+
+    // Function to update the countdown
+    function updateCountdown() {
+        // Get the countdown element
+        var countdownElement = document.getElementById('countdown');
+
+        // Get the time left from the Django variable
+        var timeLeft = "{{ time_left }}";
+
+        // Split the time left into hours, minutes, and seconds
+        var timeParts = timeLeft.split(', ');
+
+        // Convert hours, minutes, and seconds to milliseconds
+        var millisecondsLeft = parseInt(timeParts[0]) * 60 * 60 * 1000 + parseInt(timeParts[1]) * 60 * 1000 + parseInt(timeParts[2]) * 1000;
+
+        // Update the countdown every second
+        var countdownInterval = setInterval(function() {
+            // Subtract one second from the remaining time
+            millisecondsLeft -= 1000;
+
+            // Check if the remaining time is less than 0
+            if (millisecondsLeft <= 0) {
+                // If the time has expired, clear the interval
+                clearInterval(countdownInterval);
+                // Set the countdown text to "Expired"
+                countdownElement.textContent = "Expired";
+            } else {
+                // Convert milliseconds to hours, minutes, and seconds
+                var hours = Math.floor(millisecondsLeft / (1000 * 60 * 60));
+                var minutes = Math.floor((millisecondsLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((millisecondsLeft % (1000 * 60)) / 1000);
+
+                // Format the remaining time
+                var formattedTime = hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+
+                // Update the countdown text
+                countdownElement.textContent = formattedTime;
+
+                // Check if the remaining time is less than 1 hour, 12 hours, or 24 hours
+                if (hours < 1) {
+                    countdownElement.style.color = "red";
+                } else if (hours < 12) {
+                    countdownElement.style.color = "orange";
+                } else if (hours < 24) {
+                    countdownElement.style.color = "yellow";
+                } 
+            }
+        }, 1000); // Update every second
+    }
+
+    // Call the updateCountdown function when the page loads
+    window.onload = updateCountdown;
 </script>
 {% endblock %}

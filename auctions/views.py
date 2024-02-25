@@ -177,14 +177,7 @@ def listing(request, listing_id):
         minutes_left, seconds_left = divmod(remainder, 60)
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
-        if hours_left < 1:
-            time_left_level = 3
-        elif hours_left < 12:   
-            time_left_level = 2
-        elif hours_left < 24:
-            time_left_level = 1
-        else:
-            time_left_level = 0
+
     try:
         winner = Winner.objects.get(listing=listing)
     except Winner.DoesNotExist:
