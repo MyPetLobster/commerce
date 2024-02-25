@@ -94,6 +94,7 @@ hr {
 .logout-link,
 .footer-link {
   color: $nav-color;
+  transition: 0.15s;
 }
 .nav-link:hover,
 .logout-link:hover,
@@ -178,6 +179,7 @@ footer {
   background-color: transparent;
   background-image: none;
   border-color: $nav-color-hover;
+  transition: 0.15s;
 }
 
 .btn-outline-primary:hover {
@@ -201,6 +203,7 @@ footer {
 #cancel-comment {
   background-color: $cancel-color;
   color: $text-color-light;
+  transition: 0.15s;
 }
 #close-listing-btn:hover,
 #close-listing-btn:focus,
@@ -214,6 +217,7 @@ footer {
 /* Link Styles */
 a {
   color: $link-color;
+  transition: 0.15s;
 }
 a:hover {
   text-decoration: none;
@@ -244,7 +248,17 @@ a:hover {
 }
 
 .active-listings-heading {
-  margin-bottom: 40px;
+  margin-bottom: 10px;
+}
+
+#go-to-closed,
+#back-to-top {
+    cursor: pointer;
+    transition: 0.15s;
+}
+#go-to-closed:hover,
+#back-to-top:hover {
+  color: $nav-color-hover;
 }
 
 .thumb-title-div {
@@ -263,9 +277,13 @@ a:hover {
   font-size: 0.8em;
   gap: 30px;
   margin-bottom: 20px;
-
-  p:hover {
+  
+  p {
     cursor: pointer;
+    transition: 0.15s;
+  }
+  p:hover {
+    color: $nav-color-hover;
   }
 }
 .sort-by-active {
@@ -425,6 +443,7 @@ legend {
     font-size: 0.7em;
     padding: 4px 15px;
     background-color: $cancel-color;
+    transition: 0.15s;
   }
   .btn-primary:hover,
   .btn-primary:focus,

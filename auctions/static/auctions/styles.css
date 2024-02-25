@@ -76,6 +76,7 @@ hr {
 .logout-link,
 .footer-link {
   color: #8c8787;
+  transition: 0.15s;
 }
 
 .nav-link:hover,
@@ -180,6 +181,7 @@ footer li {
   background-color: transparent;
   background-image: none;
   border-color: #c55176;
+  transition: 0.15s;
 }
 
 .btn-outline-primary:hover {
@@ -203,6 +205,7 @@ footer li {
 #cancel-comment {
   background-color: #80052c;
   color: #f4f4f4;
+  transition: 0.15s;
 }
 
 #close-listing-btn:hover,
@@ -217,6 +220,7 @@ footer li {
 /* Link Styles */
 a {
   color: #1696b9;
+  transition: 0.15s;
 }
 
 a:hover {
@@ -250,7 +254,18 @@ a:hover {
 }
 
 .active-listings-heading {
-  margin-bottom: 40px;
+  margin-bottom: 10px;
+}
+
+#go-to-closed,
+#back-to-top {
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+#go-to-closed:hover,
+#back-to-top:hover {
+  color: #c55176;
 }
 
 .thumb-title-div {
@@ -277,8 +292,12 @@ a:hover {
   gap: 30px;
   margin-bottom: 20px;
 }
-.sort-by-container p:hover {
+.sort-by-container p {
   cursor: pointer;
+  transition: 0.15s;
+}
+.sort-by-container p:hover {
+  color: #c55176;
 }
 
 .sort-by-active {
@@ -467,6 +486,7 @@ legend {
   font-size: 0.7em;
   padding: 4px 15px;
   background-color: #80052c;
+  transition: 0.15s;
 }
 .watchlist-listing .btn-primary:hover,
 .watchlist-listing .btn-primary:focus,
