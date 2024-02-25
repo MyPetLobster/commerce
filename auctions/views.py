@@ -346,6 +346,7 @@ def change_password(request, user_id):
 def sort(request):
     # Sort Form Fields: Title, Seller, Date, Price
     # Sort Order: Ascending, Descending
+    page = request.POST["page"]
     sort_by = request.POST["sort-by"]
     sort_by_direction = request.POST["sort-by-direction"]
 
@@ -379,7 +380,14 @@ def sort(request):
         
     print(listings)
 
-    return render(request, "auctions/index.html", {
-        "listings": listings
-    })
+    if page == "index":
+        return render(request, "auctions/index.html", {
+            "listings": listings
+        })
+    elif page == "listings":
+        winners = Winner.objects.all()
+        return render(request, "auctions/listings.html", {
+            "listings": listings,
+            "winners": winners
+        })
     
