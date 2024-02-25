@@ -162,8 +162,6 @@ def listing(request, listing_id):
 
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    print(f'diff_seconds: {diff_seconds}')
-
     if diff_seconds > 259200:
         time_left = "listing has ended"
         if listing.active:
@@ -178,18 +176,21 @@ def listing(request, listing_id):
         hours_left, remainder = divmod(seconds_left, 3600)
         minutes_left, seconds_left = divmod(remainder, 60)
         seconds_left = math.floor(seconds_left)
-
-        print(f'hours_left: {hours_left}')
-        print(f'minutes_left: {minutes_left}')
-        print(f'seconds_left: {seconds_left}')
-        
         time_left = f"{int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
-
+        if hours_left < 1:
+            time_left_level = 3
+        elif hours_left < 12:   
+            time_left_level = 2
+        elif hours_left < 24:
+            time_left_level = 1
+        else:
+            time_left_level = 0
     try:
         winner = Winner.objects.get(listing=listing)
     except Winner.DoesNotExist:
         winner = None
 
+    # Place Bid
     if request.method == "POST":
         amount = request.POST["amount"]
         bid = Bid.objects.create(
@@ -207,7 +208,8 @@ def listing(request, listing_id):
         "winner": winner,
         "comments": comments,
         "comment_form": CommentForm(),
-        "time_left": time_left
+        "time_left": time_left,
+        "time_left_level": time_left_level
     })
 
 

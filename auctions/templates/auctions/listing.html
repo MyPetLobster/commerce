@@ -37,8 +37,16 @@
     {% endif %}
     <div class="listing-desc">
         <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
-        <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br>  
-        <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight">{{ time_left }}</span></br>
+            <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br> 
+        {% if time_left_level == 0 %}
+            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight">{{ time_left }}</span></br>
+        {% elif time_left_level == 1 %} 
+            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:yellow">{{ time_left }}</span></br> 
+        {% elif time_left_level == 2 %}
+            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:orange">{{ time_left }}</span></br> 
+        {% elif time_left_level == 3 %}
+            <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight" style="color:red">{{ time_left }}</span></br>
+        {% endif %}
         <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
         
         {% if listing.categories %}
