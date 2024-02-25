@@ -1,5 +1,5 @@
 import math
-from datetime import datetime, timezone
+from datetime import timedelta, timezone
 
 from django import forms
 from django.contrib import messages
@@ -162,17 +162,27 @@ def listing(request, listing_id):
 
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    if diff_seconds < 0:
+    print(f'diff_seconds: {diff_seconds}')
+
+    if diff_seconds > 259200:
         time_left = "listing has ended"
         if listing.active:
             listing.active = False
             listing.save()
+        closed_date = listing.date + timedelta(days=3)
+        closed_date = closed_date
+        time_left = f"listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
             
     else:
         seconds_left = max(0, 259200 - diff_seconds)
         hours_left, remainder = divmod(seconds_left, 3600)
         minutes_left, seconds_left = divmod(remainder, 60)
+        seconds_left = math.floor(seconds_left)
 
+        print(f'hours_left: {hours_left}')
+        print(f'minutes_left: {minutes_left}')
+        print(f'seconds_left: {seconds_left}')
+        
         time_left = f"{int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
     try:

@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% load tz %}
+
 {% block title %}
     Listing: {{ listing.title }}
 {% endblock %}
@@ -26,6 +28,7 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="page-content">
     <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
@@ -34,7 +37,7 @@
     {% endif %}
     <div class="listing-desc">
         <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
-        <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br>    
+        <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.price }}</span></br>  
         <span class="bold">Time Left:&nbsp;&nbsp;</span><span class="lightweight">{{ time_left }}</span></br>
         <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
         
