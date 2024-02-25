@@ -268,6 +268,24 @@ a:hover {
   display: none;
 }
 
+.sort-by-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.8em;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+.sort-by-container p:hover {
+  cursor: pointer;
+}
+
+.sort-by-active {
+  font-weight: bold;
+  color: #c55176;
+}
+
 /* Form Styles */
 legend {
   font-size: 1em;

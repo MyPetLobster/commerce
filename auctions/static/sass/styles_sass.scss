@@ -258,10 +258,20 @@ a:hover {
 .up-arrow {
   display: none;
 }
+.sort-by-container {
+  @include flex-row;
+  font-size: 0.8em;
+  gap: 30px;
+  margin-bottom: 20px;
 
-
-
-
+  p:hover {
+    cursor: pointer;
+  }
+}
+.sort-by-active {
+  font-weight: bold;
+  color: $nav-color-hover;
+}
 
 /* Form Styles */
 legend {
@@ -354,12 +364,9 @@ legend {
 }
 
 .timestamp {
-    font-size: 0.8em;
-    color: $medium-gray;
+  font-size: 0.8em;
+  color: $medium-gray;
 }
-
-
-
 
 /* Profile Page */
 .profile-page-content {
