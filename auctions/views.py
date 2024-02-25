@@ -201,8 +201,7 @@ def listing(request, listing_id):
         "winner": winner,
         "comments": comments,
         "comment_form": CommentForm(),
-        "time_left": time_left,
-        "time_left_level": time_left_level
+        "time_left": time_left
     })
 
 
