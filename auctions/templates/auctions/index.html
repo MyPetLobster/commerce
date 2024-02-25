@@ -79,6 +79,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
         const sortByOptions = document.querySelectorAll(".sort-by-option");
+        window.scrollTo(0, localStorage.getItem("scrollY"));
 
         sortByOptions.forEach(option => {
             option.addEventListener("click", function() {
@@ -86,6 +87,7 @@
             const direction = localStorage.getItem("sort-by-direction") === "asc" ? "desc" : "asc";
             localStorage.setItem("sort-by", sortBy);
             localStorage.setItem("sort-by-direction", direction);
+            localStorage.setItem("scrollY", window.scrollY);
             document.querySelector("#sort-by").value = sortBy;
             document.querySelector("#sort-by-direction").value = direction;
             document.querySelector(".sort-by-form").submit();
