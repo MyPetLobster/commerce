@@ -1,3 +1,4 @@
+/* Dark Mode/Light Mode */
 .light-mode {
   background-color: #f4f4f4;
   color: #333;
@@ -18,6 +19,10 @@
 
 .bold {
   font-weight: bold;
+}
+
+.lightweight {
+  font-weight: 300;
 }
 
 img {
@@ -59,10 +64,6 @@ hr {
   margin-top: 8px;
 }
 
-.lightweight {
-  font-weight: 300;
-}
-
 .center-container {
   width: 100%;
   display: flex;
@@ -71,7 +72,47 @@ hr {
   gap: 10px;
 }
 
+/* Link Styles */
+a {
+  color: #1696b9;
+  transition: 0.15s;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #0a5f76;
+}
+
+/* Form Styles */
+legend {
+  font-size: 1em;
+}
+
+#description {
+  width: 100%;
+  height: 100px;
+}
+
+.category-checkbox {
+  margin: 0;
+}
+
+.category-checkbox label {
+  font-size: smaller;
+  margin: 0;
+}
+
 /* Nav and Footer Styles */
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 0;
+}
+
 .nav-link,
 .logout-link,
 .footer-link {
@@ -102,16 +143,6 @@ hr {
 
 .hidden-hero {
   display: none;
-}
-
-.nav-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  justify-content: space-between;
-  padding: 0px;
-  margin: 0;
 }
 
 .user-status {
@@ -217,15 +248,46 @@ footer li {
   background-color: #4c0219;
 }
 
-/* Link Styles */
-a {
-  color: #1696b9;
-  transition: 0.15s;
+/* Dynamic Form and Description */
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #f4f4f4;
+  background-color: #7a9196;
+  align-items: flex-end;
+  width: auto;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+}
+.popup-form label {
+  font-size: 0.9em;
 }
 
-a:hover {
-  text-decoration: none;
-  color: #0a5f76;
+.hidden,
+.hidden-form {
+  display: none;
+}
+
+.visible {
+  display: block;
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.visible-form {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
 }
 
 /* Active and All Listings Pages */
@@ -303,67 +365,6 @@ a:hover {
 .sort-by-active {
   font-weight: bold;
   color: #c55176;
-}
-
-/* Form Styles */
-legend {
-  font-size: 1em;
-}
-
-#description {
-  width: 100%;
-  height: 100px;
-}
-
-.category-checkbox {
-  margin: 0;
-}
-
-.category-checkbox label {
-  font-size: smaller;
-  margin: 0;
-}
-
-/* Dynamic Form and Description */
-.popup-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: #f4f4f4;
-  background-color: #7a9196;
-  align-items: flex-end;
-  width: auto;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
-}
-.popup-form label {
-  font-size: 0.9em;
-}
-
-.hidden,
-.hidden-form {
-  display: none;
-}
-
-.visible {
-  display: block;
-  position: absolute;
-  top: 36%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-
-.visible-form {
-  display: block;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
 }
 
 /* Listing Page */

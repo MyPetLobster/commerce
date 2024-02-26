@@ -23,7 +23,13 @@ $background-color-dark: #333;
 $medium-gray: #6c757d;
 $cancel-color: #80052c;
 $cancel-color-hover: #4c0219;
+$btn-focus: #e75684;
+$btn-hover: #983554;
 
+
+
+
+/* Dark Mode/Light Mode */
 .light-mode {
   background-color: $background-color-light;
   color: $text-color-dark;
@@ -33,6 +39,9 @@ $cancel-color-hover: #4c0219;
   color: $text-color-light;
 }
 
+
+
+
 /* General Styles */
 .yard-sale {
   padding: 0;
@@ -40,16 +49,15 @@ $cancel-color-hover: #4c0219;
   font-size: 2.5em;
   color: $nav-color-hover;
 }
-
 .bold {
   font-weight: bold;
 }
-
-
+.lightweight {
+  font-weight: 300;
+}
 img {
   border-radius: 8px;
 }
-
 h1,
 h2,
 h3 {
@@ -65,7 +73,6 @@ h2 {
 h3 {
   font-size: 2.5em;
 }
-
 body {
   position: relative;
   min-height: 100vh;
@@ -80,17 +87,49 @@ hr {
   clear: both;
   margin-top: 8px;
 }
-
-.lightweight {
-  font-weight: 300;
-}
-
 .center-container {
   width: 100%;
   @include flex-column;
 }
 
+
+/* Link Styles */
+a {
+  color: $link-color;
+  transition: 0.15s;
+}
+a:hover {
+  text-decoration: none;
+  color: $link-color-hover;
+}
+
+
+/* Form Styles */
+legend {
+  font-size: 1em;
+}
+#description {
+  width: 100%;
+  height: 100px;
+}
+.category-checkbox {
+  margin: 0;
+}
+.category-checkbox label {
+  font-size: smaller;
+  margin: 0;
+}
+
+
+
+
 /* Nav and Footer Styles */
+.nav-container {
+  @include flex-row;
+  justify-content: space-between;
+  padding: 0px;
+  margin: 0;
+}
 .nav-link,
 .logout-link,
 .footer-link {
@@ -116,12 +155,7 @@ hr {
 .hidden-hero {
   display: none;
 }
-.nav-container {
-  @include flex-row;
-  justify-content: space-between;
-  padding: 0px;
-  margin: 0;
-}
+
 .user-status {
   @include flex-row;
   justify-content: flex-end;
@@ -131,6 +165,7 @@ hr {
 .signed-in-as {
   color: $nav-color-hover;
 }
+
 footer {
   position: absolute;
   bottom: 0;
@@ -147,6 +182,9 @@ footer {
   }
 }
 
+
+
+
 /* Button Styles */
 .btn {
   padding: 6px 25px;
@@ -158,12 +196,12 @@ footer {
   border: none;
 }
 .btn:hover {
-  background-color: #983554;
+  background-color: $btn-hover;
   color: $text-color-light;
 }
 
 .btn-primary:focus {
-  background-color: #e75684 !important;
+  background-color: $btn-focus !important;
   color: $text-color-light;
   outline: none !important;
   border-color: $nav-color-hover !important;
@@ -185,8 +223,8 @@ footer {
 
 .btn-outline-primary:hover {
   color: $nav-color-hover;
-  background-color: #983554;
-  border-color: #983554;
+  background-color: $btn-hover;
+  border-color: $btn-hover;
 }
 
 .btn-outline-primary:focus,
@@ -215,15 +253,49 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-/* Link Styles */
-a {
-  color: $link-color;
-  transition: 0.15s;
+
+
+
+/* Dynamic Form and Description */
+.popup-form {
+  @include flex-column;
+  color: $text-color-light;
+  background-color: #7a9196;
+  align-items: flex-end;
+  width: auto;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+
+  label {
+    font-size: 0.9em;
+  }
 }
-a:hover {
-  text-decoration: none;
-  color: $link-color-hover;
+
+.hidden,
+.hidden-form {
+  display: none;
 }
+.visible {
+  display: block;
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+.visible-form {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+
+
 
 /* Active and All Listings Pages */
 .page-content {
@@ -292,65 +364,6 @@ a:hover {
   color: $nav-color-hover;
 }
 
-/* Form Styles */
-legend {
-  font-size: 1em;
-}
-#description {
-  width: 100%;
-  height: 100px;
-}
-.category-checkbox {
-  margin: 0;
-}
-.category-checkbox label {
-  font-size: smaller;
-  margin: 0;
-}
-
-
-
-
-/* Dynamic Form and Description */
-.popup-form {
-  @include flex-column;
-  color: $text-color-light;
-  background-color: #7a9196;
-  align-items: flex-end;
-  width: auto;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
-
-  label {
-    font-size: 0.9em;
-  }
-}
-
-.hidden,
-.hidden-form {
-  display: none;
-}
-
-.visible {
-  display: block;
-  position: absolute;
-  top: 36%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-
-.visible-form {
-  display: block;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-
 
 
 
@@ -402,12 +415,12 @@ legend {
 
 
 
+
 /* Profile Page */
 .profile-page-content {
   @include flex-column;
   width: 100%;
 }
-
 .profile-info {
   @include flex-column;
   width: 600px;
@@ -417,7 +430,6 @@ legend {
   width: 600px;
   align-items: flex-start;
 }
-
 #profile-closed-listings {
   margin-bottom: 60px;
 
@@ -425,6 +437,9 @@ legend {
     margin-top: 4px;
   }
 }
+
+
+
 
 /* Create Listing Page */
 .create-listing-form {
@@ -434,6 +449,9 @@ legend {
   padding: 20px;
   margin-top: 20px;
 }
+
+
+
 
 /* Watchlist Page */
 .watchlist-content {
@@ -471,7 +489,6 @@ legend {
     width: 100%;
     text-align: center;
   }
-
   form {
     width: 100%;
     display: flex;
@@ -479,6 +496,9 @@ legend {
     margin-bottom: 40px;
   }
 }
+
+
+
 
 /* Categories & Category Pages */
 .categories-content {
@@ -498,11 +518,9 @@ legend {
 .categories-li {
   font-size: 0.9em;
 }
-
 .category-content {
   @include flex-column;
 }
-
 .hidden-desc {
   display: none;
 }
@@ -518,6 +536,9 @@ legend {
   border-radius: 8px;
   font-size: 0.8em;
 }
+
+
+
 
 /* Login and Register Pages */
 .auth-page-content {
@@ -536,7 +557,6 @@ legend {
 .form-control {
   font-size: 0.9em;
 }
-
 .form-control:focus {
   border-color: $nav-color-hover;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
