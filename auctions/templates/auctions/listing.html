@@ -139,6 +139,16 @@
         }
     });
 
+    
+    function checkAndUpdate() {
+            var timeLeftCheck = "{{ time_left }}";
+    if (typeof timeLeftCheck === 'string') {
+        document.getElementById('countdown').textContent = timeLeftCheck;
+    } else {
+        updateCountdown();
+    }
+    }
+
     // Function to update the countdown
     function updateCountdown() {
         // Get the countdown element
@@ -188,7 +198,7 @@
         }, 1000); // Update every second
     }
 
-    // Call the updateCountdown function when the page loads
-    window.onload = updateCountdown;
+    // Call the checkAndUpdate function when the page loads
+    window.onload = checkAndUpdate;
 </script>
 {% endblock %}
