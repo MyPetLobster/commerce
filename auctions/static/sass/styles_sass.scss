@@ -22,7 +22,7 @@ $background-color-light: #f4f4f4;
 $background-color-dark: #333;
 $medium-gray: #6c757d;
 $cancel-color: #80052c;
-$cancel-color-hover: #4c0219;
+$cancel-color-hover: #a90000;
 $btn-focus: #e75684;
 $btn-hover: #983554;
 
@@ -398,6 +398,19 @@ footer {
 }
 #dollar-sign {
   font-size: 1.3em;
+}
+
+#remove-watchlist,
+#cancel-button,
+#cancel-password {
+  background-color: $cancel-color;
+  color: $text-color-light;
+  transition: 0.15s;
+}
+#remove-watchlist:hover,
+#cancel-button:hover,
+#cancel-password:hover {
+  background-color: $cancel-color-hover;
 }
 
 /* Profile Page */

@@ -245,7 +245,7 @@ footer li {
 #cancel-comment:hover,
 #cancel-comment:focus,
 #cancel-comment:active {
-  background-color: #4c0219;
+  background-color: #a90000;
 }
 
 /* Dynamic Form and Description */
@@ -441,6 +441,20 @@ footer li {
   font-size: 1.3em;
 }
 
+#remove-watchlist,
+#cancel-button,
+#cancel-password {
+  background-color: #80052c;
+  color: #f4f4f4;
+  transition: 0.15s;
+}
+
+#remove-watchlist:hover,
+#cancel-button:hover,
+#cancel-password:hover {
+  background-color: #a90000;
+}
+
 /* Profile Page */
 .profile-page-content {
   display: flex;
@@ -517,7 +531,7 @@ footer li {
 .watchlist-listing .btn-primary:hover,
 .watchlist-listing .btn-primary:focus,
 .watchlist-listing .btn-primary:active {
-  background-color: #4c0219;
+  background-color: #a90000;
 }
 .watchlist-listing a,
 .watchlist-listing p {

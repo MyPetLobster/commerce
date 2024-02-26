@@ -317,7 +317,7 @@ def add_to_watchlist(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, listing=listing)
     if created:
-        return HttpResponseRedirect(reverse("watchlist"))
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
         pass
     listings = Listing.objects.all()
@@ -331,7 +331,7 @@ def remove_from_watchlist(request, listing_id):
     if request.method == "POST":
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
         watchlist_item.delete()
-        return HttpResponseRedirect(reverse("watchlist"))
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     
 
 @login_required
