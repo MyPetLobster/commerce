@@ -374,6 +374,10 @@ footer li {
   padding: 20px;
 }
 
+.listing-img {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
+
 .comments-div {
   display: flex;
   flex-direction: column;
@@ -422,6 +426,19 @@ footer li {
 
 .visible-watchlist {
   display: block;
+}
+
+.bid-form-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  gap: 5px;
+}
+
+#dollar-sign {
+  font-size: 1.3em;
 }
 
 /* Profile Page */

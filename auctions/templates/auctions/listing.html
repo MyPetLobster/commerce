@@ -33,7 +33,7 @@
     <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
-        <img src="{{ listing.image }}" height="450">
+        <img class="listing-img" src="{{ listing.image }}" height="450">
     {% endif %}
     <div class="listing-desc">
         <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
@@ -75,7 +75,10 @@
             {% if listing.user != user %}
                 <form class="bid-form" action="/listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
-                    <input class="form-control" type="number" name="amount" step="0.01" min="{{ listing.price }}">
+                    <div class="bid-form-div">
+                        <span id="dollar-sign">$</span>
+                        <input class="form-control" type="number" name="amount" step="0.01" min="{{ listing.price }}">
+                    </div>
                     <button class="btn btn-primary" type="submit">Place Bid</button>
                 </form>
             {% endif %}

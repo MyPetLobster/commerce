@@ -26,9 +26,6 @@ $cancel-color-hover: #4c0219;
 $btn-focus: #e75684;
 $btn-hover: #983554;
 
-
-
-
 /* Dark Mode/Light Mode */
 .light-mode {
   background-color: $background-color-light;
@@ -38,9 +35,6 @@ $btn-hover: #983554;
   background-color: $background-color-dark;
   color: $text-color-light;
 }
-
-
-
 
 /* General Styles */
 .yard-sale {
@@ -92,7 +86,6 @@ hr {
   @include flex-column;
 }
 
-
 /* Link Styles */
 a {
   color: $link-color;
@@ -102,7 +95,6 @@ a:hover {
   text-decoration: none;
   color: $link-color-hover;
 }
-
 
 /* Form Styles */
 legend {
@@ -119,9 +111,6 @@ legend {
   font-size: smaller;
   margin: 0;
 }
-
-
-
 
 /* Nav and Footer Styles */
 .nav-container {
@@ -181,9 +170,6 @@ footer {
     list-style-type: none;
   }
 }
-
-
-
 
 /* Button Styles */
 .btn {
@@ -253,9 +239,6 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-
-
-
 /* Dynamic Form and Description */
 .popup-form {
   @include flex-column;
@@ -294,9 +277,6 @@ footer {
   z-index: 9999;
 }
 
-
-
-
 /* Active and All Listings Pages */
 .page-content {
   @include flex-column;
@@ -326,8 +306,8 @@ footer {
 
 #go-to-closed,
 #back-to-top {
-    cursor: pointer;
-    transition: 0.15s;
+  cursor: pointer;
+  transition: 0.15s;
 }
 #go-to-closed:hover,
 #back-to-top:hover {
@@ -350,7 +330,7 @@ footer {
   font-size: 0.8em;
   gap: 30px;
   margin-bottom: 20px;
-  
+
   p {
     cursor: pointer;
     transition: 0.15s;
@@ -364,16 +344,15 @@ footer {
   color: $primary-pink;
 }
 
-
-
-
 /* Listing Page */
 .listing-desc {
   margin-top: 20px;
   width: 600px;
   padding: 20px;
 }
-
+.listing-img {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
 .comments-div {
   @include flex-column;
   margin-top: 20px;
@@ -412,9 +391,14 @@ footer {
 .visible-watchlist {
   display: block;
 }
-
-
-
+.bid-form-div {
+  @include flex-row;
+  align-items: center;
+  gap: 5px;
+}
+#dollar-sign {
+  font-size: 1.3em;
+}
 
 /* Profile Page */
 .profile-page-content {
@@ -438,9 +422,6 @@ footer {
   }
 }
 
-
-
-
 /* Create Listing Page */
 .create-listing-form {
   @include flex-column;
@@ -449,9 +430,6 @@ footer {
   padding: 20px;
   margin-top: 20px;
 }
-
-
-
 
 /* Watchlist Page */
 .watchlist-content {
@@ -497,9 +475,6 @@ footer {
   }
 }
 
-
-
-
 /* Categories & Category Pages */
 .categories-content {
   @include flex-column;
@@ -536,9 +511,6 @@ footer {
   border-radius: 8px;
   font-size: 0.8em;
 }
-
-
-
 
 /* Login and Register Pages */
 .auth-page-content {
