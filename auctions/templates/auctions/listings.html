@@ -75,9 +75,9 @@
                         <div class="list-desc-div">
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
-                                <span class="bold">Current Bid:</span> ${{ listing.price }}</br>
-                                <span class="bold">Description:</span> {{ listing.description }}</br>
-                                <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
+                                <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }}</br>
+                                <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
+                                <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
                             </p>    
                         </div>
 
@@ -129,13 +129,13 @@
                         <div class="list-desc-div">
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
-                                <span class="bold">Final Bid:</span> ${{ listing.price }}</br>
+                                <span class="bold">Final Bid:&nbsp; </span> ${{ listing.price }}</br>
                                 {% for winner in winners %}
                                     {% if winner.listing == listing %}
-                                        <span class="bold">Winner: {{ winner.user.username }}</span></br>
+                                        <span class="bold">Winner:&nbsp; {{ winner.user.username }}</span></br>
                                     {% endif %}
                                 {% endfor %}
-                                <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                                <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                             </p>   
                         </div>
                     </div>

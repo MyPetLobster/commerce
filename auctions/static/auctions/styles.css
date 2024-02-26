@@ -72,6 +72,10 @@ hr {
   gap: 10px;
 }
 
+.field-line {
+  margin-bottom: 8px;
+}
+
 /* Link Styles */
 a {
   color: #1696b9;

@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".del-msg").onclick = function () {
-    this.parentElement.style.display = "none";
-  };
+  deleteMsg = document.querySelector(".del-msg");
+  if (deleteMsg) {
+    deleteMsg.onclick = function () {
+      this.parentElement.style.display = "none";
+    };
+  }
 });
 
 setTimeout(function () {
-  document.querySelector(".message").style.display = "none";
+  message = document.querySelector(".message");
+  if (message) {
+    message.style.display = "none";
+  }
 }, 3000);
 
 // Check if the user has a theme preference and set it when page loads

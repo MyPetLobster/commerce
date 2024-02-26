@@ -72,9 +72,9 @@
                             <div class="list-desc-div">
                                 <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                                 <p>
-                                    <span class="bold">Current Bid:</span> ${{ listing.price }}</br>
-                                    <span class="bold">Description:</span> {{ listing.description }}</br>
-                                    <span class="bold">Seller:</span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                    <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }}</br>
+                                    <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
+                                    <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
                                 </p>    
                         </div>
                     </li>
