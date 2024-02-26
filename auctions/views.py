@@ -138,17 +138,31 @@ def listing(request, listing_id):
 
     # Place Bid
     if request.method == "POST":
-        amount = request.POST["amount"]
-        bid = Bid.objects.create(
-            amount=amount,
-            listing=listing,
-            user=request.user
-        )
-        bid.save()
-        listing.price = bid.amount
-        listing.save()
-        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-    
+        amount = float(request.POST["amount"])
+        current_price = float(listing.price)
+
+        if amount <= current_price:
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "comments": comments,
+                "comment_form": CommentForm(),
+                "time_left": time_left,
+                "user_bid": user_bid,
+                "difference": difference,
+                "watchlist_item": watchlist_item,
+                "message": "Bid must be higher than current price"
+            })
+        else:
+            bid = Bid.objects.create(
+                amount=amount,
+                listing=listing,
+                user=request.user
+            )
+            bid.save()
+            listing.price = bid.amount
+            listing.save()
+            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        
 
     listing_date_utc = listing.date
     listing_date = listing_date_utc.astimezone(timezone.get_current_timezone())
