@@ -1,5 +1,6 @@
-{% extends "auctions/layout.html" %} {% block title %} Category: {{ category }}
-{% endblock %} {% block navbar %}
+{% extends "auctions/layout.html" %} 
+{% block title %} Category: {{ category }} {% endblock %} 
+{% block navbar %}
 <li class="nav-item">
   <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
 </li>
@@ -18,8 +19,8 @@
 <li class="nav-item">
   <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
 </li>
-{% endblock %} {% block body %}
-
+{% endblock %} 
+{% block body %}
 <div class="category-content">
   <h1>{{ category.category }}</h1>
   <h6>{{ category.description }}</h6>
