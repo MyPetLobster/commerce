@@ -15,6 +15,7 @@ from django.utils import timezone
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner
 
 
+# Form Models for Listings, Comments, and User Info
 class ListingForm(ModelForm):
     class Meta:
         model = Listing
@@ -59,23 +60,9 @@ class UserInfoForm(ModelForm):
         }
 
 
-def index(request):
-    listings = Listing.objects.all()
-    print(listings)
-    return render(request, "auctions/index.html" , {
-        "listings": listings
-    })
 
 
-def listings(request):
-    listings = Listing.objects.all()
-    winners = Winner.objects.all()
-    return render(request, "auctions/listings.html", {
-        "listings": listings,
-        "winners": winners
-    })
-
-
+# Authentication Views
 def login_view(request):
     if request.method == "POST":
 
@@ -125,32 +112,25 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-@login_required
-def create(request):
-    if request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
-        price = request.POST["price"]
-        image = request.POST["image"]
-        category_ids = request.POST.getlist("categories")  
 
-        listing = Listing.objects.create(
-            title=title,
-            description=description,
-            starting_bid=price,
-            price=price,
-            image=image,
-            user=request.user
-        )
 
-        listing.categories.set(category_ids)
+# Views - Public
+def index(request):
+    listings = Listing.objects.all()
+    print(listings)
+    return render(request, "auctions/index.html" , {
+        "listings": listings
+    })
 
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "auctions/create.html", {
-            "form": ListingForm()
-        })
-    
+
+def listings(request):
+    listings = Listing.objects.all()
+    winners = Winner.objects.all()
+    return render(request, "auctions/listings.html", {
+        "listings": listings,
+        "winners": winners
+    })
+
 
 def listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -214,6 +194,52 @@ def listing(request, listing_id):
     })
 
 
+def categories(request):
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+
+def category(request, category_id):
+    listings = Listing.objects.filter(categories=category_id)
+    category = Category.objects.get(pk=category_id)
+    return render(request, "auctions/category.html", {
+        "listings": listings,
+        "category": category
+    })
+
+
+
+
+# Views - Login Required
+@login_required
+def create(request):
+    if request.method == "POST":
+        title = request.POST["title"]
+        description = request.POST["description"]
+        price = request.POST["price"]
+        image = request.POST["image"]
+        category_ids = request.POST.getlist("categories")  
+
+        listing = Listing.objects.create(
+            title=title,
+            description=description,
+            starting_bid=price,
+            price=price,
+            image=image,
+            user=request.user
+        )
+
+        listing.categories.set(category_ids)
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "auctions/create.html", {
+            "form": ListingForm()
+        })
+    
+
 @login_required
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
@@ -226,6 +252,27 @@ def watchlist(request):
     })
 
 
+@login_required
+def profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    listings = Listing.objects.filter(user=user)
+    watchlist = Watchlist.objects.filter(user=user)
+    winners = Winner.objects.filter(listing__user=user)
+    current_user = request.user
+
+    return render(request, "auctions/profile.html", {
+        "user": user,
+        "listings": listings,
+        "watchlist": watchlist,
+        "winners": winners,
+        "user_info_form": UserInfoForm(instance=user),
+        "current_user": current_user
+    })
+
+
+
+
+# Functions and Actions
 @login_required
 def add_to_watchlist(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -285,39 +332,6 @@ def comment(request, listing_id):
     )
     comment.save()
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-
-
-def categories(request):
-    categories = Category.objects.all()
-    return render(request, "auctions/categories.html", {
-        "categories": categories
-    })
-
-
-def category(request, category_id):
-    listings = Listing.objects.filter(categories=category_id)
-    category = Category.objects.get(pk=category_id)
-    return render(request, "auctions/category.html", {
-        "listings": listings,
-        "category": category
-    })
-
-@login_required
-def profile(request, user_id):
-    user = User.objects.get(pk=user_id)
-    listings = Listing.objects.filter(user=user)
-    watchlist = Watchlist.objects.filter(user=user)
-    winners = Winner.objects.filter(listing__user=user)
-    current_user = request.user
-
-    return render(request, "auctions/profile.html", {
-        "user": user,
-        "listings": listings,
-        "watchlist": watchlist,
-        "winners": winners,
-        "user_info_form": UserInfoForm(instance=user),
-        "current_user": current_user
-    })
 
 
 @login_required
