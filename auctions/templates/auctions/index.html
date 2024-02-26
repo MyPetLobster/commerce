@@ -64,6 +64,10 @@
                             <div class="thumb-div">
                                 <img src="{{ listing.image }}" height="120" width="120">
                             </div>
+                            {% else %}
+                            <div class="thumb-div">
+                                <img src="{% static 'images/No_Image_Available.jpg' %}" height="120" width="120">
+                            </div>
                             {% endif %}
                             <div class="list-desc-div">
                                 <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
