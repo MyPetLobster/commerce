@@ -65,6 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
   backToTop.addEventListener("click", () => {
     activeListings.scrollIntoView();
   });
+
+  // if user clicks away from page, save scroll position
+  window.addEventListener("beforeunload", () => {
+    localStorage.setItem("scrollY", window.scrollY);
+  });
 });
 
 
