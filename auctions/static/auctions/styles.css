@@ -461,6 +461,10 @@ footer li {
   background-color: #a90000;
 }
 
+.fields-item {
+  margin-bottom: 20px;
+}
+
 /* Profile Page */
 .profile-page-content {
   display: flex;

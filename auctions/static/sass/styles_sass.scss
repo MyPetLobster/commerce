@@ -418,6 +418,10 @@ footer {
   background-color: $cancel-color-hover;
 }
 
+.fields-item {
+  margin-bottom: 20px;
+}
+
 /* Profile Page */
 .profile-page-content {
   @include flex-column;

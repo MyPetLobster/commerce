@@ -36,22 +36,34 @@
         <img class="listing-img" src="{{ listing.image }}" height="450">
     {% endif %}
     <div class="listing-desc">
-        <p><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.user.username }}</span></br>
-            <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price }}</span></br> 
+        <p class="fields-div"><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight"><a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></span></br>
+            <div class="fields-item">
+                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price }}</span></br> 
+            </div>
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
-                    <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: green">${{ user_bid.amount }} (You are the current highest bidder!)</span></br>
+                    <div class="fields-item">
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: green">${{ user_bid.amount }} (You are the current highest bidder!)</span></br>
+                    </div>
                 {% else %}
-                    <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: red">${{ user_bid.amount }} (Your bid is ${{ difference }} less than the current highest bid)</span></br>
+                    <div class="fields-item">
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: red">${{ user_bid.amount }} (Your bid is ${{ difference }} less than the current highest bid)</span></br>
+                    </div>
                 {% endif %} 
             {% endif %}
-            <span class="bold">Time Left:&nbsp;&nbsp;</span><span id="countdown" class="lightweight"></span></br>
-            <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description }}</span></br>
+            <div class="fields-item">
+                <span class="bold">Time Left:&nbsp;&nbsp;</span><span id="countdown" class="lightweight"></span></br>
+            </div>
+            <div class="fields-item">
+                <span class="bold">Description:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.description|linebreaksbr }}</span></br>
+            </div>
         {% if listing.categories %}
-            <span class="bold">Categories:</span> 
-            {% for category in listing.categories.all %}
-                <a href="{% url 'category' category.id %}">{{ category.category }}</a> 
-            {% endfor %}
+            <div class="fields-item">
+                <span class="bold">Categories:</span> 
+                {% for category in listing.categories.all %}
+                    <a href="{% url 'category' category.id %}">{{ category.category }}</a> 
+                {% endfor %}
+            </div>
         {% endif %}
         </p>
     </div>
