@@ -308,6 +308,9 @@ legend {
   margin: 0;
 }
 
+
+
+
 /* Dynamic Form and Description */
 .popup-form {
   @include flex-column;
@@ -333,7 +336,7 @@ legend {
 .visible {
   display: block;
   position: absolute;
-  top: 37%;
+  top: 36%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -347,6 +350,9 @@ legend {
   transform: translate(-50%, -50%);
   z-index: 9999;
 }
+
+
+
 
 /* Listing Page */
 .listing-desc {
@@ -386,6 +392,15 @@ legend {
   font-size: 0.8em;
   color: $medium-gray;
 }
+
+.hidden-watchlist {
+  display: none;
+}
+.visible-watchlist {
+  display: block;
+}
+
+
 
 /* Profile Page */
 .profile-page-content {

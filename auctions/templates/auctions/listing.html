@@ -57,11 +57,19 @@
     </div>
     {% if user.is_authenticated %}
         {% if listing.active == True %}
-
-            <form action="/add_to_watchlist/{{ listing.id }}" method="post">
-                {% csrf_token %}
-                <button class="btn btn-primary" type="submit">Add to Watchlist</button>
-            </form>
+            <div id="watchlist-check" class="hidden">{{ watchlist_item }}</div>
+            <div id="watchlist-check-content-add" class="hidden-watchlist">
+                <form action="/add_to_watchlist/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">Add to Watchlist</button>
+                </form>
+            </div>
+            <div id="watchlist-check-content-remove" class="hidden-watchlist">
+                <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">Remove from Watchlist</button>
+                </form>
+            </div>
             <p></p>
 
             {% if listing.user != user %}
@@ -127,6 +135,19 @@
     const commentButton = document.querySelector('#comment-button');
     const commentForm = document.querySelector('#comment-form');
     const cancelComment = document.querySelector('#cancel-comment');
+
+    const watchListCheck = document.querySelector('#watchlist-check');
+    const watchListCheckContentAdd = document.querySelector('#watchlist-check-content-add');
+    const watchListCheckContentRemove = document.querySelector('#watchlist-check-content-remove');
+    
+
+    if (watchListCheck.textContent === "not on watchlist") {
+        watchListCheckContentAdd.classList.remove('hidden-watchlist');
+        watchListCheckContentAdd.classList.add('visible-watchlist');
+    } else {
+        watchListCheckContentRemove.classList.remove('hidden-watchlist');
+        watchListCheckContentRemove.classList.add('visible-watchlist');
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         commentButton.onclick = function() {

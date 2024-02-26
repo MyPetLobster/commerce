@@ -170,7 +170,7 @@ def listing(request, listing_id):
                 winner.save()
             except:
                 pass
-            
+
         closed_date = listing.date + timedelta(days=3)
         closed_date = closed_date
         time_left = f"listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
@@ -197,6 +197,12 @@ def listing(request, listing_id):
         user_bid = None
         difference = None
 
+    # check if item is on users watchlist
+    try:
+        watchlist_item = Watchlist.objects.get(user=request.user, listing=listing)
+    except Watchlist.DoesNotExist:
+        watchlist_item = "not on watchlist"
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "winner": winner,
@@ -204,7 +210,8 @@ def listing(request, listing_id):
         "comment_form": CommentForm(),
         "time_left": time_left,
         "user_bid": user_bid,
-        "difference": difference
+        "difference": difference,
+        "watchlist_item": watchlist_item
     })
 
 
