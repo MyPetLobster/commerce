@@ -439,6 +439,8 @@ footer li {
   gap: 10px;
   align-items: center;
   gap: 5px;
+  position: relative;
+  right: 8px;
 }
 
 #dollar-sign {

@@ -86,7 +86,7 @@ hr {
   @include flex-column;
 }
 .field-line {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 /* Link Styles */
@@ -398,6 +398,8 @@ footer {
   @include flex-row;
   align-items: center;
   gap: 5px;
+  position: relative;
+  right: 8px;
 }
 #dollar-sign {
   font-size: 1.3em;
