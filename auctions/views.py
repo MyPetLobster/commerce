@@ -156,7 +156,6 @@ def listing(request, listing_id):
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
     if diff_seconds > 259200:
-        time_left = "listing has ended"
         if listing.active:
             listing.active = False
             listing.save()
@@ -172,11 +171,8 @@ def listing(request, listing_id):
                 pass
 
         closed_date = listing.date + timedelta(days=3)
-        closed_date = closed_date
-        time_left = f"listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
+        time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
 
-
-            
     else:
         seconds_left = max(0, 259200 - diff_seconds)
         hours_left, remainder = divmod(seconds_left, 3600)
@@ -202,6 +198,14 @@ def listing(request, listing_id):
         watchlist_item = Watchlist.objects.get(user=request.user, listing=listing)
     except Watchlist.DoesNotExist:
         watchlist_item = "not on watchlist"
+
+    print(f'listing: {listing}')
+    print(f'comments: {comments}')
+    print(f'winner: {winner}')
+    print(f'user_bid: {user_bid}')
+    print(f'difference: {difference}')
+    print(f'watchlist_item: {watchlist_item}')
+    print(f'time left: {time_left}')
 
     return render(request, "auctions/listing.html", {
         "listing": listing,

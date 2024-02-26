@@ -132,6 +132,7 @@
 
 <script>
 
+
     const commentButton = document.querySelector('#comment-button');
     const commentForm = document.querySelector('#comment-form');
     const cancelComment = document.querySelector('#cancel-comment');
@@ -140,74 +141,67 @@
     const watchListCheckContentAdd = document.querySelector('#watchlist-check-content-add');
     const watchListCheckContentRemove = document.querySelector('#watchlist-check-content-remove');
     
-
-    if (watchListCheck.textContent === "not on watchlist") {
-        watchListCheckContentAdd.classList.remove('hidden-watchlist');
-        watchListCheckContentAdd.classList.add('visible-watchlist');
-    } else {
-        watchListCheckContentRemove.classList.remove('hidden-watchlist');
-        watchListCheckContentRemove.classList.add('visible-watchlist');
-    }
-
+    
     document.addEventListener('DOMContentLoaded', function() {
-        commentButton.onclick = function() {
-            commentForm.classList.remove('hidden-form');
-            commentForm.classList.add('visible-form');
+        if (commentButton) {
+            commentButton.onclick = function() {
+                commentForm.classList.remove('hidden-form');
+                commentForm.classList.add('visible-form');
+            }
+            cancelComment.onclick = function() {
+                commentForm.classList.remove('visible-form');
+                commentForm.classList.add('hidden-form');
+            }
         }
-        cancelComment.onclick = function() {
-            commentForm.classList.remove('visible-form');
-            commentForm.classList.add('hidden-form');
+
+        if (watchListCheck) {
+            watchListChecker();
         }
+
+        checkAndUpdate();
     });
 
+
+    function watchListChecker() {
+        if (watchListCheck.textContent === "not on watchlist") {
+            watchListCheckContentAdd.classList.remove('hidden-watchlist');
+            watchListCheckContentAdd.classList.add('visible-watchlist');
+        } else {
+            watchListCheckContentRemove.classList.remove('hidden-watchlist');
+            watchListCheckContentRemove.classList.add('visible-watchlist');
+        }
+    }
     
     function checkAndUpdate() {
-            var timeLeftCheck = "{{ time_left }}";
-    if (typeof timeLeftCheck === 'string') {
-        document.getElementById('countdown').textContent = timeLeftCheck;
-    } else {
-        updateCountdown();
-    }
+        var timeLeftCheck = "{{ time_left }}";
+        if (timeLeftCheck.startsWith("Listing")) {
+            document.getElementById('countdown').textContent = timeLeftCheck;
+        } else {
+            updateCountdown();
+        }
     }
 
     // Function to update the countdown
-    function updateCountdown() {
-        // Get the countdown element
+    function updateCountdown() {    
         var countdownElement = document.getElementById('countdown');
-
-        // Get the time left from the Django variable
         var timeLeft = "{{ time_left }}";
-
-        // Split the time left into hours, minutes, and seconds
         var timeParts = timeLeft.split(', ');
-
-        // Convert hours, minutes, and seconds to milliseconds
         var millisecondsLeft = parseInt(timeParts[0]) * 60 * 60 * 1000 + parseInt(timeParts[1]) * 60 * 1000 + parseInt(timeParts[2]) * 1000;
-
-        // Update the countdown every second
         var countdownInterval = setInterval(function() {
-            // Subtract one second from the remaining time
             millisecondsLeft -= 1000;
 
-            // Check if the remaining time is less than 0
             if (millisecondsLeft <= 0) {
-                // If the time has expired, clear the interval
                 clearInterval(countdownInterval);
-                // Set the countdown text to "Expired"
                 countdownElement.textContent = "Expired";
             } else {
-                // Convert milliseconds to hours, minutes, and seconds
                 var hours = Math.floor(millisecondsLeft / (1000 * 60 * 60));
                 var minutes = Math.floor((millisecondsLeft % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((millisecondsLeft % (1000 * 60)) / 1000);
 
-                // Format the remaining time
                 var formattedTime = hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
 
-                // Update the countdown text
                 countdownElement.textContent = formattedTime;
 
-                // Check if the remaining time is less than 1 hour, 12 hours, or 24 hours
                 if (hours < 1) {
                     countdownElement.style.color = "red";
                 } else if (hours < 12) {
@@ -216,10 +210,8 @@
                     countdownElement.style.color = "yellow";
                 } 
             }
-        }, 1000); // Update every second
+        }, 1000);
     }
 
-    // Call the checkAndUpdate function when the page loads
-    window.onload = checkAndUpdate;
 </script>
 {% endblock %}
