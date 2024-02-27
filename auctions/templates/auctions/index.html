@@ -55,7 +55,15 @@
             <p class="sort-by-option" data-sort-by="date">Listing Date</p>
             <p class="sort-by-option" data-sort-by="price">Price</p>
         </div>
-        <ul>
+
+        <div class="full-or-title">
+            <p>
+                <span class="full-listings opt-selected">Show Full Listings</span>
+                ||
+                <span class="title-only opt-not-selected ">Show Title Only</span>
+            </p>
+        </div>
+        <ul class="long-listings visible-listings">
             {% for listing in listings %}
                 {% if listing.active == True %}
                     <li class="li-listing">
@@ -89,11 +97,53 @@
                 {% endif %}
             {% endfor %}
         </ul>
+        <ul class="short-listings hidden-listings">
+            {% for listing in listings %}
+                {% if listing.active == True %}
+                    <li class="title-only-li" style="margin-bottom: 8px">
+                        <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- ${{ listing.price }} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
         <p><span id="back-to-top">Back to top</span></p>
     </div>
     
 
     <script>
+        const showFullListings = document.querySelector(".full-listings")
+        const showTitleOnly = document.querySelector(".title-only")
+
+        const shortListings = document.querySelector(".short-listings")
+        const longListings = document.querySelector(".long-listings")
+
+        showFullListings.addEventListener("click", () => {
+            showFullListings.classList.add("opt-selected")
+            showFullListings.classList.remove("opt-not-selected")
+            showTitleOnly.classList.add("opt-not-selected")
+            showTitleOnly.classList.remove("opt-selected")
+
+            shortListings.classList.add("hidden-listings")
+            shortListings.classList.remove("visible-listings")
+            longListings.classList.add("visible-listings")
+            longListings.classList.remove("hidden-listings")
+        });
+
+        showTitleOnly.addEventListener("click", () => {
+            showTitleOnly.classList.add("opt-selected")
+            showTitleOnly.classList.remove("opt-not-selected")
+            showFullListings.classList.add("opt-not-selected")
+            showFullListings.classList.remove("opt-selected")
+
+            longListings.classList.add("hidden-listings")
+            longListings.classList.remove("visible-listings")
+            shortListings.classList.add("visible-listings")
+            shortListings.classList.remove("hidden-listings")
+        });
+       
+
+
         // check length of the description, if over 125 characters, truncate and add a link to expand
         var allDescriptions = document.querySelectorAll(".full-description")
         var allTruncatedDescriptions = document.querySelectorAll(".truncated-description")
