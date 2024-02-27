@@ -197,11 +197,16 @@
     }
 
     // Function to update the countdown
+    // time_left format = "{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
     function updateCountdown() {    
         var countdownElement = document.getElementById('countdown');
         var timeLeft = "{{ time_left }}";
         var timeParts = timeLeft.split(', ');
-        var millisecondsLeft = parseInt(timeParts[0]) * 60 * 60 * 1000 + parseInt(timeParts[1]) * 60 * 1000 + parseInt(timeParts[2]) * 1000;
+        var millisecondsLeft = parseInt(timeParts[0]) * 24 * 60 * 60 * 1000 + 
+                            parseInt(timeParts[1]) * 60 * 60 * 1000 + 
+                            parseInt(timeParts[2]) * 60 * 1000 + 
+                            parseInt(timeParts[3]) * 1000;
+
         var countdownInterval = setInterval(function() {
             millisecondsLeft -= 1000;
 
@@ -209,19 +214,31 @@
                 clearInterval(countdownInterval);
                 countdownElement.textContent = "Expired";
             } else {
-                var hours = Math.floor(millisecondsLeft / (1000 * 60 * 60));
+                var days = Math.floor(millisecondsLeft / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((millisecondsLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 var minutes = Math.floor((millisecondsLeft % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((millisecondsLeft % (1000 * 60)) / 1000);
 
-                var formattedTime = hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+                var formattedTime = '';
+
+                if (days > 0) {
+                    formattedTime += days + ' day' + (days > 1 ? 's' : '') + ', ';
+                }
+                if (hours > 0 || days > 0) { // Include hours only if there are days or if hours are non-zero
+                    formattedTime += hours + ' hour' + (hours > 1 ? 's' : '') + ', ';
+                }
+                if (minutes > 0 || hours > 0 || days > 0) { // Include minutes only if there are hours or days or if minutes are non-zero
+                    formattedTime += minutes + ' minute' + (minutes > 1 ? 's' : '') + ', ';
+                }
+                formattedTime += seconds + ' second' + (seconds > 1 ? 's' : '');
 
                 countdownElement.textContent = formattedTime;
 
-                if (hours < 1) {
+                if (hours < 1 && days < 1) {
                     countdownElement.style.color = "red";
-                } else if (hours < 12) {
+                } else if (hours < 12 && days < 1) {
                     countdownElement.style.color = "orange";
-                } else if (hours < 24) {
+                } else if (hours < 24 && days < 1) {
                     countdownElement.style.color = "yellow";
                 } 
             }

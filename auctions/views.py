@@ -169,7 +169,7 @@ def listing(request, listing_id):
     current_date_time = timezone.now()
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    if diff_seconds > 259200:
+    if diff_seconds > 604800:
         if listing.active:
             listing.active = False
             listing.save()
@@ -184,15 +184,16 @@ def listing(request, listing_id):
             except:
                 pass
 
-        closed_date = listing.date + timedelta(days=3)
+        closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
 
     else:
-        seconds_left = max(0, 259200 - diff_seconds)
+        seconds_left = max(0, 604800 - diff_seconds)
+        days_left, seconds_left = divmod(seconds_left, 86400)
         hours_left, remainder = divmod(seconds_left, 3600)
         minutes_left, seconds_left = divmod(remainder, 60)
         seconds_left = math.floor(seconds_left)
-        time_left = f"{int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
+        time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
     try:
         winner = Winner.objects.get(listing=listing)

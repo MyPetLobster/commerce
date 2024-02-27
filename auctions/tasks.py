@@ -24,7 +24,7 @@ def check_listing_expiration():
         now = timezone.now()
 
         # Filter active listings that are more than 3 days old
-        expired_listings = Listing.objects.filter(active=True, date__lt=now - timezone.timedelta(days=3))
+        expired_listings = Listing.objects.filter(active=True, date__lt=now - timezone.timedelta(days=7))
 
         for listing in expired_listings:
             # Close the listing
