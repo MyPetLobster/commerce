@@ -319,6 +319,22 @@ footer li {
   font-size: 1em;
 }
 
+.visible-description {
+  display: block;
+}
+
+.hidden-description {
+  display: none;
+}
+
+.truncated-description {
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
 .active-listings-heading {
   margin-bottom: 10px;
 }
