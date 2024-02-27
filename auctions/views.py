@@ -179,8 +179,9 @@ def listing(request, listing_id):
             except:
                 pass
 
-        # Create a string to display the date the listing was closed
-        # Assign str to time_left, same variable used for time left if listing is still active
+
+        # Create a string, 'time_left', to display the date the listing was closed
+        # Same variable used for time left if listing is still active
         # Logic to handle the difference is in the template JS
         closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
@@ -194,25 +195,11 @@ def listing(request, listing_id):
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
-    # Find the winner of the listing, if winner exists
-    try:
-        winner = Winner.objects.get(listing=listing)
-    except Winner.DoesNotExist:
-        winner = None
-
-    # Find the user's bid on the listing, if it exists
-    try:
-        user_bid = Bid.objects.get(user=request.user, listing=listing)
-        difference = listing.price - user_bid.amount
-    except:
-        user_bid = None
-        difference = None
-
-    # Check if the listing is on the user's watchlist
-    try:
-        watchlist_item = Watchlist.objects.get(user=request.user, listing=listing)
-    except Watchlist.DoesNotExist:
-        watchlist_item = "not on watchlist"
+    # Get values to pass to template
+    winner = get_object_or_404(Winner, listing=listing)
+    user_bid = get_object_or_404(Bid, listing=listing, user=request.user)
+    watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+    difference = listing.price - user_bid.amount
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
