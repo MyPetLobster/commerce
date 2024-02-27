@@ -1,3 +1,4 @@
+import logging
 import math
 from datetime import timedelta, timezone
 
@@ -7,13 +8,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.urls import reverse
 from django.forms import ModelForm
 from django.utils import timezone
 
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner
+from .tasks import send_error_notification
 
+logger = logging.getLogger(__name__)
 
 # Form Models for Listings, Comments, and User Info
 class ListingForm(ModelForm):
@@ -117,15 +120,23 @@ def register(request):
 # Views - Public
 def index(request):
     listings = Listing.objects.all()
-    print(listings)
+
+    if not listings:
+        logger.error("No listings found")
+        send_error_notification("No listings found")
+        return render(request, "auctions/index.html", {
+            "message": "No listings found"
+        })
+
     return render(request, "auctions/index.html" , {
         "listings": listings
     })
 
 
 def listings(request):
-    listings = Listing.objects.all()
+    listings = get_list_or_404(Listing.objects.all())
     winners = Winner.objects.all()
+
     return render(request, "auctions/listings.html", {
         "listings": listings,
         "winners": winners
@@ -133,15 +144,38 @@ def listings(request):
 
 
 def listing(request, listing_id):
-    listing = Listing.objects.get(pk=listing_id)
+    listing = get_object_or_404(Listing, pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
 
     # Place Bid
     if request.method == "POST":
-        amount = float(request.POST["amount"])
-        current_price = float(listing.price)
+        try: 
+            amount = float(request.POST["amount"])
+            current_price = float(listing.price)
 
-        if amount <= current_price:
+            if amount <= current_price:
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "comments": comments,
+                    "comment_form": CommentForm(),
+                    "time_left": time_left,
+                    "user_bid": user_bid,
+                    "difference": difference,
+                    "watchlist_item": watchlist_item,
+                    "message": "Bid must be higher than current price"
+                })
+            else:
+                bid = Bid.objects.create(
+                    amount=amount,
+                    listing=listing,
+                    user=request.user
+                )
+                bid.save()
+                listing.price = bid.amount
+                listing.save()
+                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+            
+        except ValueError:
             return render(request, "auctions/listing.html", {
                 "listing": listing,
                 "comments": comments,
@@ -150,26 +184,18 @@ def listing(request, listing_id):
                 "user_bid": user_bid,
                 "difference": difference,
                 "watchlist_item": watchlist_item,
-                "message": "Bid must be higher than current price"
+                "message": "Error placing bid. Please try again."
             })
-        else:
-            bid = Bid.objects.create(
-                amount=amount,
-                listing=listing,
-                user=request.user
-            )
-            bid.save()
-            listing.price = bid.amount
-            listing.save()
-            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-        
 
-    listing_date_utc = listing.date
-    listing_date = listing_date_utc.astimezone(timezone.get_current_timezone())
+    # Calculate Time Left (7 days from listing date)    
+    listing_date = listing.date
     current_date_time = timezone.now()
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
+    # If more than 7 days have passed, close the listing (celery beat task will handle this in production, see tasks.py)
     if diff_seconds > 604800:
+
+        # In production, celery will have already closed & notified winner, so this block will be skipped
         if listing.active:
             listing.active = False
             listing.save()
@@ -184,10 +210,14 @@ def listing(request, listing_id):
             except:
                 pass
 
+        # Create a string to display the date the listing was closed
+        # Assign str to time_left, same variable used for time left if listing is still active
+        # Logic to handle the difference is in the template JS
         closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
 
     else:
+        # Generate time left string to be handled in the template JS
         seconds_left = max(0, 604800 - diff_seconds)
         days_left, seconds_left = divmod(seconds_left, 86400)
         hours_left, remainder = divmod(seconds_left, 3600)
@@ -195,12 +225,13 @@ def listing(request, listing_id):
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
+    # Find the winner of the listing, if winner exists
     try:
         winner = Winner.objects.get(listing=listing)
     except Winner.DoesNotExist:
         winner = None
-    
 
+    # Find the user's bid on the listing, if it exists
     try:
         user_bid = Bid.objects.get(user=request.user, listing=listing)
         difference = listing.price - user_bid.amount
@@ -208,19 +239,11 @@ def listing(request, listing_id):
         user_bid = None
         difference = None
 
-    # check if item is on users watchlist
+    # Check if the listing is on the user's watchlist
     try:
         watchlist_item = Watchlist.objects.get(user=request.user, listing=listing)
     except Watchlist.DoesNotExist:
         watchlist_item = "not on watchlist"
-
-    print(f'listing: {listing}')
-    print(f'comments: {comments}')
-    print(f'winner: {winner}')
-    print(f'user_bid: {user_bid}')
-    print(f'difference: {difference}')
-    print(f'watchlist_item: {watchlist_item}')
-    print(f'time left: {time_left}')
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -235,7 +258,8 @@ def listing(request, listing_id):
 
 
 def categories(request):
-    categories = Category.objects.all()
+    categories = get_list_or_404(Category.objects.all())
+
     return render(request, "auctions/categories.html", {
         "categories": categories
     })
@@ -243,7 +267,8 @@ def categories(request):
 
 def category(request, category_id):
     listings = Listing.objects.filter(categories=category_id)
-    category = Category.objects.get(pk=category_id)
+    category = get_object_or_404(Category, pk=category_id)
+
     return render(request, "auctions/category.html", {
         "listings": listings,
         "category": category
@@ -417,8 +442,6 @@ def sort(request):
     sort_by = request.POST["sort-by"]
     sort_by_direction = request.POST["sort-by-direction"]
 
-    print(sort_by)
-    print(sort_by_direction)
 
     listings = Listing.objects.all()
 
@@ -445,7 +468,6 @@ def sort(request):
     else:
         listings = listings
         
-    print(listings)
 
     if page == "index":
         return render(request, "auctions/index.html", {

@@ -23,7 +23,7 @@ def check_listing_expiration():
     try:
         now = timezone.now()
 
-        # Filter active listings that are more than 3 days old
+        # Filter active listings that are more than 7 days old
         expired_listings = Listing.objects.filter(active=True, date__lt=now - timezone.timedelta(days=7))
 
         for listing in expired_listings:
@@ -93,6 +93,10 @@ def notify_winner(winner, listing):
 
 def send_error_notification(error_message):
     try:
+        # Log the error
+        logger.error(f'''------------------\n
+                     An error occurred in the check_listing_expiration task: {error_message}\n
+                     ------------------''')
         # Send error notification email to administrator
         send_mail(
             'Error Notification: Check Listing Expiration',
