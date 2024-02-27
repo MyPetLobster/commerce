@@ -147,45 +147,14 @@ def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
 
-    # Place Bid
     if request.method == "POST":
-        try: 
-            amount = float(request.POST["amount"])
-            current_price = float(listing.price)
+        amount = request.POST.get("amount")
 
-            if amount <= current_price:
-                return render(request, "auctions/listing.html", {
-                    "listing": listing,
-                    "comments": comments,
-                    "comment_form": CommentForm(),
-                    "time_left": time_left,
-                    "user_bid": user_bid,
-                    "difference": difference,
-                    "watchlist_item": watchlist_item,
-                    "message": "Bid must be higher than current price"
-                })
-            else:
-                bid = Bid.objects.create(
-                    amount=amount,
-                    listing=listing,
-                    user=request.user
-                )
-                bid.save()
-                listing.price = bid.amount
-                listing.save()
-                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-            
-        except ValueError:
-            return render(request, "auctions/listing.html", {
-                "listing": listing,
-                "comments": comments,
-                "comment_form": CommentForm(),
-                "time_left": time_left,
-                "user_bid": user_bid,
-                "difference": difference,
-                "watchlist_item": watchlist_item,
-                "message": "Error placing bid. Please try again."
-            })
+        # Call the place_bid function to place the bid
+        if place_bid(request, amount, listing_id):
+            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        else:
+            messages.error(request, "Failed to place bid. Please try again.")
 
     # Calculate Time Left (7 days from listing date)    
     listing_date = listing.date
@@ -275,8 +244,6 @@ def category(request, category_id):
     })
 
 
-
-
 # Views - Login Required
 @login_required
 def create(request):
@@ -338,6 +305,30 @@ def profile(request, user_id):
 
 
 # Functions and Actions
+@login_required
+def place_bid(request, amount, listing_id):
+    try: 
+        listing = Listing.objects.get(pk=listing_id)
+        amount = float(amount)
+        current_price = float(listing.price)
+
+        if amount <= current_price:
+            return False
+        else:
+            bid = Bid.objects.create(
+                amount=amount,
+                listing=listing,
+                user=request.user
+            )
+            listing.price = bid.amount
+            listing.save()
+            return True
+        
+    except (Listing.DoesNotExist, ValueError, IntegrityError) as e:
+        logger.error(f"Error placing bid: {e}")
+        return False
+    
+
 @login_required
 def add_to_watchlist(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
