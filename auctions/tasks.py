@@ -98,13 +98,13 @@ def send_error_notification(error_message):
                      An error occurred in the check_listing_expiration task: {error_message}\n
                      ------------------''')
         # Send error notification email to administrator
-        send_mail(
-            'Error Notification: Check Listing Expiration',
-            f'An error occurred in the check_listing_expiration task: {error_message}',
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.ADMIN_EMAIL],
-            fail_silently=False,
-        )
+        # send_mail(
+        #     'Error Notification: Check Listing Expiration',
+        #     f'An error occurred in the check_listing_expiration task: {error_message}',
+        #     settings.DEFAULT_FROM_EMAIL,
+        #     [settings.ADMIN_EMAIL],
+        #     fail_silently=False,
+        # )
 
     except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
         logger.error(f"An error occurred while sending error notification: {str(e)}")
