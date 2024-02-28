@@ -198,7 +198,6 @@ def listing(request, listing_id):
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
-
     # Get values to pass to template
     try:
         winner = Winner.objects.get(listing=listing)
