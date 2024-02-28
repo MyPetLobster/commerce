@@ -21,7 +21,7 @@
                         {{ message }}</br>
                     {% endfor %}
                 </p>
-                <a href="#" class="del-msg">&times;</a>
+                <a class="del-x" href="#" class="del-msg">&times;</a>
             </div>
 
         {% endif %}
@@ -80,5 +80,16 @@
                 </li>
             </ul>
         </footer>
+
+        <script>
+            delX = document.querySelector('.del-x');
+            error_message = document.querySelector('.message');
+
+            if (delX) {
+                delX.addEventListener('click', () => {
+                    error_message.style.display = 'none';
+                });
+            }
+        </script>
     </body>
 </html>
