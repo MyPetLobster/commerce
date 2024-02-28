@@ -639,11 +639,11 @@ footer li {
 
 .visible-desc {
   position: absolute;
-  transform: translate(-20%, 0);
+  transform: translate(-20%, -180%);
   display: block;
   text-align: center;
   margin-top: 20px;
-  background-color: rgba(197, 81, 118, 0.679);
+  background-color: rgba(197, 81, 118, 0.831);
   border-radius: 8px;
   font-size: 0.8em;
   border: 1px solid #f4f4f4;
