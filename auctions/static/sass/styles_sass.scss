@@ -304,42 +304,45 @@ footer {
 }
 
 .visible-description {
-    display: block;
+  display: block;
 }
 .hidden-description {
   display: none;
 }
 .truncated-description {
-    cursor: pointer;
+  cursor: pointer;
 }
 .pointer {
   cursor: pointer;
 }
 
 .opt-selected {
-    font-weight: bold;
-    color: $primary-pink;
+  font-weight: bold;
+  color: $primary-pink;
 }
 .opt-not-selected {
-    font-weight: 100;
-    cursor: pointer;
+  font-weight: 100;
+  cursor: pointer;
 }
 .opt-not-selected:hover {
-    font-weight: 400;
-    color: #976f7b
+  font-weight: 400;
+  color: #976f7b;
 }
 .hidden-listings {
-    display: none;
+  display: none;
 }
 .visible-listings {
-    display: block;
+  display: block;
 }
 .title-only-li {
-    font-size: 0.9em;
-    margin-bottom: 8px;
+  font-size: 0.9em;
+  margin-bottom: 8px;
 }
 .short-listings {
-    text-align: center;
+  position: relative;
+  right: 20px;
+  width: 100%;
+  text-align: center;
 }
 
 .active-listings-heading {
