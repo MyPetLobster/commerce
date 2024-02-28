@@ -238,6 +238,7 @@ def create(request):
         if form.is_valid():
             listing = form.save(commit=False)
             listing.user = request.user
+            listing.starting_bid = listing.price
             listing.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse("index"))
@@ -359,12 +360,16 @@ def close_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     try:
         highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-        winner = Winner.objects.create(
-            amount=listing.price,
-            listing=listing,
-            user=highest_bid.user
-        )
-        winner.save()
+        starting_bid = listing.starting_bid
+        if starting_bid == highest_bid.amount:
+            pass
+        else:
+            winner = Winner.objects.create(
+                amount=listing.price,
+                listing=listing,
+                user=highest_bid.user
+            )
+            winner.save()
     except:
         pass
     listing.active = False
