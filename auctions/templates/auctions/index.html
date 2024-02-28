@@ -87,7 +87,10 @@
                                     <div class="truncated-description hidden-description">
                                         <span class="bold">Description:&nbsp; </span> <span class="expand-link">{{ listing.description|truncatechars:125 }}</span></br>
                                     </div>
-                                    <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                    {% if user.is_authenticated %}
+                                        <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                    {% endif %}
+                                    
                                 </p>    
                             </div>  
                         </div>

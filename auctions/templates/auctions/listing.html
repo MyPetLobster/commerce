@@ -37,7 +37,19 @@
     {% endif %}
     <div class="listing-desc">
         <p class="fields-div">
-            <span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight"><a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></span></br>
+            <span class="bold">Created by:&nbsp;&nbsp;</span>
+            <span class="lightweight">
+                {% if user.is_authenticated %}
+                    {% if listing.user == user %}
+                        <a href="{% url 'profile' user.id %} ">You</a>
+                    {% else %}
+                        <a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                    {% endif %}
+                {% else %}
+                    <span>{{ listing.user.username }}<span>
+                {% endif %}
+                
+            </span></br>
             <div class="fields-item">
                 <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price }}</span></br> 
             </div>
