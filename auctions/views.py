@@ -142,6 +142,28 @@ def listings(request):
         "winners": winners
     })
 
+def check_expiration(listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.active:
+        now = timezone.now()
+        if listing.date + timedelta(days=7) < now:
+            listing.active = False
+            listing.save()
+            try:
+                highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+                winner = Winner.objects.create(
+                    amount=listing.price,
+                    listing=listing,
+                    user=highest_bid.user
+                )
+                winner.save()
+            except:
+                pass
+            return True
+        else:
+            return False
+    return
+
 
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -162,30 +184,11 @@ def listing(request, listing_id):
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
     # If more than 7 days have passed, close the listing (celery beat task will handle this in production, see tasks.py)
-    if diff_seconds > 604800:
-
-        # In production, celery will have already closed & notified winner, so this block will be skipped
-        if listing.active:
-            listing.active = False
-            listing.save()
-            try:
-                highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-                winner = Winner.objects.create(
-                    amount=listing.price,
-                    listing=listing,
-                    user=highest_bid.user
-                )
-                winner.save()
-            except:
-                pass
-
-
-        # Create a string, 'time_left', to display the date the listing was closed
-        # Same variable used for time left if listing is still active
-        # Logic to handle the difference is in the template JS
+    # In production, celery will have already closed & notified winner, so this function will be skipped
+    if check_expiration(listing_id):
         closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
-
+        print('expired working *********************')
     else:
         # Generate time left string to be handled in the template JS
         seconds_left = max(0, 604800 - diff_seconds)
@@ -195,12 +198,22 @@ def listing(request, listing_id):
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
-    # Get values to pass to template
-    winner = get_object_or_404(Winner, listing=listing)
-    user_bid = get_object_or_404(Bid, listing=listing, user=request.user)
-    watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
-    difference = listing.price - user_bid.amount
 
+    # Get values to pass to template
+    try:
+        winner = Winner.objects.get(listing=listing)
+    except Winner.DoesNotExist:
+        winner = None
+
+    try:
+        user_bid = Bid.objects.get(user=request.user, listing=listing)
+        difference = listing.price - user_bid.amount
+    except:
+        user_bid = None
+        difference = None
+
+    watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+    
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "winner": winner,
