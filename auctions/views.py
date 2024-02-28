@@ -227,25 +227,15 @@ def category(request, category_id):
 @login_required
 def create(request):
     if request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
-        price = request.POST["price"]
-        image = request.POST["image"]
-        category_ids = request.POST.getlist("categories")  
-
-        listing = Listing.objects.create(
-            title=title,
-            description=description,
-            starting_bid=price,
-            price=price,
-            image=image,
-            user=request.user
-        )
-
-        listing.categories.set(category_ids)
-
-        return HttpResponseRedirect(reverse("index"))
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            listing = form.save(commit=False)
+            listing.user = request.user
+            listing.save()
+            form.save_m2m()
+            return HttpResponseRedirect(reverse("index"))
     else:
+        form = ListingForm()
         return render(request, "auctions/create.html", {
             "form": ListingForm()
         })
