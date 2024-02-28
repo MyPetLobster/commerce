@@ -17,7 +17,7 @@ class Category(models.Model):
 class Listing(models.Model):
     active = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category, related_name="listings")
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     image = models.URLField(blank=True)
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -60,7 +60,6 @@ class Watchlist(models.Model):
 
 class Winner(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    anonymous = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="winner")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="winner")

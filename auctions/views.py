@@ -245,11 +245,9 @@ def create(request):
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
-    winners = Winner.objects.filter(listing__in=listings)
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
-        "winners": winners
     })
 
 
