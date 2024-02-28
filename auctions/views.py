@@ -188,8 +188,12 @@ def listing(request, listing_id):
     except:
         user_bid = None
         difference = None
-
+    
     watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+    if watchlist_item.exists():
+        pass
+    else:
+        watchlist_item = "not on watchlist"
     
     return render(request, "auctions/listing.html", {
         "listing": listing,
