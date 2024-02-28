@@ -259,7 +259,7 @@ def watchlist(request):
 
 @login_required
 def profile(request, user_id):
-    user = User.objects.get(pk=user_id)
+    user = get_object_or_404(User, pk=user_id)
     listings = Listing.objects.filter(user=user)
     watchlist = Watchlist.objects.filter(user=user)
     winners = Winner.objects.filter(listing__user=user)

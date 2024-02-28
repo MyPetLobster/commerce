@@ -20,6 +20,12 @@
     <li class="nav-item">
         <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
     </li>
+    {% if current_user != user %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
+    </li>
+    {% endif %}
+
 {% endblock %}
 
 {% block body %}
@@ -63,7 +69,13 @@
     {% endif %}
     <p></p>
     <p></p>
-    <h2>Active Listings</h2>
+
+    {% if user == current_user %}
+        <h2>My Active Listings</h2>
+    {% else %}
+        <h2>{{ user.username }}'s Active Listings</h2>
+    {% endif %}
+    
     <div class="profile-listings">
         {% if user.listings.all.count == 0 %}
             <div class="center-container">
@@ -81,7 +93,13 @@
         </ul>
         <hr>
     </div>  
-    <h2>Closed Listings</h2>
+
+    {% if user == current_user %}
+        <h2>My Closed Listings</h2>
+    {% else %}
+        <h2>{{ user.username }}'s Closed Listings</h2>
+    {% endif %}
+
     <div id="profile-closed-listings" class="profile-listings">
         <ul>
             {% for listing in user.listings.all %}
