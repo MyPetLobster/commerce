@@ -27,16 +27,14 @@
       <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
       <p class="winner-para" style="display: inline">
         {% if listing.active == False %} 
-          -- BIDDING CLOSED -- 
-          {% if listing.winner %}
-            {% if listing.winner.user == user %} 
-              You won this auction! <span style="font-style:italic; font-weight: 200;">(see email for details)</span>
+          -- BIDDING CLOSED -- <br/>
+          {% for winner in winners %} 
+            {% if winner.listing == listing and winner.user == user %} 
+              You Won! (See email for details on how to proceed.) 
             {% else %} 
-              Winner: {{ listing.winner.user.username }} 
-            {% endif %}
-          {% else %} 
-            No bids placed 
-          {% endif %}
+              Winner: {{ winner.user.username}}
+            {% endif %} 
+          {% endfor %} 
         {% else %} 
           Current Bid: {{ listing.price }} 
         {% endif %}
