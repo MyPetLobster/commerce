@@ -36,7 +36,8 @@
         <img class="listing-img" src="{{ listing.image }}" height="450">
     {% endif %}
     <div class="listing-desc">
-        <p class="fields-div"><span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight"><a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></span></br>
+        <p class="fields-div">
+            <span class="bold">Created by:&nbsp;&nbsp;</span><span class="lightweight"><a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></span></br>
             <div class="fields-item">
                 <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price }}</span></br> 
             </div>
@@ -51,6 +52,10 @@
                     </div>
                 {% endif %} 
             {% endif %}
+            <div class="fields-item">
+                <span class="bold">Listing Date:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.date }}</span></br>
+            </div>
+
             <div class="fields-item">
                 <span class="bold">Time Left:&nbsp;&nbsp;</span><span id="countdown" class="lightweight"></span></br>
             </div>
@@ -198,6 +203,7 @@
 
     // Function to update the countdown
     // time_left format = "{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
+    // OR "Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
     function updateCountdown() {    
         var countdownElement = document.getElementById('countdown');
         var timeLeft = "{{ time_left }}";
@@ -212,7 +218,7 @@
 
             if (millisecondsLeft <= 0) {
                 clearInterval(countdownInterval);
-                countdownElement.textContent = "Expired";
+                countdownElement.textContent = "Listing has been closed.";
             } else {
                 var days = Math.floor(millisecondsLeft / (1000 * 60 * 60 * 24));
                 var hours = Math.floor((millisecondsLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

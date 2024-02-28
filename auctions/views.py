@@ -142,28 +142,6 @@ def listings(request):
         "winners": winners
     })
 
-def check_expiration(listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if listing.active:
-        now = timezone.now()
-        if listing.date + timedelta(days=7) < now:
-            listing.active = False
-            listing.save()
-            try:
-                highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-                winner = Winner.objects.create(
-                    amount=listing.price,
-                    listing=listing,
-                    user=highest_bid.user
-                )
-                winner.save()
-            except:
-                pass
-            return True
-        else:
-            return False
-    return
-
 
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -183,12 +161,12 @@ def listing(request, listing_id):
     current_date_time = timezone.now()
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    # If more than 7 days have passed, close the listing (celery beat task will handle this in production, see tasks.py)
-    # In production, celery will have already closed & notified winner, so this function will be skipped
-    if check_expiration(listing_id):
+    # In production, celery will have already closed listings & notified winners
+    if check_expiration(listing_id) == "closed - expired":
         closed_date = listing.date + timedelta(days=7)
-        time_left = f"Listing closed on {closed_date.month}/{closed_date.day}/{closed_date.year}"
-        print('expired working *********************')
+        time_left = f"Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
+    elif check_expiration(listing_id) == "closed - by seller":
+        time_left = "Listing closed by seller"
     else:
         # Generate time left string to be handled in the template JS
         seconds_left = max(0, 604800 - diff_seconds)
@@ -241,6 +219,8 @@ def category(request, category_id):
         "listings": listings,
         "category": category
     })
+
+
 
 
 # Views - Login Required
@@ -304,6 +284,33 @@ def profile(request, user_id):
 
 
 # Functions and Actions
+def check_expiration(listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.active:
+        now = timezone.now()
+        if listing.date + timedelta(days=7) < now:
+            listing.active = False
+            listing.save()
+            try:
+                highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+                winner = Winner.objects.create(
+                    amount=listing.price,
+                    listing=listing,
+                    user=highest_bid.user
+                )
+                winner.save()
+            except:
+                pass
+            return "closed - expired"
+        else:
+            return "active"
+    else:
+        if listing.date + timedelta(days=7) < timezone.now():
+            return "closed - expired"
+        else:
+            return "closed - by seller"
+
+
 @login_required
 def place_bid(request, amount, listing_id):
     try: 
