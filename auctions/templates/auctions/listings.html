@@ -8,6 +8,7 @@
 
 {% block script %}
     <script src="{% static 'auctions/sort.js' %}" defer></script>
+    <script src="{% static 'auctions/expand.js' %}" defer></script>
 {% endblock %}
 
 {% block navbar %}
@@ -31,6 +32,13 @@
 {% block body %}
 <div class="page-content">
     <h1 class="page-heading-h1">All Listings</h1>
+    <div class="full-or-title">
+        <p>
+            <span class="full-listings opt-selected">Show Full Listings</span>
+            ||
+            <span class="title-only opt-not-selected ">Show Title Only</span>
+        </p>
+    </div>
     <p></p>
 
     <h3 id="active-listings" class="active-listings-heading">Active Listings</h3>
@@ -58,7 +66,7 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul>
+    <ul class="long-listings visible-listings">
         {% for listing in listings %}
             {% if listing.active == True %}
                 <li class="li-listing">
@@ -76,7 +84,12 @@
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }}</br>
-                                <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
+                                <div class="full-description visible-description">
+                                    <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
+                                </div>
+                                <div class="truncated-description hidden-description">
+                                    <span class="bold">Description:&nbsp; </span> <span class="expand-link">{{ listing.description|truncatechars:125 }}</span></br>
+                                </div>
                                 <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
                             </p>    
                         </div>
@@ -89,6 +102,17 @@
             {% endif %}
         {% endfor %}
     </ul>
+
+    <ul class="short-listings hidden-listings">
+        {% for listing in listings %}
+            {% if listing.active == True %}
+                <li class="title-only-li" style="margin-bottom: 8px">
+                    <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- ${{ listing.price }} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
     <h3 id="closed-listings" class="page-heading-h3">Closed Listings</h3>
     <form
         class="sort-by-form"
@@ -112,7 +136,7 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul>
+    <ul class="long-listings visible-listings">
         {% for listing in listings %}
             {% if listing.active == False %}
                 <li class="li-listing">
@@ -142,6 +166,15 @@
                 </li>
                 <hr>
             </br>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <ul class="short-listings hidden-listings">
+        {% for listing in listings %}
+            {% if listing.active == False %}
+                <li class="title-only-li" style="margin-bottom: 8px">
+                    <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- ${{ listing.price }} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                </li>
             {% endif %}
         {% endfor %}
     </ul>

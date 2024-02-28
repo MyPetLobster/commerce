@@ -8,6 +8,7 @@
 
 {% block script %}
     <script src="{% static 'auctions/sort.js' %}" defer></script>
+    <script src="{% static 'auctions/expand.js' %}" defer></script>
 {% endblock %}
 
 {% block navbar %}
@@ -112,72 +113,4 @@
 
         <p><span id="back-to-top">Back to top</span></p>
     </div>
-    
-
-    <script>
-        const showFullListings = document.querySelector(".full-listings")
-        const showTitleOnly = document.querySelector(".title-only")
-
-        const shortListings = document.querySelector(".short-listings")
-        const longListings = document.querySelector(".long-listings")
-
-        showFullListings.addEventListener("click", () => {
-            showFullListings.classList.add("opt-selected")
-            showFullListings.classList.remove("opt-not-selected")
-            showTitleOnly.classList.add("opt-not-selected")
-            showTitleOnly.classList.remove("opt-selected")
-
-            shortListings.classList.add("hidden-listings")
-            shortListings.classList.remove("visible-listings")
-            longListings.classList.add("visible-listings")
-            longListings.classList.remove("hidden-listings")
-        });
-
-        showTitleOnly.addEventListener("click", () => {
-            showTitleOnly.classList.add("opt-selected")
-            showTitleOnly.classList.remove("opt-not-selected")
-            showFullListings.classList.add("opt-not-selected")
-            showFullListings.classList.remove("opt-selected")
-
-            longListings.classList.add("hidden-listings")
-            longListings.classList.remove("visible-listings")
-            shortListings.classList.add("visible-listings")
-            shortListings.classList.remove("hidden-listings")
-        });
-       
-
-
-        // check length of the description, if over 125 characters, truncate and add a link to expand
-        var allDescriptions = document.querySelectorAll(".full-description")
-        var allTruncatedDescriptions = document.querySelectorAll(".truncated-description")
-        for (var i = 0; i < allDescriptions.length; i++) {
-            if (allDescriptions[i].innerText.length > 200) {
-                allDescriptions[i].classList.add("hidden-description")
-                allDescriptions[i].classList.remove("visible-description")
-                allTruncatedDescriptions[i].classList.add("visible-description")
-                allTruncatedDescriptions[i].classList.remove("hidden-description")
-            }
-        }
-
-        // add event listener to expand the description
-        document.querySelectorAll(".expand-link").forEach((link) => {
-            link.addEventListener("click", () => {
-                link.parentElement.classList.add("hidden-description")
-                link.parentElement.classList.remove("visible-description")
-                
-                link.parentElement.previousElementSibling.classList.add("pointer")    
-                link.parentElement.previousElementSibling.classList.remove("hidden-description")
-                link.parentElement.previousElementSibling.classList.add("visible-description")
-
-                link.parentElement.previousElementSibling.addEventListener("click", () => {
-                    link.parentElement.previousElementSibling.classList.add("hidden-description")
-                    link.parentElement.previousElementSibling.classList.remove("visible-description")
-                    link.parentElement.previousElementSibling.classList.remove("pointer")
-                    link.parentElement.classList.remove("hidden-description")
-                    link.parentElement.classList.add("visible-description")
-                });
-            });
-        });
-
-    </script>
 {% endblock %}
