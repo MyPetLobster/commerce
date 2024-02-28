@@ -512,12 +512,40 @@ footer {
 }
 
 /* Create Listing Page */
+.create-form-div {
+  @include flex-column;
+  align-items: center;
+  width: 500px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+}
 .create-listing-form {
   @include flex-column;
   align-items: flex-start;
-  width: 600px;
+  width: 100%;
   padding: 20px;
   margin-top: 20px;
+
+  div {
+    width: 100%;
+  }
+
+  #id_categories {
+    font-size: 0.9em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    div label {
+      @include flex-row;
+      gap: 5px;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
 }
 
 /* Watchlist Page */
