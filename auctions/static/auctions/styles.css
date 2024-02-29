@@ -776,4 +776,34 @@ footer li {
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 
+/* Transactions Page */
+.table,
+.table-striped,
+.transactions-table {
+  background-color: #6c757d;
+  border-radius: 16px;
+  overflow: hidden;
+  outline: 3px solid #c55176;
+}
+.table th,
+.table-striped th,
+.transactions-table th {
+  /*remove border top of table head? */
+  border-top: none;
+  color: #f4f4f4;
+}
+.table tbody,
+.table-striped tbody,
+.transactions-table tbody {
+  color: #f4f4f4;
+}
+
+.red {
+  color: #a90000;
+}
+
+.green {
+  color: #1f3f1a;
+}
+
 /*# sourceMappingURL=styles.css.map */

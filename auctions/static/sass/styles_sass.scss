@@ -684,3 +684,29 @@ footer {
   border-color: $primary-pink;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
+
+/* Transactions Page */
+.table,
+.table-striped,
+.transactions-table {
+  background-color: $medium-gray;
+  border-radius: 16px;
+  overflow: hidden;
+  outline: 3px solid $primary-pink;
+
+  th {
+    /*remove border top of table head? */
+    border-top: none;
+    color: $text-color-light;
+  }
+  tbody {
+    color: $text-color-light;
+  }
+}
+
+.red {
+  color: $cancel-color-hover;
+}
+.green {
+  color: $money-green-hover;
+}
