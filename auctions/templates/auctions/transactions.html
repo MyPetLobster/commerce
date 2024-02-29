@@ -23,7 +23,10 @@
         <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+        <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
     </li>
 {% endblock %}
 
@@ -31,7 +34,7 @@
 {% block body %}
 
 <div class="page-content">
-    <h2>{{ user.username }}'s Transaction History</h2>
+    <h2>{{ current_user.username }}'s Transaction History</h2>
     <table class="table table-striped transactions-table">
         <thead>
             <tr>
@@ -65,9 +68,9 @@
         </tbody>
     </table>
     <div class="center-container">
-        <p>Your current balance is: {{ user.balance }}</p>
+        <p>Your current balance is: {{ current_user.balance }}</p>
     </div>
-    <a href="{% url 'profile' user.id %}" class="btn btn-primary">Back to Profile</a>
+    <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
 
 {% endblock %}

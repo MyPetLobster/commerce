@@ -23,14 +23,14 @@ Messages
   <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+  <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
 </li>
 {% endblock %} 
 
 {% block body %}
 
 <div class="page-content">
-  <h2>{{ user.username }}'s Messages</h2>
+  <h2>{{ current_user.username }}'s Messages</h2>
   <div class="messages-container">
     <h3>Messages</h3>
     <p></p>
@@ -75,7 +75,7 @@ Messages
       {% endif %}
     </div>
   </div>
-  <a href="{% url 'profile' user.id %}" class="btn btn-primary"
+  <a href="{% url 'profile' current_user.id %}" class="btn btn-primary"
     >Back to Profile</a
   >
 </div>

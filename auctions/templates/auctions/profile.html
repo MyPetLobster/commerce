@@ -20,6 +20,9 @@
     <li class="nav-item">
         <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
+    </li>
     {% if current_user != user %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
@@ -63,58 +66,58 @@
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
     {% if current_user == user %}
-        <button id="edit-button" class="btn btn-primary">Edit Profile</button>
-        <button id="change-password" class="btn btn-primary">Change Password</button>
-        
-    </div>
+            <button id="edit-button" class="btn btn-primary">Edit Profile</button>
+            <button id="change-password" class="btn btn-primary">Change Password</button>
+            
+        </div>
 
-    <div id="edit-profile" class="hidden-form">
-        <form class="popup-form" action="{% url 'edit' user.id %}" method="post">
-            {% csrf_token %}
-            {{ user_info_form }}
-            <button class="btn btn-primary" type="submit" style="align-self:center">Save Changes</button>
-            <button class="btn btn-primary" type="button" id="cancel-button" style="align-self:center">Cancel</button>
-        </form>
-    </div>
+        <div id="edit-profile" class="hidden-form">
+            <form class="popup-form" action="{% url 'edit' current_user.id %}" method="post">
+                {% csrf_token %}
+                {{ user_info_form }}
+                <button class="btn btn-primary" type="submit" style="align-self:center">Save Changes</button>
+                <button class="btn btn-primary" type="button" id="cancel-button" style="align-self:center">Cancel</button>
+            </form>
+        </div>
 
-    <div id="change-password-form" class="hidden-form">
-        <form class="popup-form" action="{% url 'change_password' user.id %}" method="post">
-            {% csrf_token %}
-            <input class="form-control" type="password" name="old_password" placeholder="Old Password">
-            <input class="form-control" type="password" name="new_password1" placeholder="New Password">
-            <input class="form-control" type="password" name="new_password2" placeholder="Confirm New Password">
-            <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
-            <button class="btn btn-primary" type="button" id="cancel-password" style="align-self:center">Cancel</button>
-        </form>
-    </div>
-    <div class="profile-listings">
-        <hr>
-    </div>
-    <div class="account-balance">
-        <h2>Account Balance</h2>
-        <p>${{ user.balance }}</p>
-        <p><a href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
-        <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
-        <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
-    </div>
-    <div class="deposit-form hidden-form">
-        <form class="popup-form" action="{% url 'deposit' user.id %}" method="post">
-            {% csrf_token %}
-            <h3>Deposit Funds</h3>
-            <input class="form-control" type="number" name="amount" placeholder="Amount">
-            <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
-            <button class="btn btn-primary" type="button" id="cancel-deposit" style="align-self:center">Cancel</button>
-        </form>
-    </div>
-    <div class="withdraw-form hidden-form">
-        <form class="popup-form" action="{% url 'withdraw' user.id %}" method="post">
-            {% csrf_token %}
-            <h3>Withdraw Funds</h3>
-            <input class="form-control" type="number" name="amount" placeholder="Amount">
-            <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
-            <button class="btn btn-primary" type="button" id="cancel-withdraw" style="align-self:center">Cancel</button>
-        </form>
-    </div>
+        <div id="change-password-form" class="hidden-form">
+            <form class="popup-form" action="{% url 'change_password' current_user.id %}" method="post">
+                {% csrf_token %}
+                <input class="form-control" type="password" name="old_password" placeholder="Old Password">
+                <input class="form-control" type="password" name="new_password1" placeholder="New Password">
+                <input class="form-control" type="password" name="new_password2" placeholder="Confirm New Password">
+                <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
+                <button class="btn btn-primary" type="button" id="cancel-password" style="align-self:center">Cancel</button>
+            </form>
+        </div>
+        <div class="profile-listings">
+            <hr>
+        </div>
+        <div class="account-balance">
+            <h2>Account Balance</h2>
+            <p>${{ current_user.balance }}</p>
+            <p><a href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
+            <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
+            <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
+        </div>
+        <div class="deposit-form hidden-form">
+            <form class="popup-form" action="{% url 'deposit' current_user.id %}" method="post">
+                {% csrf_token %}
+                <h3>Deposit Funds</h3>
+                <input class="form-control" type="number" name="amount" placeholder="Amount">
+                <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
+                <button class="btn btn-primary" type="button" id="cancel-deposit" style="align-self:center">Cancel</button>
+            </form>
+        </div>
+        <div class="withdraw-form hidden-form">
+            <form class="popup-form" action="{% url 'withdraw' current_user.id %}" method="post">
+                {% csrf_token %}
+                <h3>Withdraw Funds</h3>
+                <input class="form-control" type="number" name="amount" placeholder="Amount">
+                <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
+                <button class="btn btn-primary" type="button" id="cancel-withdraw" style="align-self:center">Cancel</button>
+            </form>
+        </div>
     {% endif %}
     <p></p>
     <div class="profile-listings">
