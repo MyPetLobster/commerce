@@ -28,6 +28,7 @@ class Category(models.Model):
 class Listing(models.Model):
     active = models.BooleanField(default=True)
     shipped = models.BooleanField(default=False)
+    cancelled = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, related_name="listings")
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
