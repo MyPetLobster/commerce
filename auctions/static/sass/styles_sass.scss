@@ -293,7 +293,7 @@ footer {
 .visible {
   display: block;
   position: absolute;
-  top: 36%;
+  top: 37%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -544,6 +544,32 @@ footer {
 }
 #withdraw-btn:hover {
   background-color: $cancel-color-hover;
+}
+
+.send-msg-form-div {
+  @include flex-column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  align-items: center;
+  width: 600px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+
+  #cancel-msg {
+    background-color: $cancel-color;
+    color: $text-color-light;
+    transition: 0.15s;
+  }
+  #cancel-msg:hover {
+    background-color: $cancel-color-hover;
+  }
 }
 
 /* Create Listing Page */

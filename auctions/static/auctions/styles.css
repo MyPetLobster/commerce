@@ -306,7 +306,7 @@ footer li {
 .visible {
   display: block;
   position: absolute;
-  top: 36%;
+  top: 37%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -608,6 +608,34 @@ footer li {
 }
 
 #withdraw-btn:hover {
+  background-color: #a90000;
+}
+
+.send-msg-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  align-items: center;
+  width: 600px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid #f4f4f4;
+}
+.send-msg-form-div #cancel-msg {
+  background-color: #80052c;
+  color: #f4f4f4;
+  transition: 0.15s;
+}
+.send-msg-form-div #cancel-msg:hover {
   background-color: #a90000;
 }
 

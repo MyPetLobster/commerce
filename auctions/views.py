@@ -121,6 +121,7 @@ def register(request):
 # Views - Public
 def index(request):
     listings = Listing.objects.all()
+    current_user = request.user
 
     if not listings:
         logger.error("No listings found")
@@ -130,7 +131,8 @@ def index(request):
         })
 
     return render(request, "auctions/index.html" , {
-        "listings": listings
+        "listings": listings,
+        "current_user": current_user
     })
 
 

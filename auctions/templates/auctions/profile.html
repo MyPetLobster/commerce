@@ -29,6 +29,18 @@
 {% endblock %}
 
 {% block body %}
+<div>
+    <form id="send-msg-form" class="hidden-hero" action="{% url 'messages' current_user.id %}" method="post">
+        {% csrf_token %}
+        <div class="send-msg-form-div">
+            <input type="hidden" name="recipient" value="{{ user.id }}">
+            <input class="form-control" type="text" name="subject" placeholder="Subject">
+            <textarea class="form-control" name="message" placeholder="Message"></textarea>
+            <button class="btn btn-primary" type="submit">Send</button>
+            <button class="btn btn-primary" type="button" id="cancel-msg">Cancel</button>
+        </div>
+    </form>
+</div>
 <div class="profile-page-content">
     <h1>{{ user.username }}'s Yard</h1>
     {% if user != current_user %}
@@ -37,18 +49,7 @@
                 <button id="send-msg-btn" class="btn btn-primary">Send Message</button>
             </div>
 
-            <div class="send-msg-form hidden-form">
-                <form action="{% url 'messages' current_user.id %}" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <input type="hidden" name="recipient" value="{{ user.id }}">
-                        <input class="form-control" type="text" name="subject" placeholder="Subject">
-                        <textarea class="form-control" name="message" placeholder="Message"></textarea>
-                        <button class="btn btn-primary" type="submit">Send</button>
-                        <button class="btn btn-primary" type="button" id="cancel-msg">Cancel</button>
-                    </div>
-                </form>
-            </div>
+            
         {% endif %}
     {% endif %}
     <p></p>
@@ -178,17 +179,17 @@
 
 <script>
     const sendMsgButton = document.getElementById('send-msg-btn');
-    const sendMsgForm = document.querySelector('.send-msg-form');
+    const sendMsgForm = document.getElementById('send-msg-form');
     const cancelMsg = document.getElementById('cancel-msg');
 
     sendMsgButton.addEventListener('click', () => {
-        sendMsgForm.classList.remove('hidden-form');
-        sendMsgForm.classList.add('visible-form');
+        sendMsgForm.classList.remove('hidden-hero');
+        sendMsgForm.classList.add('visible-hero');
     });
 
     cancelMsg.addEventListener('click', () => {
-        sendMsgForm.classList.add('hidden-form');
-        sendMsgForm.classList.remove('visible-form');
+        sendMsgForm.classList.add('hidden-hero');
+        sendMsgForm.classList.remove('visible-hero');
     });
 
 
