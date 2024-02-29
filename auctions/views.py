@@ -15,7 +15,7 @@ from django.forms import ModelForm
 from django.utils import timezone
 
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction
-from .tasks import send_error_notification
+from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner
 
 logger = logging.getLogger(__name__)
 
@@ -298,6 +298,8 @@ def check_expiration(listing_id):
                     user=highest_bid.user
                 )
                 winner.save()
+                notify_winner(winner, listing)
+                transfer_to_escrow(winner)
             except:
                 pass
             return "closed - expired"
