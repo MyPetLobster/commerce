@@ -363,20 +363,19 @@ def remove_from_watchlist(request, listing_id):
 def close_listing(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     if request.user == listing.user:
-        try:
-            highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-            starting_bid = listing.starting_bid
-            if starting_bid == highest_bid.amount:
-                pass
-            else:
-                winner = Winner.objects.create(
-                    amount=listing.price,
-                    listing=listing,
-                    user=highest_bid.user
-                )
-                winner.save()
-        except:
-            pass
+        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+        starting_bid = listing.starting_bid
+        if highest_bid.amount > starting_bid:
+            winner = Winner.objects.create(
+                amount=listing.price,
+                listing=listing,
+                user=highest_bid.user
+            )
+            winner.save()
+            notify_winner(winner, listing)
+            transfer_to_escrow(winner)
+        else:
+            listing.cancelled = True
         listing.active = False
         listing.save()
     return HttpResponseRedirect(reverse("index"))
