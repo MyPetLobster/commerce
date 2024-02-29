@@ -47,6 +47,7 @@
             
             <div class="user-status">
                 {% if current_user.is_authenticated %}
+                <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">${{ current_user.balance }}&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <span class="signed-in-as">Signed in as <strong>{{ current_user.username }}</strong></span>
                 {% else %}
