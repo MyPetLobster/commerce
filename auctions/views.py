@@ -598,12 +598,12 @@ def messages(request, user_id):
         if user_id != request.user.id:
             return HttpResponse("Unauthorized", status=401)
         
-        user = User.objects.get(pk=request.user.id)
-        sent_messages = Message.objects.filter(sender=user)
-        inbox_messages = Message.objects.filter(recipient=user)
+        current_user = User.objects.get(pk=request.user.id)
+        sent_messages = Message.objects.filter(sender=current_user)
+        inbox_messages = Message.objects.filter(recipient=current_user)
 
         return render(request, "auctions/messages.html", {
             'sent_messages': sent_messages,
             'inbox_messages': inbox_messages,
-            'user': user
+            'current_user': current_user
         })
