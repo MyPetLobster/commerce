@@ -15,7 +15,7 @@ from django.forms import ModelForm
 from django.utils import timezone
 
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction
-from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner
+from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner, send_message, check_bids_funds
 
 logger = logging.getLogger(__name__)
 
@@ -148,10 +148,17 @@ def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
 
+    # Place Bid
     if request.method == "POST":
         amount = request.POST.get("amount")
-
-        # Call the place_bid function to place the bid
+        time_left = listing.date + timedelta(days=7) - timezone.now()
+        total_seconds_left = time_left.total_seconds()
+        if total_seconds_left <= 86400:
+            user_balance = request.user.balance
+            if amount > user_balance:
+                messages.error(request, "Insufficient funds. Must have enough deposited to cover a bid within 24 hours of listing expiration.")
+                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+            
         if place_bid(request, amount, listing_id):
             return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
         else:
@@ -317,8 +324,8 @@ def check_expiration(listing_id):
 def place_bid(request, amount, listing_id):
     try: 
         listing = Listing.objects.get(pk=listing_id)
-        amount = float(amount)
-        current_price = float(listing.price)
+        amount = decimal(amount)
+        current_price = decimal(listing.price)
 
         if amount <= current_price:
             return False
@@ -330,6 +337,15 @@ def place_bid(request, amount, listing_id):
             )
             listing.price = bid.amount
             listing.save()
+            
+            admin = User.objects.get(pk=2)
+            bidder = request.user
+            subject = f"New bid on {listing.title}"
+            message = f"{request.user.username} placed a bid of ${amount} on {listing.title}. Good luck!"
+            send_message(admin, bidder, subject, message)
+
+            check_bids_funds(listing_id)
+
             return True
         
     except (Listing.DoesNotExist, ValueError, IntegrityError) as e:

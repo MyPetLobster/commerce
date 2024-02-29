@@ -186,3 +186,34 @@ def send_message(sender, recipient, subject, message):
         message=message
     )
     message.save()
+
+@shared_task
+def check_bids_funds(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    now = timezone.now()
+    bids = Bid.objects.filter(listing=listing)
+    if bids.exists():
+        highest_bid = bids.order_by('-amount').first()
+        if highest_bid.amount > highest_bid.user.balance:
+            if listing.date + timezone.timedelta(days=6) < now:
+                send_message(
+                    User.objects.get(pk=2),
+                    highest_bid.user,
+                    f"Insufficient funds for {listing.title}",
+                    f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding."
+                )
+                highest_bid.delete()
+            else:
+                time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
+                send_message(
+                    User.objects.get(pk=2),
+                    highest_bid.user,
+                    f"Insufficient funds for {listing.title}",
+                    f"Your bid of {highest_bid.amount} on {listing.title}. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
+            )
+            highest_bid.delete()
+    else:
+        pass
+
+
+
