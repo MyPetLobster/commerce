@@ -17,6 +17,17 @@ class Transaction(models.Model):
         return f"{self.sender} - {self.recipient} - {self.amount}"
     
 
+class Message(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    subject = models.CharField(max_length=64, blank=True, null=True)
+    message = models.TextField()
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+
+    def __str__(self):
+        return f"{self.sender} - {self.recipient} - {self.message}"
+        
+
 class Category(models.Model):
     category = models.CharField(max_length=64)
     description = models.TextField(blank=True)

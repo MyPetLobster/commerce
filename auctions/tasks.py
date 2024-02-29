@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 
-from .models import Bid, Listing, Winner, User, Transaction
+from .models import Bid, Listing, Winner, User, Transaction, Message
 
 
 logger = logging.getLogger(__name__)
@@ -162,7 +162,7 @@ def transfer_to_seller(listing_id):
             listing=listing
         )
         fee_transaction.save()
-        
+
         sell_transaction = Transaction.objects.create(
             sender=escrow_account,
             recipient=seller,
@@ -176,3 +176,13 @@ def transfer_to_seller(listing_id):
         seller.balance += amount
         seller.save()
         return True
+    
+
+def send_message(sender, recipient, subject, message):
+    message = Message.objects.create(
+        sender=sender,
+        recipient=recipient,
+        subject=subject,
+        message=message
+    )
+    message.save()
