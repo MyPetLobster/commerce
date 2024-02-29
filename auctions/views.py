@@ -480,3 +480,6 @@ def sort(request):
             "winners": winners
         })
     
+
+# Money Related Functions
+    
