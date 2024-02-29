@@ -485,7 +485,6 @@ def sort(request):
     
 
 # Money Related Functions
-    
 @login_required
 def deposit(request, user_id):
     fake_bank_account = User.objects.get(pk=13)
@@ -535,3 +534,9 @@ def withdraw(request, user_id):
     user.balance -= amount
     user.save()
     return redirect("profile", user_id=user_id)
+
+
+@login_required
+def confirm_shipping(request,listing_id):
+    transfer_to_seller(listing_id)
+    return redirect("profile", user_id=request.user.id)

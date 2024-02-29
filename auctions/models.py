@@ -16,7 +16,7 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.sender} - {self.recipient} - {self.amount}"
     
-    
+
 class Category(models.Model):
     category = models.CharField(max_length=64)
     description = models.TextField(blank=True)
@@ -27,6 +27,7 @@ class Category(models.Model):
 
 class Listing(models.Model):
     active = models.BooleanField(default=True)
+    shipped = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, related_name="listings")
     date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
