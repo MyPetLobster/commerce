@@ -145,18 +145,31 @@ def transfer_to_seller(listing_id):
     seller = listing.user
     amount = listing.price
     escrow_account = User.objects.get(pk=11)
+    site_account = User.objects.get(pk=12)
+
 
     if amount > escrow_account.balance:
         #TODO: EMAIL ADMIN BALANCE ERROR BIG OOPS
         return False
     else:
-        transaction = Transaction.objects.create(
+        fee_amount = amount * 0.1
+        amount -= fee_amount
+
+        fee_transaction = Transaction.objects.create(
+            sender=escrow_account,
+            recipient=site_account,
+            amount=fee_amount,
+            listing=listing
+        )
+        fee_transaction.save()
+        
+        sell_transaction = Transaction.objects.create(
             sender=escrow_account,
             recipient=seller,
             amount=amount,
             listing=listing
         )
-        transaction.save()
+        sell_transaction.save()
 
         escrow_account.balance -= amount
         escrow_account.save()
