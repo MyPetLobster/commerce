@@ -24,4 +24,5 @@ urlpatterns = [
     path('deposit/<int:user_id>', views.deposit, name='deposit'),
     path('withdraw/<int:user_id>', views.withdraw, name='withdraw'),
     path('confirm_shipping/<int:listing_id>', views.confirm_shipping, name='confirm_shipping'),
+    path('transactions/<int:user_id>', views.transactions, name='transactions'),
 ]

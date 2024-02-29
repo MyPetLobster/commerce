@@ -545,3 +545,18 @@ def confirm_shipping(request, listing_id):
             listing.save()    
     
     return redirect("listing", listing_id=listing_id)
+
+
+@login_required
+def transactions(request, user_id):
+    if user_id != request.user.id:
+        return HttpResponse("Unauthorized", status=401)
+    user = User.objects.get(pk=user_id)
+    sent_transactions = Transaction.objects.filter(sender=user)
+    received_transactions = Transaction.objects.filter(recipient=user)
+    transactions = sent_transactions | received_transactions
+
+    return render(request, "auctions/transactions.html", {
+        'transactions': transactions,
+        'user': user
+    })
