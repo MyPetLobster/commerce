@@ -25,6 +25,7 @@ $cancel-color: #80052c;
 $cancel-color-hover: #a90000;
 $btn-focus: #e75684;
 $btn-hover: #983554;
+$money-green: #2d6128;
 
 /* Dark Mode/Light Mode */
 .light-mode {
@@ -512,7 +513,18 @@ footer {
 }
 
 .account-balance {
-    @include flex-column;
+  @include flex-column;
+}
+#deposit-btn,
+#withdraw-btn {
+  transition: 0.2s;
+  cursor: pointer;
+}
+#deposit-btn:hover {
+  background-color: $money-green;
+}
+#withdraw-btn:hover {
+  background-color: $cancel-color-hover;
 }
 
 /* Create Listing Page */

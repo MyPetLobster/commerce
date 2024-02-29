@@ -71,14 +71,16 @@
     </div>
     <div class="account-balance">
         <h2>Account Balance</h2>
-        <p>{{ user.balance }}</p>
+        <p>${{ user.balance }}</p>
         <p><a href="#">View Transaction History</a></p>
-        <button class="btn btn-primary" onclick="window.location.href='#'">Deposit Funds</button>
-        <button class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
+        <button id="deposit-btn" class="btn btn-primary" onclick="window.location.href='#'">Deposit Funds</button>
+        <button id="withdraw-btn" class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
     </div>
     {% endif %}
     <p></p>
-    <p></p>
+    <div class="profile-listings">
+        <hr>
+    </div>
 
     {% if user == current_user %}
         <h2>My Active Listings</h2>

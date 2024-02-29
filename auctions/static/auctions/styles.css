@@ -580,6 +580,20 @@ footer li {
   gap: 10px;
 }
 
+#deposit-btn,
+#withdraw-btn {
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+#deposit-btn:hover {
+  background-color: #2d6128;
+}
+
+#withdraw-btn:hover {
+  background-color: #a90000;
+}
+
 /* Create Listing Page */
 .create-form-div {
   display: flex;
