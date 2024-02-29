@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.forms import ModelForm
 from django.utils import timezone
 
-from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction
+from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction, Message
 from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner, send_message, check_bids_funds
 
 logger = logging.getLogger(__name__)
@@ -574,5 +574,20 @@ def transactions(request, user_id):
 
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
+        'user': user
+    })
+
+
+@login_required
+def messages(request, user_id):
+    if user_id != request.user.id:
+        return HttpResponse("Unauthorized", status=401)
+    user = User.objects.get(pk=user_id)
+    sent_messages = Message.objects.filter(sender=user)
+    received_messages = Message.objects.filter(recipient=user)
+    messages = sent_messages | received_messages
+
+    return render(request, "auctions/messages.html", {
+        'messages': messages,
         'user': user
     })
