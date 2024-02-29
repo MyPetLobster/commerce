@@ -86,7 +86,7 @@
         </form>
     </div>
     <div class="withdraw-form hidden-form">
-        <form class="popup-form" action="#" method="post">
+        <form class="popup-form" action="{% url 'withdraw' user.id %}" method="post">
             {% csrf_token %}
             <h3>Withdraw Funds</h3>
             <input class="form-control" type="number" name="amount" placeholder="Amount">

@@ -22,4 +22,5 @@ urlpatterns = [
     path('change_password/<int:user_id>', views.change_password, name='change_password'),
     path('sort', views.sort, name='sort'),
     path('deposit/<int:user_id>', views.deposit, name='deposit'),
+    path('withdraw/<int:user_id>', views.withdraw, name='withdraw'),
 ]

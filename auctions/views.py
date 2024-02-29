@@ -501,9 +501,35 @@ def deposit(request, user_id):
     )
     transaction.save()
 
-
     fake_bank_account.balance -= decimal.Decimal(amount)
     fake_bank_account.save()
     user.balance += decimal.Decimal(amount)
+    user.save()
+    return redirect("profile", user_id=user_id)
+
+
+@login_required
+def withdraw(request, user_id):
+    fake_bank_account = User.objects.get(pk=13)
+    user = User.objects.get(pk=user_id)
+    amount = request.POST["amount"]
+    amount = decimal.Decimal(amount)
+    if amount <= 0:
+        messages.error(request, "Withdrawal amount must be greater than 0")
+        return redirect("profile", user_id=user_id)
+    if amount > user.balance:
+        messages.error(request, "Insufficient funds")
+        return redirect("profile", user_id=user_id)
+    
+    transaction = Transaction.objects.create(
+        amount=amount,
+        sender=user,
+        recipient=fake_bank_account
+    )
+    transaction.save()
+
+    fake_bank_account.balance += decimal.Decimal(amount)
+    fake_bank_account.save()
+    user.balance -= decimal.Decimal(amount)
     user.save()
     return redirect("profile", user_id=user_id)
