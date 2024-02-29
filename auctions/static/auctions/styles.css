@@ -543,6 +543,23 @@ footer li {
   margin-bottom: 20px;
 }
 
+.confirm-ship-div {
+  background-color: #f4f4f4;
+  color: #80052c;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #80052c;
+}
+.confirm-ship-div button {
+  background-color: #6c757d;
+  color: #f4f4f4;
+  transition: 0.15s;
+}
+.confirm-ship-div button:hover {
+  border: 2px solid #80052c;
+  background-color: #c55176;
+}
+
 /* Profile Page */
 .profile-page-content {
   display: flex;

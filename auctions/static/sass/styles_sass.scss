@@ -26,6 +26,7 @@ $cancel-color-hover: #a90000;
 $btn-focus: #e75684;
 $btn-hover: #983554;
 $money-green: #2d6128;
+$money-green-hover: #1f3f1a;
 
 /* Dark Mode/Light Mode */
 .light-mode {
@@ -488,6 +489,24 @@ footer {
 
 .fields-item {
   margin-bottom: 20px;
+}
+
+.confirm-ship-div {
+  background-color: $text-color-light;
+  color: $cancel-color;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid $cancel-color;
+
+  button {
+    background-color: $medium-gray;
+    color: $text-color-light;
+    transition: 0.15s;
+  }
+  button:hover {
+    border: 2px solid $cancel-color;
+    background-color: $primary-pink;
+  }
 }
 
 /* Profile Page */

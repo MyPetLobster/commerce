@@ -84,6 +84,29 @@
         {% endif %}
         </p>
     </div>
+    {% if listing.active == False %}
+        {% if listing.shipped == False %}
+            <div class="confirm-shipping confirm-ship-div" style="width: 350px; text-align: center;">
+                 <h4 class="confirm-ship">Confirm Shipping</h4>
+                 <p class="confirm-ship">Bidding has closed on your listing, and there is a winner.
+                    Please use the button below to generate a shipping label.
+                    Follow the instructions you receive in the email.<br/><br/>
+                    As soon as your shipping barcode is scanned, the funds will be
+                    released from escrow. 
+                 </p>
+                <form action="/confirm_shipping/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">Confirm Shipping</button>
+                </form>
+                <p></p>
+            </div>
+        {% elif listing.shipped == True %}
+            <div class="shipped">
+                <h3>Item Shipped</h3>
+                <p>Item has been shipped. Thanks for using Yard Sale!</p>
+            </div>
+        {% endif %}
+    {% endif %}
     {% if user.is_authenticated %}
         {% if listing.active == True %}
             <div id="watchlist-check" class="hidden">{{ watchlist_item }}</div>

@@ -207,7 +207,8 @@ def listing(request, listing_id):
         "time_left": time_left,
         "user_bid": user_bid,
         "difference": difference,
-        "watchlist_item": watchlist_item
+        "watchlist_item": watchlist_item,
+        "user" : request.user
     })
 
 
@@ -537,6 +538,11 @@ def withdraw(request, user_id):
 
 
 @login_required
-def confirm_shipping(request,listing_id):
-    transfer_to_seller(listing_id)
-    return redirect("profile", user_id=request.user.id)
+def confirm_shipping(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    if listing.shipped == False:
+        if transfer_to_seller(listing_id):
+            listing.shipped = True
+            listing.save()    
+    
+    return redirect("listing", listing_id=listing_id)

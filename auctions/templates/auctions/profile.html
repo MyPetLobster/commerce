@@ -73,8 +73,8 @@
         <h2>Account Balance</h2>
         <p>${{ user.balance }}</p>
         <p><a href="#">View Transaction History</a></p>
-        <button id="deposit-btn" class="btn btn-primary" onclick="window.location.href='#'">Deposit Funds</button>
-        <button id="withdraw-btn" class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
+        <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
+        <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
     </div>
     <div class="deposit-form hidden-form">
         <form class="popup-form" action="{% url 'deposit' user.id %}" method="post">
