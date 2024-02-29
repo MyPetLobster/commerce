@@ -581,7 +581,8 @@ def transactions(request, user_id):
 @login_required
 def messages(request, user_id):
     if request.method == "POST":
-        recipient = User.objects.get(pk=request.POST["recipient"])
+        recipient_id = request.POST["recipient"]
+        recipient = User.objects.get(pk=recipient_id)
         subject = request.POST["subject"]
         message = request.POST["message"]
         send_message(request.user, recipient, subject, message)
@@ -589,6 +590,7 @@ def messages(request, user_id):
     else:
         if user_id != request.user.id:
             return HttpResponse("Unauthorized", status=401)
+        
         user = User.objects.get(pk=request.user.id)
         sent_messages = Message.objects.filter(sender=user)
         inbox_messages = Message.objects.filter(recipient=user)

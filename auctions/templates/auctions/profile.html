@@ -31,6 +31,26 @@
 {% block body %}
 <div class="profile-page-content">
     <h1>{{ user.username }}'s Yard</h1>
+    {% if user != current_user %}
+        {% if current_user.is_authenticated %}
+            <div class="send-msg-div center-container">
+                <button id="send-msg-btn" class="btn btn-primary">Send Message</button>
+            </div>
+
+            <div class="send-msg-form hidden-form">
+                <form action="{% url 'messages' current_user.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" name="recipient" value="{{ user.id }}">
+                        <input class="form-control" type="text" name="subject" placeholder="Subject">
+                        <textarea class="form-control" name="message" placeholder="Message"></textarea>
+                        <button class="btn btn-primary" type="submit">Send</button>
+                        <button class="btn btn-primary" type="button" id="cancel-msg">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
     <p></p>
     <h2>Information</h2>
     <div class="profile-info">
@@ -157,6 +177,21 @@
 </div>
 
 <script>
+    const sendMsgButton = document.getElementById('send-msg-btn');
+    const sendMsgForm = document.querySelector('.send-msg-form');
+    const cancelMsg = document.getElementById('cancel-msg');
+
+    sendMsgButton.addEventListener('click', () => {
+        sendMsgForm.classList.remove('hidden-form');
+        sendMsgForm.classList.add('visible-form');
+    });
+
+    cancelMsg.addEventListener('click', () => {
+        sendMsgForm.classList.add('hidden-form');
+        sendMsgForm.classList.remove('visible-form');
+    });
+
+
     const depositButton = document.getElementById('deposit-btn');
     const depositForm = document.querySelector('.deposit-form');
     const cancelDeposit = document.getElementById('cancel-deposit');
