@@ -142,7 +142,8 @@ def listings(request):
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
-        "winners": winners
+        "winners": winners,
+        "current_user": request.user
     })
 
 
@@ -217,7 +218,7 @@ def listing(request, listing_id):
         "user_bid": user_bid,
         "difference": difference,
         "watchlist_item": watchlist_item,
-        "user" : request.user
+        "current_user" : request.user
     })
 
 
@@ -225,7 +226,8 @@ def categories(request):
     categories = get_list_or_404(Category.objects.all())
 
     return render(request, "auctions/categories.html", {
-        "categories": categories
+        "categories": categories,
+        "current_user": request.user,
     })
 
 
@@ -235,7 +237,8 @@ def category(request, category_id):
 
     return render(request, "auctions/category.html", {
         "listings": listings,
-        "category": category
+        "category": category,
+        "current_user": request.user
     })
 
 
@@ -256,7 +259,8 @@ def create(request):
     else:
         form = ListingForm()
         return render(request, "auctions/create.html", {
-            "form": ListingForm()
+            "form": ListingForm(),
+            "current_user": request.user
         })
     
 
@@ -268,7 +272,8 @@ def watchlist(request):
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
-        "winners": winners
+        "winners": winners,
+        "current_user": request.user
     })
 
 

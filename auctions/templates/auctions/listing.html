@@ -23,7 +23,7 @@
         <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+        <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
     </li>
 {% endblock %}
 
@@ -39,9 +39,9 @@
         <p class="fields-div">
             <span class="bold">Created by:&nbsp;&nbsp;</span>
             <span class="lightweight">
-                {% if user.is_authenticated %}
-                    {% if listing.user == user %}
-                        <a href="{% url 'profile' user.id %} ">You</a>
+                {% if current_user.is_authenticated %}
+                    {% if listing.user == current_user %}
+                        <a href="{% url 'profile' current_user.id %} ">You</a>
                     {% else %}
                         <a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                     {% endif %}
@@ -84,7 +84,7 @@
         {% endif %}
         </p>
     </div>
-    {% if user == listing.user %} 
+    {% if current_user == listing.user %} 
         {% if listing.active == False %}
             {% if listing.cancelled == True %}
             <div class="listing-cancelled-div">
@@ -115,7 +115,7 @@
             {% endif %}
         {% endif %}
     {% endif %}
-    {% if user.is_authenticated %}
+    {% if current_user.is_authenticated %}
         {% if listing.active == True %}
             <div id="watchlist-check" class="hidden">{{ watchlist_item }}</div>
             <div id="watchlist-check-content-add" class="hidden-watchlist">
@@ -132,7 +132,7 @@
             </div>
             <p></p>
 
-            {% if listing.user != user %}
+            {% if listing.user != current_user %}
                 <form class="bid-form" action="/listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     <div class="bid-form-div">
@@ -143,7 +143,7 @@
                 </form>
             {% endif %}
 
-            {% if listing.user == user %}
+            {% if listing.user == current_user %}
                 <form action="/close_listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     <button id="close-listing-btn" class="btn btn-primary" type="submit">Close Listing</button>
@@ -153,7 +153,7 @@
         {% else %}
         <div class="bidding-closed">
             -- BIDDING CLOSED -- </br>
-            {% if winner.user == user %}
+            {% if winner.user == current_user %}
                 You Won! (See email for details on how to proceed.)
             {% elif listing.price == listing.starting_bid %}
                 No Bids
