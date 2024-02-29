@@ -41,7 +41,7 @@
             <li>Last Name: {{ user.last_name }}</li>
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
-        {% if current_user == user %}
+    {% if current_user == user %}
         <button id="edit-button" class="btn btn-primary">Edit Profile</button>
         <button id="change-password" class="btn btn-primary">Change Password</button>
         
@@ -65,6 +65,16 @@
             <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
             <button class="btn btn-primary" type="button" id="cancel-password" style="align-self:center">Cancel</button>
         </form>
+    </div>
+    <div class="profile-listings">
+        <hr>
+    </div>
+    <div class="account-balance">
+        <h2>Account Balance</h2>
+        <p>{{ user.balance }}</p>
+        <p><a href="#">View Transaction History</a></p>
+        <button class="btn btn-primary" onclick="window.location.href='#'">Deposit Funds</button>
+        <button class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
     </div>
     {% endif %}
     <p></p>
@@ -91,7 +101,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <hr>
+        <hr style="margin-top:30px;">
     </div>  
 
     {% if user == current_user %}

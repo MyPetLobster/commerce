@@ -511,6 +511,10 @@ footer {
   }
 }
 
+.account-balance {
+    @include flex-column;
+}
+
 /* Create Listing Page */
 .create-form-div {
   @include flex-column;

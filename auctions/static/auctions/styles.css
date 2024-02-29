@@ -573,6 +573,13 @@ footer li {
   margin-top: 4px;
 }
 
+.account-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Create Listing Page */
 .create-form-div {
   display: flex;
