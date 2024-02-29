@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 
-from .models import Bid, Listing, Winner, User, Watchlist
+from .models import Bid, Listing, Winner, User, Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -43,8 +43,10 @@ def check_listing_expiration():
                     listing=listing,
                     user=highest_bid.user
                 )
+                winner.save()
 
-                # Notify the winner (implement this)
+                transfer_to_escrow(winner)
+                   
                 notify_winner(winner, listing)
             else: 
                 pass
@@ -110,3 +112,54 @@ def send_error_notification(error_message):
         logger.error(f"An error occurred while sending error notification: {str(e)}")
     except Exception as e:
         logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
+
+
+def transfer_to_escrow(winner):
+    listing = winner.listing
+    buyer = winner.user
+    amount = listing.price
+    escrow_account = User.objects.get(pk=11)
+
+    if amount > buyer.balance: 
+        return False
+        #TODO: add error message and email notification to buyer
+    else:
+        transaction = Transaction.objects.create(
+            sender=buyer,
+            recipient=escrow_account,
+            amount=amount,
+            listing=listing
+        )
+        transaction.save()
+
+        buyer.balance -= amount
+        buyer.save()
+        escrow_account.balance += amount
+        escrow_account.save()
+
+        return True
+    
+
+def transfer_to_seller(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    seller = listing.user
+    amount = listing.price
+    escrow_account = User.objects.get(pk=11)
+
+    if amount > escrow_account.balance:
+        #TODO: EMAIL ADMIN BALANCE ERROR BIG OOPS
+        return False
+    else:
+        transaction = Transaction.objects.create(
+            sender=escrow_account,
+            recipient=seller,
+            amount=amount,
+            listing=listing
+        )
+        transaction.save()
+
+        escrow_account.balance -= amount
+        escrow_account.save()
+        seller.balance += amount
+        seller.save()
+        return True

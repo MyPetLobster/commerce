@@ -528,8 +528,8 @@ def withdraw(request, user_id):
     )
     transaction.save()
 
-    fake_bank_account.balance += decimal.Decimal(amount)
+    fake_bank_account.balance += amount
     fake_bank_account.save()
-    user.balance -= decimal.Decimal(amount)
+    user.balance -= amount
     user.save()
     return redirect("profile", user_id=user_id)
