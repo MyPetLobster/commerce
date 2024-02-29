@@ -580,14 +580,21 @@ def transactions(request, user_id):
 
 @login_required
 def messages(request, user_id):
-    if user_id != request.user.id:
-        return HttpResponse("Unauthorized", status=401)
-    user = User.objects.get(pk=user_id)
-    sent_messages = Message.objects.filter(sender=user)
-    received_messages = Message.objects.filter(recipient=user)
-    messages = sent_messages | received_messages
+    if request.method == "POST":
+        recipient = User.objects.get(pk=request.POST["recipient"])
+        subject = request.POST["subject"]
+        message = request.POST["message"]
+        send_message(request.user, recipient, subject, message)
+        return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+    else:
+        if user_id != request.user.id:
+            return HttpResponse("Unauthorized", status=401)
+        user = User.objects.get(pk=request.user.id)
+        sent_messages = Message.objects.filter(sender=user)
+        inbox_messages = Message.objects.filter(recipient=user)
 
-    return render(request, "auctions/messages.html", {
-        'messages': messages,
-        'user': user
-    })
+        return render(request, "auctions/messages.html", {
+            'sent_messages': sent_messages,
+            'inbox_messages': inbox_messages,
+            'user': user
+        })

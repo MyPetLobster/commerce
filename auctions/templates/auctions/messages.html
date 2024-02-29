@@ -33,28 +33,38 @@
 <div class="page-content">
     <h2>{{ user.username }}'s Messages</h2>
     <div class="messages-container">
-        {% if messages %}
-            <h3>Messages</h3>
-            <hr>
-            {% for message in messages %}
-                <div class="message inbox">
-                    {% if message.recipient == user %}
-                        <p class="message-sender">From: {{ message.sender }}</p>
-                        <p class="message-date">Date: {{ message.date_sent|date:"F j, Y, g:i a" }}</p>
-                        <p class="message-subject">Subject: {{ message.subject }}</p>
-                        <p class="message-content">{{ message.message }}</p>
-                    {% elif message.sender == user %}
-                        <p class="message-recipient">To: {{ message.recipient }}</p>
-                        <p class="message-date">Date: {{ message.date_sent|date:"F j, Y, g:i a" }}</p>
-                        <p class="message-subject">Subject: {{ message.subject }}</p>
-                        <p class="message-content">{{ message.message }}</p>
-                    {% endif %}
-                    <hr>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>No messages</p>
-        {% endif %}
+        <h3>Messages</h3>
+        <hr>
+        <h4>Inbox</h4>
+        <div class="message-div inbox">
+            {% if inbox_messages %}
+                <hr>
+                {% for message in inbox_messages %}
+                    <p class="message-sender">From: {{ message.sender }}</p>
+                    <p class="message-date">Date: {{ message.date_sent|date:"F j, Y, g:i a" }}</p>
+                    <p class="message-subject">Subject: {{ message.subject }}</p>
+                    <p class="message-content">{{ message.message }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No messages</p>
+            {% endif %}
+        <hr>
+        </div> 
+
+        <h4>Sent</h4>
+        <div class="message-div sent">
+            {% if sent_messages %}
+                <hr>
+                {% for message in sent_messages %}
+                    <p class="message-sender">To: {{ message.recipient }}</p>
+                    <p class="message-date">Date: {{ message.date_sent|date:"F j, Y, g:i a" }}</p>
+                    <p class="message-subject">Subject: {{ message.subject }}</p>
+                    <p class="message-content">{{ message.message }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No messages</p>
+            {% endif %}
+        </div>
     </div>
     <a href="{% url 'profile' user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
