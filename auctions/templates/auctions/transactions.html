@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+
+{% load tz %}
+
+{% block title %}
+    Transactions
+{% endblock %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' user.id %}">My Yard</a>
+    </li>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="page-content">
+    <h2>{{ user.username }}'s Transaction History</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td><a href="{% url 'listing' transaction.listing.id %}">{{ transaction.listing.title }}</a></td>
+                {% if transaction.sender == user %}
+                <td class="red">Amount: -${{ transaction.amount }}</td>
+                <td>Sender: You</td>
+                <td>Recipient: {{ transaction.recipient }}</td>
+                {% else %}
+                <td class="green">${{ transaction.amount }}</td>
+                <td>Sender: {{ transaction.sender }}</td>
+                <td>Recipient: You</td>
+                {% endif %}
+                <td>{{ transaction.date|date:"F j, Y, g:i a" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="center-container">
+        <p>Your current balance is: {{ user.balance }}</p>
+    </div>
+    <a href="{% url 'profile' user.id %}" class="btn btn-primary">Back to Profile</a>
+</div>
+
+{% endblock %}
