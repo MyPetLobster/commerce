@@ -13,7 +13,10 @@ class Transaction(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_transactions")
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE, blank=True, null=True, related_name="transactions")
 
-
+    def __str__(self):
+        return f"{self.sender} - {self.recipient} - {self.amount}"
+    
+    
 class Category(models.Model):
     category = models.CharField(max_length=64)
     description = models.TextField(blank=True)

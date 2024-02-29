@@ -77,7 +77,7 @@
         <button id="withdraw-btn" class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
     </div>
     <div class="deposit-form hidden-form">
-        <form class="popup-form" action="#" method="post">
+        <form class="popup-form" action="{% url 'deposit' user.id %}" method="post">
             {% csrf_token %}
             <h3>Deposit Funds</h3>
             <input class="form-control" type="number" name="amount" placeholder="Amount">
@@ -185,7 +185,7 @@
         withdrawForm.classList.remove('visible-form');
     });
 
-    
+
     const editButton = document.getElementById('edit-button');
     const editProfile = document.getElementById('edit-profile');
     const cancelButton = document.getElementById('cancel-button');

@@ -1,3 +1,4 @@
+import decimal 
 import logging
 import math
 from datetime import timedelta, timezone
@@ -13,7 +14,7 @@ from django.urls import reverse
 from django.forms import ModelForm
 from django.utils import timezone
 
-from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner
+from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction
 from .tasks import send_error_notification
 
 logger = logging.getLogger(__name__)
@@ -483,3 +484,26 @@ def sort(request):
 
 # Money Related Functions
     
+@login_required
+def deposit(request, user_id):
+    fake_bank_account = User.objects.get(pk=13)
+    user = User.objects.get(pk=user_id)
+    amount = request.POST["amount"]
+    amount = decimal.Decimal(amount)
+    if amount <= 0:
+        messages.error(request, "Deposit amount must be greater than 0")
+        return redirect("profile", user_id=user_id)
+    
+    transaction = Transaction.objects.create(
+        amount=amount,
+        sender=fake_bank_account,
+        recipient=user
+    )
+    transaction.save()
+
+
+    fake_bank_account.balance -= decimal.Decimal(amount)
+    fake_bank_account.save()
+    user.balance += decimal.Decimal(amount)
+    user.save()
+    return redirect("profile", user_id=user_id)
