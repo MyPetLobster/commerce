@@ -76,6 +76,24 @@
         <button id="deposit-btn" class="btn btn-primary" onclick="window.location.href='#'">Deposit Funds</button>
         <button id="withdraw-btn" class="btn btn-primary" onclick="window.location.href='#'">Withdraw Funds</button>
     </div>
+    <div class="deposit-form hidden-form">
+        <form class="popup-form" action="#" method="post">
+            {% csrf_token %}
+            <h3>Deposit Funds</h3>
+            <input class="form-control" type="number" name="amount" placeholder="Amount">
+            <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
+            <button class="btn btn-primary" type="button" id="cancel-deposit" style="align-self:center">Cancel</button>
+        </form>
+    </div>
+    <div class="withdraw-form hidden-form">
+        <form class="popup-form" action="#" method="post">
+            {% csrf_token %}
+            <h3>Withdraw Funds</h3>
+            <input class="form-control" type="number" name="amount" placeholder="Amount">
+            <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
+            <button class="btn btn-primary" type="button" id="cancel-withdraw" style="align-self:center">Cancel</button>
+        </form>
+    </div>
     {% endif %}
     <p></p>
     <div class="profile-listings">
@@ -139,6 +157,35 @@
 </div>
 
 <script>
+    const depositButton = document.getElementById('deposit-btn');
+    const depositForm = document.querySelector('.deposit-form');
+    const cancelDeposit = document.getElementById('cancel-deposit');
+
+    depositButton.addEventListener('click', () => {
+        depositForm.classList.remove('hidden-form');
+        depositForm.classList.add('visible-form');
+    });
+
+    cancelDeposit.addEventListener('click', () => {
+        depositForm.classList.add('hidden-form');
+        depositForm.classList.remove('visible-form');
+    });
+
+    const withdrawButton = document.getElementById('withdraw-btn');
+    const withdrawForm = document.querySelector('.withdraw-form');
+    const cancelWithdraw = document.getElementById('cancel-withdraw');
+
+    withdrawButton.addEventListener('click', () => {
+        withdrawForm.classList.remove('hidden-form');
+        withdrawForm.classList.add('visible-form');
+    });
+
+    cancelWithdraw.addEventListener('click', () => {
+        withdrawForm.classList.add('hidden-form');
+        withdrawForm.classList.remove('visible-form');
+    });
+
+    
     const editButton = document.getElementById('edit-button');
     const editProfile = document.getElementById('edit-profile');
     const cancelButton = document.getElementById('cancel-button');
