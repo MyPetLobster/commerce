@@ -46,8 +46,8 @@ $link-color: #1696b9;
 $link-color-hover: #0a5f76;
 $nav-color: #8c8787;
 $primary-pink: #c55176;
-$background-color-light: #f4f4f4;
-$background-color-dark: #333;
+$background-color-light: #e2e2e2;
+$background-color-dark: #303133;
 $medium-gray: #6c757d;
 $cancel-color: #a90000;
 $cancel-color-hover: #80052c;
@@ -112,7 +112,7 @@ body {
   width: 100%;
 }
 hr {
-  background-color: $medium-gray;
+  background-color: #dcdfe5;
   width: 100%;
   display: block;
   clear: both;
@@ -133,7 +133,6 @@ p {
   height: 40px;
 }
 
-
 /* LINK STYLES */
 a {
   color: $link-color;
@@ -149,7 +148,6 @@ a:hover {
 .small-a {
   font-size: 1em;
 }
-
 
 /* ALERT MESSAGE STYLES */
 .alert-div {
@@ -175,7 +173,6 @@ a:hover {
 .del-x:hover {
   font-weight: bold;
 }
-
 
 /* FORM STYLES */
 /* All input fields font-size and focus */
@@ -278,7 +275,6 @@ legend {
   margin: 0;
 }
 
-
 /* NAV and FOOTER STYLES*/
 .nav-container {
   @include flex-row;
@@ -330,7 +326,6 @@ footer {
     list-style-type: none;
   }
 }
-
 
 /* ALL BUTTON STYLES */
 .btn {
@@ -395,7 +390,6 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-
 /* CREATE LISTING PAGE */
 .create-form-div {
   @include flex-column;
@@ -427,7 +421,6 @@ footer {
     }
   }
 }
-
 
 /* INDEX and LISTINGS  */
 /* Individual Listing */
@@ -507,7 +500,6 @@ footer {
   color: $primary-pink;
 }
 
-
 /* LISTING PAGE */
 .listing-desc {
   width: 450px;
@@ -580,7 +572,6 @@ footer {
   }
 }
 
-
 /* PROFILE PAGE */
 .profile-page-content {
   @include flex-column;
@@ -605,7 +596,6 @@ footer {
 .account-balance {
   @include flex-column;
 }
-
 
 /* WATCHLIST PAGE */
 .watchlist-content {
@@ -641,7 +631,6 @@ footer {
   }
 }
 
-
 /* CATEGORY and CATEGORIES PAGES */
 #h1-all-categories {
   margin-bottom: 50px;
@@ -657,7 +646,6 @@ footer {
 .categories-li {
   font-size: 0.9em;
 }
-
 
 /* TRANSACTIONS PAGE */
 .transactions-table {
@@ -681,9 +669,9 @@ footer {
   color: $money-green-hover;
 }
 
-
 /* MESSAGES PAGE */
 .message-div {
+  width: 600px;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;

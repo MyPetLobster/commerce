@@ -1,11 +1,11 @@
 /* Dark Mode/Light Mode */
 .light-mode {
-  background-color: #f4f4f4;
+  background-color: #e2e2e2;
   color: #333;
 }
 
 .dark-mode {
-  background-color: #333;
+  background-color: #303133;
   color: #f4f4f4;
 }
 
@@ -67,7 +67,7 @@ body {
 }
 
 hr {
-  background-color: #6c757d;
+  background-color: #dcdfe5;
   width: 100%;
   display: block;
   clear: both;
@@ -810,7 +810,7 @@ footer li {
 }
 .transactions-table th,
 .transactions-table td {
-  border-color: #333 !important;
+  border-color: #303133 !important;
 }
 .transactions-table th {
   border-top: none;
@@ -826,6 +826,7 @@ footer li {
 
 /* MESSAGES PAGE */
 .message-div {
+  width: 600px;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;

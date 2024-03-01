@@ -19,9 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
     messageAdminForm.classList.add("hidden");
     messageAdminForm.classList.remove("send-msg-form");
   };
-  
-
-
 
   const helpSubmitBtn = document.querySelector("#help-submit");
   const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");
@@ -57,7 +54,6 @@ if (localStorage.getItem("theme") === "dark") {
   document.querySelector("#inverted-hero").classList.remove("hidden");
 }
 
-
 document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("dark-mode");
   document.querySelector("body").classList.toggle("light-mode");
@@ -79,30 +75,30 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   }
 };
 
-
-
 // select every other .message-div and darken the background slightly
 function changeMessageColors() {
-    messageDivs = document.querySelectorAll('.message-div');
-    lightModeColorOne = '#ded9dd';
-    lightModeColorTwo = '#e8e5e8';
-    darkModeColorOne = '#454144';
-    darkModeColorTwo = '#5e545c';
+  messageDivs = document.querySelectorAll(".message-div");
+  if (messageDivs.length !== 0) {
+    lightModeColorOne = "#efefef";
+    lightModeColorTwo = "#d0d0d0";
+    darkModeColorOne = "#2b2c2e";
+    darkModeColorTwo = "#353638";
 
-    if (localStorage.getItem('theme') === 'light') {
-        modColorOne = lightModeColorOne;
-        modColorTwo = lightModeColorTwo;
-    } 
-    if (localStorage.getItem('theme') === 'dark') {
-        modColorOne = darkModeColorOne;
-        modColorTwo = darkModeColorTwo;
+    if (localStorage.getItem("theme") === "light") {
+      modColorOne = lightModeColorOne;
+      modColorTwo = lightModeColorTwo;
+    }
+    if (localStorage.getItem("theme") === "dark") {
+      modColorOne = darkModeColorOne;
+      modColorTwo = darkModeColorTwo;
     }
 
     messageDivs.forEach((div, index) => {
-        if (index % 2 === 0) {
-            div.style.backgroundColor = modColorOne;
-        } else {
-            div.style.backgroundColor = modColorTwo;
-        }
+      if (index % 2 === 0) {
+        div.style.backgroundColor = modColorOne;
+      } else {
+        div.style.backgroundColor = modColorTwo;
+      }
     });
+  }
 }
