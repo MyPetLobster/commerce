@@ -668,7 +668,7 @@ footer {
   @include flex-column;
 }
 
-/* Login and Register Pages */
+
 
 /* TRANSACTIONS PAGE */
 .table,
@@ -677,15 +677,14 @@ footer {
   background-color: $medium-gray;
   border-radius: 8px;
   overflow: hidden;
-  outline: 3px solid $primary-pink;
-
-  th {
-    /*remove border top of table head */
-    border-top: none;
-    color: $text-color-light;
+  font-size: 0.9em;
+  color: $text-color-light;
+  th,
+  td {
+    border-color: $background-color-dark !important;
   }
-  tbody {
-    color: $text-color-light;
+  th {
+    border-top: none;
   }
 }
 
@@ -696,7 +695,8 @@ footer {
   color: $money-green-hover;
 }
 
-/* Messages Page */
+
+/* MESSAGES PAGE */
 
 .message-div {
   padding: 10px;
