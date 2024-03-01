@@ -493,6 +493,7 @@ footer li {
 #remove-from-watchlist-btn {
   font-size: 0.7em;
   padding: 4px 15px;
+  margin: 5px;
 }
 
 /* Profile Page - Deposit and Withdraw Buttons */
@@ -736,7 +737,7 @@ footer li {
   gap: 10px;
 }
 
-/* Watchlist Page */
+/* WATCHLIST PAGE */
 .watchlist-content {
   display: flex;
   flex-direction: column;
@@ -759,11 +760,14 @@ footer li {
   gap: 0px;
   align-items: flex-start;
 }
-.watchlist-listing p {
+.watchlist-listing div {
   font-size: 0.8em;
 }
+.watchlist-listing a {
+  font-size: 0.9em;
+}
 .watchlist-listing a,
-.watchlist-listing p {
+.watchlist-listing div {
   width: 100%;
   text-align: center;
 }
@@ -771,7 +775,7 @@ footer li {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 12px;
 }
 
 /* Categories & Category Pages */

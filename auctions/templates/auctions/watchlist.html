@@ -27,8 +27,9 @@
   <ul>
     {% for listing in listings %}
     <li class="watchlist-listing">
+
       <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-      <p class="winner-para" style="display: inline">
+      <div style="display: inline">
         {% if listing.active == False %} 
           -- BIDDING CLOSED -- <br/>
           {% for winner in winners %} 
@@ -41,11 +42,12 @@
         {% else %} 
           Current Bid: {{ listing.price }} 
         {% endif %}
-      </p>
+      </div>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}
         <button class="btn btn-primary cancel-btn" id="remove-from-watchlist-btn" type="submit">Remove from Watchlist</button>
       </form>
+      
     </li>
     {% endfor %}
   </ul>
