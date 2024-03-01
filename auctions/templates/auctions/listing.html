@@ -171,7 +171,7 @@
 
             {% if listing.active == True %}
                 <button class="btn btn-primary" id="comment-button">Leave a Comment</button>
-                <form id="comment-form" class="hidden popup-form" action="/comment/{{ listing.id }}" method="post">
+                <form id="comment-form" class="hidden" action="/comment/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     {{ comment_form }}
                     <div class="center-container">
@@ -212,10 +212,10 @@
         if (commentButton) {
             commentButton.onclick = function() {
                 commentForm.classList.remove('hidden');
-                commentForm.classList.add('visible-form');
+                commentForm.classList.add('listing-leave-comment-form');
             }
             cancelComment.onclick = function() {
-                commentForm.classList.remove('visible-form');
+                commentForm.classList.remove('listing-leave-comment-form');
                 commentForm.classList.add('hidden');
             }
         }
@@ -229,7 +229,6 @@
 
 
     function watchListChecker() {
-        alert(watchListCheck.textContent);
         if (watchListCheck.textContent === "not on watchlist") {
             watchListCheckContentAdd.classList.remove('hidden');
             watchListCheckContentAdd.classList.add('visible');

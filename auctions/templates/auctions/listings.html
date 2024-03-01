@@ -69,7 +69,7 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul class="long-listings visible-listings">
+    <ul class="long-listings visible">
         {% for listing in listings %}
             {% if listing.active == True %}
                 <li class="li-listing">
@@ -87,10 +87,10 @@
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }}</br>
-                                <div class="full-description visible-description">
+                                <div class="full-description visible">
                                     <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
                                 </div>
-                                <div class="truncated-description hidden-description">
+                                <div class="truncated-description hidden">
                                     <span class="bold">Description:&nbsp; </span> <span class="expand-link">{{ listing.description|truncatechars:125 }}</span></br>
                                 </div>
                                 <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
@@ -106,7 +106,7 @@
         {% endfor %}
     </ul>
 
-    <ul class="short-listings hidden-listings">
+    <ul class="short-listings hidden">
         {% for listing in listings %}
             {% if listing.active == True %}
                 <li class="title-only-li" style="margin-bottom: 8px">
@@ -139,7 +139,7 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul class="long-listings visible-listings">
+    <ul class="long-listings visible">
         {% for listing in listings %}
             {% if listing.active == False %}
                 <li class="li-listing">
@@ -172,7 +172,7 @@
             {% endif %}
         {% endfor %}
     </ul>
-    <ul class="short-listings hidden-listings">
+    <ul class="short-listings hidden">
         {% for listing in listings %}
             {% if listing.active == False %}
                 <li class="title-only-li" style="margin-bottom: 8px">

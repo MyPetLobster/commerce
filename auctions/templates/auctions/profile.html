@@ -71,7 +71,7 @@
             
         </div>
 
-        <div id="edit-profile" class="hidden-form">
+        <div id="edit-profile" class="hidden">
             <form class="popup-form" action="{% url 'edit' current_user.id %}" method="post">
                 {% csrf_token %}
                 {{ user_info_form }}
@@ -80,7 +80,7 @@
             </form>
         </div>
 
-        <div id="change-password-form" class="hidden-form">
+        <div id="change-password-form" class="hidden">
             <form class="popup-form" action="{% url 'change_password' current_user.id %}" method="post">
                 {% csrf_token %}
                 <input class="form-control" type="password" name="old_password" placeholder="Old Password">
@@ -102,7 +102,7 @@
             <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
         </div>
 
-        <div class="deposit-form hidden-form">
+        <div class="deposit-form hidden">
             <form class="popup-form" action="{% url 'deposit' current_user.id %}" method="post">
                 {% csrf_token %}
                 <h3>Deposit Funds</h3>
@@ -111,7 +111,7 @@
                 <button class="btn btn-primary" type="button" id="cancel-deposit" style="align-self:center">Cancel</button>
             </form>
         </div>
-        <div class="withdraw-form hidden-form">
+        <div class="withdraw-form hidden">
             <form class="popup-form" action="{% url 'withdraw' current_user.id %}" method="post">
                 {% csrf_token %}
                 <h3>Withdraw Funds</h3>
@@ -206,12 +206,12 @@
     const cancelDeposit = document.getElementById('cancel-deposit');
 
     depositButton.addEventListener('click', () => {
-        depositForm.classList.remove('hidden-form');
+        depositForm.classList.remove('hidden');
         depositForm.classList.add('visible-form');
     });
 
     cancelDeposit.addEventListener('click', () => {
-        depositForm.classList.add('hidden-form');
+        depositForm.classList.add('hidden');
         depositForm.classList.remove('visible-form');
     });
 
@@ -220,12 +220,12 @@
     const cancelWithdraw = document.getElementById('cancel-withdraw');
 
     withdrawButton.addEventListener('click', () => {
-        withdrawForm.classList.remove('hidden-form');
+        withdrawForm.classList.remove('hidden');
         withdrawForm.classList.add('visible-form');
     });
 
     cancelWithdraw.addEventListener('click', () => {
-        withdrawForm.classList.add('hidden-form');
+        withdrawForm.classList.add('hidden');
         withdrawForm.classList.remove('visible-form');
     });
 
@@ -235,12 +235,12 @@
     const cancelButton = document.getElementById('cancel-button');
 
     editButton.addEventListener('click', () => {
-        editProfile.classList.remove('hidden-form');
+        editProfile.classList.remove('hidden');
         editProfile.classList.add('visible-form');
     });
 
     cancelButton.addEventListener('click', () => {
-        editProfile.classList.add('hidden-form');
+        editProfile.classList.add('hidden');
         editProfile.classList.remove('visible-form');
     });
 
@@ -249,12 +249,12 @@
     const cancelPassword = document.getElementById('cancel-password');
 
     changePassword.addEventListener('click', () => {
-        changePasswordForm.classList.remove('hidden-form');
+        changePasswordForm.classList.remove('hidden');
         changePasswordForm.classList.add('visible-form');
     });
 
     cancelPassword.addEventListener('click', () => {
-        changePasswordForm.classList.add('hidden-form');
+        changePasswordForm.classList.add('hidden');
         changePasswordForm.classList.remove('visible-form');
     });
 </script>

@@ -4,7 +4,7 @@ import math
 from datetime import timedelta, timezone
 
 from django import forms
-from django.contrib import messages
+from django.contrib import messages as contrib_messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -17,7 +17,9 @@ from django.utils import timezone
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction, Message
 from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner, send_message, check_bids_funds
 
+
 logger = logging.getLogger(__name__)
+
 
 # Form Models for Listings, Comments, and User Info
 class ListingForm(ModelForm):
@@ -159,13 +161,13 @@ def listing(request, listing_id):
         if total_seconds_left <= 86400:
             user_balance = request.user.balance
             if amount > user_balance:
-                messages.error(request, "Insufficient funds. Must have enough deposited to cover a bid within 24 hours of listing expiration.")
+                contrib_messages.error(request, "Insufficient funds. Must have enough deposited to cover a bid within 24 hours of listing expiration.")
                 return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
             
         if place_bid(request, amount, listing_id):
             return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
         else:
-            messages.error(request, "Failed to place bid. Please try again.")
+            contrib_messages.error(request, "Failed to place bid. Please try again.")
 
     # Calculate Time Left (7 days from listing date)    
     listing_date = listing.date
@@ -448,17 +450,17 @@ def change_password(request, user_id):
     new_password_confirm = request.POST["new_password2"]
 
     if not user.check_password(old_password):
-        messages.error(request, "Old password is incorrect")
+        contrib_messages.error(request, "Old password is incorrect")
         return redirect("profile", user_id=user_id)
 
     if new_password != new_password_confirm:
-        messages.error(request, "Passwords do not match")
+        contrib_messages.error(request, "Passwords do not match")
         return redirect("profile", user_id=user_id)
     
     user.set_password(new_password)
     user.save()
     
-    messages.success(request, "Password changed successfully")
+    contrib_messages.success(request, "Password changed successfully")
     return redirect("profile", user_id=user_id)
 
 
@@ -518,7 +520,7 @@ def deposit(request, user_id):
     amount = request.POST["amount"]
     amount = decimal.Decimal(amount)
     if amount <= 0:
-        messages.error(request, "Deposit amount must be greater than 0")
+        contrib_messages.error(request, "Deposit amount must be greater than 0")
         return redirect("profile", user_id=user_id)
     
     transaction = Transaction.objects.create(
@@ -542,10 +544,10 @@ def withdraw(request, user_id):
     amount = request.POST["amount"]
     amount = decimal.Decimal(amount)
     if amount <= 0:
-        messages.error(request, "Withdrawal amount must be greater than 0")
+        contrib_messages.error(request, "Withdrawal amount must be greater than 0")
         return redirect("profile", user_id=user_id)
     if amount > user.balance:
-        messages.error(request, "Insufficient funds")
+        contrib_messages.error(request, "Insufficient funds")
         return redirect("profile", user_id=user_id)
     
     transaction = Transaction.objects.create(

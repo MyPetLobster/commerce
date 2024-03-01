@@ -73,6 +73,7 @@
 
     <p></p>
 
+    {% if current_user.is_authenticated %}
     <div>
       <form id="send-msg-form" class="hidden send-msg-form" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
@@ -89,8 +90,8 @@
         <button id="help-submit" type="submit" style="display:none;">Send</button>
         <button type="button" class="btn btn-primary" id="cancel-msg-admin">Cancel</button>
       </form>
-
     </div>
+    {% endif %}
         {% block body %}
         {% endblock %}
 
