@@ -127,6 +127,28 @@ a:hover {
 }
 
 /* Form Styles */
+/* Email Admin Form */
+.send-msg-form {
+  @include flex-column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 500px;
+  padding: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+  label {
+    color: $text-color-light;
+  }
+  .form-group {
+    width: 100% !important;
+  }
+}
+
 legend {
   font-size: 1em;
 }
@@ -149,12 +171,15 @@ legend {
   padding: 0px;
   margin: 0;
 }
+#msg-admin-link,
 .nav-link,
 .logout-link,
 .footer-link {
+  cursor: pointer;
   color: $nav-color;
   transition: 0.15s;
 }
+#msg-admin-link:hover,
 .nav-link:hover,
 .logout-link:hover,
 .footer-link:hover {
@@ -546,7 +571,7 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-.send-msg-form-div {
+.send-usr-msg-form-div {
   @include flex-column;
   position: fixed;
   top: 50%;
@@ -736,3 +761,5 @@ footer {
 .green {
   color: $money-green-hover;
 }
+
+/* Messages Page */

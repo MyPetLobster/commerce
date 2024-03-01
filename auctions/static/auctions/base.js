@@ -5,6 +5,27 @@ document.addEventListener("DOMContentLoaded", function () {
       this.parentElement.style.display = "none";
     };
   }
+
+  document.querySelector("#msg-admin-link").onclick = function () {
+    document
+      .querySelector("#send-msg-form")
+      .classList.toggle("hidden-hero");
+  };
+  document.querySelector("#cancel-msg-admin").onclick = function () {
+    document
+      .querySelector("#send-msg-form")
+      .classList.toggle("hidden-hero");
+  };
+
+  const helpSubmitBtn = document.querySelector("#help-submit");
+  const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");
+
+  helpSubmitBtnFaux.onclick = function () {
+    const subjectValue = document.querySelector("#subject").value;
+    const subjectText = `-- HELP -- ${subjectValue}`;
+    document.querySelector("#subject").value = subjectText;
+    helpSubmitBtn.click();
+  };
 });
 
 setTimeout(function () {

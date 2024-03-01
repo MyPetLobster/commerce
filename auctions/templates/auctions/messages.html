@@ -34,27 +34,6 @@ Messages
   <div class="messages-container">
     <h3>Messages</h3>
     <p></p>
-    <p class="center-container"><a id="msg-admin-link" class="btn btn-primary">message the admins!</a></p>
-    <p></p>
-
-    <div>
-      <form id="send-msg-form" class="hidden-hero" action="{% url 'messages' current_user.id %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <input type="text" class="form-control" id="subject" name="subject" value="" />
-        </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea class="form-control" id="message" name="message" rows="3"></textarea>
-        </div>
-        <input type="hidden" name="recipient" value="2" />
-        <button id="help-submit-faux" class="btn btn-primary">Send</button>
-        <button id="help-submit" type="submit" style="display:none;">Send</button>
-        <button type="button" class="btn btn-primary" id="cancel-msg-admin">Cancel</button>
-      </form>
-
-    </div>
 
     <h4>Inbox</h4>
     <hr />
@@ -100,25 +79,4 @@ Messages
   <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
 
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelector("#msg-admin-link").onclick = function () {
-        document.querySelector("#send-msg-form").classList.toggle("hidden-hero");
-        };
-        document.querySelector("#cancel-msg-admin").onclick = function () {
-        document.querySelector("#send-msg-form").classList.toggle("hidden-hero");
-        };
-        
-        const helpSubmitBtn = document.querySelector("#help-submit");
-        const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");
-
-        
-        helpSubmitBtnFaux.onclick = function () {
-            const subjectValue = document.querySelector("#subject").value;
-            const subjectText = `-- HELP -- ${subjectValue}`;
-            document.querySelector("#subject").value = subjectText;
-        };
-    });
-</script>
 {% endblock %}

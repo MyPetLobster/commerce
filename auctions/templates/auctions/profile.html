@@ -33,14 +33,14 @@
 
 {% block body %}
 <div>
-    <form id="send-msg-form" class="hidden-hero" action="{% url 'messages' current_user.id %}" method="post">
+    <form id="send-usr-msg-form" class="hidden-hero" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
-        <div class="send-msg-form-div">
+        <div class="send-usr-msg-form-div">
             <input type="hidden" name="recipient" value="{{ user.id }}">
             <input class="form-control" type="text" name="subject" placeholder="Subject">
             <textarea class="form-control" name="message" placeholder="Message"></textarea>
             <button class="btn btn-primary" type="submit">Send</button>
-            <button class="btn btn-primary" type="button" id="cancel-msg">Cancel</button>
+            <button class="btn btn-primary" type="button" id="cancel-usr-msg">Cancel</button>
         </div>
     </form>
 </div>
@@ -49,7 +49,7 @@
     {% if user != current_user %}
         {% if current_user.is_authenticated %}
             <div class="send-msg-div center-container">
-                <button id="send-msg-btn" class="btn btn-primary">Send Message</button>
+                <button id="send-usr-msg-btn" class="btn btn-primary">Send Message</button>
             </div>
 
             
@@ -181,9 +181,9 @@
 </div>
 
 <script>
-    const sendMsgButton = document.getElementById('send-msg-btn');
-    const sendMsgForm = document.getElementById('send-msg-form');
-    const cancelMsg = document.getElementById('cancel-msg');
+    const sendMsgButton = document.getElementById('send-usr-msg-btn');
+    const sendMsgForm = document.getElementById('send-usr-msg-form');
+    const cancelMsg = document.getElementById('cancel-usr-msg');
 
     sendMsgButton.addEventListener('click', () => {
         sendMsgForm.classList.remove('hidden-hero');

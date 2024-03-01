@@ -63,8 +63,34 @@
             
             </div>
         </div>
+
         <hr class="divider">
 
+        <div class="center-container">
+            <p style="text-align:center;"><span class="bold">🥴 from clutter to cash 🤑<br /><br />
+            <span style="font-size:0.8em;">Have any questions or comments? <a id="msg-admin-link">Send us a message,</a> we're here to help!</span></p>
+        </div>
+
+    <p></p>
+
+    <div>
+      <form id="send-msg-form" class="hidden-hero send-msg-form" action="{% url 'messages' current_user.id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input type="text" class="form-control" id="subject" name="subject" value="" />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+        </div>
+        <input type="hidden" name="recipient" value="2" />
+        <button id="help-submit-faux" class="btn btn-primary">Send</button>
+        <button id="help-submit" type="submit" style="display:none;">Send</button>
+        <button type="button" class="btn btn-primary" id="cancel-msg-admin">Cancel</button>
+      </form>
+
+    </div>
         {% block body %}
         {% endblock %}
 
