@@ -497,13 +497,15 @@ def sort(request):
 
     if page == "index":
         return render(request, "auctions/index.html", {
-            "listings": listings
+            "listings": listings,
+            "current_user": request.user
         })
     elif page == "listings":
         winners = Winner.objects.all()
         return render(request, "auctions/listings.html", {
             "listings": listings,
-            "winners": winners
+            "winners": winners,
+            "current_user": request.user
         })
     
 
