@@ -130,8 +130,13 @@ a:hover {
   color: red;
 }
 
-/* Form Styles */
-/* Email Admin Form */
+
+
+
+
+
+
+/* Layout Template - Message Admin Form */
 .send-msg-form {
   @include flex-column;
   position: fixed;
@@ -152,6 +157,150 @@ a:hover {
     width: 100% !important;
   }
 }
+
+
+
+
+/* Categories Page - category description on hover */
+.visible-categories {
+  display: block;
+  position: absolute;
+  top: 49%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+
+
+/* Dynamic Form and Description */
+.hidden {
+  display: none;
+}
+.visible { 
+  display: block;
+}
+
+
+
+/* Listing Page - Leave Comment Form */
+.visible-form {
+  display: block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+.popup-form {
+  @include flex-column;
+  color: $text-color-light;
+  background-color: #7a9196;
+  align-items: flex-end;
+  width: auto;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+
+  label {
+    font-size: 0.9em;
+  }
+}
+
+
+
+
+/* Category Page - Listing Hover Description */
+.visible-desc {
+  position: absolute;
+  transform: translate(-20%, -180%);
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  background-color: rgba(197, 81, 118, 0.831);
+  border-radius: 8px;
+  font-size: 0.8em;
+  border: 1px solid $text-color-light;
+}
+
+
+
+/* Create Listing Page */
+.create-form-div {
+  @include flex-column;
+  align-items: center;
+  width: 500px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+}
+.create-listing-form {
+  @include flex-column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 20px;
+  margin-top: 20px;
+
+  div {
+    width: 100%;
+  }
+
+  #id_categories {
+    font-size: 0.9em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    div label {
+      @include flex-row;
+      gap: 5px;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}
+
+
+/* Profile Page - Send User Message Form */
+.send-usr-msg-form-div {
+  @include flex-column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  align-items: center;
+  width: 600px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #949494;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+
+  #cancel-msg {
+    background-color: $cancel-color;
+    color: $text-color-light;
+    transition: 0.15s;
+  }
+  #cancel-msg:hover {
+    background-color: $cancel-color-hover;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 legend {
   font-size: 1em;
@@ -197,12 +346,7 @@ legend {
   align-items: center;
   padding-left: 10px;
 }
-.visible-hero {
-  display: block;
-}
-.hidden-hero {
-  display: none;
-}
+
 
 .user-status {
   @include flex-row;
@@ -298,43 +442,7 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-/* Dynamic Form and Description */
-.popup-form {
-  @include flex-column;
-  color: $text-color-light;
-  background-color: #7a9196;
-  align-items: flex-end;
-  width: auto;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
 
-  label {
-    font-size: 0.9em;
-  }
-}
-
-.hidden,
-.hidden-form {
-  display: none;
-}
-.visible {
-  display: block;
-  position: absolute;
-  top: 49%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-.visible-form {
-  display: block;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
 
 /* Active and All Listings Pages */
 .page-content {
@@ -359,12 +467,7 @@ footer {
   }
 }
 
-.visible-description {
-  display: block;
-}
-.hidden-description {
-  display: none;
-}
+
 .truncated-description {
   cursor: pointer;
 }
@@ -383,12 +486,6 @@ footer {
 .opt-not-selected:hover {
   font-weight: 400;
   color: #976f7b;
-}
-.hidden-listings {
-  display: none;
-}
-.visible-listings {
-  display: block;
 }
 .title-only-li {
   font-size: 0.9em;
@@ -486,12 +583,7 @@ footer {
   color: $medium-gray;
 }
 
-.hidden-watchlist {
-  display: none;
-}
-.visible-watchlist {
-  display: block;
-}
+
 .bid-form-div {
   @include flex-row;
   align-items: center;
@@ -575,68 +667,9 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-.send-usr-msg-form-div {
-  @include flex-column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  align-items: center;
-  width: 600px;
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #949494;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-  border-radius: 8px;
-  border: 2px solid $text-color-light;
 
-  #cancel-msg {
-    background-color: $cancel-color;
-    color: $text-color-light;
-    transition: 0.15s;
-  }
-  #cancel-msg:hover {
-    background-color: $cancel-color-hover;
-  }
-}
 
-/* Create Listing Page */
-.create-form-div {
-  @include flex-column;
-  align-items: center;
-  width: 500px;
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #949494;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-  border-radius: 8px;
-  border: 2px solid $text-color-light;
-}
-.create-listing-form {
-  @include flex-column;
-  align-items: flex-start;
-  width: 100%;
-  padding: 20px;
-  margin-top: 20px;
 
-  div {
-    width: 100%;
-  }
-
-  #id_categories {
-    font-size: 0.9em;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    div label {
-      @include flex-row;
-      gap: 5px;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
-}
 
 /* Watchlist Page */
 .watchlist-content {
@@ -703,20 +736,7 @@ footer {
 .category-content {
   @include flex-column;
 }
-.hidden-desc {
-  display: none;
-}
-.visible-desc {
-  position: absolute;
-  transform: translate(-20%, -180%);
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  background-color: rgba(197, 81, 118, 0.831);
-  border-radius: 8px;
-  font-size: 0.8em;
-  border: 1px solid $text-color-light;
-}
+
 
 /* Login and Register Pages */
 .auth-page-content {

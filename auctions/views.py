@@ -204,11 +204,12 @@ def listing(request, listing_id):
     except:
         watchlist_item = None
 
-    if watchlist_item != None:
+    if watchlist_item.exists():
         pass
     else:
         watchlist_item = "not on watchlist"
     
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "winner": winner,

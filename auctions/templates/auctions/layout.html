@@ -27,8 +27,8 @@
         {% endif %}
         <div class="hero">
             <h1 class="yard-sale">Yard Sale</h1>
-            <img id="standard-hero" class="visible-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
-            <img id="inverted-hero" class="hidden-hero" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
+            <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
+            <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
         </div>
         
         <div class="nav-container">
@@ -74,7 +74,7 @@
     <p></p>
 
     <div>
-      <form id="send-msg-form" class="hidden-hero send-msg-form" action="{% url 'messages' current_user.id %}" method="post">
+      <form id="send-msg-form" class="hidden send-msg-form" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
         <div class="form-group">
           <label for="subject">Subject</label>

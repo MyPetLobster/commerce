@@ -33,7 +33,7 @@
 
 {% block body %}
 <div>
-    <form id="send-usr-msg-form" class="hidden-hero" action="{% url 'messages' current_user.id %}" method="post">
+    <form id="send-usr-msg-form" class="hidden" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
         <div class="send-usr-msg-form-div">
             <input type="hidden" name="recipient" value="{{ user.id }}">
@@ -189,13 +189,13 @@
 
     if (sendMsgButton) {
         sendMsgButton.addEventListener('click', () => {
-        sendMsgForm.classList.remove('hidden-hero');
-        sendMsgForm.classList.add('visible-hero');
+        sendMsgForm.classList.remove('hidden');
+        sendMsgForm.classList.add('visible');
     });
 
         cancelMsg.addEventListener('click', () => {
-        sendMsgForm.classList.add('hidden-hero');
-        sendMsgForm.classList.remove('visible-hero');
+        sendMsgForm.classList.add('hidden');
+        sendMsgForm.classList.remove('visible');
     });
     }
 

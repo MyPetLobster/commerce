@@ -23,13 +23,13 @@ function showFull() {
   showTitleOnly.classList.remove("opt-selected");
 
   shortListings.forEach((listing) => {
-    listing.classList.add("hidden-listings");
-    listing.classList.remove("visible-listings");
+    listing.classList.add("hidden");
+    listing.classList.remove("visible");
   });
 
   longListings.forEach((listing) => {
-    listing.classList.add("visible-listings");
-    listing.classList.remove("hidden-listings");
+    listing.classList.add("visible");
+    listing.classList.remove("hidden");
   });
 
   localStorage.setItem("fullOrTitle", "full");
@@ -42,13 +42,13 @@ function showTitle() {
   showFullListings.classList.remove("opt-selected");
 
   longListings.forEach((listing) => {
-    listing.classList.add("hidden-listings");
-    listing.classList.remove("visible-listings");
+    listing.classList.add("hidden");
+    listing.classList.remove("visible");
   });
 
   shortListings.forEach((listing) => {
-    listing.classList.add("visible-listings");
-    listing.classList.remove("hidden-listings");
+    listing.classList.add("visible");
+    listing.classList.remove("hidden");
   });
 
   localStorage.setItem("fullOrTitle", "title");
@@ -60,29 +60,29 @@ var allDescriptions = document.querySelectorAll(".full-description")
 var allTruncatedDescriptions = document.querySelectorAll(".truncated-description")
 for (var i = 0; i < allDescriptions.length; i++) {
     if (allDescriptions[i].innerText.length > 200) {
-        allDescriptions[i].classList.add("hidden-description")
-        allDescriptions[i].classList.remove("visible-description")
-        allTruncatedDescriptions[i].classList.add("visible-description")
-        allTruncatedDescriptions[i].classList.remove("hidden-description")
+        allDescriptions[i].classList.add("hidden")
+        allDescriptions[i].classList.remove("visible")
+        allTruncatedDescriptions[i].classList.add("visible")
+        allTruncatedDescriptions[i].classList.remove("hidden")
     }
 }
 
 // add event listener to expand the description
 document.querySelectorAll(".expand-link").forEach((link) => {
     link.addEventListener("click", () => {
-        link.parentElement.classList.add("hidden-description")
-        link.parentElement.classList.remove("visible-description")
+        link.parentElement.classList.add("hidden")
+        link.parentElement.classList.remove("visible")
         
         link.parentElement.previousElementSibling.classList.add("pointer")    
-        link.parentElement.previousElementSibling.classList.remove("hidden-description")
-        link.parentElement.previousElementSibling.classList.add("visible-description")
+        link.parentElement.previousElementSibling.classList.remove("hidden")
+        link.parentElement.previousElementSibling.classList.add("visible")
 
         link.parentElement.previousElementSibling.addEventListener("click", () => {
-            link.parentElement.previousElementSibling.classList.add("hidden-description")
-            link.parentElement.previousElementSibling.classList.remove("visible-description")
+            link.parentElement.previousElementSibling.classList.add("hidden")
+            link.parentElement.previousElementSibling.classList.remove("visible")
             link.parentElement.previousElementSibling.classList.remove("pointer")
-            link.parentElement.classList.remove("hidden-description")
-            link.parentElement.classList.add("visible-description")
+            link.parentElement.classList.remove("hidden")
+            link.parentElement.classList.add("visible")
         });
     });
 });

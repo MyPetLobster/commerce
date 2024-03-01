@@ -37,7 +37,7 @@
       <a class="title-link" href="{% url 'listing' listing.id %}"
         >{{ listing.title }}</a
       >
-      <p class="listing-desc hidden-desc">
+      <p class="listing-desc hidden">
         {{ listing.title }} - {{ listing.description|truncatechars:125 }} - ${{listing.price }}
       </p>
     </li>
@@ -48,12 +48,12 @@
 <script>
   document.querySelectorAll(".title-link").forEach((link) => {
     link.addEventListener("mouseover", () => {
-      link.nextElementSibling.classList.toggle("hidden-desc");
+      link.nextElementSibling.classList.toggle("hidden");
       link.nextElementSibling.classList.toggle("visible-desc");
       
     });
     link.addEventListener("mouseout", () => {
-      link.nextElementSibling.classList.toggle("hidden-desc");
+      link.nextElementSibling.classList.toggle("hidden");
       link.nextElementSibling.classList.toggle("visible-desc");
     });
   });

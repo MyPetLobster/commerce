@@ -39,10 +39,10 @@
     document.querySelectorAll(".categories-content li").forEach((li) => {
         li.addEventListener("mouseover", () => {
         li.querySelector(".description").classList.remove("hidden");
-        li.querySelector(".description").classList.add("visible");
+        li.querySelector(".description").classList.add("visible-categories");
         });
         li.addEventListener("mouseout", () => {
-        li.querySelector(".description").classList.remove("visible");
+        li.querySelector(".description").classList.remove("visible-categories");
         li.querySelector(".description").classList.add("hidden");
         });
     });

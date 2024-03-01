@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("#msg-admin-link").onclick = function () {
     document
       .querySelector("#send-msg-form")
-      .classList.toggle("hidden-hero");
+      .classList.toggle("hidden");
   };
   document.querySelector("#cancel-msg-admin").onclick = function () {
     document
       .querySelector("#send-msg-form")
-      .classList.toggle("hidden-hero");
+      .classList.toggle("hidden");
   };
 
   const helpSubmitBtn = document.querySelector("#help-submit");
@@ -45,20 +45,20 @@ setTimeout(function () {
 if (localStorage.getItem("theme") === "dark") {
   document.querySelector("body").classList.add("dark-mode");
   document.querySelector("body").classList.remove("light-mode");
-  document.querySelector("#standard-hero").classList.add("hidden-hero");
-  document.querySelector("#standard-hero").classList.remove("visible-hero");
-  document.querySelector("#inverted-hero").classList.add("visible-hero");
-  document.querySelector("#inverted-hero").classList.remove("hidden-hero");
+  document.querySelector("#standard-hero").classList.add("hidden");
+  document.querySelector("#standard-hero").classList.remove("visible");
+  document.querySelector("#inverted-hero").classList.add("visible");
+  document.querySelector("#inverted-hero").classList.remove("hidden");
 }
 
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("dark-mode");
   document.querySelector("body").classList.toggle("light-mode");
-  document.querySelector("#standard-hero").classList.toggle("visible-hero");
-  document.querySelector("#standard-hero").classList.toggle("hidden-hero");
-  document.querySelector("#inverted-hero").classList.toggle("hidden-hero");
-  document.querySelector("#inverted-hero").classList.toggle("visible-hero");
+  document.querySelector("#standard-hero").classList.toggle("visible");
+  document.querySelector("#standard-hero").classList.toggle("hidden");
+  document.querySelector("#inverted-hero").classList.toggle("hidden");
+  document.querySelector("#inverted-hero").classList.toggle("visible");
   localStorage.setItem(
     "theme",
     document.querySelector("body").classList.contains("dark-mode")

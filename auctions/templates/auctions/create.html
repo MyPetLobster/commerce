@@ -29,7 +29,7 @@
 {% block body %}
     <div class="page-content">
         <h1>List an item for sale</h1>
-        <div class="form-div create-form-div">
+        <div class="create-form-div">
             <form class="create-listing-form" action="/create" method="post">
                 {% csrf_token %}
                 {{ form }}

@@ -121,13 +121,13 @@
     {% if current_user.is_authenticated %}
         {% if listing.active == True %}
             <div id="watchlist-check" class="hidden">{{ watchlist_item }}</div>
-            <div id="watchlist-check-content-add" class="hidden-watchlist">
+            <div id="watchlist-check-content-add" class="hidden">
                 <form action="/add_to_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-primary" type="submit">Add to Watchlist</button>
                 </form>
             </div>
-            <div id="watchlist-check-content-remove" class="hidden-watchlist">
+            <div id="watchlist-check-content-remove" class="hidden">
                 <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     <button id="remove-watchlist" class="btn btn-primary" type="submit">Remove from Watchlist</button>
@@ -171,7 +171,7 @@
 
             {% if listing.active == True %}
                 <button class="btn btn-primary" id="comment-button">Leave a Comment</button>
-                <form id="comment-form" class="hidden-form popup-form" action="/comment/{{ listing.id }}" method="post">
+                <form id="comment-form" class="hidden popup-form" action="/comment/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     {{ comment_form }}
                     <div class="center-container">
@@ -211,12 +211,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         if (commentButton) {
             commentButton.onclick = function() {
-                commentForm.classList.remove('hidden-form');
+                commentForm.classList.remove('hidden');
                 commentForm.classList.add('visible-form');
             }
             cancelComment.onclick = function() {
                 commentForm.classList.remove('visible-form');
-                commentForm.classList.add('hidden-form');
+                commentForm.classList.add('hidden');
             }
         }
 
@@ -229,12 +229,13 @@
 
 
     function watchListChecker() {
+        alert(watchListCheck.textContent);
         if (watchListCheck.textContent === "not on watchlist") {
-            watchListCheckContentAdd.classList.remove('hidden-watchlist');
-            watchListCheckContentAdd.classList.add('visible-watchlist');
+            watchListCheckContentAdd.classList.remove('hidden');
+            watchListCheckContentAdd.classList.add('visible');
         } else {
-            watchListCheckContentRemove.classList.remove('hidden-watchlist');
-            watchListCheckContentRemove.classList.add('visible-watchlist');
+            watchListCheckContentRemove.classList.remove('hidden');
+            watchListCheckContentRemove.classList.add('visible');
         }
     }
     
