@@ -461,7 +461,10 @@ def change_password(request, user_id):
     user.save()
     
     contrib_messages.success(request, "Password changed successfully")
-    return redirect("profile", user_id=user_id)
+    return render(request, "auctions/profile.html", {
+        "user_id": user_id,
+        "current_user": request.user
+    })
 
 
 def sort(request):
