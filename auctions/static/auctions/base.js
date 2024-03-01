@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 setTimeout(function () {
-  message = document.querySelector(".message");
+  message = document.querySelector(".alert-div");
   if (message) {
     message.style.display = "none";
   }

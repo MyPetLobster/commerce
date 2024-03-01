@@ -15,15 +15,16 @@
     </head>
     <body class="light-mode">
         {% if messages %}
-            <div class="message">
-                <p>
-                    {% for message in messages %}
-                        {{ message }}</br>
-                    {% endfor %}
-                </p>
-                <a class="del-x" href="#" class="del-msg">&times;</a>
-            </div>
-
+            {% for message in messages %}
+                {% if message.tags %}
+                    <div class="center-container">
+                        <div class="{{ message.tags }}-div alert-div">
+                            <div class="{{ message.tags }}" >{{ message }}</div>
+                            <a class="del-x" href="#" class="del-msg">&times;</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
         <div class="hero">
             <h1 class="yard-sale">Yard Sale</h1>
@@ -111,7 +112,7 @@
 
         <script>
             delX = document.querySelector('.del-x');
-            error_message = document.querySelector('.message');
+            error_message = document.querySelector('.alert-div');
 
             if (delX) {
                 delX.addEventListener('click', () => {

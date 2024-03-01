@@ -106,20 +106,20 @@ a:hover {
 }
 
 /* Alert Message Styles */
-.message {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: auto;
+.alert-div {
+  width: 300px;
   height: auto;
-  padding: 20px 60px 20px 60px;
-  margin: 20px;
   border-radius: 8px;
-  font-size: 1.2em;
+  padding: 10px;
   text-align: center;
-  background-color: rgb(139, 139, 139);
 }
+.success-div {
+  background-color: #2d6128;
+}
+.error-div {
+  background-color: #80052c;
+}
+
 .del-x {
   margin: 0;
   line-height: 0%;
