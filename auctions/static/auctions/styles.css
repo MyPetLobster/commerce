@@ -208,6 +208,8 @@ a:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  text-align: center;
+  color: #c55176;
 }
 
 /* Profile Page - Edit Info, Change Password, Deposit and Withdraw Forms */
@@ -769,6 +771,10 @@ footer li {
 }
 
 /* Categories & Category Pages */
+#h1-all-categories {
+  margin-bottom: 50px;
+}
+
 .categories-content {
   display: flex;
   flex-direction: column;
@@ -778,10 +784,6 @@ footer li {
 }
 .categories-content h1 {
   margin-bottom: 50px;
-}
-.categories-content .description {
-  text-align: center;
-  color: #c55176;
 }
 
 .categories-li {
@@ -796,8 +798,6 @@ footer li {
 }
 
 /* TRANSACTIONS PAGE */
-.table,
-.table-striped,
 .transactions-table {
   background-color: #6c757d;
   border-radius: 8px;
@@ -805,16 +805,10 @@ footer li {
   font-size: 0.9em;
   color: #f4f4f4;
 }
-.table th,
-.table td,
-.table-striped th,
-.table-striped td,
 .transactions-table th,
 .transactions-table td {
   border-color: #333 !important;
 }
-.table th,
-.table-striped th,
 .transactions-table th {
   border-top: none;
 }

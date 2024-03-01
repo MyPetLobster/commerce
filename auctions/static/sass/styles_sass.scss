@@ -220,6 +220,8 @@ a:hover {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  text-align: center;
+  color: $primary-pink;
 }
 
 /* Profile Page - Edit Info, Change Password, Deposit and Withdraw Forms */
@@ -647,17 +649,15 @@ footer {
 }
 
 /* Categories & Category Pages */
+#h1-all-categories {
+  margin-bottom: 50px;
+}
 .categories-content {
   @include flex-column;
   margin-top: 20px;
 
   h1 {
     margin-bottom: 50px;
-  }
-
-  .description {
-    text-align: center;
-    color: $primary-pink;
   }
 }
 
@@ -671,8 +671,7 @@ footer {
 
 
 /* TRANSACTIONS PAGE */
-.table,
-.table-striped,
+
 .transactions-table {
   background-color: $medium-gray;
   border-radius: 8px;
