@@ -25,7 +25,7 @@
 
 {% endblock %} 
 {% block body %}
-<div class="category-content">
+<div class="page-content">
   <h1>{{ category.category }}</h1>
   <h6>{{ category.description }}</h6>
   {% if not listings %}
@@ -33,7 +33,7 @@
   {% endif %}
   <ul>
     {% for listing in listings %}
-    <li>
+    <li class="categories-li">
       <a class="title-link" href="{% url 'listing' listing.id %}"
         >{{ listing.title }}</a
       >

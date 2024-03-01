@@ -40,7 +40,7 @@
     {% endif %}
     <div class="listing-desc">
         <p class="fields-div">
-            <span class="bold">Created by:&nbsp;&nbsp;</span>
+            <span class="bold">Seller:&nbsp;&nbsp;</span>
             <span class="lightweight">
                 {% if current_user.is_authenticated %}
                     {% if listing.user == current_user %}
@@ -136,9 +136,9 @@
             <p></p>
 
             {% if listing.user != current_user %}
-                <form class="bid-form" action="/listing/{{ listing.id }}" method="post">
+                <form class="bid-form-div" action="/listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
-                    <div class="bid-form-div">
+                    <div class="bid-form-dollar-div">
                         <span id="dollar-sign">$</span>
                         <input class="form-control" type="number" name="amount" step="0.01" min="{{ listing.price }}">
                     </div>
@@ -167,8 +167,20 @@
         {% endif %}
         
         <div class="comments-div">
+            <hr >
+            
             <h2>Comments</h2>
 
+            <ul>
+                {% for comment in comments %}
+                    {% if comment.anonymous == True %}
+                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    {% else %}
+                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    {% endif %}
+                    
+                {% endfor %}
+            </ul>
             {% if listing.active == True %}
                 <button class="btn btn-primary" id="comment-button">Leave a Comment</button>
                 <form id="comment-form" class="hidden" action="/comment/{{ listing.id }}" method="post">
@@ -180,20 +192,9 @@
                     </div>
                 </form>
             {% endif %}
-
-            
-            <ul>
-                {% for comment in comments %}
-                    {% if comment.anonymous == True %}
-                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
-                    {% else %}
-                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
-                    {% endif %}
-                    
-                {% endfor %}
-            </ul>
         </div>
     {% endif %}
+
 </div>
 
 <script>

@@ -113,6 +113,7 @@ body {
 }
 hr {
   background-color: $medium-gray;
+  width: 100%;
   display: block;
   clear: both;
   margin-top: 8px;
@@ -247,8 +248,10 @@ a:hover {
   margin-top: 20px;
   background-color: rgba(197, 81, 118, 0.831);
   border-radius: 8px;
-  font-size: 0.8em;
   border: 1px solid $text-color-light;
+  width: 600px;
+  padding: 20px;
+  font-size: 0.9em;
 }
 
 /* Create Listing Page */
@@ -517,12 +520,15 @@ footer {
 
 /* Listing Page */
 .listing-desc {
-  margin-top: 20px;
-  width: 600px;
-  padding: 20px;
+  width: 450px;
+  font-size: 0.9em;
+}
+.fields-item {
+  margin-bottom: 10px;
 }
 .listing-img {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  margin-bottom: 20px;
 }
 .comments-div {
   @include flex-column;
@@ -542,21 +548,18 @@ footer {
 .anon-checkbox {
   accent-color: $primary-pink !important;
 }
-.bid-form {
-  @include flex-column;
-}
-
 .bidding-closed {
   @include flex-column;
   text-align: center;
 }
-
 .timestamp {
   font-size: 0.8em;
   color: $medium-gray;
 }
-
 .bid-form-div {
+  @include flex-column;
+}
+.bid-form-dollar-div {
   @include flex-row;
   align-items: center;
   gap: 5px;
@@ -567,9 +570,7 @@ footer {
   font-size: 1.3em;
 }
 
-.fields-item {
-  margin-bottom: 20px;
-}
+
 
 .confirm-ship-div {
   background-color: $text-color-light;
@@ -619,6 +620,7 @@ footer {
 .watchlist-content {
   @include flex-column;
   width: 100%;
+  margin-bottom: 20px;
 
   h1 {
     position: relative;
@@ -660,15 +662,9 @@ footer {
     margin-bottom: 50px;
   }
 }
-
 .categories-li {
   font-size: 0.9em;
 }
-.category-content {
-  @include flex-column;
-}
-
-
 
 /* TRANSACTIONS PAGE */
 
@@ -693,7 +689,6 @@ footer {
 .deposit-amt {
   color: $money-green-hover;
 }
-
 
 /* MESSAGES PAGE */
 

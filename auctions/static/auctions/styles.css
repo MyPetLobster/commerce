@@ -68,6 +68,7 @@ body {
 
 hr {
   background-color: #6c757d;
+  width: 100%;
   display: block;
   clear: both;
   margin-top: 8px;
@@ -251,8 +252,10 @@ a:hover {
   margin-top: 20px;
   background-color: rgba(197, 81, 118, 0.831);
   border-radius: 8px;
-  font-size: 0.8em;
   border: 1px solid #f4f4f4;
+  width: 600px;
+  padding: 20px;
+  font-size: 0.9em;
 }
 
 /* Create Listing Page */
@@ -609,13 +612,17 @@ footer li {
 
 /* Listing Page */
 .listing-desc {
-  margin-top: 20px;
-  width: 600px;
-  padding: 20px;
+  width: 450px;
+  font-size: 0.9em;
+}
+
+.fields-item {
+  margin-bottom: 10px;
 }
 
 .listing-img {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  margin-bottom: 20px;
 }
 
 .comments-div {
@@ -640,13 +647,6 @@ footer li {
   accent-color: #c55176 !important;
 }
 
-.bid-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
 .bidding-closed {
   display: flex;
   flex-direction: column;
@@ -662,6 +662,13 @@ footer li {
 
 .bid-form-div {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.bid-form-dollar-div {
+  display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 10px;
@@ -673,10 +680,6 @@ footer li {
 
 #dollar-sign {
   font-size: 1.3em;
-}
-
-.fields-item {
-  margin-bottom: 20px;
 }
 
 .confirm-ship-div {
@@ -740,6 +743,7 @@ footer li {
   align-items: center;
   gap: 10px;
   width: 100%;
+  margin-bottom: 20px;
 }
 .watchlist-content h1 {
   position: relative;
@@ -788,13 +792,6 @@ footer li {
 
 .categories-li {
   font-size: 0.9em;
-}
-
-.category-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
 }
 
 /* TRANSACTIONS PAGE */
