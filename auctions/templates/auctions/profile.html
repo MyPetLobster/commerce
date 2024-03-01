@@ -36,11 +36,14 @@
     <form id="send-usr-msg-form" class="hidden" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
         <div class="send-usr-msg-form-div">
+            <h4 class="form-title">Message {{ user.username }}</h4>
             <input type="hidden" name="recipient" value="{{ user.id }}">
             <input class="form-control" type="text" name="subject" placeholder="Subject">
             <textarea class="form-control" name="message" placeholder="Message"></textarea>
-            <button class="btn btn-primary" type="submit">Send</button>
-            <button class="btn btn-primary" type="button" id="cancel-usr-msg">Cancel</button>
+            <div class="form-btn-box">
+                <button class="btn btn-primary" type="submit">Send</button>
+                <button class="btn btn-primary cancel-btn" type="button" id="cancel-usr-msg">Cancel</button>
+            </div>
         </div>
     </form>
 </div>
@@ -74,20 +77,26 @@
         <div id="edit-profile" class="hidden">
             <form class="popup-form" action="{% url 'edit' current_user.id %}" method="post">
                 {% csrf_token %}
+                <h4 class="form-title">Edit Profile</h4>
                 {{ user_info_form }}
-                <button class="btn btn-primary" type="submit" style="align-self:center">Save Changes</button>
-                <button class="btn btn-primary" type="button" id="cancel-button" style="align-self:center">Cancel</button>
+                <div class="form-btn-box">
+                    <button class="btn btn-primary" type="submit" style="align-self:center">Save Changes</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-edit-profile-button" style="align-self:center">Cancel</button>
+                </div>
             </form>
         </div>
 
         <div id="change-password-form" class="hidden">
             <form class="popup-form" action="{% url 'change_password' current_user.id %}" method="post">
                 {% csrf_token %}
+                <h4 class="form-title">Change Password</h4>
                 <input class="form-control" type="password" name="old_password" placeholder="Old Password">
                 <input class="form-control" type="password" name="new_password1" placeholder="New Password">
                 <input class="form-control" type="password" name="new_password2" placeholder="Confirm New Password">
-                <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
-                <button class="btn btn-primary" type="button" id="cancel-password" style="align-self:center">Cancel</button>
+                <div class="form-btn-box">
+                    <button class="btn btn-primary" type="submit" style="align-self:center">Change Password</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-password-btn" style="align-self:center">Cancel</button>
+                </div>
             </form>
         </div>
         <div class="profile-listings">
@@ -105,19 +114,23 @@
         <div class="deposit-form hidden">
             <form class="popup-form" action="{% url 'deposit' current_user.id %}" method="post">
                 {% csrf_token %}
-                <h3>Deposit Funds</h3>
+                <h4 class="form-title">Deposit Funds</h4>
                 <input class="form-control" type="number" name="amount" placeholder="Amount">
-                <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
-                <button class="btn btn-primary" type="button" id="cancel-deposit" style="align-self:center">Cancel</button>
+                <div class="form-btn-box">
+                    <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-deposit-btn" style="align-self:center">Cancel</button>
+                </div>
             </form>
         </div>
         <div class="withdraw-form hidden">
             <form class="popup-form" action="{% url 'withdraw' current_user.id %}" method="post">
                 {% csrf_token %}
-                <h3>Withdraw Funds</h3>
+                <h4 class="form-title">Withdraw Funds</h4>
                 <input class="form-control" type="number" name="amount" placeholder="Amount">
-                <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
-                <button class="btn btn-primary" type="button" id="cancel-withdraw" style="align-self:center">Cancel</button>
+                <div class="form-btn-box">
+                    <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-withdraw-btn" style="align-self:center">Cancel</button>
+                </div>
             </form>
         </div>
     {% endif %}
@@ -203,59 +216,59 @@
 
     const depositButton = document.getElementById('deposit-btn');
     const depositForm = document.querySelector('.deposit-form');
-    const cancelDeposit = document.getElementById('cancel-deposit');
+    const cancelDeposit = document.getElementById('cancel-deposit-btn');
 
     depositButton.addEventListener('click', () => {
         depositForm.classList.remove('hidden');
-        depositForm.classList.add('visible-form');
+        depositForm.classList.add('visible');
     });
 
     cancelDeposit.addEventListener('click', () => {
         depositForm.classList.add('hidden');
-        depositForm.classList.remove('visible-form');
+        depositForm.classList.remove('visible');
     });
 
     const withdrawButton = document.getElementById('withdraw-btn');
     const withdrawForm = document.querySelector('.withdraw-form');
-    const cancelWithdraw = document.getElementById('cancel-withdraw');
+    const cancelWithdraw = document.getElementById('cancel-withdraw-btn');
 
     withdrawButton.addEventListener('click', () => {
         withdrawForm.classList.remove('hidden');
-        withdrawForm.classList.add('visible-form');
+        withdrawForm.classList.add('visible');
     });
 
     cancelWithdraw.addEventListener('click', () => {
         withdrawForm.classList.add('hidden');
-        withdrawForm.classList.remove('visible-form');
+        withdrawForm.classList.remove('visible');
     });
 
 
     const editButton = document.getElementById('edit-button');
     const editProfile = document.getElementById('edit-profile');
-    const cancelButton = document.getElementById('cancel-button');
+    const cancelButton = document.getElementById('cancel-edit-profile-button');
 
     editButton.addEventListener('click', () => {
         editProfile.classList.remove('hidden');
-        editProfile.classList.add('visible-form');
+        editProfile.classList.add('visible');
     });
 
     cancelButton.addEventListener('click', () => {
         editProfile.classList.add('hidden');
-        editProfile.classList.remove('visible-form');
+        editProfile.classList.remove('visible');
     });
 
     const changePassword = document.getElementById('change-password');
     const changePasswordForm = document.getElementById('change-password-form');
-    const cancelPassword = document.getElementById('cancel-password');
+    const cancelPassword = document.getElementById('cancel-password-btn');
 
     changePassword.addEventListener('click', () => {
         changePasswordForm.classList.remove('hidden');
-        changePasswordForm.classList.add('visible-form');
+        changePasswordForm.classList.add('visible');
     });
 
     cancelPassword.addEventListener('click', () => {
         changePasswordForm.classList.add('hidden');
-        changePasswordForm.classList.remove('visible-form');
+        changePasswordForm.classList.remove('visible');
     });
 </script>
 

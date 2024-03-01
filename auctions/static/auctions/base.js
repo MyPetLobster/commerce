@@ -6,16 +6,22 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-  document.querySelector("#msg-admin-link").onclick = function () {
-    document
-      .querySelector("#send-msg-form")
-      .classList.toggle("hidden");
+  const messageAdminBtn = document.querySelector("#msg-admin-link");
+  const messageAdminForm = document.querySelector("#msg-admin-form");
+  const cancelMsgAdminBtn = document.querySelector("#cancel-msg-admin");
+
+  messageAdminBtn.onclick = function () {
+    messageAdminForm.classList.remove("hidden");
+    messageAdminForm.classList.add("send-msg-form");
   };
-  document.querySelector("#cancel-msg-admin").onclick = function () {
-    document
-      .querySelector("#send-msg-form")
-      .classList.toggle("hidden");
+
+  cancelMsgAdminBtn.onclick = function () {
+    messageAdminForm.classList.add("hidden");
+    messageAdminForm.classList.remove("send-msg-form");
   };
+  
+
+
 
   const helpSubmitBtn = document.querySelector("#help-submit");
   const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");

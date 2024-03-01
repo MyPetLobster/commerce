@@ -12,6 +12,29 @@
   gap: 10px;
 }
 
+@mixin floating-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+@mixin universal-form {
+  display: block;
+  color: $text-color-light;
+  background-color: #7a9196;
+  height: auto;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+  input {
+    margin-bottom: 10px;
+  }
+}
+
 $text-color-dark: #333;
 $text-color-light: #f4f4f4;
 $link-color: #1696b9;
@@ -21,8 +44,8 @@ $primary-pink: #c55176;
 $background-color-light: #f4f4f4;
 $background-color-dark: #333;
 $medium-gray: #6c757d;
-$cancel-color: #80052c;
-$cancel-color-hover: #a90000;
+$cancel-color: #a90000;
+$cancel-color-hover: #80052c;
 $btn-focus: #e75684;
 $btn-hover: #983554;
 $money-green: #2d6128;
@@ -119,31 +142,114 @@ a:hover {
 .error-div {
   background-color: #80052c;
 }
-
 .del-x {
   margin: 0;
   line-height: 0%;
   font-size: 1.5em;
   color: white;
+  cursor: pointer;
+  transition-duration: 0.15s;
 }
 .del-x:hover {
-  color: red;
+  font-weight: bold;
+}
+
+/* FORM STYLES */
+
+/* All input fields font-size and focus */
+.form-control {
+  font-size: 0.9em;
+}
+.form-control:focus {
+  border-color: $primary-pink;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
+}
+
+/* Dynamic Form and Description */
+.hidden {
+  display: none;
+}
+.visible {
+  display: block;
+}
+
+.form-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Form Buttons */
+.form-btn-box {
+  @include flex-column;
+  margin: 20px 0 0 0;
+  width: 100%;
+}
+
+/* Cancel Buttons */
+.cancel-btn {
+  background-color: $cancel-color !important;
+  color: $text-color-light !important;
+  transition: 0.15s !important;
+}
+.cancel-btn:hover,
+.cancel-btn:focus,
+.cancel-btn:active,
+.cancel-btn:visited {
+  background-color: $cancel-color-hover !important;
+}
+
+#cancel-msg {
+  background-color: $cancel-color;
+  color: $text-color-light;
+  transition: 0.15s;
+}
+#cancel-msg:hover {
+  background-color: $cancel-color-hover;
+}
+
+#close-listing-btn {
+  background-color: $cancel-color;
+  color: $text-color-light;
+  transition: 0.15s;
+}
+#close-listing-btn:hover,
+#close-listing-btn:focus,
+#close-listing-btn:active {
+  background-color: $cancel-color-hover;
+}
+
+#remove-watchlist,
+#cancel-button,
+#cancel-password {
+  background-color: $cancel-color;
+  color: $text-color-light;
+  transition: 0.15s;
+}
+#remove-watchlist:hover,
+#cancel-button:hover,
+#cancel-password:hover {
+  background-color: $cancel-color-hover;
+}
+
+#deposit-btn,
+#withdraw-btn {
+  transition: 0.2s;
+  cursor: pointer;
+}
+#deposit-btn:hover {
+  background-color: $money-green;
+}
+#withdraw-btn:hover {
+  background-color: $cancel-color-hover;
 }
 
 /* Layout Template - Message Admin Form */
 .send-msg-form {
   @include flex-column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  width: 500px;
-  padding: 20px;
-  background-color: #949494;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-  border-radius: 8px;
-  border: 2px solid $text-color-light;
+  @include floating-form;
+  @include universal-form;
+
   label {
     color: $text-color-light;
   }
@@ -162,41 +268,14 @@ a:hover {
   z-index: 9999;
 }
 
-/* Dynamic Form and Description */
-.hidden {
-  display: none;
-}
-.visible {
-  display: block;
-}
-
 /* Profile Page - Edit Info, Change Password, Deposit and Withdraw Forms */
-.visible-form {
-  display: block;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-}
-
 /* Listing Page - Leave Comment Form */
 .popup-form {
   @include flex-column;
-  display: block;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  color: $text-color-light;
-  background-color: #7a9196;
-  align-items: flex-end;
-  width: auto;
-  padding: 20px;
+  @include floating-form;
+  @include universal-form;
+
   margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
 
   label {
     font-size: 0.9em;
@@ -219,26 +298,21 @@ a:hover {
 /* Create Listing Page */
 .create-form-div {
   @include flex-column;
-  align-items: center;
+  @include universal-form;
   width: 500px;
-  padding: 20px;
   margin-top: 20px;
-  background-color: #949494;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-  border-radius: 8px;
-  border: 2px solid $text-color-light;
 }
 .create-listing-form {
   @include flex-column;
   align-items: flex-start;
   width: 100%;
-  padding: 20px;
-  margin-top: 20px;
 
+  /* Set all form groups to 100% width */
   div {
     width: 100%;
   }
 
+  /* Target categories field, use grid to display checkboxes in 2 columns */
   #id_categories {
     font-size: 0.9em;
     display: grid;
@@ -256,28 +330,9 @@ a:hover {
 /* Profile Page - Send User Message Form */
 .send-usr-msg-form-div {
   @include flex-column;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  align-items: center;
-  width: 600px;
-  padding: 20px;
+  @include floating-form;
+  @include universal-form;
   margin-top: 20px;
-  background-color: #949494;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-  border-radius: 8px;
-  border: 2px solid $text-color-light;
-
-  #cancel-msg {
-    background-color: $cancel-color;
-    color: $text-color-light;
-    transition: 0.15s;
-  }
-  #cancel-msg:hover {
-    background-color: $cancel-color-hover;
-  }
 }
 
 /* Authentication Forms */
@@ -286,14 +341,6 @@ a:hover {
   align-items: center;
   width: 600px;
   padding: 20px;
-}
-
-.form-control {
-  font-size: 0.9em;
-}
-.form-control:focus {
-  border-color: $primary-pink;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 
 legend {
@@ -383,10 +430,10 @@ footer {
 }
 
 .btn-primary:focus {
-  background-color: $btn-focus !important;
+  background-color: $btn-focus;
   color: $text-color-light;
   outline: none !important;
-  border-color: $primary-pink !important;
+  border-color: $primary-pink;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 .btn-primary:active {
@@ -418,21 +465,6 @@ footer {
 .btn-outline-primary:disabled {
   color: $primary-pink;
   background-color: transparent;
-}
-
-#close-listing-btn,
-#cancel-comment {
-  background-color: $cancel-color;
-  color: $text-color-light;
-  transition: 0.15s;
-}
-#close-listing-btn:hover,
-#close-listing-btn:focus,
-#close-listing-btn:active,
-#cancel-comment:hover,
-#cancel-comment:focus,
-#cancel-comment:active {
-  background-color: $cancel-color-hover;
 }
 
 /* Active and All Listings Pages */
@@ -584,19 +616,6 @@ footer {
   font-size: 1.3em;
 }
 
-#remove-watchlist,
-#cancel-button,
-#cancel-password {
-  background-color: $cancel-color;
-  color: $text-color-light;
-  transition: 0.15s;
-}
-#remove-watchlist:hover,
-#cancel-button:hover,
-#cancel-password:hover {
-  background-color: $cancel-color-hover;
-}
-
 .fields-item {
   margin-bottom: 20px;
 }
@@ -643,17 +662,6 @@ footer {
 
 .account-balance {
   @include flex-column;
-}
-#deposit-btn,
-#withdraw-btn {
-  transition: 0.2s;
-  cursor: pointer;
-}
-#deposit-btn:hover {
-  background-color: $money-green;
-}
-#withdraw-btn:hover {
-  background-color: $cancel-color-hover;
 }
 
 /* Watchlist Page */

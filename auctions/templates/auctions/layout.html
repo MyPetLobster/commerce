@@ -76,8 +76,10 @@
 
     {% if current_user.is_authenticated %}
     <div>
-      <form id="send-msg-form" class="hidden send-msg-form" action="{% url 'messages' current_user.id %}" method="post">
+        
+      <form id="msg-admin-form" class="hidden" action="{% url 'messages' current_user.id %}" method="post">
         {% csrf_token %}
+        <h4 class="form-title">Message the Admins</h4>
         <div class="form-group">
           <label for="subject">Subject</label>
           <input type="text" class="form-control" id="subject" name="subject" value="" />
@@ -87,9 +89,11 @@
           <textarea class="form-control" id="message" name="message" rows="3"></textarea>
         </div>
         <input type="hidden" name="recipient" value="2" />
-        <button id="help-submit-faux" class="btn btn-primary">Send</button>
         <button id="help-submit" type="submit" style="display:none;">Send</button>
-        <button type="button" class="btn btn-primary" id="cancel-msg-admin">Cancel</button>
+        <div class="form-btn-box">
+            <button id="help-submit-faux" class="btn btn-primary">Send</button>
+            <button type="button" class="cancel-btn btn btn-primary" id="cancel-msg-admin">Cancel</button>
+        </div>
       </form>
     </div>
     {% endif %}
