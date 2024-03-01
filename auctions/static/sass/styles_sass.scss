@@ -179,55 +179,9 @@ a:hover {
   margin-bottom: 10px;
 }
 
-/* Form Buttons */
-.form-btn-box {
-  @include flex-column;
-  margin: 20px 0 0 0;
-  width: 100%;
-}
-
-/* Cancel Buttons */
-.cancel-btn {
-  background-color: $cancel-color !important;
-  color: $text-color-light !important;
-  transition: 0.15s !important;
-}
-.cancel-btn:hover,
-.cancel-btn:focus,
-.cancel-btn:active,
-.cancel-btn:visited {
-  background-color: $cancel-color-hover !important;
-}
-#small-watchlist-btn {
-  font-size: 0.7em;
-  padding: 4px 15px;
-}
 
 
-#remove-watchlist,
-#cancel-button,
-#cancel-password {
-  background-color: $cancel-color;
-  color: $text-color-light;
-  transition: 0.15s;
-}
-#remove-watchlist:hover,
-#cancel-button:hover,
-#cancel-password:hover {
-  background-color: $cancel-color-hover;
-}
 
-#deposit-btn,
-#withdraw-btn {
-  transition: 0.2s;
-  cursor: pointer;
-}
-#deposit-btn:hover {
-  background-color: $money-green;
-}
-#withdraw-btn:hover {
-  background-color: $cancel-color-hover;
-}
 
 /* Layout Template - Message Admin Form */
 .send-msg-form {
@@ -427,30 +381,51 @@ footer {
   border: none !important;
 }
 
-.btn-outline-primary {
-  color: $primary-pink;
-  background-color: transparent;
-  background-image: none;
-  border-color: $primary-pink;
-  transition: 0.15s;
+
+
+/* Form Buttons Div */
+.form-btn-box {
+  @include flex-column;
+  margin: 20px 0 0 0;
+  width: 100%;
 }
 
-.btn-outline-primary:hover {
-  color: $primary-pink;
-  background-color: $btn-hover;
-  border-color: $btn-hover;
+/* Cancel Buttons */
+.cancel-btn {
+  background-color: $cancel-color !important;
+  color: $text-color-light !important;
+  transition: 0.15s !important;
+}
+.cancel-btn:hover,
+.cancel-btn:focus,
+.cancel-btn:active,
+.cancel-btn:visited {
+  background-color: $cancel-color-hover !important;
 }
 
-.btn-outline-primary:focus,
-.btn-outline-primary.focus {
-  box-shadow: 0 0 0 0.2rem rgba(197, 81, 118, 0.5);
+/* Watchlist Page - Small Buttons */
+#remove-from-watchlist-btn {
+  font-size: 0.7em;
+  padding: 4px 15px;
 }
 
-.btn-outline-primary.disabled,
-.btn-outline-primary:disabled {
-  color: $primary-pink;
-  background-color: transparent;
+/* Profile Page - Deposit and Withdraw Buttons */
+#deposit-btn,
+#withdraw-btn {
+  transition: 0.2s;
+  cursor: pointer;
 }
+#deposit-btn:hover {
+  background-color: $money-green;
+}
+#withdraw-btn:hover {
+  background-color: $cancel-color-hover;
+}
+
+
+
+
+
 
 /* Active and All Listings Pages */
 .page-content {

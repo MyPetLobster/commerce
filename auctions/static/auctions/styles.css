@@ -148,63 +148,6 @@ a:hover {
   margin-bottom: 10px;
 }
 
-/* Form Buttons */
-.form-btn-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin: 20px 0 0 0;
-  width: 100%;
-}
-
-/* Cancel Buttons */
-.cancel-btn {
-  background-color: #a90000 !important;
-  color: #f4f4f4 !important;
-  transition: 0.15s !important;
-}
-
-.cancel-btn:hover,
-.cancel-btn:focus,
-.cancel-btn:active,
-.cancel-btn:visited {
-  background-color: #80052c !important;
-}
-
-#small-watchlist-btn {
-  font-size: 0.7em;
-  padding: 4px 15px;
-}
-
-#remove-watchlist,
-#cancel-button,
-#cancel-password {
-  background-color: #a90000;
-  color: #f4f4f4;
-  transition: 0.15s;
-}
-
-#remove-watchlist:hover,
-#cancel-button:hover,
-#cancel-password:hover {
-  background-color: #80052c;
-}
-
-#deposit-btn,
-#withdraw-btn {
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-#deposit-btn:hover {
-  background-color: #2d6128;
-}
-
-#withdraw-btn:hover {
-  background-color: #80052c;
-}
-
 /* Layout Template - Message Admin Form */
 .send-msg-form {
   display: flex;
@@ -494,29 +437,49 @@ footer li {
   border: none !important;
 }
 
-.btn-outline-primary {
-  color: #c55176;
-  background-color: transparent;
-  background-image: none;
-  border-color: #c55176;
-  transition: 0.15s;
+/* Form Buttons Div */
+.form-btn-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 0 0;
+  width: 100%;
 }
 
-.btn-outline-primary:hover {
-  color: #c55176;
-  background-color: #983554;
-  border-color: #983554;
+/* Cancel Buttons */
+.cancel-btn {
+  background-color: #a90000 !important;
+  color: #f4f4f4 !important;
+  transition: 0.15s !important;
 }
 
-.btn-outline-primary:focus,
-.btn-outline-primary.focus {
-  box-shadow: 0 0 0 0.2rem rgba(197, 81, 118, 0.5);
+.cancel-btn:hover,
+.cancel-btn:focus,
+.cancel-btn:active,
+.cancel-btn:visited {
+  background-color: #80052c !important;
 }
 
-.btn-outline-primary.disabled,
-.btn-outline-primary:disabled {
-  color: #c55176;
-  background-color: transparent;
+/* Watchlist Page - Small Buttons */
+#remove-from-watchlist-btn {
+  font-size: 0.7em;
+  padding: 4px 15px;
+}
+
+/* Profile Page - Deposit and Withdraw Buttons */
+#deposit-btn,
+#withdraw-btn {
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+#deposit-btn:hover {
+  background-color: #2d6128;
+}
+
+#withdraw-btn:hover {
+  background-color: #80052c;
 }
 
 /* Active and All Listings Pages */

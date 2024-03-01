@@ -130,7 +130,7 @@
             <div id="watchlist-check-content-remove" class="hidden">
                 <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}
-                    <button id="remove-watchlist" class="btn btn-primary" type="submit">Remove from Watchlist</button>
+                    <button class="btn btn-primary cancel-btn" type="submit">Remove from Watchlist</button>
                 </form>
             </div>
             <p></p>
