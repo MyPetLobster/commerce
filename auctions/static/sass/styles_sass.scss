@@ -198,26 +198,11 @@ a:hover {
 .cancel-btn:visited {
   background-color: $cancel-color-hover !important;
 }
-
-#cancel-msg {
-  background-color: $cancel-color;
-  color: $text-color-light;
-  transition: 0.15s;
-}
-#cancel-msg:hover {
-  background-color: $cancel-color-hover;
+#small-watchlist-btn {
+  font-size: 0.7em;
+  padding: 4px 15px;
 }
 
-#close-listing-btn {
-  background-color: $cancel-color;
-  color: $text-color-light;
-  transition: 0.15s;
-}
-#close-listing-btn:hover,
-#close-listing-btn:focus,
-#close-listing-btn:active {
-  background-color: $cancel-color-hover;
-}
 
 #remove-watchlist,
 #cancel-button,
@@ -683,17 +668,6 @@ footer {
 
   p {
     font-size: 0.8em;
-  }
-  .btn-primary {
-    font-size: 0.7em;
-    padding: 4px 15px;
-    background-color: $cancel-color;
-    transition: 0.15s;
-  }
-  .btn-primary:hover,
-  .btn-primary:focus,
-  .btn-primary:active {
-    background-color: $cancel-color-hover;
   }
   a,
   p {

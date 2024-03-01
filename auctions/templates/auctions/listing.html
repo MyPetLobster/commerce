@@ -149,7 +149,7 @@
             {% if listing.user == current_user %}
                 <form action="/close_listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
-                    <button id="close-listing-btn" class="btn btn-primary" type="submit">Close Listing</button>
+                    <button id="close-listing-btn" class="btn btn-primary cancel-btn" type="submit">Close Listing</button>
                 </form>
             {% endif %}
 

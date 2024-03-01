@@ -172,26 +172,9 @@ a:hover {
   background-color: #80052c !important;
 }
 
-#cancel-msg {
-  background-color: #a90000;
-  color: #f4f4f4;
-  transition: 0.15s;
-}
-
-#cancel-msg:hover {
-  background-color: #80052c;
-}
-
-#close-listing-btn {
-  background-color: #a90000;
-  color: #f4f4f4;
-  transition: 0.15s;
-}
-
-#close-listing-btn:hover,
-#close-listing-btn:focus,
-#close-listing-btn:active {
-  background-color: #80052c;
+#small-watchlist-btn {
+  font-size: 0.7em;
+  padding: 4px 15px;
 }
 
 #remove-watchlist,
@@ -798,17 +781,6 @@ footer li {
 }
 .watchlist-listing p {
   font-size: 0.8em;
-}
-.watchlist-listing .btn-primary {
-  font-size: 0.7em;
-  padding: 4px 15px;
-  background-color: #a90000;
-  transition: 0.15s;
-}
-.watchlist-listing .btn-primary:hover,
-.watchlist-listing .btn-primary:focus,
-.watchlist-listing .btn-primary:active {
-  background-color: #80052c;
 }
 .watchlist-listing a,
 .watchlist-listing p {

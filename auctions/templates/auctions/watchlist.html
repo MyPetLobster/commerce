@@ -44,7 +44,7 @@
       </p>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}
-        <button class="btn btn-primary" type="submit">Remove from Watchlist</button>
+        <button class="btn btn-primary cancel-btn" id="small-watchlist-btn" type="submit">Remove from Watchlist</button>
       </form>
     </li>
     {% endfor %}
