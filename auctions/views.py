@@ -583,7 +583,8 @@ def transactions(request, user_id):
 
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
-        'user': user
+        'user': user,
+        'current_user': request.user
     })
 
 

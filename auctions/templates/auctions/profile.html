@@ -93,6 +93,7 @@
         <div class="profile-listings">
             <hr>
         </div>
+
         <div class="account-balance">
             <h2>Account Balance</h2>
             <p>${{ current_user.balance }}</p>
@@ -100,6 +101,7 @@
             <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
             <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
         </div>
+
         <div class="deposit-form hidden-form">
             <form class="popup-form" action="{% url 'deposit' current_user.id %}" method="post">
                 {% csrf_token %}
@@ -185,15 +187,18 @@
     const sendMsgForm = document.getElementById('send-usr-msg-form');
     const cancelMsg = document.getElementById('cancel-usr-msg');
 
-    sendMsgButton.addEventListener('click', () => {
+    if (sendMsgButton) {
+        sendMsgButton.addEventListener('click', () => {
         sendMsgForm.classList.remove('hidden-hero');
         sendMsgForm.classList.add('visible-hero');
     });
 
-    cancelMsg.addEventListener('click', () => {
+        cancelMsg.addEventListener('click', () => {
         sendMsgForm.classList.add('hidden-hero');
         sendMsgForm.classList.remove('visible-hero');
     });
+    }
+
 
 
     const depositButton = document.getElementById('deposit-btn');
