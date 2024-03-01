@@ -33,13 +33,11 @@ Messages
   <h2>{{ current_user.username }}'s Messages</h2>
   <div class="messages-container">
     <h3>Messages</h3>
-    <p></p>
-
-    <h4>Inbox</h4>
+    <div class="divider-med"></div>
+    <h4 class="center-container">Inbox</h4>
     <hr />
     <div class="messages-div inbox">
       {% if inbox_messages %}
-      <hr />
       {% for message in inbox_messages %}
       <div class="message-div">
         <p class="message-sender">From: {{ message.sender }}</p>
@@ -54,13 +52,12 @@ Messages
       {% else %}
       <p>No messages</p>
       {% endif %}
-      <hr />
     </div>
-
-    <h4>Sent</h4>
+    <div class="divider-med"></div>
+    <h4 class="center-container">Sent Messages</h4>
+    <hr />
     <div class="messages-div sent">
       {% if sent_messages %}
-      <hr />
       {% for message in sent_messages %}
       <div class="message-div">
         <p class="message-sender">To: {{ message.recipient }}</p>
@@ -76,7 +73,9 @@ Messages
       {% endif %}
     </div>
   </div>
-  <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
+  <a style="margin-top:20px;" href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
+
+<div id="this-is-message-page"></div>
 
 {% endblock %}

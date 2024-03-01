@@ -26,6 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#subject").value = subjectText;
     helpSubmitBtn.click();
   };
+
+  const messagePageCheck = document.querySelector("#this-is-message-page");
+  if (messagePageCheck) {
+    changeMessageColors();
+  }
 });
 
 setTimeout(function () {
@@ -35,6 +40,7 @@ setTimeout(function () {
   }
 }, 3000);
 
+// DARK and LIGHT MODES
 // Check if the user has a theme preference and set it when page loads
 if (localStorage.getItem("theme") === "dark") {
   document.querySelector("body").classList.add("dark-mode");
@@ -44,6 +50,7 @@ if (localStorage.getItem("theme") === "dark") {
   document.querySelector("#inverted-hero").classList.add("visible-hero");
   document.querySelector("#inverted-hero").classList.remove("hidden-hero");
 }
+
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("dark-mode");
@@ -58,4 +65,38 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
       ? "dark"
       : "light"
   );
+
+  // change the colors of the message divs if they exist
+  const messagePageCheck = document.querySelector("#this-is-message-page");
+  if (messagePageCheck) {
+    changeMessageColors();
+  }
 };
+
+
+
+// select every other .message-div and darken the background slightly
+function changeMessageColors() {
+    messageDivs = document.querySelectorAll('.message-div');
+    lightModeColorOne = '#ded9dd';
+    lightModeColorTwo = '#e8e5e8';
+    darkModeColorOne = '#454144';
+    darkModeColorTwo = '#5e545c';
+
+    if (localStorage.getItem('theme') === 'light') {
+        modColorOne = lightModeColorOne;
+        modColorTwo = lightModeColorTwo;
+    } 
+    if (localStorage.getItem('theme') === 'dark') {
+        modColorOne = darkModeColorOne;
+        modColorTwo = darkModeColorTwo;
+    }
+
+    messageDivs.forEach((div, index) => {
+        if (index % 2 === 0) {
+            div.style.backgroundColor = modColorOne;
+        } else {
+            div.style.backgroundColor = modColorTwo;
+        }
+    });
+}

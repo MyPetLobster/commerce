@@ -90,6 +90,10 @@ hr {
 .field-line {
   margin-bottom: 8px;
 }
+.divider-med {
+  width: 100%;
+  height: 40px;
+}
 
 /* Link Styles */
 a {
@@ -763,3 +767,9 @@ footer {
 }
 
 /* Messages Page */
+
+.message-div {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
