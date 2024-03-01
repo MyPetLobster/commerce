@@ -57,11 +57,24 @@ body {
   overflow-x: hidden;
 }
 
+.page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 40px 60px 40px;
+  width: 100%;
+}
+
 hr {
   background-color: #6c757d;
   display: block;
   clear: both;
   margin-top: 8px;
+}
+
+p {
+  font-size: 1em;
 }
 
 .center-container {
@@ -92,6 +105,14 @@ a:hover {
   color: #0a5f76;
 }
 
+.big-a {
+  font-size: 1.3em;
+}
+
+.small-a {
+  font-size: 1em;
+}
+
 /* Alert Message Styles */
 .alert-div {
   width: 300px;
@@ -110,12 +131,12 @@ a:hover {
 }
 
 .del-x {
+  cursor: pointer;
+  transition: 0.15s;
   margin: 0;
   line-height: 0%;
   font-size: 1.5em;
   color: white;
-  cursor: pointer;
-  transition-duration: 0.15s;
 }
 
 .del-x:hover {
@@ -353,8 +374,8 @@ legend {
 .logout-link,
 .footer-link {
   cursor: pointer;
-  color: #8c8787;
   transition: 0.15s;
+  color: #8c8787;
 }
 
 #msg-admin-link:hover,
@@ -409,11 +430,11 @@ footer li {
 
 /* Button Styles */
 .btn {
+  cursor: pointer;
+  transition: 0.15s;
   padding: 6px 25px;
   border-radius: 6px;
   font-size: 1em;
-  cursor: pointer;
-  transition: 0.2s;
   background-color: #c55176;
   border: none;
 }
@@ -423,11 +444,13 @@ footer li {
   color: #f4f4f4;
 }
 
-.btn-primary:focus {
-  background-color: #e75684;
-  color: #f4f4f4;
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: #e75684 !important;
+  color: #f4f4f4 !important;
   outline: none !important;
-  border-color: #c55176;
+  border-color: #c55176 !important;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 
@@ -470,8 +493,8 @@ footer li {
 /* Profile Page - Deposit and Withdraw Buttons */
 #deposit-btn,
 #withdraw-btn {
-  transition: 0.2s;
   cursor: pointer;
+  transition: 0.15s;
 }
 
 #deposit-btn:hover {
@@ -482,31 +505,8 @@ footer li {
   background-color: #80052c;
 }
 
-/* Active and All Listings Pages */
-.page-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 20px 40px 60px 40px;
-}
-.page-content ul {
-  width: 60%;
-}
-.page-content li {
-  list-style-type: none;
-  margin-bottom: 40px;
-}
-.page-content .big-a {
-  font-size: 1.3em;
-}
-.page-content .small-a {
-  font-size: 1em;
-}
-.page-content p {
-  font-size: 1em;
-}
-
+/* INDEX and LISTINGS  */
+/* Used by JS to make truncated descriptions clickable */
 .truncated-description {
   cursor: pointer;
 }
@@ -515,6 +515,17 @@ footer li {
   cursor: pointer;
 }
 
+.long-listings,
+.short-listings {
+  width: 60%;
+}
+.long-listings li,
+.short-listings li {
+  list-style-type: none;
+  margin-bottom: 40px;
+}
+
+/* Listings/Index Toggle Full Listings - Title Only */
 .opt-selected {
   font-weight: bold;
   color: #c55176;
@@ -785,28 +796,19 @@ footer li {
 }
 
 /* Login and Register Pages */
-.auth-page-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-}
-
-/* Transactions Page */
+/* TRANSACTIONS PAGE */
 .table,
 .table-striped,
 .transactions-table {
   background-color: #6c757d;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   outline: 3px solid #c55176;
 }
 .table th,
 .table-striped th,
 .transactions-table th {
-  /*remove border top of table head? */
+  /*remove border top of table head */
   border-top: none;
   color: #f4f4f4;
 }
@@ -816,11 +818,11 @@ footer li {
   color: #f4f4f4;
 }
 
-.red {
-  color: #80052c;
+.withdraw-amt {
+  color: #a90000;
 }
 
-.green {
+.deposit-amt {
   color: #1f3f1a;
 }
 

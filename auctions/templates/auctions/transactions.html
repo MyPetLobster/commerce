@@ -54,11 +54,11 @@
                     <td>N/A</td>
                 {% endif %}
                 {% if transaction.sender == user %}
-                <td class="red">-${{ transaction.amount }}</td>
+                <td class="withdraw-amt">-${{ transaction.amount }}</td>
                 <td>You</td>
                 <td>{{ transaction.recipient }}</td>
                 {% else %}
-                <td class="green">${{ transaction.amount }}</td>
+                <td class="deposit-amt">${{ transaction.amount }}</td>
                 <td>{{ transaction.sender }}</td>
                 <td>You</td>
                 {% endif %}

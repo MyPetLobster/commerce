@@ -35,6 +35,11 @@
   }
 }
 
+@mixin cursor-pointer-transition {
+  cursor: pointer;
+  transition: 0.15s;
+}
+
 $text-color-dark: #333;
 $text-color-light: #f4f4f4;
 $link-color: #1696b9;
@@ -50,6 +55,7 @@ $btn-focus: #e75684;
 $btn-hover: #983554;
 $money-green: #2d6128;
 $money-green-hover: #1f3f1a;
+$pale-pink: #976f7b;
 
 /* Dark Mode/Light Mode */
 .light-mode {
@@ -100,11 +106,19 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
 }
+.page-content {
+  @include flex-column;
+  padding: 20px 40px 60px 40px;
+  width: 100%;
+}
 hr {
   background-color: $medium-gray;
   display: block;
   clear: both;
   margin-top: 8px;
+}
+p {
+  font-size: 1em;
 }
 .center-container {
   width: 100%;
@@ -127,6 +141,12 @@ a:hover {
   text-decoration: none;
   color: $link-color-hover;
 }
+.big-a {
+  font-size: 1.3em;
+}
+.small-a {
+  font-size: 1em;
+}
 
 /* Alert Message Styles */
 .alert-div {
@@ -143,12 +163,11 @@ a:hover {
   background-color: #80052c;
 }
 .del-x {
+  @include cursor-pointer-transition;
   margin: 0;
   line-height: 0%;
   font-size: 1.5em;
   color: white;
-  cursor: pointer;
-  transition-duration: 0.15s;
 }
 .del-x:hover {
   font-weight: bold;
@@ -178,10 +197,6 @@ a:hover {
   font-weight: bold;
   margin-bottom: 10px;
 }
-
-
-
-
 
 /* Layout Template - Message Admin Form */
 .send-msg-form {
@@ -308,9 +323,8 @@ legend {
 .nav-link,
 .logout-link,
 .footer-link {
-  cursor: pointer;
+  @include cursor-pointer-transition;
   color: $nav-color;
-  transition: 0.15s;
 }
 #msg-admin-link:hover,
 .nav-link:hover,
@@ -355,11 +369,10 @@ footer {
 
 /* Button Styles */
 .btn {
+  @include cursor-pointer-transition;
   padding: 6px 25px;
   border-radius: 6px;
   font-size: 1em;
-  cursor: pointer;
-  transition: 0.2s;
   background-color: $primary-pink;
   border: none;
 }
@@ -367,12 +380,13 @@ footer {
   background-color: $btn-hover;
   color: $text-color-light;
 }
-
-.btn-primary:focus {
-  background-color: $btn-focus;
-  color: $text-color-light;
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: $btn-focus !important;
+  color: $text-color-light !important;
   outline: none !important;
-  border-color: $primary-pink;
+  border-color: $primary-pink !important;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 .btn-primary:active {
@@ -380,16 +394,12 @@ footer {
   box-shadow: none !important;
   border: none !important;
 }
-
-
-
 /* Form Buttons Div */
 .form-btn-box {
   @include flex-column;
   margin: 20px 0 0 0;
   width: 100%;
 }
-
 /* Cancel Buttons */
 .cancel-btn {
   background-color: $cancel-color !important;
@@ -402,18 +412,15 @@ footer {
 .cancel-btn:visited {
   background-color: $cancel-color-hover !important;
 }
-
 /* Watchlist Page - Small Buttons */
 #remove-from-watchlist-btn {
   font-size: 0.7em;
   padding: 4px 15px;
 }
-
 /* Profile Page - Deposit and Withdraw Buttons */
 #deposit-btn,
 #withdraw-btn {
-  transition: 0.2s;
-  cursor: pointer;
+  @include cursor-pointer-transition;
 }
 #deposit-btn:hover {
   background-color: $money-green;
@@ -422,41 +429,25 @@ footer {
   background-color: $cancel-color-hover;
 }
 
+/* INDEX and LISTINGS  */
 
-
-
-
-
-/* Active and All Listings Pages */
-.page-content {
-  @include flex-column;
-  padding: 20px 40px 60px 40px;
-
-  ul {
-    width: 60%;
-  }
-  li {
-    list-style-type: none;
-    margin-bottom: 40px;
-  }
-  .big-a {
-    font-size: 1.3em;
-  }
-  .small-a {
-    font-size: 1em;
-  }
-  p {
-    font-size: 1em;
-  }
-}
-
+/* Used by JS to make truncated descriptions clickable */
 .truncated-description {
   cursor: pointer;
 }
 .pointer {
   cursor: pointer;
 }
+.long-listings,
+.short-listings {
+  width: 60%;
+  li {
+    list-style-type: none;
+    margin-bottom: 40px;
+  }
+}
 
+/* Listings/Index Toggle Full Listings - Title Only */
 .opt-selected {
   font-weight: bold;
   color: $primary-pink;
@@ -467,7 +458,7 @@ footer {
 }
 .opt-not-selected:hover {
   font-weight: 400;
-  color: #976f7b;
+  color: $pale-pink;
 }
 .title-only-li {
   font-size: 0.9em;
@@ -486,8 +477,7 @@ footer {
 
 #go-to-closed,
 #back-to-top {
-  cursor: pointer;
-  transition: 0.15s;
+  @include cursor-pointer-transition;
 }
 #go-to-closed:hover,
 #back-to-top:hover {
@@ -512,8 +502,7 @@ footer {
   margin-bottom: 20px;
 
   p {
-    cursor: pointer;
-    transition: 0.15s;
+    @include cursor-pointer-transition;
   }
   p:hover {
     color: $primary-pink;
@@ -680,23 +669,18 @@ footer {
 }
 
 /* Login and Register Pages */
-.auth-page-content {
-  @include flex-column;
-  width: 100%;
-  height: 100%;
-}
 
-/* Transactions Page */
+/* TRANSACTIONS PAGE */
 .table,
 .table-striped,
 .transactions-table {
   background-color: $medium-gray;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   outline: 3px solid $primary-pink;
 
   th {
-    /*remove border top of table head? */
+    /*remove border top of table head */
     border-top: none;
     color: $text-color-light;
   }
@@ -705,10 +689,10 @@ footer {
   }
 }
 
-.red {
-  color: $cancel-color-hover;
+.withdraw-amt {
+  color: $cancel-color;
 }
-.green {
+.deposit-amt {
   color: $money-green-hover;
 }
 
