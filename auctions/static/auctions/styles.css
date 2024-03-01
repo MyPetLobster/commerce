@@ -62,7 +62,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 20px 40px 60px 40px;
+  padding: 20px 20px 40px 20px;
   width: 100%;
 }
 
@@ -95,7 +95,7 @@ p {
   height: 40px;
 }
 
-/* Link Styles */
+/* LINK STYLES */
 a {
   color: #1696b9;
   transition: 0.15s;
@@ -114,7 +114,7 @@ a:hover {
   font-size: 1em;
 }
 
-/* Alert Message Styles */
+/* ALERT MESSAGE STYLES */
 .alert-div {
   width: 300px;
   height: auto;
@@ -155,6 +155,12 @@ a:hover {
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 
+.form-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 /* Dynamic Form and Description */
 .hidden {
   display: none;
@@ -162,12 +168,6 @@ a:hover {
 
 .visible {
   display: block;
-}
-
-.form-title {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
 }
 
 /* Layout Template - Message Admin Form */
@@ -258,56 +258,6 @@ a:hover {
   font-size: 0.9em;
 }
 
-/* Create Listing Page */
-.create-form-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  display: block;
-  color: #f4f4f4;
-  background-color: #7a9196;
-  height: auto;
-  min-width: 300px;
-  padding: 20px;
-  border-radius: 8px;
-  border: 2px solid #f4f4f4;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
-  width: 500px;
-  margin-top: 20px;
-}
-.create-form-div input {
-  margin-bottom: 10px;
-}
-
-.create-listing-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  align-items: flex-start;
-  width: 100%;
-  /* Set all form groups to 100% width */
-  /* Target categories field, use grid to display checkboxes in 2 columns */
-}
-.create-listing-form div {
-  width: 100%;
-}
-.create-listing-form #id_categories {
-  font-size: 0.9em;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.create-listing-form #id_categories div label {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  gap: 5px;
-  justify-content: flex-start;
-  align-items: center;
-}
-
 /* Profile Page - Send User Message Form */
 .send-usr-msg-form-div {
   display: flex;
@@ -363,7 +313,7 @@ legend {
   margin: 0;
 }
 
-/* Nav and Footer Styles */
+/* NAV and FOOTER STYLES*/
 .nav-container {
   display: flex;
   flex-direction: row;
@@ -433,7 +383,7 @@ footer li {
   list-style-type: none;
 }
 
-/* Button Styles */
+/* ALL BUTTON STYLES */
 .btn {
   cursor: pointer;
   transition: 0.15s;
@@ -511,7 +461,68 @@ footer li {
   background-color: #80052c;
 }
 
+/* CREATE LISTING PAGE */
+.create-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  display: block;
+  color: #f4f4f4;
+  background-color: #7a9196;
+  height: auto;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #f4f4f4;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+  width: 500px;
+  margin-top: 20px;
+}
+.create-form-div input {
+  margin-bottom: 10px;
+}
+
+.create-listing-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  /* Set all form groups to 100% width */
+  /* Target categories field, use grid to display checkboxes in 2 columns */
+}
+.create-listing-form div {
+  width: 100%;
+}
+.create-listing-form #id_categories {
+  font-size: 0.9em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.create-listing-form #id_categories div label {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 /* INDEX and LISTINGS  */
+/* Individual Listing */
+.thumb-title-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
 /* Used by JS to make truncated descriptions clickable */
 .truncated-description {
   cursor: pointer;
@@ -559,10 +570,7 @@ footer li {
   text-align: center;
 }
 
-.active-listings-heading {
-  margin-bottom: 10px;
-}
-
+/* Listings/Index - Return to top link */
 #go-to-closed,
 #back-to-top {
   cursor: pointer;
@@ -574,16 +582,7 @@ footer li {
   color: #c55176;
 }
 
-.thumb-title-div {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 10px;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-}
-
+/* Dynamic Arrow Styles for Sort By */
 .down-arrow,
 .up-arrow {
   display: none;
@@ -611,7 +610,7 @@ footer li {
   color: #c55176;
 }
 
-/* Listing Page */
+/* LISTING PAGE */
 .listing-desc {
   width: 450px;
   font-size: 0.9em;
@@ -626,6 +625,7 @@ footer li {
   margin-bottom: 20px;
 }
 
+/* Comments Section */
 .comments-div {
   display: flex;
   flex-direction: column;
@@ -661,6 +661,7 @@ footer li {
   color: #6c757d;
 }
 
+/* Make a Bid */
 .bid-form-div {
   display: flex;
   flex-direction: column;
@@ -683,6 +684,7 @@ footer li {
   font-size: 1.3em;
 }
 
+/* Confirm Shipping Button */
 .confirm-ship-div {
   background-color: #f4f4f4;
   color: #a90000;
@@ -700,7 +702,7 @@ footer li {
   background-color: #c55176;
 }
 
-/* Profile Page */
+/* PROFILE PAGE */
 .profile-page-content {
   display: flex;
   flex-direction: column;
@@ -778,7 +780,7 @@ footer li {
   margin-bottom: 12px;
 }
 
-/* Categories & Category Pages */
+/* CATEGORY and CATEGORIES PAGES */
 #h1-all-categories {
   margin-bottom: 50px;
 }

@@ -108,7 +108,7 @@ body {
 }
 .page-content {
   @include flex-column;
-  padding: 20px 40px 60px 40px;
+  padding: 20px 20px 40px 20px;
   width: 100%;
 }
 hr {
@@ -133,7 +133,8 @@ p {
   height: 40px;
 }
 
-/* Link Styles */
+
+/* LINK STYLES */
 a {
   color: $link-color;
   transition: 0.15s;
@@ -149,7 +150,8 @@ a:hover {
   font-size: 1em;
 }
 
-/* Alert Message Styles */
+
+/* ALERT MESSAGE STYLES */
 .alert-div {
   width: 300px;
   height: auto;
@@ -174,8 +176,8 @@ a:hover {
   font-weight: bold;
 }
 
-/* FORM STYLES */
 
+/* FORM STYLES */
 /* All input fields font-size and focus */
 .form-control {
   font-size: 0.9em;
@@ -184,7 +186,11 @@ a:hover {
   border-color: $primary-pink;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
-
+.form-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 /* Dynamic Form and Description */
 .hidden {
   display: none;
@@ -192,13 +198,6 @@ a:hover {
 .visible {
   display: block;
 }
-
-.form-title {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
 /* Layout Template - Message Admin Form */
 .send-msg-form {
   @include flex-column;
@@ -212,7 +211,6 @@ a:hover {
     width: 100% !important;
   }
 }
-
 /* Categories Page - category description on hover */
 .visible-categories {
   display: block;
@@ -224,7 +222,6 @@ a:hover {
   text-align: center;
   color: $primary-pink;
 }
-
 /* Profile Page - Edit Info, Change Password, Deposit and Withdraw Forms */
 /* Listing Page - Leave Comment Form */
 .popup-form {
@@ -238,7 +235,6 @@ a:hover {
     font-size: 0.9em;
   }
 }
-
 /* Category Page - Listing Hover Description */
 .visible-desc {
   position: absolute;
@@ -253,39 +249,6 @@ a:hover {
   padding: 20px;
   font-size: 0.9em;
 }
-
-/* Create Listing Page */
-.create-form-div {
-  @include flex-column;
-  @include universal-form;
-  width: 500px;
-  margin-top: 20px;
-}
-.create-listing-form {
-  @include flex-column;
-  align-items: flex-start;
-  width: 100%;
-
-  /* Set all form groups to 100% width */
-  div {
-    width: 100%;
-  }
-
-  /* Target categories field, use grid to display checkboxes in 2 columns */
-  #id_categories {
-    font-size: 0.9em;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    div label {
-      @include flex-row;
-      gap: 5px;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
-}
-
 /* Profile Page - Send User Message Form */
 .send-usr-msg-form-div {
   @include flex-column;
@@ -293,7 +256,6 @@ a:hover {
   @include universal-form;
   margin-top: 20px;
 }
-
 /* Authentication Forms */
 .auth-form {
   @include flex-column;
@@ -301,7 +263,6 @@ a:hover {
   width: 600px;
   padding: 20px;
 }
-
 legend {
   font-size: 1em;
 }
@@ -317,7 +278,8 @@ legend {
   margin: 0;
 }
 
-/* Nav and Footer Styles */
+
+/* NAV and FOOTER STYLES*/
 .nav-container {
   @include flex-row;
   justify-content: space-between;
@@ -337,7 +299,6 @@ legend {
 .footer-link:hover {
   color: $primary-pink;
 }
-
 .hero {
   @include flex-row;
   font-size: 1.75em;
@@ -345,7 +306,6 @@ legend {
   align-items: center;
   padding-left: 10px;
 }
-
 .user-status {
   @include flex-row;
   justify-content: flex-end;
@@ -355,7 +315,6 @@ legend {
 .signed-in-as {
   color: $primary-pink;
 }
-
 footer {
   position: absolute;
   bottom: 0;
@@ -372,7 +331,8 @@ footer {
   }
 }
 
-/* Button Styles */
+
+/* ALL BUTTON STYLES */
 .btn {
   @include cursor-pointer-transition;
   padding: 6px 25px;
@@ -435,8 +395,48 @@ footer {
   background-color: $cancel-color-hover;
 }
 
-/* INDEX and LISTINGS  */
 
+/* CREATE LISTING PAGE */
+.create-form-div {
+  @include flex-column;
+  @include universal-form;
+  width: 500px;
+  margin-top: 20px;
+}
+.create-listing-form {
+  @include flex-column;
+  align-items: flex-start;
+  width: 100%;
+
+  /* Set all form groups to 100% width */
+  div {
+    width: 100%;
+  }
+
+  /* Target categories field, use grid to display checkboxes in 2 columns */
+  #id_categories {
+    font-size: 0.9em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    div label {
+      @include flex-row;
+      gap: 5px;
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+}
+
+
+/* INDEX and LISTINGS  */
+/* Individual Listing */
+.thumb-title-div {
+  @include flex-row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
 /* Used by JS to make truncated descriptions clickable */
 .truncated-description {
   cursor: pointer;
@@ -452,7 +452,6 @@ footer {
     margin-bottom: 40px;
   }
 }
-
 /* Listings/Index Toggle Full Listings - Title Only */
 .opt-selected {
   font-weight: bold;
@@ -476,11 +475,7 @@ footer {
   width: 100%;
   text-align: center;
 }
-
-.active-listings-heading {
-  margin-bottom: 10px;
-}
-
+/* Listings/Index - Return to top link */
 #go-to-closed,
 #back-to-top {
   @include cursor-pointer-transition;
@@ -489,14 +484,7 @@ footer {
 #back-to-top:hover {
   color: $primary-pink;
 }
-
-.thumb-title-div {
-  @include flex-row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-}
-
+/* Dynamic Arrow Styles for Sort By */
 .down-arrow,
 .up-arrow {
   display: none;
@@ -519,7 +507,8 @@ footer {
   color: $primary-pink;
 }
 
-/* Listing Page */
+
+/* LISTING PAGE */
 .listing-desc {
   width: 450px;
   font-size: 0.9em;
@@ -531,6 +520,7 @@ footer {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
   margin-bottom: 20px;
 }
+/* Comments Section */
 .comments-div {
   @include flex-column;
   margin-top: 20px;
@@ -557,6 +547,7 @@ footer {
   font-size: 0.8em;
   color: $medium-gray;
 }
+/* Make a Bid */
 .bid-form-div {
   @include flex-column;
 }
@@ -570,7 +561,7 @@ footer {
 #dollar-sign {
   font-size: 1.3em;
 }
-
+/* Confirm Shipping Button */
 .confirm-ship-div {
   background-color: $text-color-light;
   color: $cancel-color;
@@ -589,7 +580,8 @@ footer {
   }
 }
 
-/* Profile Page */
+
+/* PROFILE PAGE */
 .profile-page-content {
   @include flex-column;
   width: 100%;
@@ -610,10 +602,10 @@ footer {
     margin-top: 4px;
   }
 }
-
 .account-balance {
   @include flex-column;
 }
+
 
 /* WATCHLIST PAGE */
 .watchlist-content {
@@ -649,7 +641,8 @@ footer {
   }
 }
 
-/* Categories & Category Pages */
+
+/* CATEGORY and CATEGORIES PAGES */
 #h1-all-categories {
   margin-bottom: 50px;
 }
@@ -665,8 +658,8 @@ footer {
   font-size: 0.9em;
 }
 
-/* TRANSACTIONS PAGE */
 
+/* TRANSACTIONS PAGE */
 .transactions-table {
   background-color: $medium-gray;
   border-radius: 8px;
@@ -681,7 +674,6 @@ footer {
     border-top: none;
   }
 }
-
 .withdraw-amt {
   color: $cancel-color;
 }
@@ -689,8 +681,8 @@ footer {
   color: $money-green-hover;
 }
 
-/* MESSAGES PAGE */
 
+/* MESSAGES PAGE */
 .message-div {
   padding: 10px;
   margin-bottom: 10px;
