@@ -124,16 +124,16 @@ def register(request):
 def index(request):
     listings = Listing.objects.all()
     current_user = request.user
+    messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
-    if not listings:
-        logger.error("No listings found")
-        send_error_notification("No listings found")
+    set_inactive(listings)
 
     return render(request, "auctions/index.html" , {
         "listings": listings,
         "current_user": current_user,
+        "messages": messages,
         "unread_message_count": unread_message_count
     })
 
@@ -142,13 +142,17 @@ def listings(request):
     listings = get_list_or_404(Listing.objects.all())
     winners = Winner.objects.all()
     current_user = request.user
+    messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
+
+    set_inactive(listings)
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
         "winners": winners,
         "current_user": current_user,
+        "messages": messages,
         "unread_message_count": unread_message_count
     })
 
@@ -238,25 +242,42 @@ def listing(request, listing_id):
 
 def categories(request):
     categories = get_list_or_404(Category.objects.all())
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/categories.html", {
         "categories": categories,
-        "current_user": request.user,
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
     })
 
 
 def category(request, category_id):
     listings = Listing.objects.filter(categories=category_id)
     category = get_object_or_404(Category, pk=category_id)
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/category.html", {
         "listings": listings,
         "category": category,
-        "current_user": request.user
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
     })
 
+## PAUSING HERE 3/01/2024 10pm
+#TODO Keep adding necessary context to views. Is there a shortcut? reverse? 
 
-
+# current_user = request.user
+# messages = contrib_messages.get_messages(request)
+# unread_messages = Message.objects.filter(recipient=current_user, read=False)
+# unread_message_count = unread_messages.count()
 
 # Views - Login Required
 @login_required
@@ -272,9 +293,15 @@ def create(request):
             return HttpResponseRedirect(reverse("index"))
     else:
         form = ListingForm()
+        current_user = request.user
+        messages = contrib_messages.get_messages(request)
+        unread_messages = Message.objects.filter(recipient=current_user, read=False)
+        unread_message_count = unread_messages.count()
         return render(request, "auctions/create.html", {
             "form": ListingForm(),
-            "current_user": request.user
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
         })
     
 
@@ -283,11 +310,17 @@ def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
     winners = Winner.objects.filter(listing__in=listings)
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
         "winners": winners,
-        "current_user": request.user
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
     })
 
 
@@ -298,6 +331,9 @@ def profile(request, user_id):
     watchlist = Watchlist.objects.filter(user=user)
     winners = Winner.objects.filter(listing__user=user)
     current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/profile.html", {
         "user": user,
@@ -305,7 +341,9 @@ def profile(request, user_id):
         "watchlist": watchlist,
         "winners": winners,
         "user_info_form": UserInfoForm(instance=user),
-        "current_user": current_user
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
     })
 
 
@@ -384,18 +422,28 @@ def add_to_watchlist(request, listing_id):
     if created:
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
-        pass
-    listings = Listing.objects.all()
-    return render(request, "auctions/index.html" , {
-        "listings": listings
-    })
+        listings = Listing.objects.all()
+        current_user = request.user
+        contrib_messages.add_message(request, contrib_messages.ERROR, "Listing already on watchlist")
+        messages = contrib_messages.get_messages(request)
+        unread_messages = Message.objects.filter(recipient=current_user, read=False)
+        unread_message_count = unread_messages.count()
+        return render(request, "auctions/index.html" , {
+            "listings": listings,
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
 
 
 @login_required
 def remove_from_watchlist(request, listing_id):
     if request.method == "POST":
-        watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
-        watchlist_item.delete()
+        try:
+            watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
+            watchlist_item.delete()
+        except Watchlist.DoesNotExist:
+            contrib_messages.add_message(request, contrib_messages.ERROR, "Listing not on watchlist")
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     
 
@@ -514,18 +562,26 @@ def sort(request):
     else:
         listings = listings
         
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     if page == "index":
         return render(request, "auctions/index.html", {
             "listings": listings,
-            "current_user": request.user
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
         })
     elif page == "listings":
         winners = Winner.objects.all()
         return render(request, "auctions/listings.html", {
             "listings": listings,
             "winners": winners,
-            "current_user": request.user
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
         })
     
 
@@ -594,22 +650,32 @@ def confirm_shipping(request, listing_id):
 
 @login_required
 def transactions(request, user_id):
-    if user_id != request.user.id:
+    current_user = request.user
+    if user_id != current_user:
         return HttpResponse("Unauthorized", status=401)
     user = User.objects.get(pk=user_id)
     sent_transactions = Transaction.objects.filter(sender=user)
     received_transactions = Transaction.objects.filter(recipient=user)
     transactions = sent_transactions | received_transactions
 
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
         'user': user,
-        'current_user': request.user
+        'current_user': current_user,
+        'messages': messages,
+        'unread_message_count': unread_message_count
     })
 
 
 @login_required
 def messages(request, user_id):
+
+    current_user = request.user
+
     if request.method == "POST":
         recipient_id = request.POST["recipient"]
         recipient = User.objects.get(pk=recipient_id)
@@ -618,15 +684,30 @@ def messages(request, user_id):
         send_message(request.user, recipient, subject, message)
         return HttpResponseRedirect(reverse("messages", args=(user_id,)))
     else:
-        if user_id != request.user.id:
+        if user_id !=  current_user.id:
             return HttpResponse("Unauthorized", status=401)
         
-        current_user = User.objects.get(pk=request.user.id)
         sent_messages = Message.objects.filter(sender=current_user)
         inbox_messages = Message.objects.filter(recipient=current_user)
+
+        messages = contrib_messages.get_messages(request)
+        unread_messages = Message.objects.filter(recipient=current_user, read=False)
+        unread_message_count = unread_messages.count()
 
         return render(request, "auctions/messages.html", {
             'sent_messages': sent_messages,
             'inbox_messages': inbox_messages,
-            'current_user': current_user
+            'current_user': current_user,
+            'messages': messages,
+            'unread_message_count': unread_message_count
         })
+    
+
+
+def set_inactive(listings):
+    for listing in listings:
+        if listing.date + timedelta(days=7) < timezone.now():
+            listing.active = False
+            listing.save()
+        else:
+            pass
