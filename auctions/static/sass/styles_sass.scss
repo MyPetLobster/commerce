@@ -57,10 +57,11 @@ $money-green: #2d6128;
 $money-green-hover: #1f3f1a;
 $pale-pink: #976f7b;
 
-
-
-
-
+.mail-icon-div {
+  @include flex-row;
+  @include cursor-pointer-transition;
+  align-items: center;
+}
 #unread-count {
   position: relative;
   top: -20px;
@@ -70,9 +71,6 @@ $pale-pink: #976f7b;
   padding: 8px 10px 8px 10px;
   font-size: 0.7em;
 }
-
-
-
 
 /* Dark Mode/Light Mode */
 .light-mode {
@@ -325,8 +323,6 @@ legend {
   justify-content: flex-end;
   gap: 10px;
   padding: 10px;
-}
-#mail-svg {
 }
 .signed-in-as {
   color: $primary-pink;

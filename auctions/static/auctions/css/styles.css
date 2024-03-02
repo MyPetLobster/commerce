@@ -1,3 +1,13 @@
+.mail-icon-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.15s;
+  align-items: center;
+}
+
 #unread-count {
   position: relative;
   top: -20px;
