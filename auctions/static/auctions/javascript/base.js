@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+  const mailIconDefault = document.getElementById("mail-icon-default");
+  const mailIconHover = document.getElementById("mail-icon-hover");
+  const mailIconUnread = document.getElementById("mail-icon-unread");
+
+
   deleteMsg = document.querySelector(".del-msg");
   if (deleteMsg) {
     deleteMsg.onclick = function () {
@@ -100,5 +106,16 @@ function changeMessageColors() {
         div.style.backgroundColor = modColorTwo;
       }
     });
+  }
+}
+
+
+function checkForUnreadMessages() {
+  const mailIconDefault = document.getElementById("mail-icon-default");
+  const mailIconUnread = document.getElementById("mail-icon-unread");
+  const isUnreadMessages = document.getElementById("unread-message-count");
+  const unreadMessages = parseInt(isUnreadMessages.innerText);
+  if (unreadMessages > 0) {
+    
   }
 }

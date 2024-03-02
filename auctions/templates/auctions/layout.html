@@ -48,8 +48,12 @@
             
             <div class="user-status">
                 {% if current_user.is_authenticated %}
-                <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">${{ current_user.balance }}&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
+                    <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">${{ current_user.balance }}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <span id="mail-icon-default" class="mail-icon visible"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:30px;"></span>
+                    <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" style="width:30px;"><span id="unread-count">66666 unread messages</span></span>
+                    <span id="mail-icon-hover" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" style="width:30px;"></span>&nbsp;&nbsp;
                     <span class="signed-in-as">Signed in as <strong>{{ current_user.username }}</strong></span>
                 {% else %}
                     <ul class="nav">
@@ -61,8 +65,8 @@
                         </li>
                     </ul>
                 {% endif %}
-            
             </div>
+
         </div>
 
         <hr class="divider">

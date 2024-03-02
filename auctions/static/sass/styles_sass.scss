@@ -40,7 +40,7 @@
   transition: 0.15s;
 }
 
-$text-color-dark: #333;
+$text-color-dark: #303133;
 $text-color-light: #f4f4f4;
 $link-color: #1696b9;
 $link-color-hover: #0a5f76;
@@ -56,6 +56,23 @@ $btn-hover: #983554;
 $money-green: #2d6128;
 $money-green-hover: #1f3f1a;
 $pale-pink: #976f7b;
+
+
+
+
+
+#unread-count {
+  position: relative;
+  top: -20px;
+  background-color: rgba(197, 81, 118, 0.563);
+  color: $text-color-light;
+  border-radius: 20px;
+  padding: 8px 10px 8px 10px;
+  font-size: 0.7em;
+}
+
+
+
 
 /* Dark Mode/Light Mode */
 .light-mode {
@@ -112,7 +129,7 @@ body {
   width: 100%;
 }
 hr {
-  background-color: #dcdfe5;
+  background-color: #babfc8;
   width: 100%;
   display: block;
   clear: both;
@@ -304,9 +321,12 @@ legend {
 }
 .user-status {
   @include flex-row;
+  align-items: center;
   justify-content: flex-end;
   gap: 10px;
   padding: 10px;
+}
+#mail-svg {
 }
 .signed-in-as {
   color: $primary-pink;
