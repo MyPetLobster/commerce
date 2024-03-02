@@ -124,50 +124,63 @@ def register(request):
 def index(request):
     listings = Listing.objects.all()
     current_user = request.user
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     if not listings:
         logger.error("No listings found")
         send_error_notification("No listings found")
-        return render(request, "auctions/index.html", {
-            "message": "No listings found"
-        })
 
     return render(request, "auctions/index.html" , {
         "listings": listings,
-        "current_user": current_user
+        "current_user": current_user,
+        "unread_message_count": unread_message_count
     })
 
 
 def listings(request):
     listings = get_list_or_404(Listing.objects.all())
     winners = Winner.objects.all()
+    current_user = request.user
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
         "winners": winners,
-        "current_user": request.user
+        "current_user": current_user,
+        "unread_message_count": unread_message_count
     })
 
 
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     comments = Comment.objects.filter(listing=listing)
+    current_user = request.user
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
-    # Place Bid
-    if request.method == "POST":
-        amount = request.POST.get("amount")
-        time_left = listing.date + timedelta(days=7) - timezone.now()
-        total_seconds_left = time_left.total_seconds()
-        if total_seconds_left <= 86400:
-            user_balance = request.user.balance
-            if amount > user_balance:
-                contrib_messages.error(request, "Insufficient funds. Must have enough deposited to cover a bid within 24 hours of listing expiration.")
-                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-            
-        if place_bid(request, amount, listing_id):
-            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-        else:
-            contrib_messages.error(request, "Failed to place bid. Please try again.")
+    # Get values to pass to template
+    try:
+        winner = Winner.objects.get(listing=listing)
+    except Winner.DoesNotExist:
+        winner = None
+    try:
+        user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()
+    except:
+        user_bid = None
+    try:
+        difference = listing.price - user_bid.amount
+    except:
+        difference = None
+    try:
+        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+    except:
+        watchlist_item = None
+    if watchlist_item.exists():
+        pass
+    else:
+        watchlist_item = "not on watchlist"
 
     # Calculate Time Left (7 days from listing date)    
     listing_date = listing.date
@@ -189,29 +202,25 @@ def listing(request, listing_id):
         seconds_left = math.floor(seconds_left)
         time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
 
-    # Get values to pass to template
-    try:
-        winner = Winner.objects.get(listing=listing)
-    except Winner.DoesNotExist:
-        winner = None
+    # POST Request - Place Bid
+    if request.method == "POST":
+        amount = request.POST.get("amount")
+        time_left_b = listing.date + timedelta(days=7) - timezone.now()
+        total_seconds_left = time_left_b.total_seconds()
+        if total_seconds_left <= 86400:
+            if amount > current_user.balance:
+                contrib_messages.add_message(request, contrib_messages.ERROR, "Insufficient funds")
+                 
+            else:
+                place_bid(request, amount, listing_id)
+        else:
+            place_bid(request, amount, listing_id)
 
-    try:
-        user_bid = Bid.objects.get(user=request.user, listing=listing)
-        difference = listing.price - user_bid.amount
-    except:
-        user_bid = None
-        difference = None
-    try:
-        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
-    except:
-        watchlist_item = None
-
-    if watchlist_item.exists():
-        pass
-    else:
-        watchlist_item = "not on watchlist"
+        #TODO Add to Watchlist
+            
     
-
+    messages = contrib_messages.get_messages(request)
+     
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "winner": winner,
@@ -221,7 +230,9 @@ def listing(request, listing_id):
         "user_bid": user_bid,
         "difference": difference,
         "watchlist_item": watchlist_item,
-        "current_user" : request.user
+        "current_user" : request.user,
+        "unread_message_count": unread_message_count,
+        "messages": messages
     })
 
 
@@ -334,8 +345,9 @@ def check_expiration(listing_id):
 def place_bid(request, amount, listing_id):
     try: 
         listing = Listing.objects.get(pk=listing_id)
-        amount = decimal(amount)
-        current_price = decimal(listing.price)
+        amount = float(amount)
+        current_price = float(listing.price)
+        current_user = request.user
 
         if amount <= current_price:
             return False
@@ -343,20 +355,22 @@ def place_bid(request, amount, listing_id):
             bid = Bid.objects.create(
                 amount=amount,
                 listing=listing,
-                user=request.user
+                user=current_user
             )
-            listing.price = bid.amount
-            listing.save()
+            bid.save()
             
             admin = User.objects.get(pk=2)
-            bidder = request.user
+            bidder = current_user
             subject = f"New bid on {listing.title}"
-            message = f"{request.user.username} placed a bid of ${amount} on {listing.title}. Good luck!"
+            message = f"You placed a bid of ${amount} on {listing.title}. Good luck!"
             send_message(admin, bidder, subject, message)
 
-            check_bids_funds(listing_id)
-
-            return True
+            if check_bids_funds(request, listing_id) == True:
+                listing.price = bid.amount
+                listing.save()
+                return True
+            else:
+                return False
         
     except (Listing.DoesNotExist, ValueError, IntegrityError) as e:
         logger.error(f"Error placing bid: {e}")

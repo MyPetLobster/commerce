@@ -4,6 +4,7 @@ import smtplib
 
 from celery import shared_task
 from django.conf import settings
+from django.contrib import messages as contrib_messages
 from django.db import DatabaseError, IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
@@ -188,7 +189,7 @@ def send_message(sender, recipient, subject, message):
     message.save()
 
 @shared_task
-def check_bids_funds(listing_id):
+def check_bids_funds(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     now = timezone.now()
     bids = Bid.objects.filter(listing=listing)
@@ -203,15 +204,21 @@ def check_bids_funds(listing_id):
                     f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding."
                 )
                 highest_bid.delete()
+                contrib_messages.add_message(request, contrib_messages.ERROR, f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding.")
+                return False
             else:
-                time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
+                time_left_to_deposit = now - (listing.date + timezone.timedelta(days=6)) 
                 send_message(
                     User.objects.get(pk=2),
                     highest_bid.user,
                     f"Insufficient funds for {listing.title}",
                     f"Your bid of {highest_bid.amount} on {listing.title}. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
-            )
-            highest_bid.delete()
+                )
+                contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid has been placed successfully, but you need to deposit funds. Check your messages for details.")
+                return True
+        elif highest_bid.amount <= highest_bid.user.balance:
+            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully.")
+            return True
     else:
         pass
 
