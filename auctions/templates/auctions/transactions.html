@@ -76,6 +76,9 @@
     </div>
 
     <h2>{{ current_user.username }}'s Bid History</h2>
+    <div class="center-container">
+        <p>You have {% if active_bid_count == 0 %}no{% else %}{{ active_bid_count }}{% endif %} active bids.</p>
+    </div>
     <table id="bids-table" class="table table-striped transactions-table">
         <thead>
             <tr>
@@ -122,9 +125,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="center-container">
-        <p>You have {% if active_bid_count == 0 %}no{% else %}{{ active_bid_count }}{% endif %} active bids.</p>
-    </div>
+
 
     <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>

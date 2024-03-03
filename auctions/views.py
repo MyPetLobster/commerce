@@ -122,21 +122,27 @@ def register(request):
 
 # Views - Public
 def index(request):
-    listings = Listing.objects.all()
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
+    listings = Listing.objects.all()
 
-    set_inactive(listings)
+    if current_user.is_authenticated:
+        messages = contrib_messages.get_messages(request)
+        unread_messages = Message.objects.filter(recipient=current_user, read=False)
+        unread_message_count = unread_messages.count()
 
-    return render(request, "auctions/index.html" , {
-        "listings": listings,
-        "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
-    })
+        set_inactive(listings)
 
+        return render(request, "auctions/index.html" , {
+            "listings": listings,
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
+    else:   
+        return render(request, "auctions/index.html" , {
+            "listings": listings,
+            "current_user": current_user
+        })
 
 def listings(request):
     listings = get_list_or_404(Listing.objects.all())
