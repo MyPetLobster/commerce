@@ -123,7 +123,7 @@
         </tbody>
     </table>
     <div class="center-container">
-        <p>Your current balance is: {{ current_user.balance }}</p>
+        <p>You have {% if active_bid_count == 0 %}no{% else %}{{ active_bid_count }}{% endif %} active bids.</p>
     </div>
 
     <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>

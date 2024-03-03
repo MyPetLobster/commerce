@@ -704,13 +704,16 @@ def transactions(request, user_id):
     user_bids = Bid.objects.filter(user=user)
     user_bids = user_bids.order_by("-date")
 
+    active_bid_count = user_bids.filter(listing__active=True).count()
+
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
         'user': user,
         'current_user': current_user,
         'messages': messages,
         'unread_message_count': unread_message_count,
-        'user_bids': user_bids
+        'user_bids': user_bids,
+        'active_bid_count': active_bid_count
     })
 
 
