@@ -164,28 +164,6 @@ def listing(request, listing_id):
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
-    # Get values to pass to template
-    try:
-        winner = Winner.objects.get(listing=listing)
-    except Winner.DoesNotExist:
-        winner = None
-    try:
-        user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()
-    except:
-        user_bid = None
-    try:
-        difference = listing.price - user_bid.amount
-    except:
-        difference = None
-    try:
-        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
-    except:
-        watchlist_item = None
-    if watchlist_item.exists():
-        pass
-    else:
-        watchlist_item = "not on watchlist"
-
     # Calculate Time Left (7 days from listing date)    
     listing_date = listing.date
     current_date_time = timezone.now()
@@ -225,6 +203,32 @@ def listing(request, listing_id):
                 listing = updated_listing 
     
     messages = contrib_messages.get_messages(request)
+    # Get values to pass to template
+    try:
+        winner = Winner.objects.get(listing=listing)
+    except Winner.DoesNotExist:
+        winner = None
+    try:
+        user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()
+    except:
+        user_bid = None
+    try:
+        difference = listing.price - user_bid.amount
+    except:
+        difference = None
+    try:
+        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+    except:
+        watchlist_item = None
+    if watchlist_item.exists():
+        pass
+    else:
+        watchlist_item = "not on watchlist"
+
+    print("*****************************************")
+    print(f'listing price: {listing.price}')
+    print(f'user bid: {user_bid.amount}')
+    print("*****************************************")
      
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -416,12 +420,11 @@ def check_if_watchlist(user, listing):
 def place_bid(request, amount, listing_id):
     try: 
         listing = Listing.objects.get(pk=listing_id)
-        amount = float(amount)
-        current_price = float(listing.price)
+        current_price = listing.price
         current_user = request.user
 
         if amount <= current_price:
-            return False
+            return False, listing
         else:
             bid = Bid.objects.create(
                 amount=amount,
@@ -448,7 +451,7 @@ def place_bid(request, amount, listing_id):
                 listing.save()
                 return True, listing
             else:
-                return False
+                return False, listing
         
     except (Listing.DoesNotExist, ValueError, IntegrityError) as e:
         logger.error(f"Error placing bid: {e}")

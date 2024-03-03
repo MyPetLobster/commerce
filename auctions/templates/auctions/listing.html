@@ -54,7 +54,7 @@
                 
             </span></br>
             <div class="fields-item">
-                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price }}</span></br> 
+                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price|floatformat:2 }}</span></br> 
             </div>
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
