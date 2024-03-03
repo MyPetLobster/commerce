@@ -36,7 +36,7 @@
 {% block body %}
 
 <div class="page-content">
-    <h2>{{ current_user.username }}'s Transaction History</h2>
+    <h2 id="transactions-section-head">{{ current_user.username }}'s Transaction History</h2>
     <table class="table table-striped transactions-table">
         <thead>
             <tr>
@@ -77,7 +77,7 @@
         <hr>
     </div>
 
-    <h2>{{ current_user.username }}'s Bid History</h2>
+    <h2 id="bids-section-head">{{ current_user.username }}'s Bid History</h2>
     <div class="center-container">
         <p>You have {% if active_bid_count == 0 %}no{% else %}{{ active_bid_count }}{% endif %} active bids.</p>
     </div>
@@ -139,6 +139,17 @@
 </div>
 
 <script>
+    // check which link the user clicked to get to transaction page, scroll section into view
+    var transactionsPageSection = localStorage.getItem('transactionsPageSection');
+    if (transactionsPageSection === 'transactions') {
+        document.getElementById('transactions-section-head').scrollIntoView();
+    } else if (transactionsPageSection === 'bids') {
+        document.getElementById('bids-section-head').scrollIntoView();
+    } else {
+        document.getElementById('transactions-section-head').scrollIntoView();
+    }
+
+
     // Only display the first bid for each listing id. Add a click event listener to the visible rows to toggle the display of the remaining bids by using class "hidden".
     var visibleBids = {};
     var bidRows = document.querySelectorAll('#bids-table tbody tr');

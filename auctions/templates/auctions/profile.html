@@ -106,7 +106,7 @@
         <div class="account-balance">
             <h2>Account Balance</h2>
             <p>${{ current_user.balance }}</p>
-            <p><a href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
+            <p><a id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
             <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
             <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
         </div>
@@ -140,6 +140,7 @@
     </div>
     <div class="user-bids">
         <h2>Bids</h2>
+        <p><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Bidding History</a></p>
         <ul>
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
@@ -229,6 +230,17 @@
 </div>
 
 <script>
+    const transactionHistoryLink = document.getElementById('transaction-history-link');
+    const bidHistoryLink = document.getElementById('bid-history-link');
+
+    transactionHistoryLink.addEventListener('click', () => {
+        localStorage.setItem('transactions-page-section', 'transactions');
+    });
+
+    bidHistoryLink.addEventListener('click', () => {
+        localStorage.setItem('transactions-page-section', 'bids');
+    });
+    
     const sendMsgButton = document.getElementById('send-usr-msg-btn');
     const sendMsgForm = document.getElementById('send-usr-msg-form');
     const cancelMsg = document.getElementById('cancel-usr-msg');
