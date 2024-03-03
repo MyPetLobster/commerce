@@ -847,14 +847,16 @@ footer li {
 }
 
 /* MESSAGES PAGE */
-.message-div {
+.message-div,
+.message-div-full {
   width: 600px;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
 }
 
-.message-sender {
+.message-sender,
+.message-summary {
   width: 100%;
   display: flex;
   flex-direction: row;

@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const messagePageCheck = document.querySelector("#this-is-message-page");
   if (messagePageCheck) {
     changeMessageColors();
+    showHideFullMessage();
   }
 });
 
@@ -151,7 +152,37 @@ function changeMessageColors() {
       }
     });
   }
+  messageDivsFull = document.querySelectorAll(".message-div-full");
+  if (messageDivsFull.length !== 0) {
+    messageDivsFull.forEach((div, index) => {
+      if (index % 2 === 0) {
+        div.style.backgroundColor = modColorOne;
+      } else {
+        div.style.backgroundColor = modColorTwo;
+      }
+    });
+  }
 }
+
+
+function showHideFullMessage() {
+  const messageDivs = document.querySelectorAll(".message-div");
+  messageDivs.forEach((div) => {
+    div.onclick = function () {
+      const fullMessage = this.nextElementSibling;
+      fullMessage.classList.toggle("hidden");
+      fullMessage.classList.toggle("visible");
+      div.classList.toggle("hidden");
+
+      fullMessage.onclick = function () {
+        fullMessage.classList.toggle("hidden");
+        fullMessage.classList.toggle("visible");
+        div.classList.toggle("hidden");
+      };
+    };
+  });
+}
+
 
 function checkForUnreadMessages() {
   const isUnreadMessages = document.getElementById("unread-message-count");

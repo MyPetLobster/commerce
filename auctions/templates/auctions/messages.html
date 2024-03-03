@@ -1,6 +1,8 @@
 {% extends "auctions/layout.html" %} 
 {% load tz %} 
-{% block title %} Messages {% endblock %} 
+{% block title %} 
+Messages 
+{% endblock %} 
 {% block navbar %}
 <li class="nav-item">
   <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
@@ -29,9 +31,22 @@
     <div class="divider-med"></div>
     <h4 class="center-container">Inbox</h4>
     <hr />
-    <div class="messages-div inbox">
+
+    <div class="messages-div message-div-collapsed">
       {% if inbox_messages %} {% for message in inbox_messages %}
-      <div class="message-div">
+      <div class="message-div collapsed-message-div">
+        <p class="message-summary">
+          <span
+            >{{ message.sender }} - {{ message.subject|truncatechars:50 }}</span
+          >
+          <span id="read-unread">
+            <span id="selector-isread">read</span>
+            <span id="selector-isunread">unread</span>
+          </span>
+        </p>
+      </div>
+
+      <div class="message-div-full hidden">
         <p class="message-sender">
           <span>From: {{ message.sender }}</span>
           <span id="read-unread">
@@ -50,12 +65,13 @@
             <span>Delete</span>
           </div>
         </div>
-
       </div>
+
       {% endfor %} {% else %}
       <p>No messages</p>
       {% endif %}
     </div>
+
     <div class="divider-med"></div>
     <h4 class="center-container">Sent Messages</h4>
     <hr />
