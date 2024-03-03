@@ -140,6 +140,12 @@ p {
 .small-font {
   font-size: 0.8em;
 }
+.red {
+  color: $cancel-color;
+}
+.green {
+  color: $money-green;
+}
 .center-container {
   width: 100%;
   @include flex-column;
@@ -777,8 +783,6 @@ footer {
   gap: 40px;
 }
 
-
-
 #newest-first,
 #oldest-first,
 .mark-all-read {
@@ -797,4 +801,16 @@ footer {
   color: $btn-hover !important;
   text-decoration: underline;
   font-size: 0.9em;
+}
+
+.expired-bid {
+  color: $medium-gray;
+  font-style: italic;
+  
+  a, 
+  p,
+  span {
+    color: $medium-gray;
+    font-style: italic;
+  }
 }

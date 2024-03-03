@@ -103,6 +103,14 @@ p {
   font-size: 0.8em;
 }
 
+.red {
+  color: #a90000;
+}
+
+.green {
+  color: #2d6128;
+}
+
 .center-container {
   width: 100%;
   display: flex;
@@ -983,6 +991,17 @@ footer li {
   color: #983554 !important;
   text-decoration: underline;
   font-size: 0.9em;
+}
+
+.expired-bid {
+  color: #6c757d;
+  font-style: italic;
+}
+.expired-bid a,
+.expired-bid p,
+.expired-bid span {
+  color: #6c757d;
+  font-style: italic;
 }
 
 /*# sourceMappingURL=styles.css.map */

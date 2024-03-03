@@ -138,6 +138,39 @@
     <div class="profile-listings">
         <hr>
     </div>
+    <div class="user-bids">
+        <h2>Bids</h2>
+        <ul>
+            {% for bid_info in bid_info_list %}
+                {% if bid_info.is_old_bid == True %}
+                {% else %}
+                <li class="li-listing">
+                
+                    {% if bid_info.user_bid.listing.active == True %}
+                        <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
+                            {% if bid_info.user_bid.amount == bid_info.highest_bid %}
+                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(current highest bid)</span></p>
+                            {% else %}
+                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">(${{ bid_info.difference }} less than highest bid) </span></p>
+                        {% endif %}
+                    {% else %}
+                        <div class="expired-bid">
+                            <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
+                            {% if bid_info.user_bid == bid_info.highest_bid %}
+                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(You Won!)</span></p>
+                            {% else %}
+                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">({{ bid_info.user_bid.listing.winner.username }} won this auction)</span></p>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </li>
+                {% endif %}
+            {% endfor %}
+    </div>
+
+    <div class="profile-listings">
+        <hr>
+    </div>
 
     {% if user == current_user %}
         <h2>My Active Listings</h2>

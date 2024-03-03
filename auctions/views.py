@@ -324,6 +324,22 @@ def watchlist(request):
     })
 
 
+class UserBidInfo:
+    def __init__(self, user_bid, is_old_bid):
+        self.user_bid = user_bid
+        self.highest_bid = user_bid.listing.price
+        self.difference = self.highest_bid - user_bid.amount
+        self.is_old_bid = is_old_bid
+
+
+def check_if_old_bid(bid, listing):
+    user_bids = Bid.objects.filter(user=bid.user, listing=listing)
+    if user_bids.count() > 1:
+        if bid.amount < listing.price:
+            return True
+        else:
+            return False
+
 @login_required
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -334,6 +350,20 @@ def profile(request, user_id):
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
+    user_bids = Bid.objects.filter(user=user)
+    bid_info_list = []
+
+    for bid in user_bids:
+        bid_listing = bid.listing
+        is_old_bid = check_if_old_bid(bid, bid_listing)
+
+        user_bid_info = UserBidInfo(bid, is_old_bid)
+
+
+        bid_info_list.append(user_bid_info)
+
+    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.date, reverse=True)
+
 
     return render(request, "auctions/profile.html", {
         "user": user,
@@ -343,9 +373,9 @@ def profile(request, user_id):
         "user_info_form": UserInfoForm(instance=user),
         "current_user": current_user,
         "messages": messages,
-        "unread_message_count": unread_message_count
+        "unread_message_count": unread_message_count,
+        "bid_info_list": bid_info_list
     })
-
 
 
 
@@ -691,7 +721,7 @@ def messages(request, user_id):
         inbox_messages = Message.objects.filter(recipient=current_user)
         sent_messages = sent_messages.exclude(deleted_by=current_user)
         inbox_messages = inbox_messages.exclude(deleted_by=current_user)
-        
+
         sort_by_direction = "newest-first"
         sent_messages = sent_messages.order_by("-date")
         inbox_messages = inbox_messages.order_by("-date")
