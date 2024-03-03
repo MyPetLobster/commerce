@@ -85,6 +85,12 @@ document.addEventListener("DOMContentLoaded", function () {
       mailIconHover.classList.remove("hidden");
       mailIconHover.classList.add("visible");
     };
+    mailIconDiv.onmouseout = function () {
+      mailIconDefault.classList.remove("hidden");
+      mailIconDefault.classList.add("visible");
+      mailIconHover.classList.add("hidden");
+      mailIconHover.classList.remove("visible");
+    }
   }
 
   deleteMsg = document.querySelector(".del-msg");
