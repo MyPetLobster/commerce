@@ -9,8 +9,9 @@
 }
 
 #unread-count {
-  position: relative;
-  top: -20px;
+  position: absolute;
+  top: 80px;
+  right: 110px;
   background-color: rgba(197, 81, 118, 0.563);
   color: #f4f4f4;
   border-radius: 20px;

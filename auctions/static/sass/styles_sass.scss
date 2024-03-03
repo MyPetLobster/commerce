@@ -63,8 +63,9 @@ $pale-pink: #976f7b;
   align-items: center;
 }
 #unread-count {
-  position: relative;
-  top: -20px;
+  position: absolute;
+  top: 80px;
+  right: 110px;
   background-color: rgba(197, 81, 118, 0.563);
   color: $text-color-light;
   border-radius: 20px;
