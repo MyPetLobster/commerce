@@ -1,3 +1,42 @@
+setTimeout(function () {
+  message = document.querySelector(".alert-div");
+  if (message) {
+    message.style.display = "none";
+  }
+}, 3000);
+
+// DARK and LIGHT MODES
+// Check if the user has a theme preference and set it when page loads
+if (localStorage.getItem("theme") === "dark") {
+  document.querySelector("body").classList.add("dark-mode");
+  document.querySelector("body").classList.remove("light-mode");
+  document.querySelector("#standard-hero").classList.add("hidden");
+  document.querySelector("#standard-hero").classList.remove("visible");
+  document.querySelector("#inverted-hero").classList.add("visible");
+  document.querySelector("#inverted-hero").classList.remove("hidden");
+}
+
+document.querySelector("#theme-mode-toggle").onclick = function () {
+  document.querySelector("body").classList.toggle("dark-mode");
+  document.querySelector("body").classList.toggle("light-mode");
+  document.querySelector("#standard-hero").classList.toggle("visible");
+  document.querySelector("#standard-hero").classList.toggle("hidden");
+  document.querySelector("#inverted-hero").classList.toggle("hidden");
+  document.querySelector("#inverted-hero").classList.toggle("visible");
+  localStorage.setItem(
+    "theme",
+    document.querySelector("body").classList.contains("dark-mode")
+      ? "dark"
+      : "light"
+  );
+
+  // change the colors of the message divs if they exist
+  const messagePageCheck = document.querySelector("#this-is-message-page");
+  if (messagePageCheck) {
+    changeMessageColors();
+  }
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");
   const mailIconHover = document.getElementById("mail-icon-hover");
@@ -38,16 +77,15 @@ document.addEventListener("DOMContentLoaded", function () {
       mailIconHover.classList.remove("visible");
     };
   } else {
-      mailIconDiv.onmouseover = function () {
-        mailIconDefault.classList.add("hidden");
-        mailIconDefault.classList.remove("visible");
-        mailIconUnread.classList.add("hidden");
-        mailIconUnread.classList.remove("visible");
-        mailIconHover.classList.remove("hidden");
-        mailIconHover.classList.add("visible");
-      };
+    mailIconDiv.onmouseover = function () {
+      mailIconDefault.classList.add("hidden");
+      mailIconDefault.classList.remove("visible");
+      mailIconUnread.classList.add("hidden");
+      mailIconUnread.classList.remove("visible");
+      mailIconHover.classList.remove("hidden");
+      mailIconHover.classList.add("visible");
+    };
   }
-
 
   deleteMsg = document.querySelector(".del-msg");
   if (deleteMsg) {
@@ -87,44 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-setTimeout(function () {
-  message = document.querySelector(".alert-div");
-  if (message) {
-    message.style.display = "none";
-  }
-}, 3000);
-
-// DARK and LIGHT MODES
-// Check if the user has a theme preference and set it when page loads
-if (localStorage.getItem("theme") === "dark") {
-  document.querySelector("body").classList.add("dark-mode");
-  document.querySelector("body").classList.remove("light-mode");
-  document.querySelector("#standard-hero").classList.add("hidden");
-  document.querySelector("#standard-hero").classList.remove("visible");
-  document.querySelector("#inverted-hero").classList.add("visible");
-  document.querySelector("#inverted-hero").classList.remove("hidden");
-}
-
-document.querySelector("#theme-mode-toggle").onclick = function () {
-  document.querySelector("body").classList.toggle("dark-mode");
-  document.querySelector("body").classList.toggle("light-mode");
-  document.querySelector("#standard-hero").classList.toggle("visible");
-  document.querySelector("#standard-hero").classList.toggle("hidden");
-  document.querySelector("#inverted-hero").classList.toggle("hidden");
-  document.querySelector("#inverted-hero").classList.toggle("visible");
-  localStorage.setItem(
-    "theme",
-    document.querySelector("body").classList.contains("dark-mode")
-      ? "dark"
-      : "light"
-  );
-
-  // change the colors of the message divs if they exist
-  const messagePageCheck = document.querySelector("#this-is-message-page");
-  if (messagePageCheck) {
-    changeMessageColors();
-  }
-};
+// FUNCTIONS
 
 // select every other .message-div and darken the background slightly
 function changeMessageColors() {
@@ -164,12 +165,20 @@ function changeMessageColors() {
   }
 }
 
-
 function showHideFullMessage() {
   const messageDivs = document.querySelectorAll(".message-div");
   messageDivs.forEach((div) => {
-    div.onclick = function () {
+    div.onclick = function (event) {
       const fullMessage = this.nextElementSibling;
+      const rect = this.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+
+      // Exclude top right corner (e.g., 10px from the top and 10px from the right)
+      if (clickX > rect.width - 120 && clickY < 75) {
+        return;
+      }
+
       fullMessage.classList.toggle("hidden");
       fullMessage.classList.toggle("visible");
       div.classList.toggle("hidden");
@@ -182,7 +191,6 @@ function showHideFullMessage() {
     };
   });
 }
-
 
 function checkForUnreadMessages() {
   const isUnreadMessages = document.getElementById("unread-message-count");

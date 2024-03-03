@@ -711,3 +711,13 @@ def set_inactive(listings):
             listing.save()
         else:
             pass
+
+
+def mark_as_read(request, message_id):
+    message = Message.objects.get(pk=message_id)
+    if message.read == False:
+        message.read = True
+    else:
+        message.read = False
+    message.save()
+    return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))

@@ -26,4 +26,5 @@ urlpatterns = [
     path('confirm_shipping/<int:listing_id>', views.confirm_shipping, name='confirm_shipping'),
     path('transactions/<int:user_id>', views.transactions, name='transactions'),
     path('messages/<int:user_id>', views.messages, name='messages'),
+    path('mark_as_read/<int:message_id>', views.mark_as_read, name='mark_as_read'),
 ]

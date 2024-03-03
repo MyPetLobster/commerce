@@ -1,9 +1,5 @@
-{% extends "auctions/layout.html" %} 
-{% load tz %} 
-{% block title %} 
-Messages 
-{% endblock %} 
-{% block navbar %}
+{% extends "auctions/layout.html" %} {% load tz %} {%block title%} Messages
+{%endblock%} {% block navbar %}
 <li class="nav-item">
   <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
 </li>
@@ -34,14 +30,20 @@ Messages
 
     <div class="messages-div message-div-collapsed">
       {% if inbox_messages %} {% for message in inbox_messages %}
+      <div class="is-message-read hidden">
+        {% if message.read == True %}True{% else %}False{% endif %}
+      </div>
       <div class="message-div collapsed-message-div">
         <p class="message-summary">
           <span
             >{{ message.sender }} - {{ message.subject|truncatechars:50 }}</span
           >
-          <span id="read-unread">
-            <span id="selector-isread">read</span>
-            <span id="selector-isunread">unread</span>
+          <span class="read-unread">
+            {% if message.read == True %}
+              <a href="{% url 'mark_as_read' message.id %}">Read</a>
+            {% else %}
+              <a href="{% url 'mark_as_read' message.id %}">Mark as Read</a>
+            {% endif %}
           </span>
         </p>
       </div>
@@ -49,9 +51,12 @@ Messages
       <div class="message-div-full hidden">
         <p class="message-sender">
           <span>From: {{ message.sender }}</span>
-          <span id="read-unread">
-            <span id="selector-isread">read</span>
-            <span id="selector-isunread">unread</span>
+          <span class="read-unread">
+            {% if message.read == True %}
+              <a href="{% url 'mark_as_read' message.id %}">Read</a>
+            {% else %}
+              <a href="{% url 'mark_as_read' message.id %}">Mark as Read</a>
+            {% endif %}
           </span>
         </p>
         <p class="message-date">
@@ -100,4 +105,9 @@ Messages
 
 <div id="this-is-message-page"></div>
 
+<script>
+
+
+
+</script>
 {% endblock %}
