@@ -76,7 +76,7 @@
     </div>
 
     <h2>{{ current_user.username }}'s Bid History</h2>
-    <table class="table table-striped transactions-table">
+    <table id="bids-table" class="table table-striped transactions-table">
         <thead>
             <tr>
                 <th>Date</th>
@@ -89,16 +89,16 @@
         <tbody>
             {% for bid in user_bids %}
             {% if bid.listing.active == True and bid.amount == bid.listing.price %}
-                <tr class="winning-bid-active">
+                <tr class="winning-bid-active _{{ bid.listing.id }}">
             {% elif bid.listing.active == False and bid.amount == bid.listing.price %}
-                <tr class="winning-bid-closed">
+                <tr class="winning-bid-closed _{{ bid.listing.id }}">
             {% elif bid.listing.active == True and bid.amount != bid.listing.price %}
-                <tr class="losing-bid-active">
+                <tr class="losing-bid-active _{{ bid.listing.id }}">
             {% elif bid.listing.active == False and bid.amount != bid.listing.price %}
-                <tr class="losing-bid-closed">
+                <tr class="losing-bid-closed _{{ bid.listing.id }}">
             {% endif %}
                 <td>{{ bid.date|date:"F j, Y, g:i a" }}</td>
-                    <td><a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a></td>
+                <td><a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a></td>
                 <td class="bid-amt">${{ bid.amount }}</td>
                 <td>
                     {% if bid.listing.active == True %}
@@ -128,5 +128,45 @@
 
     <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
+
+<script>
+    // Only display the first bid for each listing id. Add a click event listener to the visible rows to toggle the display of the remaining bids by using class "hidden".
+    var visibleBids = {};
+    var bidRows = document.querySelectorAll('#bids-table tbody tr');
+
+    bidRows.forEach(function(row) {
+        var listingId = row.classList[row.classList.length - 1];
+        if (visibleBids[listingId] === undefined) {
+            visibleBids[listingId] = true;
+        } else {
+            row.classList.add('hidden');
+        }
+    });
+
+    bidRows.forEach(function(row) {
+        row.addEventListener('click', function() {
+        
+            var listingId = row.classList[row.classList.length - 1];
+            var listingBids = document.querySelectorAll(`.${listingId}`);
+            var hiddenBids = Array.from(listingBids).filter(function(bid) {
+                return bid.classList.contains('hidden');
+            });
+            
+            if (hiddenBids.length > 0) { // Check if there are hidden bids
+                hiddenBids.forEach(function(hiddenBid) {
+                    hiddenBid.classList.toggle('hidden'); // Toggle the 'hidden' class
+                });
+                visibleBids[listingId] = !visibleBids[listingId]; // Toggle the visibility status
+            } else {
+                listingBids.forEach(function(bid) {
+                    if (bid !== row) {
+                        bid.classList.add('hidden');
+                    }
+                });
+                visibleBids[listingId] = false;
+            }
+        });
+    });
+</script>
 
 {% endblock %}

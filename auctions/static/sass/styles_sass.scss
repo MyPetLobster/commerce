@@ -809,16 +809,14 @@ footer {
 .expired-bid {
   color: $medium-gray;
   font-style: italic;
-  
-  a, 
+
+  a,
   p,
   span {
     color: $medium-gray;
     font-style: italic;
   }
 }
-
-
 
 .winning-bid-active {
   color: $money-green;
@@ -837,4 +835,14 @@ footer {
   color: $medium-gray;
   font-style: italic;
   font-size: 0.9em;
+}
+
+#bids-table {
+  text-align: center;
+  a {
+    color: $text-color-dark;
+  }
+  a:hover {
+    color: $btn-hover;
+  }
 }
