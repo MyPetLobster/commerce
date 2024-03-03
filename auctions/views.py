@@ -701,12 +701,16 @@ def transactions(request, user_id):
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
+    user_bids = Bid.objects.filter(user=user)
+    user_bids = user_bids.order_by("-date")
+
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
         'user': user,
         'current_user': current_user,
         'messages': messages,
-        'unread_message_count': unread_message_count
+        'unread_message_count': unread_message_count,
+        'user_bids': user_bids
     })
 
 

@@ -841,6 +841,7 @@ footer li {
 
 /* TRANSACTIONS PAGE */
 .transactions-table {
+  max-width: 800px;
   background-color: #6c757d;
   border-radius: 8px;
   overflow: hidden;
@@ -1004,6 +1005,28 @@ footer li {
 .expired-bid span {
   color: #6c757d;
   font-style: italic;
+}
+
+.winning-bid-active {
+  color: #2d6128;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.winning-bid-closed {
+  color: #1f3f1a;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.losing-bid-active {
+  font-size: 0.9em;
+}
+
+.losing-bid-closed {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9em;
 }
 
 /*# sourceMappingURL=styles.css.map */

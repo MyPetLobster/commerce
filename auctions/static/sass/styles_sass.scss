@@ -679,6 +679,7 @@ footer {
 
 /* TRANSACTIONS PAGE */
 .transactions-table {
+  max-width: 800px;
   background-color: $medium-gray;
   border-radius: 8px;
   overflow: hidden;
@@ -815,4 +816,25 @@ footer {
     color: $medium-gray;
     font-style: italic;
   }
+}
+
+
+
+.winning-bid-active {
+  color: $money-green;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+.winning-bid-closed {
+  color: $money-green-hover;
+  font-style: italic;
+  font-size: 0.9em;
+}
+.losing-bid-active {
+  font-size: 0.9em;
+}
+.losing-bid-closed {
+  color: $medium-gray;
+  font-style: italic;
+  font-size: 0.9em;
 }

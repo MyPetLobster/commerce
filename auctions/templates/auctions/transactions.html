@@ -70,6 +70,62 @@
     <div class="center-container">
         <p>Your current balance is: {{ current_user.balance }}</p>
     </div>
+
+    <div class="center-container">
+        <hr>
+    </div>
+
+    <h2>{{ current_user.username }}'s Bid History</h2>
+    <table class="table table-striped transactions-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Active/Closed</th>
+                <th>Wining Bid?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bid in user_bids %}
+            {% if bid.listing.active == True and bid.amount == bid.listing.price %}
+                <tr class="winning-bid-active">
+            {% elif bid.listing.active == False and bid.amount == bid.listing.price %}
+                <tr class="winning-bid-closed">
+            {% elif bid.listing.active == True and bid.amount != bid.listing.price %}
+                <tr class="losing-bid-active">
+            {% elif bid.listing.active == False and bid.amount != bid.listing.price %}
+                <tr class="losing-bid-closed">
+            {% endif %}
+                <td>{{ bid.date|date:"F j, Y, g:i a" }}</td>
+                    <td><a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a></td>
+                <td class="bid-amt">${{ bid.amount }}</td>
+                <td>
+                    {% if bid.listing.active == True %}
+                        Active
+                    {% else %}
+                        Closed
+                    {% endif %}
+                </td>
+                <td class="winning-bid">
+                    {% if bid.listing.active == True %}
+                        N/A
+                    {% else %}
+                        {% if bid.listing.winner == user %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="center-container">
+        <p>Your current balance is: {{ current_user.balance }}</p>
+    </div>
+
     <a href="{% url 'profile' current_user.id %}" class="btn btn-primary">Back to Profile</a>
 </div>
 
