@@ -21,19 +21,21 @@
 {% endblock %} {% block body %}
 
 <div class="page-content">
+
   <h2>{{ current_user.username }}'s Messages</h2>
+
+  <!-- ALL MESSAGES -->
   <div class="messages-container">
     <h3>Messages</h3>
     <div class="divider-med"></div>
     <h4 class="center-container">Inbox</h4>
-
+    <!-- SORT BY CONTAINER -->
     <div class="center-container" style="margin-top:20px;"><span class="bold small-font">Sort By: </span></div>
     <div class="newest-oldest-msgs-div">
-      
       <span id="newest-first" class="bold">Newest First</span>
       <span id="oldest-first">Oldest First</span>
     </div>
-
+    <!-- SORT BY FORM (HIDDEN)-->
     <form action="{% url 'sort_messages' %}" method="post" id="sort-msg-form">
       {% csrf_token %}
       <input
@@ -45,16 +47,24 @@
     </form>
 
     <hr />
+
+    <!-- MARK ALL AS READ BUTTON -->
     {% if unread_message_count > 0 %}
     <div class="center-container" style="padding: 10px;">
       <a href="{% url 'mark_all_as_read' current_user.id %}" class="mark-all-read">Mark All as Read</a>
     </div>
     {% endif %}
-    <div class="messages-div message-div-collapsed">
+
+
+    <div class="all-inbox-div">
       {% if inbox_messages %} {% for message in inbox_messages %}
+
+      <!-- hidden check for unread/read -->
       <div class="is-message-read hidden">
         {% if message.read == True %}True{% else %}False{% endif %}
       </div>
+
+      <!-- Collapsed Message Div -->
       <div class="message-div collapsed-message-div">
         <p class="message-summary">
           <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
@@ -76,6 +86,7 @@
         </p>
       </div>
 
+      <!-- Full Message Div -->
       <div class="message-div-full hidden">
         <p class="message-sender">
           <span>From: {{ message.sender }}</span>
@@ -160,20 +171,39 @@
     <div class="divider-med"></div>
     <h4 class="center-container">Sent Messages</h4>
     <hr />
-    <div class="messages-div sent">
+    <div class="all-sent-messages">
       {% if sent_messages %} {% for message in sent_messages %}
-      <div class="message-div">
-        <p class="message-sender">To: {{ message.recipient }}</p>
-        <p class="message-date">
-          Date: {{ message.date|date:"F j, Y, g:i a" }}
-        </p>
-        <p class="message-subject">Subject: {{ message.subject }}</p>
-        <p class="message-content">{{ message.message }}</p>
-      </div>
+        <div class="message-div collapsed-message-div">
+          <p class="message-summary">
+            <span>{{ message.date|date:"y/m/d" }} - {{ message.recipient }} - {{ message.subject|truncatechars:30 }}</span>
+          </p>
+        </div>
+
+        <div class="message-div-full hidden">
+          <p class="message-sender">To: {{ message.recipient }}</p>
+          <p class="message-date">
+            Date: {{ message.date|date:"F j, Y, g:i a" }}
+          </p>
+          <p class="message-subject">Subject: {{ message.subject }}</p>
+          <p class="message-content">{{ message.message }}</p>
+        </div>
+
+        <div class="reply-delete-container hidden">
+          <div class="reply-delete-div">
+            <span class="delete-msg-button">
+              <a
+                class="delete-msg-button"
+                href="{% url 'delete_message' message.id %}"
+                >Delete</a
+              >
+            </span>
+          </div>
+        </div>
+
       {% endfor %} {% else %}
-      <p>No messages</p>
+        <p>No messages</p>
       {% endif %}
-    </div>
+    </div>  
   </div>
   <a
     style="margin-top: 20px"
