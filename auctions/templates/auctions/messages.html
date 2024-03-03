@@ -40,9 +40,17 @@
           >
           <span class="read-unread">
             {% if message.read == True %}
-              <a href="{% url 'mark_as_read' message.id %}">Read</a>
+            <a
+              class="mark-as-unread-button"
+              href="{% url 'mark_as_read' message.id %}"
+              >Read</a
+            >
             {% else %}
-              <a href="{% url 'mark_as_read' message.id %}">Mark as Read</a>
+            <a
+              class="mark-as-read-button"
+              href="{% url 'mark_as_read' message.id %}"
+              >Mark as Read</a
+            >
             {% endif %}
           </span>
         </p>
@@ -53,9 +61,17 @@
           <span>From: {{ message.sender }}</span>
           <span class="read-unread">
             {% if message.read == True %}
-              <a href="{% url 'mark_as_read' message.id %}">Read</a>
+            <a
+              class="mark-as-unread-button"
+              href="{% url 'mark_as_read' message.id %}"
+              >Read</a
+            >
             {% else %}
-              <a href="{% url 'mark_as_read' message.id %}">Mark as Read</a>
+            <a
+              class="mark-as-read-button"
+              href="{% url 'mark_as_read' message.id %}"
+              >Mark as Read</a
+            >
             {% endif %}
           </span>
         </p>
@@ -66,32 +82,52 @@
         <p class="message-content">{{ message.message }}</p>
       </div>
 
-        <div class="reply-delete-container hidden">
-          <div class="reply-delete-div">
-            <span class="reply-button">Reply</span>
-            <div class="reply-form-div hidden">
-              <form
-                action="{% url 'messages' message.id %}"
-                method="post"
-                class="reply-form popup-form"
-              >
-                {% csrf_token %}
-                <input type="hidden" name="recipient" value="{{ message.sender }}" />
-                <input type="hidden" name="subject" value="Re: {{ message.subject }}" />
-                <textarea
-                  class="form-control"
-                  id="message"
-                  name="message"
-                  rows="3"
-                ></textarea>
+      <div class="reply-delete-container hidden">
+        <div class="reply-delete-div">
+          <span class="reply-button">Reply</span>
+          <div class="reply-form-div hidden">
+            <form
+              action="{% url 'messages' message.id %}"
+              method="post"
+              class="reply-form popup-form"
+            >
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="recipient"
+                value="{{ message.sender }}"
+              />
+              <input
+                type="hidden"
+                name="subject"
+                value="Re: {{ message.subject }}"
+              />
+              <div class="center-container" style="margin-bottom: 20px">
+                <h5>Reply to {{ message.sender }}</h5>
+              </div>
+              <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                rows="3"
+              ></textarea>
+              <div class="center-container" style="margin-top: 20px">
                 <button type="submit" class="btn btn-primary">Send</button>
-                <button type="button" class="cancel-btn cancel-reply">Cancel</button>
-              </form>
-            </div>
-
-            <span><a href="{% url 'delete_message' message.id %}">Delete</a></span>
+                <button
+                  type="button"
+                  class="btn btn-primary cancel-btn cancel-reply"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
+
+          <span
+            ><a class="delete-msg-button" href="{% url 'delete_message' message.id %}">Delete</a></span
+          >
         </div>
+      </div>
       {% endfor %} {% else %}
       <p>No messages</p>
       {% endif %}
@@ -126,6 +162,20 @@
 <div id="this-is-message-page"></div>
 
 <script>
+  const replyButtons = document.querySelectorAll(".reply-button");
+  const replyForms = document.querySelectorAll(".reply-form-div");
+  const cancelButtons = document.querySelectorAll(".cancel-reply");
 
+  replyButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      replyForms[index].classList.toggle("hidden");
+    });
+  });
+
+  cancelButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      replyForms[index].classList.toggle("hidden");
+    });
+  });
 </script>
 {% endblock %}

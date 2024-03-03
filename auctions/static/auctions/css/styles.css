@@ -264,6 +264,11 @@ a:hover {
   font-size: 0.9em;
 }
 
+/* Messages Page - Reply to Message Form */
+.reply-form {
+  width: 400px;
+}
+
 /* Category Page - Listing Hover Description */
 .visible-desc {
   position: absolute;
@@ -882,9 +887,66 @@ footer li {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 60px;
   margin-top: -6px;
   margin-bottom: 20px;
+}
+
+.reply-button {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #c55176;
+}
+
+.reply-button:hover {
+  color: #983554;
+}
+
+.reply-button:active {
+  color: #e75684;
+}
+
+.mark-as-unread-button {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #6c757d;
+}
+
+.mark-as-unread-button:hover {
+  color: #c55176;
+}
+
+.mark-as-unread-button:active {
+  color: #e75684;
+}
+
+.mark-as-read-button {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #c55176;
+}
+
+.mark-as-read-button:hover {
+  color: #8c8787;
+}
+
+.mark-as-read-button:active {
+  color: #6c757d;
+}
+
+.delete-msg-button {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #a90000;
+}
+
+.delete-msg-button:hover {
+  color: #80052c;
+}
+
+.delete-msg-button:active {
+  color: #80052c;
 }
 
 /*# sourceMappingURL=styles.css.map */
