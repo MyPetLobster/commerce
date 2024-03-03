@@ -2,6 +2,8 @@
 
 {% load tz %}
 
+{% load custom_filters %}
+
 {% block title %}
     Transactions
 {% endblock %}
@@ -86,7 +88,7 @@
                 <th>Item</th>
                 <th>Amount</th>
                 <th>Active/Closed</th>
-                <th>Wining Bid?</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -112,12 +114,18 @@
                 </td>
                 <td class="winning-bid">
                     {% if bid.listing.active == True %}
-                        N/A
+                        {% if bid.amount == bid.listing.price %}
+                            Winning
+                        {% else %}
+                            Losing <span style="font-size: 0.7em; font-style:italic;">
+                                        (${{ bid.listing.price|subtract:bid.amount }} behind)
+                                    </span>
+                        {% endif %}
                     {% else %}
                         {% if bid.listing.winner == user %}
-                            Yes
+                            WON!
                         {% else %}
-                            No
+                            Lost
                         {% endif %}
                     {% endif %}
                 </td>
