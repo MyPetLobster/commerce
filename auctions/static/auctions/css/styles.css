@@ -854,4 +854,34 @@ footer li {
   border-radius: 8px;
 }
 
+.message-sender {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+#read-unread {
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.8em;
+  color: #6c757d;
+}
+
+#read-unread:hover {
+  color: #c55176;
+}
+
+.reply-delete-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
 /*# sourceMappingURL=styles.css.map */

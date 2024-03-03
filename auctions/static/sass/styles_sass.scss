@@ -693,3 +693,25 @@ footer {
   margin-bottom: 10px;
   border-radius: 8px;
 }
+
+.message-sender {
+  width: 100%;
+  @include flex-row;
+  justify-content: space-between;
+}
+
+#read-unread {
+  @include cursor-pointer-transition;
+  font-size: 0.8em;
+  color: $medium-gray;
+}
+#read-unread:hover {
+  color: $primary-pink;
+}
+
+.reply-delete-div {
+  @include flex-row;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 10px;
+}
