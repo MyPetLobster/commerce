@@ -690,6 +690,10 @@ def messages(request, user_id):
         sent_messages = Message.objects.filter(sender=current_user)
         inbox_messages = Message.objects.filter(recipient=current_user)
 
+        sort_by_direction = "newest-first"
+        sent_messages = sent_messages.order_by("-date")
+        inbox_messages = inbox_messages.order_by("-date")
+
         messages = contrib_messages.get_messages(request)
         unread_messages = Message.objects.filter(recipient=current_user, read=False)
         unread_message_count = unread_messages.count()
@@ -699,9 +703,36 @@ def messages(request, user_id):
             'inbox_messages': inbox_messages,
             'current_user': current_user,
             'messages': messages,
-            'unread_message_count': unread_message_count
+            'unread_message_count': unread_message_count,
+            'sort_by_direction': sort_by_direction
         })
     
+
+def sort_messages(request):
+    current_user = request.user
+    sort_by_direction = request.POST["sort-msg-direction"]
+    sent_messages = Message.objects.filter(sender=current_user)
+    inbox_messages = Message.objects.filter(recipient=current_user)
+
+    if sort_by_direction == "oldest-first":
+        sent_messages = sent_messages.order_by("date")
+        inbox_messages = inbox_messages.order_by("date")
+    else:
+        sent_messages = sent_messages.order_by("-date")
+        inbox_messages = inbox_messages.order_by("-date")
+
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+    return render(request, "auctions/messages.html", {
+        'sent_messages': sent_messages,
+        'inbox_messages': inbox_messages,
+        'current_user': current_user,
+        'messages': messages,
+        'unread_message_count': unread_message_count,
+        'sort_by_direction': sort_by_direction
+    })
 
 
 def set_inactive(listings):

@@ -99,6 +99,10 @@ p {
   font-size: 1em;
 }
 
+.small-font {
+  font-size: 0.8em;
+}
+
 .center-container {
   width: 100%;
   display: flex;
@@ -947,6 +951,36 @@ footer li {
 
 .delete-msg-button:active {
   color: #80052c;
+}
+
+.newest-oldest-msgs-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  gap: 40px;
+}
+
+#newest-first,
+#oldest-first {
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.8em;
+  color: #6c757d;
+}
+
+#newest-first:hover,
+#oldest-first:hover {
+  color: #c55176;
+}
+
+.bold-underline {
+  font-weight: bold;
+  color: #983554 !important;
+  text-decoration: underline;
+  font-size: 0.9em;
 }
 
 /*# sourceMappingURL=styles.css.map */

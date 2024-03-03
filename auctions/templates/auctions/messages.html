@@ -26,6 +26,24 @@
     <h3>Messages</h3>
     <div class="divider-med"></div>
     <h4 class="center-container">Inbox</h4>
+
+    <div class="center-container" style="margin-top:20px;"><span class="bold small-font">Sort By: </span></div>
+    <div class="newest-oldest-msgs-div">
+      
+      <span id="newest-first" class="bold">Newest First</span>
+      <span id="oldest-first">Oldest First</span>
+    </div>
+
+    <form action="{% url 'sort_messages' %}" method="post" id="sort-msg-form">
+      {% csrf_token %}
+      <input
+        id="sort-by-direction"
+        type="hidden"
+        name="sort-msg-direction"
+        value=""
+      />
+    </form>
+
     <hr />
 
     <div class="messages-div message-div-collapsed">
@@ -35,9 +53,7 @@
       </div>
       <div class="message-div collapsed-message-div">
         <p class="message-summary">
-          <span
-            >{{ message.sender }} - {{ message.subject|truncatechars:50 }}</span
-          >
+          <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
           <span class="read-unread">
             {% if message.read == True %}
             <a
@@ -87,7 +103,7 @@
           <span class="reply-button">Reply</span>
           <div class="reply-form-div hidden">
             <form
-              action="{% url 'messages' message.id %}"
+              action="{% url 'messages' current_user.id %}"
               method="post"
               class="reply-form popup-form"
             >
@@ -124,7 +140,11 @@
           </div>
 
           <span
-            ><a class="delete-msg-button" href="{% url 'delete_message' message.id %}">Delete</a></span
+            ><a
+              class="delete-msg-button"
+              href="{% url 'delete_message' message.id %}"
+              >Delete</a
+            ></span
           >
         </div>
       </div>
@@ -162,20 +182,48 @@
 <div id="this-is-message-page"></div>
 
 <script>
-  const replyButtons = document.querySelectorAll(".reply-button");
-  const replyForms = document.querySelectorAll(".reply-form-div");
-  const cancelButtons = document.querySelectorAll(".cancel-reply");
+  document.addEventListener("DOMContentLoaded", () => {
+    const replyButtons = document.querySelectorAll(".reply-button");
+    const replyForms = document.querySelectorAll(".reply-form-div");
+    const cancelButtons = document.querySelectorAll(".cancel-reply");
 
-  replyButtons.forEach((button, index) => {
-    button.addEventListener("click", () => {
-      replyForms[index].classList.toggle("hidden");
+    replyButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        replyForms[index].classList.toggle("hidden");
+      });
     });
-  });
 
-  cancelButtons.forEach((button, index) => {
-    button.addEventListener("click", () => {
-      replyForms[index].classList.toggle("hidden");
+    cancelButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        replyForms[index].classList.toggle("hidden");
+      });
     });
+
+    const sortMsgForm = document.getElementById("sort-msg-form");
+    const sortMsgDirection = document.getElementById("sort-by-direction");
+    const newestFirst = document.getElementById("newest-first");
+    const oldestFirst = document.getElementById("oldest-first");
+
+    newestFirst.addEventListener("click", () => {
+      sortMsgDirection.value = "newest-first";
+      localStorage.setItem("messageSort", "newest-first");
+      sortMsgForm.submit();
+    });
+
+    oldestFirst.addEventListener("click", () => {
+      sortMsgDirection.value = "oldest-first";
+      localStorage.setItem("messageSort", "oldest-first");
+      sortMsgForm.submit();
+    });
+
+    if (localStorage.getItem("messageSort") === "oldest-first") {
+      newestFirst.classList.remove("bold-underline");
+      oldestFirst.classList.add("bold-underline");
+    }
+    if (localStorage.getItem("messageSort") === "newest-first") {
+      newestFirst.classList.add("bold-underline");
+      oldestFirst.classList.remove("bold-underline");
+    }
   });
 </script>
 {% endblock %}

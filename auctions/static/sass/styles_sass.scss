@@ -137,6 +137,9 @@ hr {
 p {
   font-size: 1em;
 }
+.small-font {
+  font-size: 0.8em;
+}
 .center-container {
   width: 100%;
   @include flex-column;
@@ -765,4 +768,29 @@ footer {
 }
 .delete-msg-button:active {
   color: $cancel-color-hover;
+}
+
+.newest-oldest-msgs-div {
+  @include flex-row;
+  width: 100%;
+  justify-content: center;
+  gap: 40px;
+}
+
+#newest-first,
+#oldest-first {
+  @include cursor-pointer-transition;
+  font-size: 0.8em;
+  color: $medium-gray;
+}
+#newest-first:hover,
+#oldest-first:hover {
+  color: $primary-pink;
+}
+
+.bold-underline {
+  font-weight: bold;
+  color: $btn-hover !important;
+  text-decoration: underline;
+  font-size: 0.9em;
 }
