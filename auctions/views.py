@@ -225,10 +225,6 @@ def listing(request, listing_id):
     else:
         watchlist_item = "not on watchlist"
 
-    print("*****************************************")
-    print(f'listing price: {listing.price}')
-    print(f'user bid: {user_bid.amount}')
-    print("*****************************************")
      
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -720,37 +716,67 @@ def messages(request, user_id):
     current_user = request.user
 
     if request.method == "POST":
-        recipient_id = request.POST["recipient"]
-        recipient = User.objects.get(pk=recipient_id)
-        subject = request.POST["subject"]
-        message = request.POST["message"]
-        send_message(request.user, recipient, subject, message)
-        return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+        try:
+            visibility = request.POST["show-hide-input"]
+
+            if visibility == "show":
+                request.session["show_read"] = True
+            else:
+                request.session["show_read"] = False
+        except:
+            pass
+
+        if visibility == "show" or visibility == "hide":
+            pass
+        else:
+            recipient_id = request.POST["recipient"]
+            recipient = User.objects.get(pk=recipient_id)
+            subject = request.POST["subject"]
+            message = request.POST["message"]
+            send_message(request.user, recipient, subject, message)
+            return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+
+    if user_id !=  current_user.id:
+        return HttpResponse("Unauthorized", status=401)
+
+    if request.session["show_read"] == None:
+        request.session["show_read"] = False
+    
+    if request.session["show_read"] == True:
+        show_read_messages = "True"
+
     else:
-        if user_id !=  current_user.id:
-            return HttpResponse("Unauthorized", status=401)
-        
+        show_read_messages = "False"
+
+    if show_read_messages == "True":
         sent_messages = Message.objects.filter(sender=current_user)
         inbox_messages = Message.objects.filter(recipient=current_user)
-        sent_messages = sent_messages.exclude(deleted_by=current_user)
-        inbox_messages = inbox_messages.exclude(deleted_by=current_user)
+    else:
+        sent_messages = Message.objects.filter(sender=current_user, read=False)
+        inbox_messages = Message.objects.filter(recipient=current_user, read=False)
 
-        sort_by_direction = "newest-first"
-        sent_messages = sent_messages.order_by("-date")
-        inbox_messages = inbox_messages.order_by("-date")
 
-        messages = contrib_messages.get_messages(request)
-        unread_messages = Message.objects.filter(recipient=current_user, read=False)
-        unread_message_count = unread_messages.count()
+    sent_messages = sent_messages.exclude(deleted_by=current_user)
+    inbox_messages = inbox_messages.exclude(deleted_by=current_user)
 
-        return render(request, "auctions/messages.html", {
-            'sent_messages': sent_messages,
-            'inbox_messages': inbox_messages,
-            'current_user': current_user,
-            'messages': messages,
-            'unread_message_count': unread_message_count,
-            'sort_by_direction': sort_by_direction
-        })
+    sort_by_direction = "newest-first"
+    sent_messages = sent_messages.order_by("-date")
+    inbox_messages = inbox_messages.order_by("-date")
+
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+
+    return render(request, "auctions/messages.html", {
+        'sent_messages': sent_messages,
+        'inbox_messages': inbox_messages,
+        'current_user': current_user,
+        'messages': messages,
+        'unread_message_count': unread_message_count,
+        'sort_by_direction': sort_by_direction,
+        'show_read_messages': show_read_messages
+    })
     
 
 def sort_messages(request):

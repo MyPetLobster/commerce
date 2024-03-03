@@ -55,118 +55,139 @@
     </div>
     {% endif %}
 
-
-    <div class="all-inbox-div">
-      {% if inbox_messages %} {% for message in inbox_messages %}
-
-      <!-- hidden check for unread/read -->
-      <div class="is-message-read hidden">
-        {% if message.read == True %}True{% else %}False{% endif %}
-      </div>
-
-      <!-- Collapsed Message Div -->
-      <div class="message-div collapsed-message-div">
-        <p class="message-summary">
-          <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
-          <span class="read-unread">
-            {% if message.read == True %}
-            <a
-              class="mark-as-unread-button"
-              href="{% url 'mark_as_read' message.id %}"
-              >Read</a
-            >
-            {% else %}
-            <a
-              class="mark-as-read-button"
-              href="{% url 'mark_as_read' message.id %}"
-              >Mark as Read</a
-            >
-            {% endif %}
-          </span>
-        </p>
-      </div>
-
-      <!-- Full Message Div -->
-      <div class="message-div-full hidden">
-        <p class="message-sender">
-          <span>From: {{ message.sender }}</span>
-          <span class="read-unread">
-            {% if message.read == True %}
-            <a
-              class="mark-as-unread-button"
-              href="{% url 'mark_as_read' message.id %}"
-              >Read</a
-            >
-            {% else %}
-            <a
-              class="mark-as-read-button"
-              href="{% url 'mark_as_read' message.id %}"
-              >Mark as Read</a
-            >
-            {% endif %}
-          </span>
-        </p>
-        <p class="message-date">
-          Date: {{ message.date|date:"F j, Y, g:i a" }}
-        </p>
-        <p class="message-subject">Subject: {{ message.subject }}</p>
-        <p class="message-content">{{ message.message }}</p>
-      </div>
-
-      <div class="reply-delete-container hidden">
-        <div class="reply-delete-div">
-          <span class="reply-button">Reply</span>
-          <div class="reply-form-div hidden">
-            <form
-              action="{% url 'messages' current_user.id %}"
-              method="post"
-              class="reply-form popup-form"
-            >
-              {% csrf_token %}
-              <input
-                type="hidden"
-                name="recipient"
-                value="{{ message.sender }}"
-              />
-              <input
-                type="hidden"
-                name="subject"
-                value="Re: {{ message.subject }}"
-              />
-              <div class="center-container" style="margin-bottom: 20px">
-                <h5>Reply to {{ message.sender }}</h5>
-              </div>
-              <textarea
-                class="form-control"
-                id="message"
-                name="message"
-                rows="3"
-              ></textarea>
-              <div class="center-container" style="margin-top: 20px">
-                <button type="submit" class="btn btn-primary">Send</button>
-                <button
-                  type="button"
-                  class="btn btn-primary cancel-btn cancel-reply"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <span
-            ><a
-              class="delete-msg-button"
-              href="{% url 'delete_message' message.id %}"
-              >Delete</a
-            ></span
-          >
-        </div>
-      </div>
-      {% endfor %} {% else %}
-      <p>No messages</p>
-      {% endif %}
+    <form action="{% url 'messages' current_user.id %}" method="post" id="show-hide-form" class="hidden">
+      {% csrf_token %}
+      <input
+        id="show-hide-input"
+        type="hidden"
+        name="show-hide-input"
+        value="{% if show_read_messages %}hide{% else %}show{% endif %}"
+      />
+    </form>
+    <div class="center-container">
+      <span class="show-hide-button" style="margin-bottom: 20px;">
+        {% if show_read_messages == "True" %}Hide{% else %}Show{% endif %} Read Messages
+      </span>
     </div>
+
+
+    {% if unread_message_count == 0 and show_read_messages == False %}
+      <div class="center-container" style="margin-top: 20px">
+        <p>No unread messages</p>
+      </div>
+    {% else %}
+      <div class="all-inbox-div">
+        {% if inbox_messages %} {% for message in inbox_messages %}
+
+        <!-- hidden check for unread/read -->
+        <div class="is-message-read hidden">
+          {% if message.read == True %}True{% else %}False{% endif %}
+        </div>
+
+        <!-- Collapsed Message Div -->
+        <div class="message-div collapsed-message-div">
+          <p class="message-summary">
+            <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
+            <span class="read-unread">
+              {% if message.read == True %}
+              <a
+                class="mark-as-unread-button"
+                href="{% url 'mark_as_read' message.id %}"
+                >Read</a
+              >
+              {% else %}
+              <a
+                class="mark-as-read-button"
+                href="{% url 'mark_as_read' message.id %}"
+                >Mark as Read</a
+              >
+              {% endif %}
+            </span>
+          </p>
+        </div>
+
+        <!-- Full Message Div -->
+        <div class="message-div-full hidden">
+          <p class="message-sender">
+            <span>From: {{ message.sender }}</span>
+            <span class="read-unread">
+              {% if message.read == True %}
+              <a
+                class="mark-as-unread-button"
+                href="{% url 'mark_as_read' message.id %}"
+                >Read</a
+              >
+              {% else %}
+              <a
+                class="mark-as-read-button"
+                href="{% url 'mark_as_read' message.id %}"
+                >Mark as Read</a
+              >
+              {% endif %}
+            </span>
+          </p>
+          <p class="message-date">
+            Date: {{ message.date|date:"F j, Y, g:i a" }}
+          </p>
+          <p class="message-subject">Subject: {{ message.subject }}</p>
+          <p class="message-content">{{ message.message }}</p>
+        </div>
+
+        <div class="reply-delete-container hidden">
+          <div class="reply-delete-div">
+            <span class="reply-button">Reply</span>
+            <div class="reply-form-div hidden">
+              <form
+                action="{% url 'messages' current_user.id %}"
+                method="post"
+                class="reply-form popup-form"
+              >
+                {% csrf_token %}
+                <input
+                  type="hidden"
+                  name="recipient"
+                  value="{{ message.sender }}"
+                />
+                <input
+                  type="hidden"
+                  name="subject"
+                  value="Re: {{ message.subject }}"
+                />
+                <div class="center-container" style="margin-bottom: 20px">
+                  <h5>Reply to {{ message.sender }}</h5>
+                </div>
+                <textarea
+                  class="form-control"
+                  id="message"
+                  name="message"
+                  rows="3"
+                ></textarea>
+                <div class="center-container" style="margin-top: 20px">
+                  <button type="submit" class="btn btn-primary">Send</button>
+                  <button
+                    type="button"
+                    class="btn btn-primary cancel-btn cancel-reply"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <span
+              ><a
+                class="delete-msg-button"
+                href="{% url 'delete_message' message.id %}"
+                >Delete</a
+              ></span
+            >
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <p>No messages</p>
+        {% endif %}
+      </div>
+    {% endif %}
 
     <div class="divider-med"></div>
     <h4 class="center-container">Sent Messages</h4>
@@ -213,10 +234,29 @@
   >
 </div>
 
+<p id="show-hide-value" class="hidden">{{ show_read_messages }}</p>
 <div id="this-is-message-page"></div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+
+    const showHideButton = document.querySelector(".show-hide-button");
+    const showHideForm = document.getElementById("show-hide-form");
+    const showHideValue = document.getElementById("show-hide-value");
+    const showHideInput = document.getElementById("show-hide-input");
+
+    showHideButton.addEventListener("click", () => {
+      alert(`showHideValue: ${showHideValue.textContent}`)
+      if (showHideValue.textContent === "True") {
+        alert("showHideValue is True")
+        showHideInput.value = "hide";
+      } else {
+        showHideInput.value = "show";
+      }
+      showHideForm.submit();
+    });
+
+
     const replyButtons = document.querySelectorAll(".reply-button");
     const replyForms = document.querySelectorAll(".reply-form-div");
     const cancelButtons = document.querySelectorAll(".cancel-reply");

@@ -785,14 +785,16 @@ footer {
 
 #newest-first,
 #oldest-first,
-.mark-all-read {
+.mark-all-read,
+.show-hide-button {
   @include cursor-pointer-transition;
   font-size: 0.8em;
   color: $medium-gray;
 }
 #newest-first:hover,
 #oldest-first:hover,
-.mark-all-read:hover {
+.mark-all-read:hover,
+.show-hide-button:hover {
   color: $primary-pink;
 }
 

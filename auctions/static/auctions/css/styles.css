@@ -973,7 +973,8 @@ footer li {
 
 #newest-first,
 #oldest-first,
-.mark-all-read {
+.mark-all-read,
+.show-hide-button {
   cursor: pointer;
   transition: 0.15s;
   font-size: 0.8em;
@@ -982,7 +983,8 @@ footer li {
 
 #newest-first:hover,
 #oldest-first:hover,
-.mark-all-read:hover {
+.mark-all-read:hover,
+.show-hide-button:hover {
   color: #c55176;
 }
 
