@@ -714,6 +714,10 @@ def sort_messages(request):
     sent_messages = Message.objects.filter(sender=current_user)
     inbox_messages = Message.objects.filter(recipient=current_user)
 
+    # filter out messages that have been deleted by the user
+    sent_messages = sent_messages.exclude(deleted_by=current_user)
+    inbox_messages = inbox_messages.exclude(deleted_by=current_user)
+
     if sort_by_direction == "oldest-first":
         sent_messages = sent_messages.order_by("date")
         inbox_messages = inbox_messages.order_by("date")
@@ -754,8 +758,13 @@ def mark_as_read(request, message_id):
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
 def delete_message(request, message_id):
+    current_user = request.user
     message = Message.objects.get(pk=message_id)
-    message.delete()
+    if message.deleted_by == None:
+        message.deleted_by.add(current_user)
+    # else:
+    #     message.deleted_by.remove(current_user)
+    message.save()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
 def mark_all_as_read(request, user_id):
