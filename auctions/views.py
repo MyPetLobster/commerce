@@ -751,14 +751,13 @@ def messages(request, user_id):
 
     if user_id !=  current_user.id:
         return HttpResponse("Unauthorized", status=401)
-
-    if request.session["show_read"] == None:
-        request.session["show_read"] = False
-    
-    if request.session["show_read"] == True:
-        show_read_messages = "True"
-
-    else:
+    try:
+        if request.session["show_read"] == None:
+            request.session["show_read"] = False
+        
+        if request.session["show_read"] == True:
+            show_read_messages = "True"
+    except:
         show_read_messages = "False"
 
     if show_read_messages == "True":

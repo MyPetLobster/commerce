@@ -117,9 +117,9 @@
                         {% if bid.amount == bid.listing.price %}
                             Winning
                         {% else %}
-                            Losing <span style="font-size: 0.7em; font-style:italic;">
-                                        (${{ bid.listing.price|subtract:bid.amount }} behind)
-                                    </span>
+                            <span class="red" style="font-size: 0.7em; font-style:italic;">
+                                (${{ bid.listing.price|subtract:bid.amount }} behind)
+                            </span>
                         {% endif %}
                     {% else %}
                         {% if bid.listing.winner == user %}
