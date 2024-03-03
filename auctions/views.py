@@ -165,10 +165,7 @@ def listings(request):
 
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    comments = Comment.objects.filter(listing=listing)
     current_user = request.user
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
 
     # Calculate Time Left (7 days from listing date)    
     listing_date = listing.date
@@ -231,6 +228,9 @@ def listing(request, listing_id):
     else:
         watchlist_item = "not on watchlist"
 
+    comments = Comment.objects.filter(listing=listing)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
      
     return render(request, "auctions/listing.html", {
         "listing": listing,
