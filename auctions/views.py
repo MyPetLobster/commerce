@@ -690,7 +690,7 @@ def confirm_shipping(request, listing_id):
 @login_required
 def transactions(request, user_id):
     current_user = request.user
-    if user_id != current_user:
+    if user_id != current_user.id:
         return HttpResponse("Unauthorized", status=401)
     user = User.objects.get(pk=user_id)
     sent_transactions = Transaction.objects.filter(sender=user)
