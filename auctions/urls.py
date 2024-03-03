@@ -27,4 +27,5 @@ urlpatterns = [
     path('transactions/<int:user_id>', views.transactions, name='transactions'),
     path('messages/<int:user_id>', views.messages, name='messages'),
     path('mark_as_read/<int:message_id>', views.mark_as_read, name='mark_as_read'),
+    path('delete_message/<int:message_id>', views.delete_message, name='delete_message'),
 ]

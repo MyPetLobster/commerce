@@ -179,6 +179,9 @@ function showHideFullMessage() {
         return;
       }
 
+      const replyDeleteDivs = this.nextElementSibling.nextElementSibling;
+      replyDeleteDivs.classList.toggle("hidden");
+
       fullMessage.classList.toggle("hidden");
       fullMessage.classList.toggle("visible");
       div.classList.toggle("hidden");
@@ -187,6 +190,7 @@ function showHideFullMessage() {
         fullMessage.classList.toggle("hidden");
         fullMessage.classList.toggle("visible");
         div.classList.toggle("hidden");
+        replyDeleteDivs.classList.toggle("hidden");
       };
     };
   });

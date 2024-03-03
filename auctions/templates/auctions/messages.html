@@ -64,14 +64,34 @@
         </p>
         <p class="message-subject">Subject: {{ message.subject }}</p>
         <p class="message-content">{{ message.message }}</p>
-        <div class="center-container">
-          <div class="reply-delete-div">
-            <span>Reply</span>
-            <span>Delete</span>
-          </div>
-        </div>
       </div>
 
+        <div class="reply-delete-container hidden">
+          <div class="reply-delete-div">
+            <span class="reply-button">Reply</span>
+            <div class="reply-form-div hidden">
+              <form
+                action="{% url 'messages' message.id %}"
+                method="post"
+                class="reply-form popup-form"
+              >
+                {% csrf_token %}
+                <input type="hidden" name="recipient" value="{{ message.sender }}" />
+                <input type="hidden" name="subject" value="Re: {{ message.subject }}" />
+                <textarea
+                  class="form-control"
+                  id="message"
+                  name="message"
+                  rows="3"
+                ></textarea>
+                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="button" class="cancel-btn cancel-reply">Cancel</button>
+              </form>
+            </div>
+
+            <span><a href="{% url 'delete_message' message.id %}">Delete</a></span>
+          </div>
+        </div>
       {% endfor %} {% else %}
       <p>No messages</p>
       {% endif %}
@@ -106,8 +126,6 @@
 <div id="this-is-message-page"></div>
 
 <script>
-
-
 
 </script>
 {% endblock %}
