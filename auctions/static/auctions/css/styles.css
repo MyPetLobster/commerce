@@ -964,7 +964,8 @@ footer li {
 }
 
 #newest-first,
-#oldest-first {
+#oldest-first,
+.mark-all-read {
   cursor: pointer;
   transition: 0.15s;
   font-size: 0.8em;
@@ -972,7 +973,8 @@ footer li {
 }
 
 #newest-first:hover,
-#oldest-first:hover {
+#oldest-first:hover,
+.mark-all-read:hover {
   color: #c55176;
 }
 

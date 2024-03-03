@@ -45,7 +45,11 @@
     </form>
 
     <hr />
-
+    {% if unread_message_count > 0 %}
+    <div class="center-container" style="padding: 10px;">
+      <a href="{% url 'mark_all_as_read' current_user.id %}" class="mark-all-read">Mark All as Read</a>
+    </div>
+    {% endif %}
     <div class="messages-div message-div-collapsed">
       {% if inbox_messages %} {% for message in inbox_messages %}
       <div class="is-message-read hidden">

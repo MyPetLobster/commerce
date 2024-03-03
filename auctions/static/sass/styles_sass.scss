@@ -777,14 +777,18 @@ footer {
   gap: 40px;
 }
 
+
+
 #newest-first,
-#oldest-first {
+#oldest-first,
+.mark-all-read {
   @include cursor-pointer-transition;
   font-size: 0.8em;
   color: $medium-gray;
 }
 #newest-first:hover,
-#oldest-first:hover {
+#oldest-first:hover,
+.mark-all-read:hover {
   color: $primary-pink;
 }
 

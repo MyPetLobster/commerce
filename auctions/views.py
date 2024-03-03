@@ -757,3 +757,10 @@ def delete_message(request, message_id):
     message = Message.objects.get(pk=message_id)
     message.delete()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
+
+def mark_all_as_read(request, user_id):
+    messages = Message.objects.filter(recipient=request.user)
+    for message in messages:
+        message.read = True
+        message.save()
+    return HttpResponseRedirect(reverse("messages", args=(user_id,)))
