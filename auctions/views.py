@@ -209,19 +209,20 @@ def listing(request, listing_id):
     # POST Request - Place Bid
     if request.method == "POST":
         amount = request.POST.get("amount")
+        amount = decimal.Decimal(amount)
         time_left_b = listing.date + timedelta(days=7) - timezone.now()
         total_seconds_left = time_left_b.total_seconds()
         if total_seconds_left <= 86400:
             if amount > current_user.balance:
                 contrib_messages.add_message(request, contrib_messages.ERROR, "Insufficient funds")
-                 
             else:
-                place_bid(request, amount, listing_id)
+                success, updated_listing = place_bid(request, amount, listing_id)
+                if success:
+                    listing = updated_listing
         else:
-            place_bid(request, amount, listing_id)
-
-        #TODO Add to Watchlist
-            
+            success, updated_listing = place_bid(request, amount, listing_id)      
+            if success:
+                listing = updated_listing 
     
     messages = contrib_messages.get_messages(request)
      
@@ -271,13 +272,6 @@ def category(request, category_id):
         "unread_message_count": unread_message_count
     })
 
-## PAUSING HERE 3/01/2024 10pm
-#TODO Keep adding necessary context to views. Is there a shortcut? reverse? 
-
-# current_user = request.user
-# messages = contrib_messages.get_messages(request)
-# unread_messages = Message.objects.filter(recipient=current_user, read=False)
-# unread_message_count = unread_messages.count()
 
 # Views - Login Required
 @login_required
@@ -323,7 +317,7 @@ def watchlist(request):
         "unread_message_count": unread_message_count
     })
 
-
+# Profile related classes and functions
 class UserBidInfo:
     def __init__(self, user_bid, is_old_bid):
         self.user_bid = user_bid
@@ -339,6 +333,7 @@ def check_if_old_bid(bid, listing):
             return True
         else:
             return False
+
 
 @login_required
 def profile(request, user_id):
@@ -409,6 +404,14 @@ def check_expiration(listing_id):
             return "closed - by seller"
 
 
+
+def check_if_watchlist(user, listing):
+    watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
+    if watchlist_item.exists():
+        return True
+    else:
+        return False
+    
 @login_required
 def place_bid(request, amount, listing_id):
     try: 
@@ -433,10 +436,17 @@ def place_bid(request, amount, listing_id):
             message = f"You placed a bid of ${amount} on {listing.title}. Good luck!"
             send_message(admin, bidder, subject, message)
 
+            if check_if_watchlist(current_user, listing) == False:
+                watchlist_item = Watchlist.objects.create(
+                    user=current_user,
+                    listing=listing
+                )
+                watchlist_item.save()
+
             if check_bids_funds(request, listing_id) == True:
                 listing.price = bid.amount
                 listing.save()
-                return True
+                return True, listing
             else:
                 return False
         
