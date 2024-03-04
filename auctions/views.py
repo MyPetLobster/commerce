@@ -119,8 +119,40 @@ def register(request):
 
 
 
-# TODO Refactor bid flow logic
+
 # Views - Public
+def categories(request):
+    categories = get_list_or_404(Category.objects.all())
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+    return render(request, "auctions/categories.html", {
+        "categories": categories,
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
+    })
+
+
+def category(request, category_id):
+    listings = Listing.objects.filter(categories=category_id)
+    category = get_object_or_404(Category, pk=category_id)
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+    return render(request, "auctions/category.html", {
+        "listings": listings,
+        "category": category,
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
+    })
+
+
 def index(request):
     current_user = request.user
     listings = Listing.objects.all()
@@ -146,7 +178,6 @@ def index(request):
         })
 
 
-#TODO Refactor bid flow logic
 def listings(request):
     listings = get_list_or_404(Listing.objects.all())
     winners = Winner.objects.all()
@@ -155,7 +186,6 @@ def listings(request):
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
-    #TODO Handle closing logic here
     set_inactive(listings)
 
     return render(request, "auctions/listings.html", {
@@ -167,7 +197,6 @@ def listings(request):
     })
 
 
-#TODO: Refactor bid flow logic
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_user = request.user
@@ -229,7 +258,41 @@ def listing(request, listing_id):
         "messages": messages
     })
 
-# Listing Helper Functions
+# Index, Listing, Listings Helper Functions
+def set_inactive(listings):
+    for listing in listings:
+        if listing.date + timedelta(days=7) < timezone.now():
+            listing.active = False
+            listing.save()
+            try: 
+                declare_winner(listing)
+            except:
+                pass
+        else:
+            pass
+
+
+def check_expiration(listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.active:
+        now = timezone.now()
+        if listing.date + timedelta(days=7) < now:
+            listing.active = False
+            listing.save()
+            try:
+                declare_winner(listing)
+            except:
+                pass
+            return "closed - expired"
+        else:
+            return "active"
+    else:
+        if listing.date + timedelta(days=7) < timezone.now():
+            return "closed - expired"
+        else:
+            return "closed - by seller"
+        
+
 def get_listing_values(request, listing):
     try:
         winner = Winner.objects.get(listing=listing)
@@ -268,37 +331,6 @@ def generate_time_left_string(difference_seconds):
 
 
 
-
-def categories(request):
-    categories = get_list_or_404(Category.objects.all())
-    current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
-    return render(request, "auctions/categories.html", {
-        "categories": categories,
-        "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
-    })
-
-
-def category(request, category_id):
-    listings = Listing.objects.filter(categories=category_id)
-    category = get_object_or_404(Category, pk=category_id)
-    current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
-    return render(request, "auctions/category.html", {
-        "listings": listings,
-        "category": category,
-        "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
-    })
 
 
 # Views - Login Required
@@ -403,7 +435,9 @@ def profile(request, user_id):
 
 
 
-# Functions and Actions
+# ACTION VIEWS
+
+# helper for place_bid
 def check_if_watchlist(user, listing):
     watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
     if watchlist_item.exists():
@@ -675,8 +709,10 @@ def withdraw(request, user_id):
     return redirect("profile", user_id=user_id)
 
 
+# Seller will have a button on profile to confirm shipping.
+# Once pressed, money will be transferred from escrow to seller.
 @login_required
-def confirm_shipping(request, listing_id):
+def confirm_shipping(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     if listing.shipped == False:
         if transfer_to_seller(listing_id):
@@ -686,6 +722,7 @@ def confirm_shipping(request, listing_id):
     return redirect("listing", listing_id=listing_id)
 
 
+# View all transaction and bid history. Can only view own transactions.
 @login_required
 def transactions(request, user_id):
     current_user = request.user
@@ -716,6 +753,7 @@ def transactions(request, user_id):
     })
 
 
+# Handle sending msgs and the messages view
 @login_required
 def messages(request, user_id):
 
@@ -744,34 +782,18 @@ def messages(request, user_id):
 
     if user_id !=  current_user.id:
         return HttpResponse("Unauthorized", status=401)
-    try:
-        if request.session["show_read"] == None:
-            request.session["show_read"] = False
-        
-        if request.session["show_read"] == True:
-            show_read_messages = "True"
-    except:
-        show_read_messages = "False"
+    
+    # Dynamic Show Read Messages
+    sent_messages, inbox_messages, show_read_messages = show_hide_read_messages(request)
 
-    if show_read_messages == "True":
-        sent_messages = Message.objects.filter(sender=current_user)
-        inbox_messages = Message.objects.filter(recipient=current_user)
-    else:
-        sent_messages = Message.objects.filter(sender=current_user, read=False)
-        inbox_messages = Message.objects.filter(recipient=current_user, read=False)
-
-
-    sent_messages = sent_messages.exclude(deleted_by=current_user)
-    inbox_messages = inbox_messages.exclude(deleted_by=current_user)
-
-    sort_by_direction = "newest-first"
-    sent_messages = sent_messages.order_by("-date")
-    inbox_messages = inbox_messages.order_by("-date")
-
+    # Dynamic Sort Messages
+    sent_messages, inbox_messages, sort_by_direction = determine_message_sort(request, sent_messages, inbox_messages)
+    
+    # alert-msgs
     messages = contrib_messages.get_messages(request)
+
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
-
 
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
@@ -782,14 +804,18 @@ def messages(request, user_id):
         'sort_by_direction': sort_by_direction,
         'show_read_messages': show_read_messages
     })
-    
 
-def sort_messages(request):
-    current_user = request.user
-    sort_by_direction = request.POST["sort-msg-direction"]
-    sent_messages = Message.objects.filter(sender=current_user)
-    inbox_messages = Message.objects.filter(recipient=current_user)
 
+def determine_message_sort(request, sent_messages, inbox_messages):
+    try:
+        if request.session["sort_by_direction"] == None:
+            sort_by_direction = "newest-first"
+            request.session["sort_by_direction"] = sort_by_direction
+        else:
+            sort_by_direction = request.session["sort_by_direction"]
+    except:
+        sort_by_direction = "newest-first"
+        request.session["sort_by_direction"] = sort_by_direction
 
     if sort_by_direction == "oldest-first":
         sent_messages = sent_messages.order_by("date")
@@ -797,6 +823,44 @@ def sort_messages(request):
     else:
         sent_messages = sent_messages.order_by("-date")
         inbox_messages = inbox_messages.order_by("-date")
+
+    return sent_messages, inbox_messages, sort_by_direction
+
+
+def show_hide_read_messages(request):  
+    current_user = request.user
+    try:
+        if request.session["show_read"] == None:
+            request.session["show_read"] = False
+        
+        if request.session["show_read"] == True:
+            show_read_messages = "True"
+        else:
+            show_read_messages = "False"
+    except:
+        show_read_messages = "False"
+
+    if show_read_messages == "True":
+        sent_messages = Message.objects.filter(sender=current_user)
+        inbox_messages = Message.objects.filter(recipient=current_user)
+    else:
+        sent_messages = Message.objects.filter(sender=current_user, read=False)
+        inbox_messages = Message.objects.filter(recipient=current_user, read=False)
+
+    sent_messages = sent_messages.exclude(deleted_by=current_user)
+    inbox_messages = inbox_messages.exclude(deleted_by=current_user)
+
+    return sent_messages, inbox_messages, show_read_messages
+
+def sort_messages(request):
+    current_user = request.user
+    
+    if request.method == "POST":
+        sort_by_direction = request.POST["sort-by-direction"]
+        request.session["sort_by_direction"] = sort_by_direction
+
+    sent_messages, inbox_messages, show_read_messages = show_hide_read_messages(request)
+    sent_messages, inbox_messages, sort_by_direction = determine_message_sort(request, sent_messages, inbox_messages)
 
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -808,7 +872,8 @@ def sort_messages(request):
         'current_user': current_user,
         'messages': messages,
         'unread_message_count': unread_message_count,
-        'sort_by_direction': sort_by_direction
+        'sort_by_direction': sort_by_direction,
+        'show_read_messages': show_read_messages
     })
 
 
@@ -854,36 +919,6 @@ def declare_winner(listing):
 
 
 
-def set_inactive(listings):
-    for listing in listings:
-        if listing.date + timedelta(days=7) < timezone.now():
-            listing.active = False
-            listing.save()
-            try: 
-                declare_winner(listing)
-            except:
-                pass
-        else:
-            pass
 
 
-# Used in listing view to check if listing is expired
-def check_expiration(listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if listing.active:
-        now = timezone.now()
-        if listing.date + timedelta(days=7) < now:
-            listing.active = False
-            listing.save()
-            try:
-                declare_winner(listing)
-            except:
-                pass
-            return "closed - expired"
-        else:
-            return "active"
-    else:
-        if listing.date + timedelta(days=7) < timezone.now():
-            return "closed - expired"
-        else:
-            return "closed - by seller"
+
