@@ -1,5 +1,10 @@
-{% extends "auctions/layout.html" %} {% load tz %} {%block title%} Messages
-{%endblock%} {% block navbar %}
+{% extends "auctions/layout.html" %} {% load tz %} 
+
+{%block title%} 
+  {{ current_user.username }}'s Messages
+{% endblock %} 
+
+{% block navbar %}
 <li class="nav-item">
   <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
 </li>
