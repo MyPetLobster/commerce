@@ -119,7 +119,7 @@ def register(request):
 
 
 
-
+# TODO Refactor bid flow logic
 # Views - Public
 def index(request):
     current_user = request.user
@@ -130,6 +130,7 @@ def index(request):
         unread_messages = Message.objects.filter(recipient=current_user, read=False)
         unread_message_count = unread_messages.count()
 
+        #TODO: Handle closing logic here
         set_inactive(listings)
 
         return render(request, "auctions/index.html" , {
@@ -144,6 +145,8 @@ def index(request):
             "current_user": current_user
         })
 
+
+#TODO Refactor bid flow logic
 def listings(request):
     listings = get_list_or_404(Listing.objects.all())
     winners = Winner.objects.all()
@@ -152,6 +155,7 @@ def listings(request):
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
+    #TODO Handle closing logic here
     set_inactive(listings)
 
     return render(request, "auctions/listings.html", {
@@ -163,6 +167,7 @@ def listings(request):
     })
 
 
+#TODO: Refactor bid flow logic
 def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_user = request.user
@@ -172,20 +177,14 @@ def listing(request, listing_id):
     current_date_time = timezone.now()
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
-    # In production, celery will have already closed listings & notified winners
+    # Generate time left string for JavaScript display, live countdown
     if check_expiration(listing_id) == "closed - expired":
         closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
     elif check_expiration(listing_id) == "closed - by seller":
         time_left = "Listing closed by seller"
     else:
-        # Generate time left string to be handled in the template JS
-        seconds_left = max(0, 604800 - diff_seconds)
-        days_left, seconds_left = divmod(seconds_left, 86400)
-        hours_left, remainder = divmod(seconds_left, 3600)
-        minutes_left, seconds_left = divmod(remainder, 60)
-        seconds_left = math.floor(seconds_left)
-        time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
+        time_left = generate_time_left_string(diff_seconds)
 
     # POST Request - Place Bid
     if request.method == "POST":
@@ -193,6 +192,9 @@ def listing(request, listing_id):
         amount = decimal.Decimal(amount)
         time_left_b = listing.date + timedelta(days=7) - timezone.now()
         total_seconds_left = time_left_b.total_seconds()
+
+        # Check if there is less than 24 hours left on the listing
+        # if so, check if the user has enough funds to place the bid
         if total_seconds_left <= 86400:
             if amount > current_user.balance:
                 contrib_messages.add_message(request, contrib_messages.ERROR, "Insufficient funds")
@@ -205,8 +207,30 @@ def listing(request, listing_id):
             if success:
                 listing = updated_listing 
     
-    messages = contrib_messages.get_messages(request)
+    
     # Get values to pass to template
+    winner, user_bid, difference, watchlist_item = get_listing_values(request, listing)
+    messages = contrib_messages.get_messages(request)
+    comments = Comment.objects.filter(listing=listing)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+     
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "winner": winner,
+        "comments": comments,
+        "comment_form": CommentForm(),
+        "time_left": time_left,
+        "user_bid": user_bid,
+        "difference": difference,
+        "watchlist_item": watchlist_item,
+        "current_user" : request.user,
+        "unread_message_count": unread_message_count,
+        "messages": messages
+    })
+
+# Listing Helper Functions
+def get_listing_values(request, listing):
     try:
         winner = Winner.objects.get(listing=listing)
     except Winner.DoesNotExist:
@@ -228,23 +252,21 @@ def listing(request, listing_id):
     else:
         watchlist_item = "not on watchlist"
 
-    comments = Comment.objects.filter(listing=listing)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-     
-    return render(request, "auctions/listing.html", {
-        "listing": listing,
-        "winner": winner,
-        "comments": comments,
-        "comment_form": CommentForm(),
-        "time_left": time_left,
-        "user_bid": user_bid,
-        "difference": difference,
-        "watchlist_item": watchlist_item,
-        "current_user" : request.user,
-        "unread_message_count": unread_message_count,
-        "messages": messages
-    })
+    return winner, user_bid, difference, watchlist_item
+
+
+def generate_time_left_string(difference_seconds):
+    # Generate time left string to be handled in the template JS
+    seconds_left = max(0, 604800 - difference_seconds)
+    days_left, seconds_left = divmod(seconds_left, 86400)
+    hours_left, remainder = divmod(seconds_left, 3600)
+    minutes_left, seconds_left = divmod(remainder, 60)
+    seconds_left = math.floor(seconds_left)
+    time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
+
+    return time_left
+
+
 
 
 def categories(request):
@@ -380,37 +402,8 @@ def profile(request, user_id):
 
 
 
+
 # Functions and Actions
-def check_expiration(listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if listing.active:
-        now = timezone.now()
-        if listing.date + timedelta(days=7) < now:
-            listing.active = False
-            listing.save()
-            try:
-                highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-                winner = Winner.objects.create(
-                    amount=listing.price,
-                    listing=listing,
-                    user=highest_bid.user
-                )
-                winner.save()
-                notify_winner(winner, listing)
-                transfer_to_escrow(winner)
-            except:
-                pass
-            return "closed - expired"
-        else:
-            return "active"
-    else:
-        if listing.date + timedelta(days=7) < timezone.now():
-            return "closed - expired"
-        else:
-            return "closed - by seller"
-
-
-
 def check_if_watchlist(user, listing):
     watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
     if watchlist_item.exists():
@@ -819,15 +812,6 @@ def sort_messages(request):
     })
 
 
-def set_inactive(listings):
-    for listing in listings:
-        if listing.date + timedelta(days=7) < timezone.now():
-            listing.active = False
-            listing.save()
-        else:
-            pass
-
-
 def mark_as_read(request, message_id):
     message = Message.objects.get(pk=message_id)
     if message.read == False:
@@ -850,3 +834,56 @@ def mark_all_as_read(request, user_id):
         message.read = True
         message.save()
     return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+
+
+
+
+def declare_winner(listing):
+    if Winner.objects.filter(listing=listing).exists():
+        return
+    
+    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+    if highest_bid:
+        winner = Winner.objects.create(
+            amount=listing.price,
+            listing=listing,
+            user=highest_bid.user
+        )
+        notify_winner(winner, listing)
+        transfer_to_escrow(winner)
+
+
+
+def set_inactive(listings):
+    for listing in listings:
+        if listing.date + timedelta(days=7) < timezone.now():
+            listing.active = False
+            listing.save()
+            try: 
+                declare_winner(listing)
+            except:
+                pass
+        else:
+            pass
+
+
+# Used in listing view to check if listing is expired
+def check_expiration(listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.active:
+        now = timezone.now()
+        if listing.date + timedelta(days=7) < now:
+            listing.active = False
+            listing.save()
+            try:
+                declare_winner(listing)
+            except:
+                pass
+            return "closed - expired"
+        else:
+            return "active"
+    else:
+        if listing.date + timedelta(days=7) < timezone.now():
+            return "closed - expired"
+        else:
+            return "closed - by seller"

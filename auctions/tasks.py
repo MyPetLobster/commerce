@@ -208,6 +208,7 @@ def check_bids_funds(request, listing_id):
                 return False
             else:
                 time_left_to_deposit = now - (listing.date + timezone.timedelta(days=6)) 
+                time_left_to_deposit = f"{time_left_to_deposit.days} days, {time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
                 send_message(
                     User.objects.get(pk=2),
                     highest_bid.user,
