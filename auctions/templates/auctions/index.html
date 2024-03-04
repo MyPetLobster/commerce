@@ -1,5 +1,5 @@
 {% extends "auctions/layout.html" %}
-
+{% load custom_filters %}
 {% load static %}
 
 {% block title %}
@@ -84,7 +84,7 @@
                             <div class="list-desc-div">
                                 <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                                 <p>
-                                    <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }}</br>
+                                    <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }} </br>
                                     <div class="full-description visible">
                                         <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
                                     </div>
@@ -93,6 +93,9 @@
                                     </div>
                                     {% if current_user.is_authenticated %}
                                         <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                        {% with time_left_and_status=listing.id|get_time_left %}
+                                            <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span></br>
+                                        {% endwith %} 
                                     {% endif %}
                                     
                                 </p>    
