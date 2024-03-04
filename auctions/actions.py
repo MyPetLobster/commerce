@@ -1,22 +1,79 @@
+from django.contrib import messages as contrib_messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 import decimal
 
-from django.contrib import messages as contrib_messages
-from django.contrib.auth.decorators import login_required
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-
 from . import helpers
+from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Winner, Comment, Transaction
 from .tasks import notify_winner, transfer_to_escrow, transfer_to_seller
-from .classes import UserInfoForm
 
 
 
 
+# INDEX/LISTINGS FUNCTIONS
+def sort(request):
+    # Sort Form Fields: Title, Seller, Date, Price
+    # Sort Order: Ascending, Descending
+    page = request.POST["page"]
+    sort_by = request.POST["sort-by"]
+    sort_by_direction = request.POST["sort-by-direction"]
+
+
+    listings = Listing.objects.all()
+
+    if sort_by == "title":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("title")
+        else:
+            listings = listings.order_by("-title")
+    elif sort_by == "seller":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("user")
+        else:
+            listings = listings.order_by("-user")
+    elif sort_by == "date":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("date")
+        else:
+            listings = listings.order_by("-date")
+    elif sort_by == "price":
+        if sort_by_direction == "asc":
+            listings = listings.order_by("price")
+        else:
+            listings = listings.order_by("-price")
+    else:
+        listings = listings
+        
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+    if page == "index":
+        return render(request, "auctions/index.html", {
+            "listings": listings,
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
+    elif page == "listings":
+        winners = Winner.objects.all()
+        return render(request, "auctions/listings.html", {
+            "listings": listings,
+            "winners": winners,
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
+    
+
+
+
+# LISTING FUNCTIONS
 @login_required
 def add_to_watchlist(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -91,6 +148,9 @@ def comment(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+
+
+# PROFILE FUNCTIONS
 @login_required
 def edit(request, user_id):
     user = User.objects.get(pk=user_id)
@@ -130,63 +190,9 @@ def change_password(request, user_id):
     })
 
 
-def sort(request):
-    # Sort Form Fields: Title, Seller, Date, Price
-    # Sort Order: Ascending, Descending
-    page = request.POST["page"]
-    sort_by = request.POST["sort-by"]
-    sort_by_direction = request.POST["sort-by-direction"]
 
 
-    listings = Listing.objects.all()
-
-    if sort_by == "title":
-        if sort_by_direction == "asc":
-            listings = listings.order_by("title")
-        else:
-            listings = listings.order_by("-title")
-    elif sort_by == "seller":
-        if sort_by_direction == "asc":
-            listings = listings.order_by("user")
-        else:
-            listings = listings.order_by("-user")
-    elif sort_by == "date":
-        if sort_by_direction == "asc":
-            listings = listings.order_by("date")
-        else:
-            listings = listings.order_by("-date")
-    elif sort_by == "price":
-        if sort_by_direction == "asc":
-            listings = listings.order_by("price")
-        else:
-            listings = listings.order_by("-price")
-    else:
-        listings = listings
-        
-    current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
-    if page == "index":
-        return render(request, "auctions/index.html", {
-            "listings": listings,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
-    elif page == "listings":
-        winners = Winner.objects.all()
-        return render(request, "auctions/listings.html", {
-            "listings": listings,
-            "winners": winners,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
-    
-
-# Money Related Functions
+# Profile - Money Related Functions
 @login_required
 def deposit(request, user_id):
     fake_bank_account = User.objects.get(pk=13)
@@ -238,10 +244,14 @@ def withdraw(request, user_id):
     return redirect("profile", user_id=user_id)
 
 
-# Seller will have a button on profile to confirm shipping.
-# Once pressed, money will be transferred from escrow to seller.
 @login_required
 def confirm_shipping(listing_id):
+    '''
+    Seller will have a button on profile to confirm shipping once the 
+    winner's funds have been transferred to escrow.
+
+    Once pressed, money will be transferred from escrow to seller.
+    '''
     listing = Listing.objects.get(pk=listing_id)
     if listing.shipped == False:
         if transfer_to_seller(listing_id):
@@ -252,6 +262,8 @@ def confirm_shipping(listing_id):
 
 
 
+
+# MESSAGES FUNCTIONS
 def sort_messages(request):
     current_user = request.user
     
@@ -287,6 +299,14 @@ def mark_as_read(request, message_id):
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
 
+def mark_all_as_read(request, user_id):
+    messages = Message.objects.filter(recipient=request.user)
+    for message in messages:
+        message.read = True
+        message.save()
+    return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+
+
 def delete_message(request, message_id):
     current_user = request.user
     message = Message.objects.get(pk=message_id)
@@ -295,9 +315,3 @@ def delete_message(request, message_id):
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
 
-def mark_all_as_read(request, user_id):
-    messages = Message.objects.filter(recipient=request.user)
-    for message in messages:
-        message.read = True
-        message.save()
-    return HttpResponseRedirect(reverse("messages", args=(user_id,)))

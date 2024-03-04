@@ -3,6 +3,9 @@ from django.forms import ModelForm
 
 from .models import Listing, Comment, User
 
+
+
+
 # Form Models for Listings, Comments, and User Info
 class ListingForm(ModelForm):
     class Meta:
@@ -23,6 +26,7 @@ class ListingForm(ModelForm):
             'categories': forms.CheckboxSelectMultiple(attrs={'class': 'category-checkbox'}),
         }
 
+
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
@@ -31,6 +35,7 @@ class CommentForm(ModelForm):
             'comment': forms.Textarea(attrs={'class': 'form-control', 'id': 'comment'}),
             'anonymous': forms.CheckboxInput(attrs={'class': 'anon-checkbox'}),
         }
+
 
 class UserInfoForm(ModelForm):
     class Meta:
@@ -48,6 +53,7 @@ class UserInfoForm(ModelForm):
         }
 
 
+# Class to hold user bid info, used in views.profile
 class UserBidInfo:
     def __init__(self, user_bid, is_old_bid):
         self.user_bid = user_bid

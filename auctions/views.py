@@ -1,8 +1,3 @@
-import decimal 
-import logging
-from datetime import timedelta, timezone
-
-
 from django.contrib import messages as contrib_messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -12,19 +7,22 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.urls import reverse
 from django.utils import timezone
 
+import decimal 
+import logging
+from datetime import timedelta, timezone
+
 from . import helpers
-from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction, Message
+from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist, Winner
 from .tasks import send_message
-from .classes import UserInfoForm, ListingForm, CommentForm, UserBidInfo
+from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
+
 
 logger = logging.getLogger(__name__)
 
 
 
 
-
-
-# Authentication Views
+# VIEWS - AUTHENTICATION
 def login_view(request):
     if request.method == "POST":
 
@@ -76,7 +74,7 @@ def register(request):
 
 
 
-# Views - Public
+# VIEWS - PUBLIC
 def categories(request):
     categories = get_list_or_404(Category.objects.all())
     current_user = request.user
@@ -216,7 +214,7 @@ def listing(request, listing_id):
 
 
 
-# Views - Login Required
+# VIEWS - LOGIN REQUIRED
 @login_required
 def create(request):
     if request.method == "POST":
@@ -295,9 +293,12 @@ def profile(request, user_id):
     })
 
 
-# View all transaction and bid history. Can only view own transactions.
 @login_required
 def transactions(request, user_id):
+    '''
+    View all bid and transaction history, link will only
+    appear on a user's own profile page
+    '''
     current_user = request.user
     if user_id != current_user.id:
         return HttpResponse("Unauthorized", status=401)
@@ -380,16 +381,3 @@ def messages(request, user_id):
         'sort_by_direction': sort_by_direction,
         'show_read_messages': show_read_messages
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
