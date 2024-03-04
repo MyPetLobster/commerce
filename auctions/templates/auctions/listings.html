@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% load custom_filters %}
+
 {% load static %}
 
 {% block title %}
@@ -76,7 +78,7 @@
                     <div class="thumb-title-div">
                         {% if listing.image != "" %}
                             <div class="thumb-div">
-                                <img src="{{ listing.image }}" height="120">
+                                <img src="{{ listing.image }}" height="120" width="120">
                             </div>
                         {% else %}
                             <div class="thumb-div">
@@ -93,7 +95,12 @@
                                 <div class="truncated-description hidden">
                                     <span class="bold">Description:&nbsp; </span> <span class="expand-link">{{ listing.description|truncatechars:125 }}</span></br>
                                 </div>
-                                <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a> 
+                                {% if current_user.is_authenticated %}
+                                        <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
+                                        {% with time_left_and_status=listing.id|get_time_left %}
+                                            <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span></br>
+                                        {% endwith %} 
+                                {% endif %}
                             </p>    
                         </div>
 
