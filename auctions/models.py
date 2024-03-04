@@ -40,6 +40,7 @@ class Category(models.Model):
 
 class Listing(models.Model):
     active = models.BooleanField(default=True)
+    in_escrow = models.BooleanField(default=False)
     shipped = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, related_name="listings")
