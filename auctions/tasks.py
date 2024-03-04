@@ -44,10 +44,8 @@ def check_listing_expiration():
                     listing=listing,
                     user=highest_bid.user
                 )
-                winner.save()
 
                 transfer_to_escrow(winner)
-                   
                 notify_winner(winner, listing)
             else: 
                 pass
@@ -125,13 +123,12 @@ def transfer_to_escrow(winner):
         return False
         #TODO: add error message and email notification to buyer
     else:
-        transaction = Transaction.objects.create(
+        Transaction.objects.create(
             sender=buyer,
             recipient=escrow_account,
             amount=amount,
             listing=listing
         )
-        transaction.save()
 
         buyer.balance -= amount
         buyer.save()
@@ -180,13 +177,13 @@ def transfer_to_seller(listing_id):
     
 
 def send_message(sender, recipient, subject, message):
-    message = Message.objects.create(
+    Message.objects.create(
         sender=sender,
         recipient=recipient,
         subject=subject,
         message=message
     )
-    message.save()
+    
 
 @shared_task
 def check_bids_funds(request, listing_id):

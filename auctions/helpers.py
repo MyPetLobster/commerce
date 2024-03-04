@@ -135,7 +135,6 @@ def place_bid(request, amount, listing_id):
                 listing=listing,
                 user=current_user
             )
-            bid.save()
             
             admin = User.objects.get(pk=2)
             bidder = current_user
@@ -144,11 +143,11 @@ def place_bid(request, amount, listing_id):
             send_message(admin, bidder, subject, message)
 
             if check_if_watchlist(current_user, listing) == False:
-                watchlist_item = Watchlist.objects.create(
+                Watchlist.objects.create(
                     user=current_user,
                     listing=listing
                 )
-                watchlist_item.save()
+
 
             if check_bids_funds(request, listing_id) == True:
                 listing.price = bid.amount

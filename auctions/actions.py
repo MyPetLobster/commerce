@@ -117,7 +117,6 @@ def close_listing(request, listing_id):
                 listing=listing,
                 user=highest_bid.user
             )
-            winner.save()
             notify_winner(winner, listing)
             transfer_to_escrow(winner)
         else:
@@ -144,7 +143,6 @@ def comment(request, listing_id):
         listing=listing,
         user=request.user
     )
-    comment.save()
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
@@ -203,12 +201,11 @@ def deposit(request, user_id):
         contrib_messages.error(request, "Deposit amount must be greater than 0")
         return redirect("profile", user_id=user_id)
     
-    transaction = Transaction.objects.create(
+    Transaction.objects.create(
         amount=amount,
         sender=fake_bank_account,
         recipient=user
     )
-    transaction.save()
 
     fake_bank_account.balance -= decimal.Decimal(amount)
     fake_bank_account.save()
@@ -230,12 +227,11 @@ def withdraw(request, user_id):
         contrib_messages.error(request, "Insufficient funds")
         return redirect("profile", user_id=user_id)
     
-    transaction = Transaction.objects.create(
+    Transaction.objects.create(
         amount=amount,
         sender=user,
         recipient=fake_bank_account
     )
-    transaction.save()
 
     fake_bank_account.balance += amount
     fake_bank_account.save()
