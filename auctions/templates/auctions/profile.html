@@ -229,6 +229,13 @@
     </div>
 </div>
 
+<div class="center-container">
+    <p>See Dangerous Options</p>
+    <div class="delete-account-div">
+
+    </div>
+</div>
+<div class="divider-med"></div>
 <script>
     const transactionHistoryLink = document.getElementById('transaction-history-link');
     const bidHistoryLink = document.getElementById('bid-history-link');
@@ -240,7 +247,7 @@
     bidHistoryLink.addEventListener('click', () => {
         localStorage.setItem('transactions-page-section', 'bids');
     });
-    
+
     const sendMsgButton = document.getElementById('send-usr-msg-btn');
     const sendMsgForm = document.getElementById('send-usr-msg-form');
     const cancelMsg = document.getElementById('cancel-usr-msg');
