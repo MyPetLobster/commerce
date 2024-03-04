@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% load custom_filters %}
+
 {% block title %}
     {{ user.username }}'s Profile
 {% endblock %}
@@ -149,11 +151,16 @@
                 
                     {% if bid_info.user_bid.listing.active == True %}
                         <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
-                            {% if bid_info.user_bid.amount == bid_info.highest_bid %}
-                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(current highest bid)</span></p>
-                            {% else %}
-                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">(${{ bid_info.difference }} less than highest bid) </span></p>
-                        {% endif %}
+                            <p>
+                                {% if bid_info.user_bid.amount == bid_info.highest_bid %}
+                                    <span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(current highest bid)</span></br>
+                                {% else %}
+                                    <span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">(${{ bid_info.difference }} less than highest bid) </span></br>
+                                {% endif %}
+                            {% with time_left_and_status=bid_info.user_bid.listing.id|get_time_left %}
+                                <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>
+                            {% endwith %} 
+                        </p>
                     {% else %}
                         <div class="expired-bid">
                             <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>

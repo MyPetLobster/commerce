@@ -27,10 +27,18 @@ def get_time_left(listing_id):
     now = timezone.now()
     time_left = listing.date + timezone.timedelta(days=7) - now
     if time_left.days < 1:
-        status = 'red'
+        if time_left.seconds < 43200:
+            status = 'red'
+        else:
+            status = 'orange'
     elif time_left.days < 2:
         status = 'yellow'
     else:
         status = 'green'
-    time_left = f'{time_left.days} days, {time_left.seconds//3600} hours, {(time_left.seconds//60)%60} minutes left'
+    if time_left.days < 0:
+        time_left = 'Auction Ended'
+    elif time_left.days == 0:
+        time_left = f'{time_left.seconds//3600} hours, {(time_left.seconds//60)%60} minutes left'
+    else:
+        time_left = f'{time_left.days} days, {time_left.seconds//3600} hours, {(time_left.seconds//60)%60} minutes left'
     return time_left, status
