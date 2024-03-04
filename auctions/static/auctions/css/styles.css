@@ -1,3 +1,15 @@
+/* Dark Mode/Light Mode */
+.light-mode {
+  background-color: #e2e2e2;
+  color: #303133;
+}
+
+.dark-mode {
+  background-color: #303133;
+  color: #f4f4f4;
+}
+
+/* General Styles */
 .mail-icon-div {
   display: flex;
   flex-direction: row;
@@ -19,18 +31,6 @@
   font-size: 0.7em;
 }
 
-/* Dark Mode/Light Mode */
-.light-mode {
-  background-color: #e2e2e2;
-  color: #303133;
-}
-
-.dark-mode {
-  background-color: #303133;
-  color: #f4f4f4;
-}
-
-/* General Styles */
 .yard-sale {
   padding: 0;
   font-family: "Caveat", cursive;
@@ -876,6 +876,49 @@ footer li {
   color: #1f3f1a;
 }
 
+.expired-bid {
+  color: #6c757d;
+  font-style: italic;
+}
+.expired-bid a,
+.expired-bid p,
+.expired-bid span {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.winning-bid-active {
+  color: #f4f4f4;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.winning-bid-closed {
+  color: #1f3f1a;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+.losing-bid-active {
+  font-size: 0.9em;
+}
+
+.losing-bid-closed {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+#bids-table {
+  text-align: center;
+}
+#bids-table a {
+  color: #f4f4f4;
+}
+#bids-table a:hover {
+  color: #983554;
+}
+
 /* MESSAGES PAGE */
 .message-div,
 .message-div-full {
@@ -1006,49 +1049,6 @@ footer li {
   color: #983554 !important;
   text-decoration: underline;
   font-size: 0.9em;
-}
-
-.expired-bid {
-  color: #6c757d;
-  font-style: italic;
-}
-.expired-bid a,
-.expired-bid p,
-.expired-bid span {
-  color: #6c757d;
-  font-style: italic;
-}
-
-.winning-bid-active {
-  color: #f4f4f4;
-  font-weight: bold;
-  font-size: 0.9em;
-}
-
-.winning-bid-closed {
-  color: #1f3f1a;
-  font-style: italic;
-  font-size: 0.9em;
-}
-
-.losing-bid-active {
-  font-size: 0.9em;
-}
-
-.losing-bid-closed {
-  color: #6c757d;
-  font-style: italic;
-  font-size: 0.9em;
-}
-
-#bids-table {
-  text-align: center;
-}
-#bids-table a {
-  color: #f4f4f4;
-}
-#bids-table a:hover {
-  color: #983554;
 }
 
 /*# sourceMappingURL=styles.css.map */

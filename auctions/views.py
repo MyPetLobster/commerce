@@ -9,7 +9,7 @@ from django.utils import timezone
 
 import decimal 
 import logging
-from datetime import timedelta, timezone
+from datetime import timedelta
 
 from . import helpers
 from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist, Winner

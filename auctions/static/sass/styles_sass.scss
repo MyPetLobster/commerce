@@ -4,14 +4,12 @@
   justify-content: center;
   gap: 10px;
 }
-
 @mixin flex-column {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
 }
-
 @mixin floating-form {
   position: fixed;
   top: 50%;
@@ -19,7 +17,6 @@
   transform: translate(-50%, -50%);
   z-index: 9999;
 }
-
 @mixin universal-form {
   display: block;
   color: $text-color-light;
@@ -34,11 +31,13 @@
     margin-bottom: 10px;
   }
 }
-
 @mixin cursor-pointer-transition {
   cursor: pointer;
   transition: 0.15s;
 }
+
+
+
 
 $text-color-dark: #303133;
 $text-color-light: #f4f4f4;
@@ -60,6 +59,21 @@ $pale-pink: #976f7b;
 $yellow: #e6d00c;
 $orange: #b36f1b;
 
+
+
+
+/* Dark Mode/Light Mode */
+.light-mode {
+  background-color: $background-color-light;
+  color: $text-color-dark;
+}
+.dark-mode {
+  background-color: $background-color-dark;
+  color: $text-color-light;
+}
+
+
+/* General Styles */
 .mail-icon-div {
   @include flex-row;
   @include cursor-pointer-transition;
@@ -75,18 +89,6 @@ $orange: #b36f1b;
   padding: 8px 10px 8px 10px;
   font-size: 0.7em;
 }
-
-/* Dark Mode/Light Mode */
-.light-mode {
-  background-color: $background-color-light;
-  color: $text-color-dark;
-}
-.dark-mode {
-  background-color: $background-color-dark;
-  color: $text-color-light;
-}
-
-/* General Styles */
 .yard-sale {
   padding: 0;
   font-family: "Caveat", cursive;
@@ -170,6 +172,7 @@ p {
   height: 40px;
 }
 
+
 /* LINK STYLES */
 a {
   color: $link-color;
@@ -185,6 +188,7 @@ a:hover {
 .small-a {
   font-size: 1em;
 }
+
 
 /* ALERT MESSAGE STYLES */
 .alert-div {
@@ -211,6 +215,7 @@ a:hover {
   font-weight: bold;
 }
 
+
 /* FORM STYLES */
 /* All input fields font-size and focus */
 .form-control {
@@ -225,6 +230,8 @@ a:hover {
   font-weight: bold;
   margin-bottom: 10px;
 }
+
+
 /* Dynamic Form and Description */
 .hidden {
   display: none;
@@ -316,6 +323,7 @@ legend {
   margin: 0;
 }
 
+
 /* NAV and FOOTER STYLES*/
 .nav-container {
   @include flex-row;
@@ -368,6 +376,7 @@ footer {
     list-style-type: none;
   }
 }
+
 
 /* ALL BUTTON STYLES */
 .btn {
@@ -432,6 +441,7 @@ footer {
   background-color: $cancel-color-hover;
 }
 
+
 /* CREATE LISTING PAGE */
 .create-form-div {
   @include flex-column;
@@ -463,6 +473,7 @@ footer {
     }
   }
 }
+
 
 /* INDEX and LISTINGS  */
 /* Individual Listing */
@@ -542,6 +553,7 @@ footer {
   color: $primary-pink;
 }
 
+
 /* LISTING PAGE */
 .listing-desc {
   width: 450px;
@@ -614,6 +626,7 @@ footer {
   }
 }
 
+
 /* PROFILE PAGE */
 .profile-page-content {
   @include flex-column;
@@ -638,6 +651,7 @@ footer {
 .account-balance {
   @include flex-column;
 }
+
 
 /* WATCHLIST PAGE */
 .watchlist-content {
@@ -673,6 +687,7 @@ footer {
   }
 }
 
+
 /* CATEGORY and CATEGORIES PAGES */
 #h1-all-categories {
   margin-bottom: 50px;
@@ -688,6 +703,7 @@ footer {
 .categories-li {
   font-size: 0.9em;
 }
+
 
 /* TRANSACTIONS PAGE */
 .transactions-table {
@@ -711,113 +727,6 @@ footer {
 .deposit-amt {
   color: $money-green-hover;
 }
-
-/* MESSAGES PAGE */
-.message-div,
-.message-div-full {
-  width: 600px;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-}
-
-.message-sender,
-.message-summary {
-  width: 100%;
-  @include flex-row;
-  justify-content: space-between;
-}
-
-#read-unread {
-  @include cursor-pointer-transition;
-  font-size: 0.8em;
-  color: $medium-gray;
-}
-#read-unread:hover {
-  color: $primary-pink;
-}
-
-.reply-delete-div {
-  @include flex-row;
-  width: 100%;
-  justify-content: center;
-  gap: 60px;
-  margin-top: -6px;
-  margin-bottom: 20px;
-}
-.reply-button {
-  @include cursor-pointer-transition;
-  color: $primary-pink;
-}
-.reply-button:hover {
-  color: $btn-hover;
-}
-.reply-button:active {
-  color: $btn-focus;
-}
-
-.mark-as-unread-button {
-  @include cursor-pointer-transition;
-  color: $medium-gray;
-}
-.mark-as-unread-button:hover {
-  color: $primary-pink;
-}
-.mark-as-unread-button:active {
-  color: $btn-focus;
-}
-
-.mark-as-read-button {
-  @include cursor-pointer-transition;
-  color: $primary-pink;
-}
-.mark-as-read-button:hover {
-  color: $nav-color;
-}
-.mark-as-read-button:active {
-  color: $medium-gray;
-}
-
-.delete-msg-button {
-  @include cursor-pointer-transition;
-  color: $cancel-color;
-}
-.delete-msg-button:hover {
-  color: $cancel-color-hover;
-}
-.delete-msg-button:active {
-  color: $cancel-color-hover;
-}
-
-.newest-oldest-msgs-div {
-  @include flex-row;
-  width: 100%;
-  justify-content: center;
-  gap: 40px;
-}
-
-#newest-first,
-#oldest-first,
-.mark-all-read,
-.show-hide-button {
-  @include cursor-pointer-transition;
-  font-size: 0.8em;
-  color: $medium-gray;
-}
-#newest-first:hover,
-#oldest-first:hover,
-.mark-all-read:hover,
-.show-hide-button:hover {
-  color: $primary-pink;
-}
-
-.bold-underline {
-  font-weight: bold;
-  color: $btn-hover !important;
-  text-decoration: underline;
-  font-size: 0.9em;
-}
-
 .expired-bid {
   color: $medium-gray;
   font-style: italic;
@@ -829,7 +738,6 @@ footer {
     font-style: italic;
   }
 }
-
 .winning-bid-active {
   color: $text-color-light;
   font-weight: bold;
@@ -848,7 +756,6 @@ footer {
   font-style: italic;
   font-size: 0.9em;
 }
-
 #bids-table {
   text-align: center;
   a {
@@ -857,4 +764,102 @@ footer {
   a:hover {
     color: $btn-hover;
   }
+}
+
+
+/* MESSAGES PAGE */
+.message-div,
+.message-div-full {
+  width: 600px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+.message-sender,
+.message-summary {
+  width: 100%;
+  @include flex-row;
+  justify-content: space-between;
+}
+#read-unread {
+  @include cursor-pointer-transition;
+  font-size: 0.8em;
+  color: $medium-gray;
+}
+#read-unread:hover {
+  color: $primary-pink;
+}
+.reply-delete-div {
+  @include flex-row;
+  width: 100%;
+  justify-content: center;
+  gap: 60px;
+  margin-top: -6px;
+  margin-bottom: 20px;
+}
+.reply-button {
+  @include cursor-pointer-transition;
+  color: $primary-pink;
+}
+.reply-button:hover {
+  color: $btn-hover;
+}
+.reply-button:active {
+  color: $btn-focus;
+}
+.mark-as-unread-button {
+  @include cursor-pointer-transition;
+  color: $medium-gray;
+}
+.mark-as-unread-button:hover {
+  color: $primary-pink;
+}
+.mark-as-unread-button:active {
+  color: $btn-focus;
+}
+.mark-as-read-button {
+  @include cursor-pointer-transition;
+  color: $primary-pink;
+}
+.mark-as-read-button:hover {
+  color: $nav-color;
+}
+.mark-as-read-button:active {
+  color: $medium-gray;
+}
+.delete-msg-button {
+  @include cursor-pointer-transition;
+  color: $cancel-color;
+}
+.delete-msg-button:hover {
+  color: $cancel-color-hover;
+}
+.delete-msg-button:active {
+  color: $cancel-color-hover;
+}
+.newest-oldest-msgs-div {
+  @include flex-row;
+  width: 100%;
+  justify-content: center;
+  gap: 40px;
+}
+#newest-first,
+#oldest-first,
+.mark-all-read,
+.show-hide-button {
+  @include cursor-pointer-transition;
+  font-size: 0.8em;
+  color: $medium-gray;
+}
+#newest-first:hover,
+#oldest-first:hover,
+.mark-all-read:hover,
+.show-hide-button:hover {
+  color: $primary-pink;
+}
+.bold-underline {
+  font-weight: bold;
+  color: $btn-hover !important;
+  text-decoration: underline;
+  font-size: 0.9em;
 }

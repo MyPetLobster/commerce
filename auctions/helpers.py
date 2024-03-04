@@ -5,7 +5,7 @@ from django.utils import timezone
 
 import logging
 import math
-from datetime import timedelta, timezone
+from datetime import timedelta
 
 from .models import Bid, Winner, Listing, Watchlist, User, Message
 from .tasks import check_bids_funds, notify_winner, send_message, transfer_to_escrow
