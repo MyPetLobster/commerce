@@ -115,7 +115,7 @@
                 <td class="winning-bid">
                     {% if bid.listing.active == True %}
                         {% if bid.amount == bid.listing.price %}
-                            Winning
+                            <span class="dark-green">Winning</span>
                         {% else %}
                             <span class="red" style="font-style:italic;">
                                 (${{ bid.listing.price|subtract:bid.amount }} behind)
@@ -123,9 +123,9 @@
                         {% endif %}
                     {% else %}
                         {% if bid.listing.winner == user %}
-                            WON!
+                            <span class="green">WON!</span>
                         {% else %}
-                            Lost
+                            <span class="red">Lost</span>
                         {% endif %}
                     {% endif %}
                 </td>

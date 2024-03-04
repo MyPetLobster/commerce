@@ -146,6 +146,9 @@ p {
 .green {
   color: $money-green;
 }
+.dark-green {
+  color: $money-green-hover;
+}
 .center-container {
   width: 100%;
   @include flex-column;
@@ -819,7 +822,7 @@ footer {
 }
 
 .winning-bid-active {
-  color: $money-green;
+  color: $text-color-light;
   font-weight: bold;
   font-size: 0.9em;
 }
@@ -840,7 +843,7 @@ footer {
 #bids-table {
   text-align: center;
   a {
-    color: $text-color-dark;
+    color: $text-color-light;
   }
   a:hover {
     color: $btn-hover;

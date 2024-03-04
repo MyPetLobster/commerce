@@ -111,6 +111,10 @@ p {
   color: #2d6128;
 }
 
+.dark-green {
+  color: #1f3f1a;
+}
+
 .center-container {
   width: 100%;
   display: flex;
@@ -1008,7 +1012,7 @@ footer li {
 }
 
 .winning-bid-active {
-  color: #2d6128;
+  color: #f4f4f4;
   font-weight: bold;
   font-size: 0.9em;
 }
@@ -1033,7 +1037,7 @@ footer li {
   text-align: center;
 }
 #bids-table a {
-  color: #303133;
+  color: #f4f4f4;
 }
 #bids-table a:hover {
   color: #983554;
