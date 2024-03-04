@@ -1,6 +1,5 @@
 import decimal 
 import logging
-import math
 from datetime import timedelta, timezone
 
 from django import forms
@@ -14,9 +13,9 @@ from django.urls import reverse
 from django.forms import ModelForm
 from django.utils import timezone
 
+from . import helpers
 from .models import User, Listing, Category, Bid, Comment, Watchlist, Winner, Transaction, Message
-from .tasks import send_error_notification, transfer_to_escrow, transfer_to_seller, notify_winner, send_message, check_bids_funds
-
+from .tasks import transfer_to_escrow, transfer_to_seller, notify_winner, send_message
 
 logger = logging.getLogger(__name__)
 
@@ -162,8 +161,7 @@ def index(request):
         unread_messages = Message.objects.filter(recipient=current_user, read=False)
         unread_message_count = unread_messages.count()
 
-        #TODO: Handle closing logic here
-        set_inactive(listings)
+        helpers.set_inactive(listings)
 
         return render(request, "auctions/index.html" , {
             "listings": listings,
@@ -186,7 +184,7 @@ def listings(request):
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
 
-    set_inactive(listings)
+    helpers.set_inactive(listings)
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
@@ -207,13 +205,13 @@ def listing(request, listing_id):
     diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
 
     # Generate time left string for JavaScript display, live countdown
-    if check_expiration(listing_id) == "closed - expired":
+    if helpers.check_expiration(listing_id) == "closed - expired":
         closed_date = listing.date + timedelta(days=7)
         time_left = f"Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
-    elif check_expiration(listing_id) == "closed - by seller":
+    elif helpers.check_expiration(listing_id) == "closed - by seller":
         time_left = "Listing closed by seller"
     else:
-        time_left = generate_time_left_string(diff_seconds)
+        time_left = helpers.generate_time_left_string(diff_seconds)
 
     # POST Request - Place Bid
     if request.method == "POST":
@@ -228,17 +226,17 @@ def listing(request, listing_id):
             if amount > current_user.balance:
                 contrib_messages.add_message(request, contrib_messages.ERROR, "Insufficient funds")
             else:
-                success, updated_listing = place_bid(request, amount, listing_id)
+                success, updated_listing = helpers.place_bid(request, amount, listing_id)
                 if success:
                     listing = updated_listing
         else:
-            success, updated_listing = place_bid(request, amount, listing_id)      
+            success, updated_listing = helpers.place_bid(request, amount, listing_id)      
             if success:
                 listing = updated_listing 
     
     
     # Get values to pass to template
-    winner, user_bid, difference, watchlist_item = get_listing_values(request, listing)
+    winner, user_bid, difference, watchlist_item = helpers.get_listing_values(request, listing)
     messages = contrib_messages.get_messages(request)
     comments = Comment.objects.filter(listing=listing)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -258,76 +256,6 @@ def listing(request, listing_id):
         "messages": messages
     })
 
-# Index, Listing, Listings Helper Functions
-def set_inactive(listings):
-    for listing in listings:
-        if listing.date + timedelta(days=7) < timezone.now():
-            listing.active = False
-            listing.save()
-            try: 
-                declare_winner(listing)
-            except:
-                pass
-        else:
-            pass
-
-
-def check_expiration(listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if listing.active:
-        now = timezone.now()
-        if listing.date + timedelta(days=7) < now:
-            listing.active = False
-            listing.save()
-            try:
-                declare_winner(listing)
-            except:
-                pass
-            return "closed - expired"
-        else:
-            return "active"
-    else:
-        if listing.date + timedelta(days=7) < timezone.now():
-            return "closed - expired"
-        else:
-            return "closed - by seller"
-        
-
-def get_listing_values(request, listing):
-    try:
-        winner = Winner.objects.get(listing=listing)
-    except Winner.DoesNotExist:
-        winner = None
-    try:
-        user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()
-    except:
-        user_bid = None
-    try:
-        difference = listing.price - user_bid.amount
-    except:
-        difference = None
-    try:
-        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
-    except:
-        watchlist_item = None
-    if watchlist_item.exists():
-        pass
-    else:
-        watchlist_item = "not on watchlist"
-
-    return winner, user_bid, difference, watchlist_item
-
-
-def generate_time_left_string(difference_seconds):
-    # Generate time left string to be handled in the template JS
-    seconds_left = max(0, 604800 - difference_seconds)
-    days_left, seconds_left = divmod(seconds_left, 86400)
-    hours_left, remainder = divmod(seconds_left, 3600)
-    minutes_left, seconds_left = divmod(remainder, 60)
-    seconds_left = math.floor(seconds_left)
-    time_left = f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
-
-    return time_left
 
 
 
@@ -386,13 +314,7 @@ class UserBidInfo:
         self.is_old_bid = is_old_bid
 
 
-def check_if_old_bid(bid, listing):
-    user_bids = Bid.objects.filter(user=bid.user, listing=listing)
-    if user_bids.count() > 1:
-        if bid.amount < listing.price:
-            return True
-        else:
-            return False
+
 
 
 @login_required
@@ -410,7 +332,7 @@ def profile(request, user_id):
 
     for bid in user_bids:
         bid_listing = bid.listing
-        is_old_bid = check_if_old_bid(bid, bid_listing)
+        is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
 
         user_bid_info = UserBidInfo(bid, is_old_bid)
 
@@ -437,54 +359,9 @@ def profile(request, user_id):
 
 # ACTION VIEWS
 
-# helper for place_bid
-def check_if_watchlist(user, listing):
-    watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
-    if watchlist_item.exists():
-        return True
-    else:
-        return False
+
     
-@login_required
-def place_bid(request, amount, listing_id):
-    try: 
-        listing = Listing.objects.get(pk=listing_id)
-        current_price = listing.price
-        current_user = request.user
 
-        if amount <= current_price:
-            return False, listing
-        else:
-            bid = Bid.objects.create(
-                amount=amount,
-                listing=listing,
-                user=current_user
-            )
-            bid.save()
-            
-            admin = User.objects.get(pk=2)
-            bidder = current_user
-            subject = f"New bid on {listing.title}"
-            message = f"You placed a bid of ${amount} on {listing.title}. Good luck!"
-            send_message(admin, bidder, subject, message)
-
-            if check_if_watchlist(current_user, listing) == False:
-                watchlist_item = Watchlist.objects.create(
-                    user=current_user,
-                    listing=listing
-                )
-                watchlist_item.save()
-
-            if check_bids_funds(request, listing_id) == True:
-                listing.price = bid.amount
-                listing.save()
-                return True, listing
-            else:
-                return False, listing
-        
-    except (Listing.DoesNotExist, ValueError, IntegrityError) as e:
-        logger.error(f"Error placing bid: {e}")
-        return False
     
 
 @login_required
@@ -510,13 +387,12 @@ def add_to_watchlist(request, listing_id):
 
 @login_required
 def remove_from_watchlist(request, listing_id):
-    if request.method == "POST":
-        try:
-            watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
-            watchlist_item.delete()
-        except Watchlist.DoesNotExist:
-            contrib_messages.add_message(request, contrib_messages.ERROR, "Listing not on watchlist")
-        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+    try:
+        watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
+        watchlist_item.delete()
+    except Watchlist.DoesNotExist:
+        contrib_messages.add_message(request, contrib_messages.ERROR, "Listing not on watchlist")
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     
 
 @login_required
@@ -753,7 +629,6 @@ def transactions(request, user_id):
     })
 
 
-# Handle sending msgs and the messages view
 @login_required
 def messages(request, user_id):
 
@@ -788,10 +663,10 @@ def messages(request, user_id):
         return HttpResponse("Unauthorized", status=401)
     
     # Dynamic Show Read Messages
-    sent_messages, inbox_messages, show_read_messages = show_hide_read_messages(request)
+    sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
 
     # Dynamic Sort Messages
-    sent_messages, inbox_messages, sort_by_direction = determine_message_sort(request, sent_messages, inbox_messages)
+    sent_messages, inbox_messages, sort_by_direction = helpers.determine_message_sort(request, sent_messages, inbox_messages)
     
     # alert-msgs
     messages = contrib_messages.get_messages(request)
@@ -810,52 +685,6 @@ def messages(request, user_id):
     })
 
 
-def determine_message_sort(request, sent_messages, inbox_messages):
-    try:
-        if request.session["sort_by_direction"] == None:
-            sort_by_direction = "newest-first"
-            request.session["sort_by_direction"] = sort_by_direction
-        else:
-            sort_by_direction = request.session["sort_by_direction"]
-    except:
-        sort_by_direction = "newest-first"
-        request.session["sort_by_direction"] = sort_by_direction
-
-    if sort_by_direction == "oldest-first":
-        sent_messages = sent_messages.order_by("date")
-        inbox_messages = inbox_messages.order_by("date")
-    else:
-        sent_messages = sent_messages.order_by("-date")
-        inbox_messages = inbox_messages.order_by("-date")
-
-    return sent_messages, inbox_messages, sort_by_direction
-
-
-def show_hide_read_messages(request):  
-    current_user = request.user
-    try:
-        if request.session["show_read"] == None:
-            request.session["show_read"] = False
-        
-        if request.session["show_read"] == True:
-            show_read_messages = "True"
-        else:
-            show_read_messages = "False"
-    except:
-        show_read_messages = "False"
-
-    if show_read_messages == "True":
-        sent_messages = Message.objects.filter(sender=current_user)
-        inbox_messages = Message.objects.filter(recipient=current_user)
-    else:
-        sent_messages = Message.objects.filter(sender=current_user, read=False)
-        inbox_messages = Message.objects.filter(recipient=current_user, read=False)
-
-    sent_messages = sent_messages.exclude(deleted_by=current_user)
-    inbox_messages = inbox_messages.exclude(deleted_by=current_user)
-
-    return sent_messages, inbox_messages, show_read_messages
-
 def sort_messages(request):
     current_user = request.user
     
@@ -863,8 +692,8 @@ def sort_messages(request):
         sort_by_direction = request.POST["sort-by-direction"]
         request.session["sort_by_direction"] = sort_by_direction
 
-    sent_messages, inbox_messages, show_read_messages = show_hide_read_messages(request)
-    sent_messages, inbox_messages, sort_by_direction = determine_message_sort(request, sent_messages, inbox_messages)
+    sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
+    sent_messages, inbox_messages, sort_by_direction = helpers.determine_message_sort(request, sent_messages, inbox_messages)
 
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -890,12 +719,14 @@ def mark_as_read(request, message_id):
     message.save()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
+
 def delete_message(request, message_id):
     current_user = request.user
     message = Message.objects.get(pk=message_id)
     message.deleted_by.add(current_user)
     message.save()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
+
 
 def mark_all_as_read(request, user_id):
     messages = Message.objects.filter(recipient=request.user)
@@ -907,19 +738,7 @@ def mark_all_as_read(request, user_id):
 
 
 
-def declare_winner(listing):
-    if Winner.objects.filter(listing=listing).exists():
-        return
-    
-    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-    if highest_bid:
-        winner = Winner.objects.create(
-            amount=listing.price,
-            listing=listing,
-            user=highest_bid.user
-        )
-        notify_winner(winner, listing)
-        transfer_to_escrow(winner)
+
 
 
 
