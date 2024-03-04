@@ -59,11 +59,11 @@
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
                     <div class="fields-item">
-                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: green">${{ user_bid.amount }} (You are the current highest bidder!)</span></br>
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight green">${{ user_bid.amount }} (You are the current highest bidder!)</span></br>
                     </div>
                 {% else %}
                     <div class="fields-item">
-                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight" style="color: red">${{ user_bid.amount }} (Your bid is ${{ difference }} less than the current highest bid)</span></br>
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="lightweight red">${{ user_bid.amount }} (Your bid is ${{ difference }} less than the current highest bid)</span></br>
                     </div>
                 {% endif %} 
             {% endif %}
@@ -288,11 +288,11 @@
                 countdownElement.textContent = formattedTime;
 
                 if (hours < 1 && days < 1) {
-                    countdownElement.style.color = "red";
+                    countdownElement.classList.add('red');
                 } else if (hours < 12 && days < 1) {
-                    countdownElement.style.color = "orange";
+                    countdownElement.classList.add('orange');
                 } else if (hours < 24 && days < 1) {
-                    countdownElement.style.color = "yellow";
+                    countdownElement.classList.add('yellow');
                 } 
             }
         }, 1000);

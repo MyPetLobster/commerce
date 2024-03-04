@@ -56,6 +56,8 @@ $btn-hover: #983554;
 $money-green: #2d6128;
 $money-green-hover: #1f3f1a;
 $pale-pink: #976f7b;
+$yellow: #f0e747;
+$orange: #b36f1b;
 
 .mail-icon-div {
   @include flex-row;
@@ -142,6 +144,12 @@ p {
 }
 .red {
   color: $cancel-color;
+}
+.orange {
+  color: $orange;
+}
+.yellow {
+  color: $yellow;
 }
 .green {
   color: $money-green;

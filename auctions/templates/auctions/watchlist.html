@@ -1,9 +1,5 @@
-{% extends "auctions/layout.html" %} 
-
-{% load custom_filters %} 
-
-{% block title %} {{ current_user.username }}'s Watchlist {% endblock %} 
-{% block navbar %}
+{% extends "auctions/layout.html" %} {% load custom_filters %} {% block title %}
+{{ current_user.username }}'s Watchlist {% endblock %} {% block navbar %}
 <li class="nav-item">
   <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
 </li>
@@ -17,42 +13,48 @@
   <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
+  <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
 </li>
 
-{% endblock %} 
-{% block body %}
+{% endblock %} {% block body %}
 <div class="watchlist-content">
   <h1>{{ current_user.username }}'s Watchlist</h1>
   {% if listings %}
   <ul>
     {% for listing in listings %}
     <li class="watchlist-listing">
-
       <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
       <div style="display: inline">
-        {% if listing.active == False %} 
-          -- BIDDING CLOSED -- <br/>
-          {% for winner in winners %} 
-            {% if winner.listing == listing and winner.user == user %} 
-              You Won! (See email for details on how to proceed.) 
-            {% else %} 
-              Winner: {{ winner.user.username}}
-            {% endif %} 
-          {% endfor %} 
+        {% if listing.active == False %} -- BIDDING CLOSED -- <br />
+        {% for winner in winners %} 
+          {% if winner.listing == listing and winner.user == user %} 
+            You Won! (See email for details on how to proceed.) 
+          {% else %} 
+            Winner: {{ winner.user.username}} 
+          {% endif %} 
+        {% endfor %} 
         {% else %} 
-          Current Bid: {{ listing.price }} <br/>
-          Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br/>
+          Current Bid: {{ listing.price }} <br />
+          Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br />
+          {% with time_left_and_status=listing.id|get_time_left %}
+            <span class="{{ time_left_and_status.1 }}">Time Left = {{ time_left_and_status.0 }}</span>
+          {% endwith %} 
         {% endif %}
+
       </div>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}
-        <button class="btn btn-primary cancel-btn" id="remove-from-watchlist-btn" type="submit">Remove from Watchlist</button>
+        <button
+          class="btn btn-primary cancel-btn"
+          id="remove-from-watchlist-btn"
+          type="submit"
+        >
+          Remove from Watchlist
+        </button>
       </form>
-      
     </li>
     {% endfor %}
   </ul>
