@@ -1,4 +1,7 @@
 {% extends "auctions/layout.html" %} 
+
+{% load custom_filters %} 
+
 {% block title %} {{ current_user.username }}'s Watchlist {% endblock %} 
 {% block navbar %}
 <li class="nav-item">
@@ -41,7 +44,8 @@
             {% endif %} 
           {% endfor %} 
         {% else %} 
-          Current Bid: {{ listing.price }} 
+          Current Bid: {{ listing.price }} <br/>
+          Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br/>
         {% endif %}
       </div>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
