@@ -768,17 +768,21 @@ def messages(request, user_id):
             else:
                 request.session["show_read"] = False
         except:
-            pass
+            visibility = "unset"
 
-        if visibility == "show" or visibility == "hide":
-            pass
-        else:
-            recipient_id = request.POST["recipient"]
-            recipient = User.objects.get(pk=recipient_id)
-            subject = request.POST["subject"]
-            message = request.POST["message"]
-            send_message(request.user, recipient, subject, message)
-            return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+        try:
+            if visibility == "show" or visibility == "hide":
+                pass
+            else:
+                recipient_id = request.POST["recipient"]
+                recipient = User.objects.get(pk=recipient_id)
+                subject = request.POST["subject"]
+                message = request.POST["message"]
+
+                send_message(request.user, recipient, subject, message)
+                return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+        except:
+            contrib_messages.error(request, "Error sending message")
 
     if user_id !=  current_user.id:
         return HttpResponse("Unauthorized", status=401)
