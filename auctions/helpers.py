@@ -13,6 +13,7 @@ from .tasks import notify_winner, transfer_to_escrow, send_message, check_bids_f
 
 logger = logging.getLogger(__name__)
 
+
 # helper for place_bid
 def check_if_watchlist(user, listing):
     watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
