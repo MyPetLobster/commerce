@@ -241,7 +241,7 @@ def withdraw(request, user_id):
 
 
 @login_required
-def confirm_shipping(listing_id):
+def confirm_shipping(request, listing_id):
     '''
     Seller will have a button on profile to confirm shipping once the 
     winner's funds have been transferred to escrow.
@@ -253,6 +253,8 @@ def confirm_shipping(listing_id):
         if transfer_to_seller(listing_id):
             listing.shipped = True
             listing.save()    
+    else:
+        contrib_messages.error(request, "Unexpected error confirming shipping, contact admins.")
     
     return redirect("listing", listing_id=listing_id)
 

@@ -1,7 +1,3 @@
-import logging
-import os
-import smtplib
-
 from celery import shared_task
 from django.conf import settings
 from django.contrib import messages as contrib_messages
@@ -13,11 +9,19 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 
+import logging
+import os
+import smtplib
+
 from .models import Bid, Listing, Winner, User, Transaction, Message
 
 
 logger = logging.getLogger(__name__)
 my_email = os.environ.get('MY_EMAIL') 
+
+
+
+
 
 @shared_task
 def check_listing_expiration():
@@ -98,7 +102,7 @@ def send_error_notification(error_message):
         logger.error(f'''------------------\n
                      An error occurred in the check_listing_expiration task: {error_message}\n
                      ------------------''')
-        # Send error notification email to administrator
+
         # send_mail(
         #     'Error Notification: Check Listing Expiration',
         #     f'An error occurred in the check_listing_expiration task: {error_message}',
@@ -108,7 +112,7 @@ def send_error_notification(error_message):
         # )
 
     except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
-        logger.error(f"An error occurred while sending error notification: {str(e)}")
+        logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
     except Exception as e:
         logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
 
@@ -120,8 +124,17 @@ def transfer_to_escrow(winner):
     escrow_account = User.objects.get(pk=11)
 
     if amount > buyer.balance: 
-        return False
-        #TODO: add error message and email notification to buyer
+        if listing.in_escrow == False:
+            subject = f"Insufficient funds for {listing.title}"
+            message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
+            funds to complete the transaction. Please add funds to your account to complete the purchase.
+            Then navigate back to the listing page via this link: {listing.get_absolute_url()} and click 
+            the 'Complete Purchase' button to complete the transaction.
+            """
+            send_message(User.objects.get(pk=2), buyer, subject, message)
+        else: 
+            logger.error(f"Unexpected conflict with escrow status for {listing.title}")
+        
     else:
         Transaction.objects.create(
             sender=buyer,
@@ -134,8 +147,7 @@ def transfer_to_escrow(winner):
         buyer.save()
         escrow_account.balance += amount
         escrow_account.save()
-
-        return True
+        listing.in_escrow = True
     
 
 def transfer_to_seller(listing_id):
@@ -145,35 +157,47 @@ def transfer_to_seller(listing_id):
     escrow_account = User.objects.get(pk=11)
     site_account = User.objects.get(pk=12)
 
+    if listing.in_escrow == True:
+        if amount > escrow_account.balance:
+            #TODO: EMAIL ADMIN BALANCE ERROR BIG OOPS
+            return False
+        else:
+            fee_amount = amount * 0.1
+            amount -= fee_amount
 
-    if amount > escrow_account.balance:
-        #TODO: EMAIL ADMIN BALANCE ERROR BIG OOPS
-        return False
+            fee_transaction = Transaction.objects.create(
+                sender=escrow_account,
+                recipient=site_account,
+                amount=fee_amount,
+                listing=listing
+            )
+            fee_transaction.save()
+
+            sell_transaction = Transaction.objects.create(
+                sender=escrow_account,
+                recipient=seller,
+                amount=amount,
+                listing=listing
+            )
+            sell_transaction.save()
+
+            escrow_account.balance -= amount
+            escrow_account.save()
+            seller.balance += amount
+            seller.save()
+
+            listing.in_escrow = False
+
+            subject = f"Your tracking information has been received for {listing.title}"
+            message = f"""The funds held in escrow for {listing.title} have been released to your account. 
+                        Your balance should be updated within 1-2 business days. Thank you for using Yard Sale!
+                        """
+            send_message(site_account, seller, subject, message)
+
+            return True
     else:
-        fee_amount = amount * 0.1
-        amount -= fee_amount
-
-        fee_transaction = Transaction.objects.create(
-            sender=escrow_account,
-            recipient=site_account,
-            amount=fee_amount,
-            listing=listing
-        )
-        fee_transaction.save()
-
-        sell_transaction = Transaction.objects.create(
-            sender=escrow_account,
-            recipient=seller,
-            amount=amount,
-            listing=listing
-        )
-        sell_transaction.save()
-
-        escrow_account.balance -= amount
-        escrow_account.save()
-        seller.balance += amount
-        seller.save()
-        return True
+        logger.error(f"Unexpected conflict with escrow status for {listing.title}")
+        return False
     
 
 def send_message(sender, recipient, subject, message):

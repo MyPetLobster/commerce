@@ -33,6 +33,50 @@
 {% block body %}
 
 <div class="page-content">
+    <div class="winner-funds-issue-div">
+        {% if winner.user == current_user %}
+            {% if listing.active == False and listing.cancelled == False and listing.shipped == False and listing.in_escrow == False %}
+                <div class="center-container winner-alert-div">
+                    <h3>Congratulations! You won the auction!</h3>
+                    <p>
+                        But further action is needed on your part. See your messages for details. If you were required to add funds to 
+                        your account, there will be a button below to do so once your account has the funds deposited. You only have 
+                        24 hours to confirm deposit of the funds. If you do not, the listing will be cancelled and the next highest bidder 
+                        will be notified. We apologize for any inconvenience. Message us with any questions.
+                    </p>
+                    <form action="/move_to_escrow/{{ listing.id }}" method="post">
+                        {% csrf_token %}
+                        <label for="add-funds">Move ${{ listing.price }} to Escrow</label>
+                        <button class="btn btn-primary" type="submit">Confirm</button>
+                    </form>
+                </div>
+            {% elif listing.active == False and listing.cancelled == False and listing.shipped == False and listing.in_escrow == True %}
+                <div class="center-container winner-alert-div">
+                    <h3>Congratulations! You won the auction!</h3>
+                    <p>Once the seller confirms shipping, the funds will be released from escrow.</p>
+                </div>
+            {% elif listing.active == False and listing.cancelled == False and listing.shipped == True %}
+                <div class="center-container winner-alert-div">
+                    <h3>Congratulations! You won the auction!</h3>
+                    <p>Item has been shipped. Thanks for using Yard Sale!</p>
+                    <p>
+                        At Yard Sale, we strive for 100% customer satisfaction. If you are anything less than satisfied with this purchase,
+                        please use our <span id="file-dispute" class="bold">dispute form</span> and one of our wonderful customer service
+                        representatives will be in touch with you in less than 24 hours, or we will refund your purchase price.</br></br>
+
+                        <span class="fine-print">
+                            *Note: a dispute will only be valid if filed within 24 hours of receiving the item. If you know beforehand that 
+                            you will not be able to receive shipment within that time window or make trusted arrangements to receive the item, 
+                            contact the admins to see if arrangements can be made. DO NOT CONTACT THE SELLER DIRECTLY for any disputes.
+                        </span>
+                        <span class="finer-print">
+                            **Note: Yard Sale and Co reserves the rights to deny any and all disputes without reason. By signing up for our 
+                            site and using our services, you have agreed to these terms.
+                        </span>
+                    </p>
+                </div>
+            {% endif %}
+        {% endif %}
     <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
@@ -93,7 +137,7 @@
             <div class="listing-cancelled-div">
                 <p>Listing has been cancelled. No bids were placed.</p>
             </div>
-            {% elif listing.shipped == False %}
+            {% elif listing.shipped == False and listing.in_escrow == True %}
                 <div class="confirm-shipping confirm-ship-div" style="width: 350px; text-align: center;">
                     <h4 class="confirm-ship">Confirm Shipping</h4>
                     <p class="confirm-ship">Bidding has closed on your listing, and there is a winner.
