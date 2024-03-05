@@ -224,13 +224,11 @@
                         <p style="display:inline" class="bold">No bids</p>
                     {% else %}
                     <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
-                        {% for winner in winners %}
-                            {% if winner.listing == listing %}
-                                <span class="bold">Winner:</span> {{ winner.user.username }}
-                            {% elif forloop.last %}
+                            {% if listing.winner %}
+                                <span class="bold">Winner:</span> {{ listing.winner.username }}
+                            {% else %}
                                 No winner
                             {% endif %}
-                        {% endfor %}
                     </p>
                     {% endif %}
                 {% endif %}

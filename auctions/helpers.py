@@ -27,16 +27,13 @@ def check_if_watchlist(user, listing):
     
 
 def declare_winner(listing):
-    if Winner.objects.filter(listing=listing).exists():
+    if listing.winner:
         return
     
     highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
     if highest_bid:
-        winner = Winner.objects.create(
-            amount=listing.price,
-            listing=listing,
-            user=highest_bid.user
-        )
+        winner = highest_bid.user
+        listing.winner = winner
         
         transfer_to_escrow(winner)
         notify_all_closed_listing(listing.id)
@@ -48,6 +45,7 @@ def set_inactive(listings):
     for listing in listings:
         if listing.date + timedelta(days=7) < timezone.now():
             listing.active = False
+            listing.closing_date = timezone.now()
             listing.save()
             try: 
                 declare_winner(listing)
@@ -66,6 +64,7 @@ def check_expiration(listing_id):
         now = timezone.now()
         if listing.date + timedelta(days=7) < now:
             listing.active = False
+            listing.closing_date = now
             listing.save()
             try:
                 declare_winner(listing)
@@ -83,8 +82,8 @@ def check_expiration(listing_id):
 
 def get_listing_values(request, listing):
     try:
-        winner = Winner.objects.get(listing=listing)
-    except Winner.DoesNotExist:
+        winner = User.objects.get(won_listings=listing)
+    except User.DoesNotExist:
         winner = None
     try:
         user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()

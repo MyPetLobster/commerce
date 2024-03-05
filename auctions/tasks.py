@@ -34,6 +34,7 @@ def check_listing_expiration():
         for listing in expired_listings:
             # Close the listing
             listing.active = False
+            listing.closing_date = now
             listing.save()
 
             # Check for bids on the listing
@@ -42,12 +43,10 @@ def check_listing_expiration():
                 # Determine the highest bid
                 highest_bid = bids.order_by('-amount').first()
 
-                # Create a Winner object and save it to the database
-                winner = Winner.objects.create(
-                    amount=highest_bid.amount,
-                    listing=listing,
-                    user=highest_bid.user
-                )
+                # Declare the winner
+                winner = highest_bid.user
+                listing.winner = winner
+                listing.save()
 
                 transfer_to_escrow(winner)
                 notify_all_closed_listing(listing.id)
@@ -87,14 +86,14 @@ def notify_all_closed_listing(listing_id):
 def message_winner(listing_id):
     site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
-    winner = Winner.objects.get(listing=listing)
+    winner = listing.winner
 
     subject = f"Congratulations! You won the auction for {listing.title}"
     message = f"""If you have sufficient funds already deposited in your account, then you're all set! If there 
                 is any further action required on your part, you will receive a message detailing the next steps.
                 Otherwise, you will receive a message with tracking information once the seller has shipped your item. 
                 Thank you for using Yard Sale!"""
-    send_message(site_account, winner.user, subject, message)
+    send_message(site_account, winner, subject, message)
 
 def message_seller_on_sale(listing_id):
     site_account = User.objects.get(pk=12)
@@ -113,8 +112,9 @@ def message_losing_bidders(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
 
-    winner = Winner.objects.get(listing=listing)
-    all_unique_bidders = all_unique_bidders.exclude(user=winner.user)
+    winner = listing.winner
+    all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
+    all_unique_bidders = all_unique_bidders.exclude(user=winner)
 
     for bidder in all_unique_bidders:
         user = User.objects.get(pk=bidder['user'])
@@ -195,7 +195,7 @@ def transfer_to_seller(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     seller = listing.user
     amount = listing.price
-    buyer = Winner.objects.get(listing=listing).user
+    buyer = listing.winner
     escrow_account = User.objects.get(pk=11)
     site_account = User.objects.get(pk=12)
     admin = User.objects.get(pk=2)

@@ -29,13 +29,11 @@
       <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
       <div style="display: inline">
         {% if listing.active == False %} -- BIDDING CLOSED -- <br />
-        {% for winner in winners %} 
-          {% if winner.listing == listing and winner.user == user %} 
+          {% if listing.winner == current_user %}
             You Won! (See email for details on how to proceed.) 
           {% else %} 
-            Winner: {{ winner.user.username}} 
+            Winner: {{ listing.winner.username }} 
           {% endif %} 
-        {% endfor %} 
         {% else %} 
           Current Bid: {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}<br />
           Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br />

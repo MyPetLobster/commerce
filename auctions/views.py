@@ -242,7 +242,6 @@ def create(request):
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
-    winners = Winner.objects.filter(listing__in=listings)
     current_user = request.user
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -250,7 +249,6 @@ def watchlist(request):
 
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
-        "winners": winners,
         "current_user": current_user,
         "messages": messages,
         "unread_message_count": unread_message_count
@@ -262,7 +260,6 @@ def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     listings = Listing.objects.filter(user=user)
     watchlist = Watchlist.objects.filter(user=user)
-    winners = Winner.objects.filter(listing__user=user)
     current_user = request.user
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -285,7 +282,6 @@ def profile(request, user_id):
         "user": user,
         "listings": listings,
         "watchlist": watchlist,
-        "winners": winners,
         "user_info_form": UserInfoForm(instance=user),
         "current_user": current_user,
         "messages": messages,
