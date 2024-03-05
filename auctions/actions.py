@@ -146,6 +146,16 @@ def comment(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+@login_required
+def move_to_escrow(request, listing_id):
+    current_user = request.user
+    listing = Listing.objects.get(pk=listing_id)
+    if current_user == listing.user:
+        winner = Winner.objects.get(listing=listing)
+        if winner.user == current_user:
+            if listing.active == False and listing.in_escrow == False and listing.shipped == False:
+                transfer_to_escrow(listing)
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
 # PROFILE FUNCTIONS

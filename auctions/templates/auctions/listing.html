@@ -77,10 +77,11 @@
                 </div>
             {% endif %}
         {% endif %}
+    </div>
     <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
-        <img class="listing-img" src="{{ listing.image }}" height="450">
+        <img class="listing-img" src="{{ listing.image }}">
     {% endif %}
     <div class="listing-desc">
         <p class="fields-div">
@@ -171,8 +172,8 @@
                     <button class="btn btn-primary" type="submit">Add to Watchlist</button>
                 </form>
             </div>
-            <div id="watchlist-check-content-remove" class="hidden">
-                <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
+            <div id="watchlist-check-content-remove" class="center-container hidden">
+                <form class="center-container" action="/remove_from_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}
                     <button class="btn btn-primary cancel-btn" type="submit">Remove from Watchlist</button>
                 </form>
@@ -210,6 +211,7 @@
         </div>
         {% endif %}
         
+
         <div class="comments-div">
             <hr >
             

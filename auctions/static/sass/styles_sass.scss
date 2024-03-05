@@ -863,3 +863,21 @@ footer {
   text-decoration: underline;
   font-size: 0.9em;
 }
+
+
+
+.listing-img {
+  max-width: 600px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
+
+.thumb-img {
+  width: 140px;
+  height: 140px;
+  object-fit: center;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}

@@ -30,4 +30,5 @@ urlpatterns = [
     path('mark_all_as_read/<int:user_id>', actions.mark_all_as_read, name='mark_all_as_read'),
     path('delete_message/<int:message_id>', actions.delete_message, name='delete_message'),
     path('sort_messages', actions.sort_messages, name='sort_messages'),
+    path('move_to_escrow/<int:listing_id>', actions.move_to_escrow, name='move_to_escrow'),
 ]
