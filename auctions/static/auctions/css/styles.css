@@ -902,15 +902,29 @@ footer li {
   font-style: italic;
   font-size: 0.9em;
 }
+.winning-bid-closed a {
+  color: #2d6128 !important;
+  font-style: italic !important;
+}
+.winning-bid-closed a:hover {
+  color: #983554 !important;
+}
 
 .losing-bid-active {
   font-size: 0.9em;
 }
 
 .losing-bid-closed {
-  color: #6c757d;
+  color: #babfc8;
   font-style: italic;
   font-size: 0.9em;
+}
+.losing-bid-closed a {
+  color: #babfc8 !important;
+  font-style: italic !important;
+}
+.losing-bid-closed a:hover {
+  color: #983554 !important;
 }
 
 #bids-table {
@@ -1069,6 +1083,18 @@ footer li {
   object-fit: center;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
+
+.old-bid {
+  color: #babfc8;
+  font-style: italic;
+}
+.old-bid a {
+  color: #babfc8 !important;
+  font-style: italic !important;
+}
+.old-bid a:hover {
+  color: #983554 !important;
 }
 
 /*# sourceMappingURL=styles.css.map */

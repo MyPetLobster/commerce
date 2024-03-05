@@ -311,7 +311,7 @@ def transactions(request, user_id):
     user_bids = Bid.objects.filter(user=user)
     user_bids = user_bids.order_by("-date")
 
-    active_bid_count = user_bids.filter(listing__active=True).count()
+    active_bid_count = user_bids.filter(listing__active=True).values("listing").distinct().count()
 
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,

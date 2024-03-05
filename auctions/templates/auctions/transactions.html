@@ -160,6 +160,7 @@
             visibleBids[listingId] = true;
         } else {
             row.classList.add('hidden');
+            row.classList.add('old-bid')
         }
     });
 
@@ -200,7 +201,7 @@
         var hiddenBids = document.querySelectorAll(`.${listingId}.hidden`);
         if (hiddenBids.length > 0) {
             bid.style.cursor = 'pointer';
-            bid.style.backgroundColor = '#617282';
+            bid.style.backgroundColor = '#969da4';
         }
     });
 
