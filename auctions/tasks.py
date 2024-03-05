@@ -14,7 +14,7 @@ import os
 import random
 import smtplib
 
-from .models import Bid, Listing, Winner, User, Transaction, Message
+from .models import Bid, Listing, User, Transaction, Message
 
 
 logger = logging.getLogger(__name__)

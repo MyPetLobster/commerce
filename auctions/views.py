@@ -12,7 +12,7 @@ import logging
 from datetime import timedelta
 
 from . import helpers
-from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist, Winner
+from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist
 from .tasks import send_message
 from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
 
@@ -133,7 +133,6 @@ def index(request):
 
 def listings(request):
     listings = get_list_or_404(Listing.objects.all())
-    winners = Winner.objects.all()
     current_user = request.user
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
@@ -143,7 +142,6 @@ def listings(request):
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
-        "winners": winners,
         "current_user": current_user,
         "messages": messages,
         "unread_message_count": unread_message_count

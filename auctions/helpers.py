@@ -8,7 +8,7 @@ import logging
 import math
 from datetime import timedelta
 
-from .models import Bid, Winner, Listing, Watchlist, User, Message
+from .models import Bid, Listing, Watchlist, User, Message
 from .tasks import notify_all_closed_listing, send_message, transfer_to_escrow
 
 

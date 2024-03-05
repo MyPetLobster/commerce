@@ -8,7 +8,7 @@ import decimal
 
 from . import helpers
 from .classes import UserInfoForm
-from .models import Bid, Listing, Watchlist, User, Message, Winner, Comment, Transaction
+from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
 from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller
 
 
