@@ -61,10 +61,8 @@ def sort(request):
             "unread_message_count": unread_message_count
         })
     elif page == "listings":
-        winners = Winner.objects.all()
         return render(request, "auctions/listings.html", {
             "listings": listings,
-            "winners": winners,
             "current_user": current_user,
             "messages": messages,
             "unread_message_count": unread_message_count
@@ -114,17 +112,17 @@ def close_listing(request, listing_id):
         try:
             if highest_bid.amount > starting_bid:
                 try:
-                    winner = Winner.objects.create(
-                        amount=listing.price,
-                        listing=listing,
-                        user=highest_bid.user
-                    )
+                    listing.winner = highest_bid.user
+                    listing.save()
+                    winner = listing.winner
                     transfer_to_escrow(winner)
                     notify_all_closed_listing(listing.id)
                     listing.active = False
                     listing.save()
                 except:
-                    winner.delete()
+                    listing.winner = None
+                    listing.active = True
+                    listing.save()
                     contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
                     return HttpResponseRedirect(reverse("index"))
 
@@ -163,11 +161,13 @@ def comment(request, listing_id):
 def move_to_escrow(request, listing_id):
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
-    if current_user == listing.user:
-        winner = Winner.objects.get(listing=listing)
-        if winner.user == current_user:
-            if listing.active == False and listing.in_escrow == False and listing.shipped == False:
-                transfer_to_escrow(listing)
+    seller = listing.user
+    winner = listing.winner
+
+    if winner == current_user:
+        if listing.active == False and listing.in_escrow == False and listing.shipped == False:
+            transfer_to_escrow(listing)
+            
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
