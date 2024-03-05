@@ -358,8 +358,11 @@ legend {
   gap: 10px;
   padding: 10px;
 }
-.signed-in-as {
+.signed-in-as a {
   color: $primary-pink;
+}
+.signed-in-as a:hover {
+  color: $btn-hover;
 }
 footer {
   position: absolute;

@@ -65,7 +65,7 @@
                         <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" style="width:25px;"></span>&nbsp;&nbsp;
                     </div>
                     <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>
-                    <span class="signed-in-as">Signed in as <strong>{{ current_user.username }}</strong></span>
+                    <span class="signed-in-as"><a href="{% url 'profile' current_user.id %}">Signed in as <strong>{{ current_user.username }}</a></strong></span>
                 {% else %}
                     <ul class="nav">
                         <li class="nav-item">
