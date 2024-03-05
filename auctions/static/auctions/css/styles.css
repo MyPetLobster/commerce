@@ -1071,10 +1071,4 @@ footer li {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 
-.clickable-row {
-  cursor: pointer;
-  transition: 0.15s;
-  border: 2px solid #983554;
-}
-
 /*# sourceMappingURL=styles.css.map */

@@ -48,7 +48,7 @@ $primary-pink: #c55176;
 $background-color-light: #e2e2e2;
 $background-color-dark: #303133;
 $medium-gray: #6c757d;
-$medium-gray-alt: #5a6874;
+$medium-gray-alt: #617282;
 $cancel-color: #a90000;
 $cancel-color-hover: #80052c;
 $btn-focus: #e75684;
@@ -884,9 +884,4 @@ footer {
   object-fit: center;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
-}
-
-.clickable-row {
-  @include cursor-pointer-transition;
-  border: 2px solid $btn-hover;
 }
