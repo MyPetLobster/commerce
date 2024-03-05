@@ -56,7 +56,7 @@
                 {% else %}
                     <td>N/A</td>
                 {% endif %}
-                {% if transaction.sender == user %}
+                {% if transaction.sender == current_user %}
                 <td class="withdraw-amt">-${{ transaction.amount }}</td>
                 <td>You</td>
                 <td>{{ transaction.recipient }}</td>
@@ -122,7 +122,7 @@
                             </span>
                         {% endif %}
                     {% else %}
-                        {% if bid.listing.winner == user %}
+                        {% if bid.listing.winner == current_user %}
                             <span class="green">WON!</span>
                         {% else %}
                             <span class="red">Lost</span>

@@ -272,10 +272,13 @@ def profile(request, user_id):
     user_bids = Bid.objects.filter(user=user)
     bid_info_list = []
 
+
     for bid in user_bids:
         bid_listing = bid.listing
         is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
-        user_bid_info = UserBidInfo(bid, is_old_bid)
+        highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
+        difference = bid.amount - highest_bid.amount
+        user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid, difference)
         bid_info_list.append(user_bid_info)
 
     bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.date, reverse=True)

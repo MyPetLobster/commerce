@@ -55,8 +55,11 @@ class UserInfoForm(ModelForm):
 
 # Class to hold user bid info, used in views.profile
 class UserBidInfo:
-    def __init__(self, user_bid, is_old_bid):
+    def __init__(self, user_bid, is_old_bid, highest_bid, difference):
         self.user_bid = user_bid
-        self.highest_bid = user_bid.listing.price
-        self.difference = self.highest_bid - user_bid.amount
         self.is_old_bid = is_old_bid
+        self.highest_bid = highest_bid
+        self.difference = difference
+        
+    def __str__(self):
+        return f"{self.user_bid} - {self.is_old_bid} - {self.highest_bid} - {self.difference}"
