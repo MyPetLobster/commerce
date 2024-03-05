@@ -187,6 +187,24 @@
             }
         });
     });
+
+
+    var hiddenBids = document.querySelectorAll('.hidden');
+    hiddenBids.forEach(function(bid) {
+        bid.style.cursor = 'pointer';
+    });
+
+    var highestBids = document.querySelectorAll('tr[class^="winning-bid-"]');
+    highestBids.forEach(function(bid) {
+        var listingId = bid.classList[bid.classList.length - 1];
+        var hiddenBids = document.querySelectorAll(`.${listingId}.hidden`);
+        if (hiddenBids.length > 0) {
+            bid.style.cursor = 'pointer';
+        }
+    });
+
+
+    
 </script>
 
 {% endblock %}

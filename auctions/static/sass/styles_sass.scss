@@ -884,3 +884,8 @@ footer {
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
+
+.clickable-row {
+  @include cursor-pointer-transition;
+  border: 2px solid $btn-hover;
+}
