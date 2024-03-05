@@ -1,4 +1,5 @@
 {% extends "auctions/layout.html" %} 
+{% load custom_filters %}
 {% block title %} Category: {{ category }} {% endblock %} 
 {% block navbar %}
 <li class="nav-item">
@@ -38,7 +39,7 @@
         >{{ listing.title }}</a
       >
       <p class="listing-desc hidden">
-        {{ listing.title }} - {{ listing.description|truncatechars:125 }} - ${{listing.price }}
+        {{ listing.title }} - {{ listing.description|truncatechars:125 }} - {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}
       </p>
     </li>
     {% endfor %}

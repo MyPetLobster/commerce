@@ -70,7 +70,7 @@
         </tbody>
     </table>
     <div class="center-container">
-        <p>Your current balance is: {{ current_user.balance }}</p>
+        <p>Your current balance is: {% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
     </div>
 
     <div class="center-container">
@@ -104,7 +104,7 @@
             {% endif %}
                 <td>{{ bid.date|date:"F j, Y, g:i a" }}</td>
                 <td><a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a></td>
-                <td class="bid-amt">${{ bid.amount }}</td>
+                <td class="bid-amt">{% with formatted_currency=bid.amount|format_currency %}{{ formatted_currency }}{% endwith %}</td>
                 <td>
                     {% if bid.listing.active == True %}
                         Active
@@ -118,7 +118,7 @@
                             <span class="dark-green">Winning</span>
                         {% else %}
                             <span class="red" style="font-style:italic;">
-                                (${{ bid.listing.price|subtract:bid.amount }} behind)
+                                ({{ bid.listing.price|subtract:bid.amount }} behind)
                             </span>
                         {% endif %}
                     {% else %}

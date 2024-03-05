@@ -84,7 +84,7 @@
                             <div class="list-desc-div">
                                 <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                                 <p>
-                                    <span class="bold">Current Bid:&nbsp; </span> ${{ listing.price }} </br>
+                                    <span class="bold">Current Bid:&nbsp; </span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} </br>
                                     <div class="full-description visible">
                                         <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
                                     </div>
@@ -111,7 +111,7 @@
             {% for listing in listings %}
                 {% if listing.active == True %}
                     <li class="title-only-li" style="margin-bottom: 8px">
-                        <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- ${{ listing.price }} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                        <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                     </li>
                 {% endif %}
             {% endfor %}

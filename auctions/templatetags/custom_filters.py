@@ -7,7 +7,8 @@ register = template.Library()
 
 @register.filter
 def subtract(value, arg):
-    return value - arg
+    difference = value - arg
+    return f"${difference:,.2f}"
 
 
 @register.filter
@@ -16,7 +17,8 @@ def get_user_high_bid(value, user_id,):
     listing = Listing.objects.get(pk=value)
     bids = Bid.objects.filter(listing=listing, user=user)
     if bids.exists():
-        return f'${bids.order_by('-amount').first().amount}'
+        high_bid = bids.order_by('-amount').first().amount
+        return f"${high_bid:,.2f}"
     else:
         return 'No Bids'
     
@@ -42,3 +44,8 @@ def get_time_left(listing_id):
     else:
         time_left = f'{time_left.days} days, {time_left.seconds//3600} hours, {(time_left.seconds//60)%60} minutes left'
     return time_left, status
+
+
+@register.filter
+def format_currency(value):
+    return f"${value:,.2f}"

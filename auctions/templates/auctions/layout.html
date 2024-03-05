@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -57,7 +57,7 @@
             <div class="user-status">
                 {% if current_user.is_authenticated %}
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
-                    <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">${{ current_user.balance }}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <div class="mail-icon-div">
                         <span id="mail-icon-default" class="mail-icon visible"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;"></span>

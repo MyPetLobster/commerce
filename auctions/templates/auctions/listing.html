@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% load custom_filters %}
+
 {% load tz %}
 
 {% block title %}
@@ -99,16 +101,16 @@
                 
             </span></br>
             <div class="fields-item">
-                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">${{ listing.price|floatformat:2 }}</span></br> 
+                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} </span></br> 
             </div>
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
                     <div class="fields-item">
-                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">${{ user_bid.amount }} (You are the current highest bidder!)</span></br>
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You are the current highest bidder!)</span></br>
                     </div>
                 {% else %}
                     <div class="fields-item">
-                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">${{ user_bid.amount }} (Your bid is ${{ difference }} less than the current highest bid)</span></br>
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (Your bid is {% with formatted_currency=difference|format_currency %}{{ formatted_currency }}{% endwith %} less than the current highest bid)</span></br>
                     </div>
                 {% endif %} 
             {% endif %}

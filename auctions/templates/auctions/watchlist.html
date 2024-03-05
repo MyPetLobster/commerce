@@ -37,7 +37,7 @@
           {% endif %} 
         {% endfor %} 
         {% else %} 
-          Current Bid: {{ listing.price }} <br />
+          Current Bid: {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}<br />
           Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br />
           {% with time_left_and_status=listing.id|get_time_left %}
             <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>

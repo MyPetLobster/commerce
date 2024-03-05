@@ -107,7 +107,7 @@
 
         <div class="account-balance">
             <h2>Account Balance</h2>
-            <p>${{ current_user.balance }}</p>
+            <p>{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
             <p><a id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
             <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
             <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
@@ -142,7 +142,7 @@
     </div>
     <div class="user-bids">
         <h2>Bids</h2>
-        <p><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Bidding History</a></p>
+        <p class="center-container"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Bidding History</a></p>
         <ul>
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
@@ -153,9 +153,9 @@
                         <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
                             <p>
                                 {% if bid_info.user_bid.amount == bid_info.highest_bid %}
-                                    <span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(current highest bid)</span></br>
+                                    <span class="bold">Bid:</span> {% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="green">(current highest bid)</span></br>
                                 {% else %}
-                                    <span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">(${{ bid_info.difference }} less than highest bid) </span></br>
+                                    <span class="bold">Bid:</span> {% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="red">({% with formatted_currency=bid_info.difference|format_currency %}{{ formatted_currency }}{% endwith %} less than highest bid) </span></br>
                                 {% endif %}
                             {% with time_left_and_status=bid_info.user_bid.listing.id|get_time_left %}
                                 <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>
@@ -165,9 +165,9 @@
                         <div class="expired-bid">
                             <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
                             {% if bid_info.user_bid == bid_info.highest_bid %}
-                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="green">(You Won!)</span></p>
+                                <p><span class="bold">Bid:</span>{% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="green">(You Won!)</span></p>
                             {% else %}
-                                <p><span class="bold">Bid:</span> ${{ bid_info.user_bid.amount }} <span class="red">({{ bid_info.user_bid.listing.winner.username }} won this auction)</span></p>
+                                <p><span class="bold">Bid:</span>{% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="red">({{ bid_info.user_bid.listing.winner.username }} won this auction)</span></p>
                             {% endif %}
                         </div>
                     {% endif %}
@@ -220,7 +220,7 @@
                     {% if listing.price == listing.starting_bid %}
                         <p style="display:inline" class="bold">No bids</p>
                     {% else %}
-                    <p style="display:inline"><span class="bold">Final Bid:</span> {{ listing.price }}</br>
+                    <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
                         {% for winner in winners %}
                             {% if winner.listing == listing %}
                                 <span class="bold">Winner:</span> {{ winner.user.username }}
