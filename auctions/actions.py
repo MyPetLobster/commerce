@@ -9,7 +9,7 @@ import decimal
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Winner, Comment, Transaction
-from .tasks import notify_winner, transfer_to_escrow, transfer_to_seller
+from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller
 
 
 
@@ -111,18 +111,31 @@ def close_listing(request, listing_id):
     if request.user == listing.user:
         highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
         starting_bid = listing.starting_bid
-        if highest_bid.amount > starting_bid:
-            winner = Winner.objects.create(
-                amount=listing.price,
-                listing=listing,
-                user=highest_bid.user
-            )
-            notify_winner(winner, listing)
-            transfer_to_escrow(winner)
-        else:
-            listing.cancelled = True
-        listing.active = False
-        listing.save()
+        try:
+            if highest_bid.amount > starting_bid:
+                try:
+                    winner = Winner.objects.create(
+                        amount=listing.price,
+                        listing=listing,
+                        user=highest_bid.user
+                    )
+                    transfer_to_escrow(winner)
+                    notify_all_closed_listing(listing.id)
+                    listing.active = False
+                    listing.save()
+                except:
+                    winner.delete()
+                    contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
+                    return HttpResponseRedirect(reverse("index"))
+
+            else:
+                listing.cancelled = True
+                listing.active = False
+                listing.save()
+
+            
+        except:
+            contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
     return HttpResponseRedirect(reverse("index"))
 
 

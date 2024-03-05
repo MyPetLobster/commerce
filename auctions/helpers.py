@@ -1,3 +1,4 @@
+from django.contrib import messages as contrib_messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
@@ -8,7 +9,7 @@ import math
 from datetime import timedelta
 
 from .models import Bid, Winner, Listing, Watchlist, User, Message
-from .tasks import check_bids_funds, notify_winner, send_message, transfer_to_escrow
+from .tasks import notify_all_closed_listing, send_message, transfer_to_escrow
 
 
 logger = logging.getLogger(__name__)
@@ -36,9 +37,9 @@ def declare_winner(listing):
             listing=listing,
             user=highest_bid.user
         )
-        notify_winner(winner, listing)
+        
         transfer_to_escrow(winner)
-    
+        notify_all_closed_listing(listing.id)
 
 
 
@@ -160,6 +161,42 @@ def place_bid(request, amount, listing_id):
         logger.error(f"Error placing bid: {e}")
         return False
 
+
+def check_bids_funds(request, listing_id):
+    admin = User.objects.get(pk=2)
+    listing = Listing.objects.get(pk=listing_id)
+    now = timezone.now()
+    bids = Bid.objects.filter(listing=listing)
+    if bids.exists():
+        highest_bid = bids.order_by('-amount').first()
+        if highest_bid.amount > highest_bid.user.balance:
+            if listing.date + timezone.timedelta(days=6) < now:
+                send_message(
+                    admin,
+                    highest_bid.user,
+                    f"Insufficient funds for {listing.title}",
+                    f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding."
+                )
+                highest_bid.delete()
+                contrib_messages.add_message(request, contrib_messages.ERROR, f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding.")
+                return False
+            else:
+                time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
+                time_left_to_deposit = f"{time_left_to_deposit.days} days, {time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
+                highest_bid_amount = "${:0,.0f}".format(highest_bid.amount)
+                send_message(
+                    admin,
+                    highest_bid.user,
+                    f"Insufficient funds for '{listing.title}'",
+                    f"Your bid of {highest_bid_amount} on '{listing.title}'. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
+                )
+                contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid has been placed successfully, but you need to deposit funds. Check your messages for details.")
+                return True
+        elif highest_bid.amount <= highest_bid.user.balance:
+            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully.")
+            return True
+    else:
+        pass
 
 
 
