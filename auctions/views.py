@@ -326,6 +326,7 @@ def transactions(request, user_id):
     sent_transactions = Transaction.objects.filter(sender=user)
     received_transactions = Transaction.objects.filter(recipient=user)
     transactions = sent_transactions | received_transactions
+    transactions = transactions.order_by("-date")
 
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
