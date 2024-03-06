@@ -139,7 +139,8 @@ def listings(request):
     unread_message_count = unread_messages.count()
 
     helpers.set_inactive(listings)
-
+    listings = get_list_or_404(Listing.objects.all())
+    
     return render(request, "auctions/listings.html", {
         "listings": listings,
         "current_user": current_user,
