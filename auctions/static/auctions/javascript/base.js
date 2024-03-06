@@ -5,6 +5,8 @@ setTimeout(function () {
   }
 }, 3000);
 
+
+
 // DARK and LIGHT MODES
 // Check if the user has a theme preference and set it when page loads
 if (localStorage.getItem("theme") === "dark") {
@@ -14,19 +16,21 @@ if (localStorage.getItem("theme") === "dark") {
   document.querySelector("#standard-hero").classList.remove("visible");
   document.querySelector("#inverted-hero").classList.add("visible");
   document.querySelector("#inverted-hero").classList.remove("hidden");
-  document.querySelector("#bids-table").classList.add("dark-mode-table");
-  document.querySelector("#bids-table").classList.remove("light-mode-table");
-  document.querySelector("#transactions-table").classList.add("dark-mode-table");
-  document.querySelector("#transactions-table").classList.remove("light-mode-table");
+  if (document.querySelector("#this-is-transactions-page")) {
+    setTransactionDarkMode();
+  }
 }
 
 if (localStorage.getItem("theme") === "light") {
-  document.querySelector("#bids-table").classList.add("light-mode-table");
-  document.querySelector("#bids-table").classList.remove("dark-mode-table");
-  document.querySelector("#transactions-table").classList.add("light-mode-table");
-  document.querySelector("#transactions-table").classList.remove("dark-mode-table");
   document.querySelector("body").classList.add("light-mode");
   document.querySelector("body").classList.remove("dark-mode");
+  document.querySelector("#standard-hero").classList.add("visible");
+  document.querySelector("#standard-hero").classList.remove("hidden");
+  document.querySelector("#inverted-hero").classList.add("hidden");
+  document.querySelector("#inverted-hero").classList.remove("visible");
+  if (document.querySelector("#this-is-transactions-page")) {
+    setTransactionLightMode();
+  }
 }
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
@@ -36,10 +40,9 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("#standard-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("visible");
-  document.querySelector("#bids-table").classList.toggle("dark-mode-table");
-  document.querySelector("#bids-table").classList.toggle("light-mode-table");
-  document.querySelector("#transactions-table").classList.toggle("dark-mode-table");
-  document.querySelector("#transactions-table").classList.toggle("light-mode-table");
+  if (document.querySelector("#this-is-transactions-page")) {
+    toggleTransactionMode();
+  }
   
   localStorage.setItem(
     "theme",
@@ -54,6 +57,30 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
     changeMessageColors();
   }
 };
+
+// TRANSACTIONS PAGE THEME MODE FUNCTIONS
+function setTransactionDarkMode() {
+  document.querySelector("#bids-table").classList.add("dark-mode-table");
+  document.querySelector("#bids-table").classList.remove("light-mode-table");
+  document.querySelector("#transactions-table").classList.add("dark-mode-table");
+  document.querySelector("#transactions-table").classList.remove("light-mode-table"); 
+}
+
+function setTransactionLightMode() {
+  document.querySelector("#bids-table").classList.add("light-mode-table");
+  document.querySelector("#bids-table").classList.remove("dark-mode-table");
+  document.querySelector("#transactions-table").classList.add("light-mode-table");
+  document.querySelector("#transactions-table").classList.remove("dark-mode-table");
+}
+
+function toggleTransactionMode() {
+  document.querySelector("#bids-table").classList.toggle("dark-mode-table");
+  document.querySelector("#bids-table").classList.toggle("light-mode-table");
+  document.querySelector("#transactions-table").classList.toggle("dark-mode-table");
+  document.querySelector("#transactions-table").classList.toggle("light-mode-table");
+}
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");
@@ -229,3 +256,4 @@ function checkForUnreadMessages() {
     return 0;
   }
 }
+
