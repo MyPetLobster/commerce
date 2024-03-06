@@ -177,7 +177,11 @@ def listing(request, listing_id):
         # if so, check if the user has enough funds to place the bid
         if total_seconds_left <= 86400:
             if amount > current_user.balance:
-                contrib_messages.add_message(request, contrib_messages.ERROR, "Insufficient funds")
+                site_account = User.objects.get(pk=12)
+                subject = f"Insufficient funds for {listing.title}",
+                message =f"Your bid of {amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account then try placing your bid again."
+                contrib_messages.add_message(request, contrib_messages.ERROR, f"Your bid of {amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding.")
+                send_message(site_account, current_user, subject, message)
             else:
                 success, updated_listing = helpers.place_bid(request, amount, listing_id)
                 if success:

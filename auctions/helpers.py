@@ -130,72 +130,79 @@ def place_bid(request, amount, listing_id):
         if amount <= current_price:
             return False, listing
         else:
-            bid = Bid.objects.create(
+            Bid.objects.create(
                 amount=amount,
                 listing=listing,
                 user=current_user
             )
-            
-            admin = User.objects.get(pk=2)
-            bidder = current_user
-            subject = f"New bid on {listing.title}"
-            message = f"You placed a bid of ${amount} on {listing.title}. Good luck!"
-            send_message(admin, bidder, subject, message)
 
+            # This block will handle all bid situations and messages
+            status, listing = check_bids_funds(request, listing_id)
+            
+            if status == True:
+                logger.info(f"Success placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
+                contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {amount} has been placed successfully.")
+            # Should never execute this block unless database error
+            elif status == False:
+                logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
+                contrib_messages.add_message(request, contrib_messages.ERROR, f"Unexpected error placing bid. Please try again. If this issue persists, contact the admins.")
+
+            # Automatically add the item to the user's watchlist 
             if check_if_watchlist(current_user, listing) == False:
                 Watchlist.objects.create(
                     user=current_user,
                     listing=listing
                 )
+            
+            return True, listing
 
-
-            if check_bids_funds(request, listing_id) == True:
-                listing.price = bid.amount
-                listing.save()
-                return True, listing
-            else:
-                return False, listing
-        
     except (Listing.DoesNotExist, ValueError, IntegrityError) as e:
-        logger.error(f"Error placing bid: {e}")
-        return False
+        logger.error(f"(Err22222) Unexpected Error placing bid: {e}")
+        return False, listing
 
 
 def check_bids_funds(request, listing_id):
-    admin = User.objects.get(pk=2)
+    site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
     now = timezone.now()
     bids = Bid.objects.filter(listing=listing)
+
     if bids.exists():
+
         highest_bid = bids.order_by('-amount').first()
+
+        # Handle cases where the highest bid is greater than the user's balance.
+        # Must have enough funds to cover bid deposited by the time the listing is 24 hours
+        # from closing. There is a check in views.listing() to skip this if the listing is 
+        # less than 24 hours from closing.
         if highest_bid.amount > highest_bid.user.balance:
-            if listing.date + timezone.timedelta(days=6) < now:
-                send_message(
-                    admin,
-                    highest_bid.user,
-                    f"Insufficient funds for {listing.title}",
-                    f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding."
-                )
-                highest_bid.delete()
-                contrib_messages.add_message(request, contrib_messages.ERROR, f"Your bid of {highest_bid.amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding.")
-                return False
+            time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
+            if time_left_to_deposit.days == 0:
+                time_left_to_deposit = f"{time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
             else:
-                time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
                 time_left_to_deposit = f"{time_left_to_deposit.days} days, {time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
-                highest_bid_amount = "${:0,.0f}".format(highest_bid.amount)
-                send_message(
-                    admin,
-                    highest_bid.user,
-                    f"Insufficient funds for '{listing.title}'",
-                    f"Your bid of {highest_bid_amount} on '{listing.title}'. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
-                )
-                contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid has been placed successfully, but you need to deposit funds. Check your messages for details.")
-                return True
+            highest_bid_amount = "${:0,.0f}".format(highest_bid.amount)
+            subject = f"Insufficient funds for '{listing.title}'",
+            message = f"Your bid of {highest_bid_amount} on '{listing.title}'. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
+            contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid has been placed successfully, but you need to deposit funds. Check your messages for details.")
+
+        # If funds are sufficient, send success message      
         elif highest_bid.amount <= highest_bid.user.balance:
+            subject = f"Success! You've placed a bid on {listing.title}"
+            message = f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully. This item has been added to your watchlist. Good luck!"
             contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully.")
-            return True
+        
+        # Update listing price to highest bid amount
+        listing.price = highest_bid.amount
+        listing.save()
+
+        # Send message to bidder
+        send_message(site_account, highest_bid.user, subject, message)
+        
+        return True, listing
+
     else:
-        pass
+        return False, listing
 
 
 
