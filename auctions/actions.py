@@ -107,7 +107,10 @@ def remove_from_watchlist(request, listing_id):
 
 @login_required
 def close_listing(request, listing_id):
+
     listing = Listing.objects.get(pk=listing_id)
+
+    # Only the seller can close the listing
     if request.user == listing.user:
         highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
         starting_bid = listing.starting_bid
@@ -135,6 +138,7 @@ def close_listing(request, listing_id):
 
             
         except:
+            logger.error(f"(Err01989) Unexpected error closing listing for listing ID {listing_id}")
             contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
     return HttpResponseRedirect(reverse("index"))
 

@@ -74,6 +74,21 @@ def register(request):
 
 
 
+def set_closing_dates_if_not_set(request):
+    '''
+    This view is used to set closing dates for listings that were created
+    before the closing_date field was added to the Listing model. 
+    '''
+
+    listings = Listing.objects.filter(active=True)
+    for listing in listings:
+        if listing.closing_date == None:
+            listing.closing_date = listing.date + timedelta(days=7)
+            listing.save()
+    return HttpResponseRedirect(reverse("index"))
+
+
+
 # VIEWS - PUBLIC
 def categories(request):
     categories = get_list_or_404(Category.objects.all())
@@ -108,6 +123,9 @@ def category(request, category_id):
 
 
 def index(request):
+
+    set_closing_dates_if_not_set(request)
+
     current_user = request.user
     listings = Listing.objects.all()
 
@@ -227,6 +245,7 @@ def create(request):
             listing = form.save(commit=False)
             listing.user = request.user
             listing.starting_bid = listing.price
+            listing.closing_date = listing.date + timedelta(days=7)
             listing.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse("index"))
