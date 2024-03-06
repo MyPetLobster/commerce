@@ -37,7 +37,7 @@
 
 <div class="page-content">
     <h2 id="transactions-section-head">{{ current_user.username }}'s Transaction History</h2>
-    <table class="table table-striped transactions-table">
+    <table id="transactions-table" class="table table-striped transactions-table light-mode-table">
         <thead>
             <tr>
                 <th>Date</th>
@@ -81,7 +81,7 @@
     <div class="center-container">
         <p>You have {% if active_bid_count == 0 %}no{% else %}{{ active_bid_count }}{% endif %} active bids.</p>
     </div>
-    <table id="bids-table" class="table table-striped transactions-table">
+    <table id="bids-table" class="table table-striped transactions-table light-mode-table">
         <thead>
             <tr>
                 <th>Date</th>

@@ -43,6 +43,8 @@ $text-color-dark: #303133;
 $text-color-light: #f4f4f4;
 $link-color: #1696b9;
 $link-color-hover: #0a5f76;
+$washed-link: #268aa0;
+$washed-link-hover: #5c6b6e;
 $nav-color: #8c8787;
 $primary-pink: #c55176;
 $background-color-light: #e2e2e2;
@@ -50,6 +52,8 @@ $background-color-dark: #303133;
 $light-gray: #babfc8;
 $medium-gray: #6c757d;
 $medium-gray-alt: #969da4;
+$med-dark-gray: #495057;
+$dark-gray: #343a40;
 $cancel-color: #a90000;
 $cancel-color-hover: #80052c;
 $btn-focus: #e75684;
@@ -727,41 +731,34 @@ footer {
 /* TRANSACTIONS PAGE */
 .transactions-table {
   max-width: 800px;
-  background-color: $medium-gray;
   border-radius: 8px;
   overflow: hidden;
   font-size: 0.9em;
-  color: $text-color-light;
-  th,
-  td {
-    border-color: $background-color-dark !important;
-  }
   th {
     border-top: none;
   }
-}
-.withdraw-amt {
-  color: $cancel-color;
+  a {
+    color: inherit;
+  }
+  a:hover {
+    color: $washed-link-hover;
+  }
 }
 .deposit-amt {
   color: $money-green-hover;
 }
-.expired-bid {
-  color: $medium-gray;
-  font-style: italic;
-
-  a,
-  p,
-  span {
-    color: $medium-gray;
-    font-style: italic;
-  }
+.withdraw-amt {
+  color: $cancel-color;
 }
+
 .winning-bid-active {
-  color: $text-color-light;
   font-weight: bold;
   font-size: 0.9em;
 }
+.expired-bid {
+  font-style: italic;
+}
+
 .winning-bid-closed {
   color: $money-green-hover;
   font-style: italic;
@@ -778,26 +775,60 @@ footer {
   font-size: 0.9em;
 }
 .losing-bid-closed {
-  color: $light-gray;
   font-style: italic;
   font-size: 0.9em;
 
   a {
-    color: $light-gray !important;
     font-style: italic !important;
   }
   a:hover {
-    color: $btn-hover !important;
+    color: $link-color-hover !important;
   }
 }
-#bids-table {
-  text-align: center;
-  a {
+
+.dark-mode-table {
+  background-color: $medium-gray;
+  color: $text-color-light;
+  th,
+  td {
+    border-color: $background-color-dark !important;
+  }
+  .winning-bid-active {
     color: $text-color-light;
   }
-  a:hover {
-    color: $btn-hover;
+  .losing-bid-closed {
+    color: $light-gray;
+    a {
+      color: $light-gray !important;
+    }
+    a:hover {
+      color: $washed-link-hover !important;
+    }
   }
+}
+.light-mode-table {
+  background-color: $light-gray;
+  color: $text-color-dark;
+  th,
+  td {
+    border-color: $background-color-light !important;
+  }
+  .winning-bid-active {
+    color: $dark-gray;
+  }
+  .losing-bid-closed {
+    color: $med-dark-gray;
+    a {
+      color: $med-dark-gray !important;
+    }
+    a:hover {
+      color: $washed-link-hover !important;
+    }
+  }
+}
+
+#bids-table {
+  text-align: center;
 }
 
 

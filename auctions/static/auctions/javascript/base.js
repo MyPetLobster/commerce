@@ -14,6 +14,19 @@ if (localStorage.getItem("theme") === "dark") {
   document.querySelector("#standard-hero").classList.remove("visible");
   document.querySelector("#inverted-hero").classList.add("visible");
   document.querySelector("#inverted-hero").classList.remove("hidden");
+  document.querySelector("#bids-table").classList.add("dark-mode-table");
+  document.querySelector("#bids-table").classList.remove("light-mode-table");
+  document.querySelector("#transactions-table").classList.add("dark-mode-table");
+  document.querySelector("#transactions-table").classList.remove("light-mode-table");
+}
+
+if (localStorage.getItem("theme") === "light") {
+  document.querySelector("#bids-table").classList.add("light-mode-table");
+  document.querySelector("#bids-table").classList.remove("dark-mode-table");
+  document.querySelector("#transactions-table").classList.add("light-mode-table");
+  document.querySelector("#transactions-table").classList.remove("dark-mode-table");
+  document.querySelector("body").classList.add("light-mode");
+  document.querySelector("body").classList.remove("dark-mode");
 }
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
@@ -23,6 +36,11 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("#standard-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("visible");
+  document.querySelector("#bids-table").classList.toggle("dark-mode-table");
+  document.querySelector("#bids-table").classList.toggle("light-mode-table");
+  document.querySelector("#transactions-table").classList.toggle("dark-mode-table");
+  document.querySelector("#transactions-table").classList.toggle("light-mode-table");
+  
   localStorage.setItem(
     "theme",
     document.querySelector("body").classList.contains("dark-mode")

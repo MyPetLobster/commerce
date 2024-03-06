@@ -888,43 +888,35 @@ footer li {
 /* TRANSACTIONS PAGE */
 .transactions-table {
   max-width: 800px;
-  background-color: #6c757d;
   border-radius: 8px;
   overflow: hidden;
   font-size: 0.9em;
-  color: #f4f4f4;
-}
-.transactions-table th,
-.transactions-table td {
-  border-color: #303133 !important;
 }
 .transactions-table th {
   border-top: none;
 }
-
-.withdraw-amt {
-  color: #a90000;
+.transactions-table a {
+  color: inherit;
+}
+.transactions-table a:hover {
+  color: #5c6b6e;
 }
 
 .deposit-amt {
   color: #1f3f1a;
 }
 
-.expired-bid {
-  color: #6c757d;
-  font-style: italic;
-}
-.expired-bid a,
-.expired-bid p,
-.expired-bid span {
-  color: #6c757d;
-  font-style: italic;
+.withdraw-amt {
+  color: #a90000;
 }
 
 .winning-bid-active {
-  color: #f4f4f4;
   font-weight: bold;
   font-size: 0.9em;
+}
+
+.expired-bid {
+  font-style: italic;
 }
 
 .winning-bid-closed {
@@ -945,26 +937,60 @@ footer li {
 }
 
 .losing-bid-closed {
-  color: #babfc8;
   font-style: italic;
   font-size: 0.9em;
 }
 .losing-bid-closed a {
-  color: #babfc8 !important;
   font-style: italic !important;
 }
 .losing-bid-closed a:hover {
-  color: #983554 !important;
+  color: #0a5f76 !important;
+}
+
+.dark-mode-table {
+  background-color: #6c757d;
+  color: #f4f4f4;
+}
+.dark-mode-table th,
+.dark-mode-table td {
+  border-color: #303133 !important;
+}
+.dark-mode-table .winning-bid-active {
+  color: #f4f4f4;
+}
+.dark-mode-table .losing-bid-closed {
+  color: #babfc8;
+}
+.dark-mode-table .losing-bid-closed a {
+  color: #babfc8 !important;
+}
+.dark-mode-table .losing-bid-closed a:hover {
+  color: #5c6b6e !important;
+}
+
+.light-mode-table {
+  background-color: #babfc8;
+  color: #303133;
+}
+.light-mode-table th,
+.light-mode-table td {
+  border-color: #e2e2e2 !important;
+}
+.light-mode-table .winning-bid-active {
+  color: #343a40;
+}
+.light-mode-table .losing-bid-closed {
+  color: #495057;
+}
+.light-mode-table .losing-bid-closed a {
+  color: #495057 !important;
+}
+.light-mode-table .losing-bid-closed a:hover {
+  color: #5c6b6e !important;
 }
 
 #bids-table {
   text-align: center;
-}
-#bids-table a {
-  color: #f4f4f4;
-}
-#bids-table a:hover {
-  color: #983554;
 }
 
 /* MESSAGES PAGE */
