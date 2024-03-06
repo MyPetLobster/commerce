@@ -40,6 +40,7 @@ def declare_winner(listing):
 
 
 
+
 # Used in - views.index, views.listings
 def set_inactive(listings):
     for listing in listings:

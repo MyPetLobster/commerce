@@ -143,33 +143,6 @@ def close_listing(request, listing_id):
     return HttpResponseRedirect(reverse("index"))
 
 
-# STAFF ONLY FUNCTION
-@login_required
-def force_close_listing(request, listing_id):
-    if request.user.is_staff:
-        listing = Listing.objects.get(pk=listing_id)
-        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-
-        if highest_bid > listing.starting_bid:
-            try:
-                listing.winner = highest_bid.user
-                listing.save()
-                transfer_to_escrow(listing.winner)
-                notify_all_closed_listing(listing.id)
-                listing.active = False
-                listing.save()
-            except:
-                listing.winner = None
-                listing.active = True
-                listing.save()
-                contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
-                return HttpResponseRedirect(reverse("index"))
-        else:
-            listing.cancelled = True
-            listing.active = False
-            listing.save()
-
-
 @login_required
 def comment(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
@@ -201,6 +174,8 @@ def move_to_escrow(request, listing_id):
             transfer_to_escrow(winner, listing_id)
             
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+
 
 
 # PROFILE FUNCTIONS
