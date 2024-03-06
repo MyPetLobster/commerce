@@ -219,6 +219,20 @@ a:hover {
 
 
 /* FORM STYLES */
+
+.confirmation-popup {
+  @include flex-column;
+  @include floating-form;
+  @include universal-form;
+  width: 400px;
+  text-align: center;
+  font-size: 0.9em;
+  
+  button {
+    margin-top: 20px;
+  }
+}
+
 /* All input fields font-size and focus */
 .form-control {
   font-size: 0.9em;

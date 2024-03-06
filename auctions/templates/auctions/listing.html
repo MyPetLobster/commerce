@@ -194,10 +194,30 @@
             {% endif %}
 
             {% if listing.user == current_user %}
-                <form action="/close_listing/{{ listing.id }}" method="post">
-                    {% csrf_token %}
-                    <button id="close-listing-btn" class="btn btn-primary cancel-btn" type="submit">Close Listing</button>
-                </form>
+
+                <button id="close-listing-btn" class="btn btn-primary cancel-btn" type="submit">Close Listing</button>
+                <div id="close-bid-confirmation" class="confirmation-popup hidden">
+                    <div class="confirmation-popup-content">
+                        <h5 class="red">Are you sure you want to close this listing?</h5>
+                        <p>
+                            This action cannot be undone. If there are any bids on your listing, there 
+                            will be a 24 hour delay before  the listing is officially closed and all 
+                            active bidders will be notified. You may not manually close a listing if 
+                            there are less than 24 hours left in the auction.
+                        </p>
+                        <p>
+                            There will also be an additional 5% fee regardless of whether or not there are 
+                            any bids on your listing. This fee will be deducted from your account balance 
+                            or added to the 10% fee if your listing sells. If you have read this and understand,
+                            you may confirm the closing of your listing below.
+                        </p>
+                        <form action="/close_listing/{{ listing.id }}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-primary" type="submit">Confirm Closing</button>
+                        </form>
+                        <button id="cancel-close" class="btn btn-primary cancel-btn" type="button">Cancel</button>
+                    </div>
+                </div>
             {% endif %}
 
         {% else %}
@@ -246,6 +266,21 @@
 </div>
 
 <script>
+    const closeListingBtn = document.querySelector('#close-listing-btn');
+    const closeBidConfirmation = document.querySelector('#close-bid-confirmation');
+    const cancelClose = document.querySelector('#cancel-close');
+
+    if (closeListingBtn) {
+        closeListingBtn.onclick = function() {
+            closeBidConfirmation.classList.remove('hidden');
+        }
+    }
+
+    if (cancelClose) {
+        cancelClose.onclick = function() {
+            closeBidConfirmation.classList.add('hidden');
+        }
+    }
 
 
     const commentButton = document.querySelector('#comment-button');

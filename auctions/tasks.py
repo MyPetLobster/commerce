@@ -127,34 +127,37 @@ def message_losing_bidders(listing_id):
 def notify_all_early_closing(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     site_account = User.objects.get(pk=12)
-    all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
     seller = listing.user
+    all_unique_bidders = User.objects.filter(bids__listing=listing).distinct()
 
-    subject = f"A listing you been on is being closed early"
-    message = f"""The listing for {listing.title} is being closed early by the seller. You have 
-                24 hours to continue bidding on this item. {listing.title} will be closed at 
-                {listing.closing_date}. Thank you for using Yard Sale!"""
+    if all_unique_bidders.exists():
+        subject = f"A listing you been on is being closed early"
+        message = f"""The listing for {listing.title} is being closed early by the seller. You have 
+                    24 hours to continue bidding on this item. {listing.title} will be closed at 
+                    {listing.closing_date}. Thank you for using Yard Sale!"""
 
-    for bidder in all_unique_bidders:
-        user = User.objects.get(pk=bidder['user'])
-        send_message(site_account, user, subject, message)
+        for bidder in all_unique_bidders:
+            user = User.objects.get(pk=bidder['user'])
+            send_message(site_account, user, subject, message)
 
-    subject_seller = f"Your listing is being closed early"
-    message_seller = f"""The listing for {listing.title} is being closed early. The new closing date is 
-                        set for {listing.closing_date}. Because of the early cancellation, you will be 
-                        charged an additional 5% fee when funds are transferred to you from escrow. 
-                        If you did not close this listing, please contact support immediately. 
-                        Thank you for using Yard Sale!"""
-    
-    send_message(site_account, seller, subject_seller, message_seller)
+        subject_seller = f"Your listing is being closed early"
+        message_seller = f"""The listing for {listing.title} is being closed early. The new closing date is 
+                            set for {listing.closing_date}. Because of the early cancellation, you will be 
+                            charged an additional 5% fee when funds are transferred to you from escrow. 
+                            If you did not close this listing, please contact support immediately. 
+                            Thank you for using Yard Sale!"""
+        
+        send_message(site_account, seller, subject_seller, message_seller)
 
 
 def charge_early_closing_fee(listing_id):
+
     listing = Listing.objects.get(pk=listing_id)
     site_account = User.objects.get(pk=12)
     seller = listing.user
     amount = listing.price
     fee_amount = amount * decimal.Decimal(0.05)
+
 
     Transaction.objects.create(
         sender=seller,

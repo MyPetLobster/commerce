@@ -113,28 +113,37 @@ def close_listing(request, listing_id):
 
     # Only the seller can close the listing
     if request.user == listing.user:
-        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
         starting_bid = listing.starting_bid
+        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+
+        if highest_bid is None:
+            highest_bid = listing.starting_bid
+
         try:
             # If there are less than 24 hours left, the listing cannot be closed manually
             if listing.closing_date - timezone.now() < timezone.timedelta(hours=24):
                 contrib_messages.error(request, "Listing cannot be closed with less than 24 hours remaining.")
                 return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-            
+
             # If there are active bids, there will be 24 hour delay before closing
             # and all bidders will be notified
-            if highest_bid.amount > starting_bid:
+            if highest_bid > starting_bid:
                 listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
                 listing.save()
                 contrib_messages.error(request, "Listing cannot be closed with active bids. There will be a 24 hour delay before closing.")
                 notify_all_early_closing(listing.id)
-
+                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+                
             # No bids, charge early closing fee and close listing
             else:
-                charge_early_closing_fee(listing_id)
-                listing.cancelled = True
-                listing.active = False
-                listing.save()
+                try:
+                    charge_early_closing_fee(listing_id)
+                    listing.cancelled = True
+                    listing.active = False
+                    listing.save()
+                except:
+                    logger.error(f"(Err01989) Unexpected charging early closing fee {listing_id}")
+                    contrib_messages.error(request, "Unexpected error charging closing fee contact admins.")
             
         except:
             logger.error(f"(Err01989) Unexpected error closing listing for listing ID {listing_id}")

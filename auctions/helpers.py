@@ -44,6 +44,8 @@ def declare_winner(listing):
 # Used in - views.index, views.listings
 def set_inactive(listings):
     for listing in listings:
+        if listing.closing_date == None:
+            listing.closing_date = listing.date + timedelta(days=7)
         if listing.closing_date < timezone.now():
             listing.active = False
             listing.save()
