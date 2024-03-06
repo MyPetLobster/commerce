@@ -371,6 +371,9 @@ legend {
   align-items: center;
   padding-left: 10px;
 }
+.hero:hover {
+  cursor: pointer;
+}
 .user-status {
   @include flex-row;
   align-items: center;

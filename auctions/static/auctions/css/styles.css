@@ -431,6 +431,10 @@ legend {
   padding-left: 10px;
 }
 
+.hero:hover {
+  cursor: pointer;
+}
+
 .user-status {
   display: flex;
   flex-direction: row;
