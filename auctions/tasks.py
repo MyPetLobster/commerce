@@ -34,7 +34,6 @@ def check_listing_expiration():
         for listing in expired_listings:
             # Close the listing
             listing.active = False
-            listing.closing_date = now
             listing.save()
 
             # Check for bids on the listing

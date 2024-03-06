@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 
 import decimal
 import logging
@@ -116,6 +117,13 @@ def close_listing(request, listing_id):
         starting_bid = listing.starting_bid
         try:
             if highest_bid.amount > starting_bid:
+
+
+                # TODO I'm stopping here. Need to implement the 24 hr delay if there are bids and user tries to close
+                # the listing. Need to write new msgs to send for this case. Separate celery task to handle this delay?
+                
+                # TODO Understand how django timezone works
+
                 try:
                     listing.winner = highest_bid.user
                     listing.save()

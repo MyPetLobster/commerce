@@ -124,8 +124,6 @@ def category(request, category_id):
 
 def index(request):
 
-    set_closing_dates_if_not_set(request)
-
     current_user = request.user
     listings = Listing.objects.all()
 
@@ -179,7 +177,7 @@ def listing(request, listing_id):
 
     # Generate time left string for JavaScript display, live countdown
     if helpers.check_expiration(listing_id) == "closed - expired":
-        closed_date = listing.date + timedelta(days=7)
+        closed_date = listing.closing_date
         time_left = f"Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
     elif helpers.check_expiration(listing_id) == "closed - by seller":
         time_left = "Listing closed by seller"

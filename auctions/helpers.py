@@ -43,9 +43,8 @@ def declare_winner(listing):
 # Used in - views.index, views.listings
 def set_inactive(listings):
     for listing in listings:
-        if listing.date + timedelta(days=7) < timezone.now():
+        if listing.closing_date < timezone.now():
             listing.active = False
-            listing.closing_date = timezone.now()
             listing.save()
             try: 
                 declare_winner(listing)
@@ -62,9 +61,8 @@ def check_expiration(listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     if listing.active:
         now = timezone.now()
-        if listing.date + timedelta(days=7) < now:
+        if listing.closing_date < now:
             listing.active = False
-            listing.closing_date = now
             listing.save()
             try:
                 declare_winner(listing)
@@ -74,7 +72,7 @@ def check_expiration(listing_id):
         else:
             return "active"
     else:
-        if listing.date + timedelta(days=7) < timezone.now():
+        if listing.closing_date < timezone.now():
             return "closed - expired"
         else:
             return "closed - by seller"
@@ -176,7 +174,7 @@ def check_bids_funds(request, listing_id):
         # from closing. There is a check in views.listing() to skip this if the listing is 
         # less than 24 hours from closing.
         if highest_bid.amount > highest_bid.user.balance:
-            time_left_to_deposit = listing.date + timezone.timedelta(days=6) - now
+            time_left_to_deposit = listing.closing_date - timezone.timedelta(days=1) - now
             if time_left_to_deposit.days == 0:
                 time_left_to_deposit = f"{time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
             else:
