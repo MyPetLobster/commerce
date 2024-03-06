@@ -1252,4 +1252,18 @@ footer li {
   margin-bottom: 20px;
 }
 
+.hide-listing {
+  display: none;
+}
+
+.display-listing {
+  display: inherit;
+}
+
+#show-more {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #c55176;
+}
+
 /*# sourceMappingURL=styles.css.map */

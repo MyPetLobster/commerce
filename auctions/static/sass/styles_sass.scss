@@ -1042,3 +1042,18 @@ footer {
   text-align: left;
   margin-bottom: 20px;
 }
+
+
+
+.hide-listing {
+  display: none;
+}
+.display-listing {
+  display: inherit;
+}
+
+
+#show-more {
+  @include cursor-pointer-transition;
+  color: $primary-pink;
+}
