@@ -232,6 +232,17 @@ def listing(request, listing_id):
     })
 
 
+def about(request):
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
+
+    return render(request, "auctions/about.html", {
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
+    })
 
 
 # VIEWS - LOGIN REQUIRED

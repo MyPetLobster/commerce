@@ -36,8 +36,10 @@
         {% endif %}
         <div class="hero">
             <h1 class="yard-sale">Yard Sale</h1>
-            <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
-            <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
+            <a href="{% url 'about' %}">
+                <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
+                <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
+            </a>
         </div>
         
         <div class="nav-container">
@@ -120,8 +122,8 @@
                 <li>
                     <a class="footer-link" href="https://github.com/MyPetLobster/commerce">GitHub Repo</a>
                 </li>
-                <li>
-                    <a class="footer-link" href="{% url 'index' %}">&copy; Yard Sale 2024</a>
+                <li id="center-footer-item">
+                    <a class="footer-link" href="{% url 'about' %}">&copy; Yard Sale 2024</a>
                 </li>
                 <li>
                     <a id="theme-mode-toggle" class="footer-link" href="#">Toggle Dark Mode</a>

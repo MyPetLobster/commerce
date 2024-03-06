@@ -137,14 +137,30 @@
             <li>
                 <h3 class="faq-question">I'm nervous about selling stuff, any tips?</h3>
                 <p class="faq-answer">
-                    Selling items can be a bit nerve-wracking, but it can also be a lot of fun. Here are a few tips to help you get started:</br></br>
-                    1. Take clear photos of your item. Make sure to show any damage or wear and tear. Buyers appreciate honesty.</br></br>
-                    2. Write a detailed description of your item. Include the item's condition, any damage, and any other relevant information.</br></br>
-                    3. Set a reasonable starting bid. If you set the starting bid too high, you may not get any bids. If you set it too low, you may not get as much as you'd like for your item.</br></br>
-                    4. Be responsive to messages. If a buyer has a question about your item, try to respond as quickly as possible. This will help build trust with potential buyers.</br></br>
-                    5. Ship your item promptly. Once your item sells, ship it as soon as possible. This will help build trust with the buyer and encourage them to leave positive feedback.</br></br>
-                    6. Be honest. If your item has any damage or wear and tear, be upfront about it. Buyers appreciate honesty and are more likely to leave positive feedback if they feel they can trust you.</br></br>
-                    7. Have fun! Selling items can be a great way to make some extra money and clear out clutter. Enjoy the process and don't be afraid to try new things.
+                    Selling items can be a bit nerve-wracking, but it can also be a lot of fun. Here are a few tips to help you get started:</br>
+                    <ul class="tips-list">
+                        <li>
+                            1. Take clear photos of your item. Make sure to show any damage or wear and tear. Buyers appreciate honesty.</br></br>
+                        </li>
+                        <li>
+                            2. Write a detailed description of your item. Include the item's condition, any damage, and any other relevant information.</br></br>
+                        </li>
+                        <li>
+                            3. Set a reasonable starting bid. If you set the starting bid too high, you may not get any bids. If you set it too low, you may not get as much as you'd like for your item.</br></br>
+                        </li>
+                        <li>
+                            4. Be responsive to messages. If a buyer has a question about your item, try to respond as quickly as possible. This will help build trust with potential buyers.</br></br>
+                        </li>
+                        <li>
+                            5. Ship your item promptly. Once your item sells, ship it as soon as possible. This will help build trust with the buyer and encourage them to leave positive feedback.</br></br>
+                        </li>
+                        <li>
+                            6. Be honest. If your item has any damage or wear and tear, be upfront about it. Buyers appreciate honesty and are more likely to leave positive feedback if they feel they can trust you.</br></br>
+                        </li>
+                        <li>
+                            7. Have fun! Selling items can be a great way to make some extra money and clear out clutter. Enjoy the process and don't be afraid to try new things.
+                        </li>
+                    </ul>
                 </p>
             </li>
             <li>
@@ -182,8 +198,9 @@
         <div class="center-container"><span id="show-terms-conditions">Show Terms and Conditions</span></div>
         <div id="terms-and-conditions" class="hidden">
             <h3 class="terms-conditions-header">Terms and Conditions</h3>
+            <div class="center-container">
+            <h6>By using Yard Sale, you agree to the following terms and conditions:</h6>
             <p class="terms-conditions-paragraph">
-                By using Yard Sale, you agree to the following terms and conditions:</br></br>
                 1. You must be at least 18 years old to use Yard Sale.</br></br>
                 2. You are responsible for the accuracy of the information you provide on Yard Sale. This includes your 
                     contact information, payment information, and any other information you provide.</br></br>
@@ -206,9 +223,19 @@
                 11. There is a non-negotiable 5% fee for a seller if the admin decides in favor of the buyer in any dispute.</br></br>
                 13. If you've read this far send the admins a message with the subject line "Lawn Gnomes" and we will give you a 5% discount on 
                     your next successful sale. This is a limited time offer and may be revoked at any time.
+            </p>
+            </div>
         </div>
 
 </div>
 
+<script>
+    document.getElementById("show-terms-conditions").addEventListener("click", function() {
+        document.getElementById("terms-and-conditions").classList.toggle("hidden");
+    });
+    document.getElementById("terms-and-conditions").addEventListener("click", function() {
+        document.getElementById("terms-and-conditions").classList.toggle("hidden");
+    });
+</script>
 
 {% endblock %}

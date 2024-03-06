@@ -404,6 +404,11 @@ legend {
   margin: 0;
 }
 
+.footer-links {
+  padding: 0;
+  margin: 0;
+}
+
 #msg-admin-link,
 .nav-link,
 .logout-link,
@@ -470,6 +475,11 @@ footer ul {
 }
 footer li {
   list-style-type: none;
+}
+
+#center-footer-item {
+  position: relative;
+  left: 17px;
 }
 
 /* ALL BUTTON STYLES */
@@ -1155,6 +1165,85 @@ footer li {
 }
 .old-bid a:hover {
   color: #983554 !important;
+}
+
+/* ABOUT PAGE */
+.about-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  max-width: 750px;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  margin-top: 20px;
+}
+
+.about-header {
+  margin-bottom: 20px;
+  color: #c55176;
+}
+
+.faq-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.faq-item {
+  text-align: center;
+}
+
+.faq-question {
+  font-size: 1.9em;
+  color: #8c8787;
+}
+
+.faq-answer {
+  margin-bottom: 20px;
+}
+
+#show-terms-conditions {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #c55176;
+}
+
+#show-terms-conditions:hover {
+  color: #983554;
+}
+
+#terms-and-conditions {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  background: #babfc8;
+  color: #343a40;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  overflow: scroll;
+}
+
+.terms-conditions-header {
+  margin-top: 40px;
+}
+
+.terms-conditions-paragraph {
+  width: 600px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
+.tips-list {
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 /*# sourceMappingURL=styles.css.map */
