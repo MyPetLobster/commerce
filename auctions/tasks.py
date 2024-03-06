@@ -176,13 +176,23 @@ def transfer_to_seller(listing_id):
 
     if listing.in_escrow == True:
         if amount > escrow_account.balance:
+
             # Send Alert Message to Admin if escrow account is empty when it shouldn't be
-            subject = "Escrow Account Empty Alert - Listing: {listing.title}"
+            subject = "(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
             message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
             send_message(site_account, admin, subject, message)
+
+            logger.error(f"(Err01989) Escrow account is empty for {listing.title}")
             return False
         else:
-            fee_amount = amount * decimal.Decimal(0.1)
+
+            #TODO Make sure to add cancellation charge when user lists item, and in terms
+
+            if listing.cancelled == True:
+                fee_amount = amount * decimal.Decimal(0.15)
+            else:
+                fee_amount = amount * decimal.Decimal(0.1)
+
             amount -= fee_amount
 
             fee_transaction = Transaction.objects.create(
@@ -213,7 +223,8 @@ def transfer_to_seller(listing_id):
             # Send confirmation message to seller after shipping confirmed
             subject = f"Your tracking information has been received for {listing.title}"
             message = f"""The funds held in escrow for {listing.title} have been released to your account. 
-                        Your balance should be updated within 1-2 business days. Thank you for using Yard Sale!
+                        Your balance should be updated within 1-2 business days. Here is the tracking 
+                        number for your records #{tracking_number}. Thank you for using Yard Sale!
                         """
             send_message(site_account, seller, subject, message)
 
@@ -221,13 +232,13 @@ def transfer_to_seller(listing_id):
             # Send confirmation message to buyer after shipping confirmed
             subject = f"{listing.title} has been shipped!"
             message = f"""The funds held in escrow for {listing.title} have been released to the seller's account 
-                        and your item has been shipped. Here is your tracking number: {tracking_number}. 
+                        and your item has been shipped. Here is your tracking number: #{tracking_number}. 
                         Thank you for using Yard Sale!"""
             send_message(site_account, buyer, subject, message)
 
             return True
     else:
-        logger.error(f"Unexpected conflict with escrow status for {listing.title}")
+        logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
         return False
     
 

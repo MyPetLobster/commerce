@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 
 import decimal
+import logging
 
 from . import helpers
 from .classes import UserInfoForm
@@ -12,6 +13,7 @@ from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
 from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller
 
 
+logger = logging.getLogger(__name__)
 
 
 # INDEX/LISTINGS FUNCTIONS
@@ -161,12 +163,11 @@ def comment(request, listing_id):
 def move_to_escrow(request, listing_id):
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
-    seller = listing.user
     winner = listing.winner
 
     if winner == current_user:
         if listing.active == False and listing.in_escrow == False and listing.shipped == False:
-            transfer_to_escrow(listing)
+            transfer_to_escrow(winner, listing_id)
             
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
@@ -276,7 +277,12 @@ def confirm_shipping(request, listing_id):
         if transfer_to_seller(listing_id):
             listing.shipped = True
             listing.save()    
+            contrib_messages.success(request, "Shipping confirmed")
+        else:
+            logger.error(f"(Err01989) Unexpected error confirming shipping for listing ID {listing_id}")
+            contrib_messages.error(request, "Unexpected error confirming shipping, contact admins.")
     else:
+        logger.error(f"(Err01989) Unexpected error confirming shipping for listing ID {listing_id}")
         contrib_messages.error(request, "Unexpected error confirming shipping, contact admins.")
     
     return redirect("listing", listing_id=listing_id)
