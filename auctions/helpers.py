@@ -35,7 +35,7 @@ def declare_winner(listing):
         winner = highest_bid.user
         listing.winner = winner
         
-        transfer_to_escrow(winner)
+        transfer_to_escrow(winner, listing.id)
         notify_all_closed_listing(listing.id)
 
 
@@ -198,7 +198,7 @@ def check_bids_funds(request, listing_id):
 
         # Send message to bidder
         send_message(site_account, highest_bid.user, subject, message)
-        
+
         return True, listing
 
     else:

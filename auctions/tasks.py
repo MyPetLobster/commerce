@@ -89,10 +89,10 @@ def message_winner(listing_id):
     winner = listing.winner
 
     subject = f"Congratulations! You won the auction for {listing.title}"
-    message = f"""If you have sufficient funds already deposited in your account, then you're all set! If there 
-                is any further action required on your part, you will receive a message detailing the next steps.
-                Otherwise, you will receive a message with tracking information once the seller has shipped your item. 
-                Thank you for using Yard Sale!"""
+    message = f"""If you have sufficient funds already deposited in your account, then you're all set and you should 
+                have already received a message confirming funds have been moved to escrow. You will receive a message 
+                with tracking information once the seller has shipped your item. If there is any further action 
+                required on your part, you should have a message detailing the next steps. Thank you for using Yard Sale!"""
     send_message(site_account, winner, subject, message)
 
 def message_seller_on_sale(listing_id):
@@ -103,8 +103,9 @@ def message_seller_on_sale(listing_id):
     subject = f"Congratulations! Your item has been sold!"
     message = f"""Your item, {listing.title}, has been sold! Please ship the item to the buyer as soon as possible.
                 We make the process easy! A shipping label as been emailed to you. As soon as you ship the item, navigate back to
-                the listing page via this link: <a href="/index/{listing.id}">{listing.id}</a> and click the 'Confirm Shipping' button to confirm the sale.
-                Once the item has been shipped, you will receive a message with tracking information. Thank you for using Yard Sale!"""
+                the listing page via this link: <a href="/index/{listing.id}">{listing.id}</a> and click the 'Confirm Shipping' 
+                button to confirm the sale. Once the item has been shipped, you will receive a message with tracking information. 
+                Thank you for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
 
 def message_losing_bidders(listing_id):
@@ -123,60 +124,30 @@ def message_losing_bidders(listing_id):
                     and issues confirming the sale, the next highest bid will be contacted. Thank you for using Yard Sale!"""
         send_message(site_account, user, subject, message)
 
-# def email_winner(winner, listing):
-#     try:
-#         # Get the winner's email
-#         winner_email = winner.user.email
 
-#         # Create the email subject
-#         subject = f"Congratulations! You won an auction. ({winner_email})"
 
-#         listing_price = listing.price
-#         listing_title = listing.title
-#         seller_name = listing.user.username
-#         seller_email = listing.user.email
-
-#         # Create the email message
-#         message = render_to_string('auctions/winner_email.html', {
-#             'listing_title': listing_title,
-#             'listing_price': listing_price,
-#             'seller_name': seller_name,
-#             'seller_email': seller_email
-#         })
-        
-#         #TODO currently using MY_EMAIL as the recipient for testing, change to winner_email
-#         # Send the email
-#         send_mail(
-#             subject,
-#             strip_tags(message),
-#             settings.EMAIL_HOST_USER,
-#             [my_email,],
-#             html_message=message
-#         )
-#     except (smtplib.SMTPException, smtplib.SMTPAuthenticationError, TemplateDoesNotExist) as e:
-#         logger.error(f"An error occurred while notifying the winner: {str(e)}")
-#         send_error_notification(str(e))
-
-def transfer_to_escrow(winner):
-    listing = winner.listing
+def transfer_to_escrow(winner, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
     buyer = winner.user
-
     amount = listing.price
     escrow_account = User.objects.get(pk=11)
+    site_account = User.objects.get(pk=12)
 
     if amount > buyer.balance: 
         if listing.in_escrow == False:
             subject = f"Insufficient funds for {listing.title}"
             message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
             funds to complete the transaction. Please add funds to your account to complete the purchase.
-            Then navigate back to the listing page via this link: {listing.get_absolute_url()} and click 
-            the 'Complete Purchase' button to complete the transaction.
-            """
-            send_message(User.objects.get(pk=2), buyer, subject, message)
+            Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
+            the transaction.
+            """   
         else: 
-            logger.error(f"Unexpected conflict with escrow status for {listing.title}")
+            logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
         
     else:
+        subject = f"Your funds have been deposited in escrow for {listing.title}"
+        message = f"As soon as the buyer ships the item, you will receive confirmation and tracking information. Thank you for using Yard Sale!"
+
         Transaction.objects.create(
             sender=buyer,
             recipient=escrow_account,
@@ -189,6 +160,9 @@ def transfer_to_escrow(winner):
         escrow_account.balance += amount
         escrow_account.save()
         listing.in_escrow = True
+        listing.save()
+
+    send_message(site_account, buyer, subject, message)
     
 
 def transfer_to_seller(listing_id):
@@ -265,3 +239,39 @@ def send_message(sender, recipient, subject, message):
         message=message
     )
 
+
+
+
+# def email_winner(winner, listing):
+#     try:
+#         # Get the winner's email
+#         winner_email = winner.user.email
+
+#         # Create the email subject
+#         subject = f"Congratulations! You won an auction. ({winner_email})"
+
+#         listing_price = listing.price
+#         listing_title = listing.title
+#         seller_name = listing.user.username
+#         seller_email = listing.user.email
+
+#         # Create the email message
+#         message = render_to_string('auctions/winner_email.html', {
+#             'listing_title': listing_title,
+#             'listing_price': listing_price,
+#             'seller_name': seller_name,
+#             'seller_email': seller_email
+#         })
+        
+#         #TODO currently using MY_EMAIL as the recipient for testing, change to winner_email
+#         # Send the email
+#         send_mail(
+#             subject,
+#             strip_tags(message),
+#             settings.EMAIL_HOST_USER,
+#             [my_email,],
+#             html_message=message
+#         )
+#     except (smtplib.SMTPException, smtplib.SMTPAuthenticationError, TemplateDoesNotExist) as e:
+#         logger.error(f"An error occurred while notifying the winner: {str(e)}")
+#         send_error_notification(str(e))
