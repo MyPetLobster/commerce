@@ -1,0 +1,214 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block title %}
+    About
+{% endblock %}
+
+{% block navbar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
+    </li>
+{% endblock %}
+
+
+{% block body %}
+<!-- Generate an html about page including faq section and terms of service section. -->
+
+<div class="page-content">
+    <div class="about-section">
+            <h2 class="about-header">About Yard Sale</h2>
+            <p class="about-paragraph">
+                Yard Sale is a platform for buying and selling items. Users can create listings for items they 
+                want to sell, and other users can bid on those items. Users can also add items to their watchlist, 
+                and send and receive messages with other users. Yard Sale is a great place to find unique items 
+                and make some extra money.</br></br>
+                As the saying goes -- one person's trash is another person's...well trash but hopefully that person
+                will think they need it and pay you money for it. Best of luck lawn gnomes!
+            </p>
+    </div>
+
+    <div class="about-section">
+        <h2 class="about-header">FAQ</h2>
+        <ul class="faq-list">
+            <li class="faq-item">
+                <h3 class="faq-question">How do I create a listing?</h3>
+                <p class="faq-answer">To create a listing, click the "Create Listing" link in the navigation bar. 
+                    You will be prompted to enter a title, description, starting bid, and category for your item. 
+                    You can also upload an image of your item. Once you submit the form, your listing will be 
+                    added to the site. Listing's are live for 7 days. There is a non-negotiable 10% fee for all 
+                    successful sales.
+                </p>
+            </li>
+            <li class="faq-item">
+                <h3 class="faq-question">How do I bid on an item?</h3>
+                <p class="faq-answer">
+                    To bid on an item, click the title of the listing to view the item's details. You will see a 
+                    form where you can enter your bid. Once you submit the form, your bid will be added to the 
+                    listing. If your bid is the highest, you will be notified that you are the highest bidder. 
+                    If someone else bids higher than you, you will be notified that you have been outbid.</br></br>
+                    If the listing is not already on your watchlist, it will be added after you place a bid.
+                </p>
+            </li>
+            <li class="faq-item">
+                <h3 class="faq-question">How do I add an item to my watchlist?</h3>
+                <p class="faq-answer">
+                    To add an item to your watchlist, click the "Add to Watchlist" button on the listing's details 
+                    page. You can view your watchlist by clicking the "Watchlist" link in the navigation bar.
+                </p>
+            </li>
+            <li class="faq-item">
+                <h3 class="faq-question">How do I send a message to another user?</h3>
+                <p class="faq-answer">
+                    To send a message to another user, navigate to their profile page from the link on their listing. 
+                    There will be a button and popup form to send them a message. You can also view your messages by
+                    clicking the "Messages" link in the navigation bar.</br></br>
+                    Please refrain from messaging other users regarding any disputes. Contact the admins if you have
+                    any issues. We here at Yard Sale have a zero tolerance policy for harassment of any kind. If you 
+                    are found to be in violation of this policy, your account will be terminated and access to funds 
+                    will have to be requested through the legal system.
+                </p>
+            </li>
+            <li class="faq-item">
+                <h3 class="faq-question">How do I close a listing early?</h3>
+                <p class="faq-answer">
+                    There are a few situations to consider if you want to close a listing early. Please read the descriptions
+                    of each scenario below and follow the instructions accordingly.</br></br>
+                    As a seller, you may close a listing early if there are more than 24 hours left before your listing 
+                    expires. (If there are less than 24 hours left and NO active bids, you may contact the admin to request
+                    an early close.) However, if less than 24 hours remain and there are active bids, you must wait until 
+                    the listing expires.</br></br>
+                    If there are more than 24 hours remaining on your active listing and no active bids, you may close the
+                    listing early by clicking the "Close Listing" button on the listing's details page. Be aware, you will be
+                    charged a non-negotiable 5% fee for closing a listing early. Your listing will be marked as cancelled and may
+                    not be relisted for 30 days.</br></br>
+                    If there are more than 24 hours remaining on your active listing and there ARE active bids on the listing, you
+                    may close the listing, but there will be a 24 hour delay before the listing is closed. All active bidders will
+                    be notified of the change. And when the listing closes, you will be charged the standard 10% fee for a successful
+                    sale as well as a non-negotiable 5% fee for closing the listing early. Your listing will be marked as closed, and 
+                    you must complete the shipping process. 
+                </p>
+            </li>
+            <li>
+                <h3 class="faq-question">How do I request a refund?</h3>
+                <p class="faq-answer">
+                    As a buyer, you may request a refund if the item you received is not as described in the listing, or if the item
+                    is damaged. You must complete the dispute form within 3 days of receiving the item. The seller will be notified
+                    of the dispute and will have 3 days to respond. If the seller does not respond, the refund will be processed. If
+                    the seller responds, you will have 3 days to resolve the dispute. If the dispute is not resolved, the admin will
+                    step in to make a decision. If the admin decides in your favor, the refund will be processed. If the admin decides
+                    in the seller's favor, the refund will not be processed. If the admin decides in favor of the seller, the admin reserves
+                    the right to charge a non-negotiable 5% fee for the dispute process. Fraud will not be tolerated.</br></br>
+                    As a buyer, if you know in advance that you will be unable to check your item within 3 days of receiving it, please
+                    contact the seller to request an extension. If the seller agrees, the admin will be notified and the dispute process
+                    will be extended. If the seller does not agree, you must complete the dispute form within 3 days of receiving the item.
+                </p>
+            </li>
+            <li>
+                <h3 class="faq-question">What if I change my mind? Can I cancel my bids?</h3>
+                <p class="faq-answer">
+                    As a bidder, you have 12 hours to change your mind and cancel your bid. If you cancel your bid within 12 hours of placing
+                    it, you will not be charged a fee. If you cancel your bid after 12 hours, you will be charged a non-negotiable 10% fee, 
+                    half of which is paid to the site and half of which is paid to the seller. This is true whether or not your bid is the 
+                    high bid at the time of cancellation.</br></br>
+                    No bids may be cancelled or withdrawn once an auction has less than 24 hours remaining. In other words, if you place a bid 
+                    on a listing that has 25 hours remaining, you will only have one hour to cancel your bid. If you place a bid on a listing
+                    that has 23 hours remaining, you will not be able to cancel your bid. If you place a bid on a listing that has 24 hours and 5
+                    seconds remaining, you have five seconds to change your mind. Act fast!
+                </p>
+            <li>
+                <h3 class="faq-question">I'm nervous about selling stuff, any tips?</h3>
+                <p class="faq-answer">
+                    Selling items can be a bit nerve-wracking, but it can also be a lot of fun. Here are a few tips to help you get started:</br></br>
+                    1. Take clear photos of your item. Make sure to show any damage or wear and tear. Buyers appreciate honesty.</br></br>
+                    2. Write a detailed description of your item. Include the item's condition, any damage, and any other relevant information.</br></br>
+                    3. Set a reasonable starting bid. If you set the starting bid too high, you may not get any bids. If you set it too low, you may not get as much as you'd like for your item.</br></br>
+                    4. Be responsive to messages. If a buyer has a question about your item, try to respond as quickly as possible. This will help build trust with potential buyers.</br></br>
+                    5. Ship your item promptly. Once your item sells, ship it as soon as possible. This will help build trust with the buyer and encourage them to leave positive feedback.</br></br>
+                    6. Be honest. If your item has any damage or wear and tear, be upfront about it. Buyers appreciate honesty and are more likely to leave positive feedback if they feel they can trust you.</br></br>
+                    7. Have fun! Selling items can be a great way to make some extra money and clear out clutter. Enjoy the process and don't be afraid to try new things.
+                </p>
+            </li>
+            <li>
+                <h3 class="faq-question">I have a very rare/high value item, is Yard Sale a safe place for me to sell this?</h3>
+                <p class="faq-answer">
+                    Yard Sale is a great place to sell rare and high value items. We take security very seriously and have a 
+                    number of measures in place to protect our users. Here are a few things to keep in mind:</br></br>
+                    1. We use a secure payment system to process all transactions. This helps protect both buyers and sellers from fraud.</br></br>
+                    2. We have a dispute resolution process in place to help resolve any issues that may arise between buyers and sellers. 
+                        If you have any concerns about a transaction, please contact the admin.</br></br>
+                    3. We have a zero tolerance policy for harassment of any kind. If you are found to be in violation of this policy, your 
+                        account will be terminated and access to funds will have to be requested through the legal system.</br></br>
+                    4. We have a feedback system in place to help buyers and sellers build trust with each other. If you have a positive 
+                        experience with a buyer or seller, please consider leaving feedback. This will help other users know that they can 
+                        trust that person.</br></br>
+                    5. Yard Sale, in partnership with Coldmann Snacks, offers optional insurance plans for peace of mind when dealing with 
+                        high value items.</br></br>
+                    6. We have an in-house team of experts who can help you determine the value of your item and provide advice on how to 
+                        sell it. If you have a rare or high value item, please contact the admin for more information. Remember Antique 
+                        Roadshow? It's like that but with less cameras and more emojis</br></br>
+                    7. If you have any concerns about a transaction, please contact the admin. We are here to help and will do everything we 
+                    can to ensure that your experience on Yard Sale is a positive one.</br></br>
+                </p>
+            </li>
+            <li>
+                <h3 class="faq-question">I have a question that isn't answered here, how can I get in touch with Yard Sale?</h3>
+                <p class="faq-answer">
+                    If you have a question that isn't answered here, please feel free to send us a message. We are here to help and will do 
+                    everything we can to ensure that your experience on Yard Sale is a positive one. You can send us a message by clicking 
+                    the "Send us a message" right below the navbar. We look forward to hearing from you!
+                </p>
+            </li>
+        </ul>
+
+        <div class="center-container"><span id="show-terms-conditions">Show Terms and Conditions</span></div>
+        <div id="terms-and-conditions" class="hidden">
+            <h3 class="terms-conditions-header">Terms and Conditions</h3>
+            <p class="terms-conditions-paragraph">
+                By using Yard Sale, you agree to the following terms and conditions:</br></br>
+                1. You must be at least 18 years old to use Yard Sale.</br></br>
+                2. You are responsible for the accuracy of the information you provide on Yard Sale. This includes your 
+                    contact information, payment information, and any other information you provide.</br></br>
+                3. You are responsible for the security of your Yard Sale account. You must keep your password secure 
+                    and not share it with anyone else. You are responsible for any activity that occurs on your account.</br></br>
+                4. You must not use Yard Sale to engage in any illegal activity, including but not limited to fraud, 
+                    harassment, and copyright infringement.</br></br>
+                5. You must not use Yard Sale to engage in any activity that violates the rights of others, including but 
+                    not limited to privacy rights, intellectual property rights, and publicity rights.</br></br>
+                6. You must not use Yard Sale to engage in any activity that is harmful to others, including but not limited 
+                    to spamming, phishing, and malware distribution.</br></br>
+                7. You must not use Yard Sale to engage in any activity that is harmful to Yard Sale, including but not limited 
+                    to hacking, denial of service attacks, and other forms of cyber attack.</br></br>
+                8. You must not use Yard Sale to engage in any activity that is harmful to the Yard Sale community, including but 
+                    not limited to harassment, hate speech, and discrimination.</br></br>
+                9. There is a non-negotiable 10% fee for all sellers upon successful sale of an item. That fee will become 15% if 
+                    a seller chooses to close a listing early. If there are no bids and a listing is closed early, there is a non-negotiable 
+                    5% fee.</br></br>
+                10. There is a non-negotiable 5% fee for a buyer if a dispute is filed and the admin decides in favor of the seller.</br></br>
+                11. There is a non-negotiable 5% fee for a seller if the admin decides in favor of the buyer in any dispute.</br></br>
+                13. If you've read this far send the admins a message with the subject line "Lawn Gnomes" and we will give you a 5% discount on 
+                    your next successful sale. This is a limited time offer and may be revoked at any time.
+        </div>
+
+</div>
+
+
+{% endblock %}
