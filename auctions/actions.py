@@ -11,7 +11,7 @@ import logging
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
-from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller
+from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller, notify_all_early_closing, charge_early_closing_fee
 
 
 logger = logging.getLogger(__name__)
@@ -116,39 +116,58 @@ def close_listing(request, listing_id):
         highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
         starting_bid = listing.starting_bid
         try:
+            # If there are less than 24 hours left, the listing cannot be closed manually
+            if listing.closing_date - timezone.now() < timezone.timedelta(hours=24):
+                contrib_messages.error(request, "Listing cannot be closed with less than 24 hours remaining.")
+                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+            
+            # If there are active bids, there will be 24 hour delay before closing
+            # and all bidders will be notified
             if highest_bid.amount > starting_bid:
+                listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
+                listing.save()
+                contrib_messages.error(request, "Listing cannot be closed with active bids. There will be a 24 hour delay before closing.")
+                notify_all_early_closing(listing.id)
 
-
-                # TODO I'm stopping here. Need to implement the 24 hr delay if there are bids and user tries to close
-                # the listing. Need to write new msgs to send for this case. Separate celery task to handle this delay?
-                
-                # TODO Understand how django timezone works
-
-                try:
-                    listing.winner = highest_bid.user
-                    listing.save()
-                    winner = listing.winner
-                    transfer_to_escrow(winner)
-                    notify_all_closed_listing(listing.id)
-                    listing.active = False
-                    listing.save()
-                except:
-                    listing.winner = None
-                    listing.active = True
-                    listing.save()
-                    contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
-                    return HttpResponseRedirect(reverse("index"))
-
+            # No bids, charge early closing fee and close listing
             else:
+                charge_early_closing_fee(listing_id)
                 listing.cancelled = True
                 listing.active = False
                 listing.save()
-
             
         except:
             logger.error(f"(Err01989) Unexpected error closing listing for listing ID {listing_id}")
             contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
+
     return HttpResponseRedirect(reverse("index"))
+
+
+# STAFF ONLY FUNCTION
+@login_required
+def force_close_listing(request, listing_id):
+    if request.user.is_staff:
+        listing = Listing.objects.get(pk=listing_id)
+        highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+
+        if highest_bid > listing.starting_bid:
+            try:
+                listing.winner = highest_bid.user
+                listing.save()
+                transfer_to_escrow(listing.winner)
+                notify_all_closed_listing(listing.id)
+                listing.active = False
+                listing.save()
+            except:
+                listing.winner = None
+                listing.active = True
+                listing.save()
+                contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
+                return HttpResponseRedirect(reverse("index"))
+        else:
+            listing.cancelled = True
+            listing.active = False
+            listing.save()
 
 
 @login_required
