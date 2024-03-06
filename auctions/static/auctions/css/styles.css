@@ -1148,11 +1148,17 @@ footer li {
 }
 
 .thumb-img {
-  width: 140px;
-  height: 140px;
-  object-fit: center;
+  height: 200px;
+  width: 200px;
+  object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  transition-duration: 0.2s;
+}
+
+.thumb-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
 }
 
 .old-bid {
