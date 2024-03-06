@@ -1,6 +1,7 @@
 from django.contrib import messages as contrib_messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, get_list_or_404
@@ -109,10 +110,8 @@ def category(request, category_id):
 
 
 def index(request):
-
-    
     current_user = request.user
-    listings = Listing.objects.all()
+    listings = Listing.objects.all().order_by("-date")
 
     if current_user.is_authenticated:
         messages = contrib_messages.get_messages(request)
@@ -120,7 +119,7 @@ def index(request):
         unread_message_count = unread_messages.count()
 
         helpers.set_inactive(listings)
-        listings = get_list_or_404(Listing.objects.all())
+        listings = Listing.objects.all()
 
         return render(request, "auctions/index.html" , {
             "listings": listings,

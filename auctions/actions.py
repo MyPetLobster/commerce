@@ -1,5 +1,6 @@
 from django.contrib import messages as contrib_messages
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -30,14 +31,14 @@ def sort(request):
 
     if sort_by == "title":
         if sort_by_direction == "asc":
-            listings = listings.order_by("title")
+            listings = listings.annotate(title_lower=Lower('title')).order_by("title_lower")
         else:
-            listings = listings.order_by("-title")
+            listings = listings.annotate(title_lower=Lower('title')).order_by("-title_lower")
     elif sort_by == "seller":
         if sort_by_direction == "asc":
-            listings = listings.order_by("user")
+            listings = listings.annotate(user_lower=Lower('user__username')).order_by("user_lower")
         else:
-            listings = listings.order_by("-user")
+            listings = listings.annotate(user_lower=Lower('user__username')).order_by("-user_lower")
     elif sort_by == "date":
         if sort_by_direction == "asc":
             listings = listings.order_by("date")
