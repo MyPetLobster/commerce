@@ -9,12 +9,14 @@
   color: #f4f4f4;
 }
 
-.light-mode-text {
+.light-mode-text,
+.time-left-light-mode {
   color: #303133;
 }
 
 .dark-mode-text,
-.white {
+.white,
+.time-left-dark-mode {
   color: #f4f4f4;
 }
 
@@ -118,15 +120,15 @@ ul {
 }
 
 .red {
-  color: #a90000;
+  color: #a90000 !important;
 }
 
 .orange {
-  color: #b36f1b;
+  color: #b36f1b !important;
 }
 
 .yellow {
-  color: #e6d00c;
+  color: #e6d00c !important;
 }
 
 .green {

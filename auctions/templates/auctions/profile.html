@@ -160,7 +160,7 @@
                                     <span class="bold">Bid:</span> {% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="red">({% with formatted_currency=bid_info.difference|format_currency %}{{ formatted_currency }}{% endwith %} less than highest bid) </span></br>
                                 {% endif %}
                             {% with time_left_and_status=bid_info.user_bid.listing.id|get_time_left %}
-                                <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>
+                                <span class="{{ time_left_and_status.1 }} dynamic-time-left-text">{{ time_left_and_status.0 }}</span>
                             {% endwith %} 
                         </p>
                     {% else %}

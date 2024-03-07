@@ -41,7 +41,9 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("#inverted-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("visible");
   if (document.querySelector("#this-is-transactions-page")) {
-    toggleTransactionMode();
+    toggleTransactionMode();  
+    toggleTimeLeftTextColor();
+    toggleTimeLeftTextColor();
   }
 
   
@@ -94,6 +96,26 @@ function setSeparateTextColor() {
     document.querySelector(".msg-sender-link").classList.add("msg-sender-link-light");
   }
 }
+
+// Theme support for time left text color - Index, Listings, Profile bids section
+function toggleTimeLeftTextColor() {
+  const timeLeftText = document.querySelectorAll(".dynamic-time-left-text");
+  if (timeLeftText) {
+
+    if (localStorage.getItem("theme") === "dark") {
+      timeLeftText.forEach((text) => {
+        text.classList.add("time-left-dark-mode")
+        text.classList.remove("time-left-light-mode")
+      });
+    } else {
+      timeLeftText.forEach((text) => {
+        text.classList.add("time-left-light-mode")
+        text.classList.remove("time-left-dark-mode")
+      });
+    }
+  }
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");
@@ -187,6 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
     changeMessageColors();
     showHideFullMessage();
   }
+
 });
 
 // FUNCTIONS

@@ -79,11 +79,13 @@ $orange: #b36f1b;
   color: $text-color-light;
 }
 
-.light-mode-text {
+.light-mode-text,
+.time-left-light-mode {
   color: $text-color-dark;
 }
 .dark-mode-text,
-.white {
+.white,
+.time-left-dark-mode {
   color: $text-color-light;
 }
 
@@ -165,13 +167,13 @@ ul {
   font-size: 0.8em;
 }
 .red {
-  color: $cancel-color;
+  color: $cancel-color !important;
 }
 .orange {
-  color: $orange;
+  color: $orange !important;
 }
 .yellow {
-  color: $yellow;
+  color: $yellow !important;
 }
 .green {
   color: $green;

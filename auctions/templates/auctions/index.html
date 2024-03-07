@@ -97,7 +97,7 @@
                                     {% if current_user.is_authenticated %}
                                         <span class="bold">Seller:&nbsp; </span> <a class="small-a" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a></br>
                                         {% with time_left_and_status=listing.id|get_time_left %}
-                                            <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span></br>
+                                            <span class="{{ time_left_and_status.1 }} dynamic-time-left-text">{{ time_left_and_status.0 }}</span></br>
                                         {% endwith %} 
                                     {% endif %}
                                     

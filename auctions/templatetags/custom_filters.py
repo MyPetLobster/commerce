@@ -36,7 +36,7 @@ def get_time_left(listing_id):
     elif time_left.days < 2:
         status = 'yellow'
     else:
-        status = 'white'
+        status = ''
     if time_left.days < 0:
         time_left = 'Auction Ended'
     elif time_left.days == 0:
