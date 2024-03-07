@@ -78,6 +78,13 @@ $orange: #b36f1b;
   color: $text-color-light;
 }
 
+.light-mode-text {
+  color: $text-color-dark;
+}
+.dark-mode-text {
+  color: $text-color-light;
+}
+
 
 /* General Styles */
 .mail-icon-div {
@@ -1066,5 +1073,21 @@ footer {
 
 #show-more:hover,
 #show-more-closed:hover {
+  color: $primary-pink;
+}
+
+
+.msg-sender-link-dark {
+  @include cursor-pointer-transition;
+  color: $text-color-light;
+}
+.msg-sender-link-dark:hover {
+  color: $primary-pink;
+}
+.msg-sender-link-light {
+  @include cursor-pointer-transition;
+  color: $text-color-dark;
+}
+.msg-sender-link-light:hover {
   color: $primary-pink;
 }

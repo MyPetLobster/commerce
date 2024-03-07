@@ -43,6 +43,7 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   if (document.querySelector("#this-is-transactions-page")) {
     toggleTransactionMode();
   }
+
   
   localStorage.setItem(
     "theme",
@@ -51,10 +52,12 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
       : "light"
   );
 
-  // change the colors of the message divs if they exist
+
+  // change the colors of the message divs if they exist and sender links in msgs
   const messagePageCheck = document.querySelector("#this-is-message-page");
   if (messagePageCheck) {
     changeMessageColors();
+    setSeparateTextColor();
   }
 };
 
@@ -80,7 +83,17 @@ function toggleTransactionMode() {
   document.querySelector("#transactions-table").classList.toggle("light-mode-table");
 }
 
-
+// Assorted Theme Mode Functions
+// used for links to sender in messages on messages page
+function setSeparateTextColor() {
+  if (localStorage.getItem("theme") === "dark") {
+    document.querySelector(".msg-sender-link").classList.remove("msg-sender-link-light");
+    document.querySelector(".msg-sender-link").classList.add("msg-sender-link-dark");
+  } else { 
+    document.querySelector(".msg-sender-link").classList.remove("msg-sender-link-dark");
+    document.querySelector(".msg-sender-link").classList.add("msg-sender-link-light");
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");

@@ -9,6 +9,14 @@
   color: #f4f4f4;
 }
 
+.light-mode-text {
+  color: #303133;
+}
+
+.dark-mode-text {
+  color: #f4f4f4;
+}
+
 /* General Styles */
 .mail-icon-div {
   display: flex;
@@ -1275,6 +1283,26 @@ footer li {
 
 #show-more:hover,
 #show-more-closed:hover {
+  color: #c55176;
+}
+
+.msg-sender-link-dark {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #f4f4f4;
+}
+
+.msg-sender-link-dark:hover {
+  color: #c55176;
+}
+
+.msg-sender-link-light {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #303133;
+}
+
+.msg-sender-link-light:hover {
   color: #c55176;
 }
 

@@ -114,7 +114,7 @@
         <!-- Full Message Div -->
         <div class="message-div-full hidden">
           <p class="message-sender">
-            <span>From: {{ message.sender }}</span>
+            <span>From: <a class="msg-sender-link" href="{% url 'profile' message.sender.id %}">{{ message.sender }}</a></span>
             <span class="read-unread">
               {% if message.read == True %}
               <a
