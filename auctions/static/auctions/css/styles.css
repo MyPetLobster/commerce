@@ -166,6 +166,11 @@ a:hover {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  font-size: 0.9em;
+}
+
+.info-div {
+  background-color: #976f7b;
 }
 
 .success-div {
@@ -176,7 +181,7 @@ a:hover {
   background-color: #80052c;
 }
 
-.del-x {
+.del-msg {
   cursor: pointer;
   transition: 0.15s;
   margin: 0;
@@ -185,7 +190,7 @@ a:hover {
   color: white;
 }
 
-.del-x:hover {
+.del-msg:hover {
   font-weight: bold;
 }
 

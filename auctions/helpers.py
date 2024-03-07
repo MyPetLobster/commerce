@@ -39,6 +39,8 @@ def declare_winner(listing):
         notify_all_closed_listing(listing.id)
 
 
+def format_as_currency(amount):
+    return f"${amount:,.2f}"
 
 
 # Used in - views.index, views.listings
@@ -142,7 +144,6 @@ def place_bid(request, amount, listing_id):
             
             if status == True:
                 logger.info(f"Success placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
-                contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {amount} has been placed successfully.")
             # Should never execute this block unless database error
             elif status == False:
                 logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
@@ -182,16 +183,17 @@ def check_bids_funds(request, listing_id):
                 time_left_to_deposit = f"{time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
             else:
                 time_left_to_deposit = f"{time_left_to_deposit.days} days, {time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
-            highest_bid_amount = "${:0,.0f}".format(highest_bid.amount)
+            highest_bid_amount = format_as_currency(highest_bid.amount)
             subject = f"Insufficient funds for '{listing.title}'",
             message = f"Your bid of {highest_bid_amount} on '{listing.title}'. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
-            contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid has been placed successfully, but you need to deposit funds. Check your messages for details.")
+            contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid of {highest_bid_amount} has been placed successfully, but you need to deposit funds. Check your messages for details.")
 
         # If funds are sufficient, send success message      
         elif highest_bid.amount <= highest_bid.user.balance:
+            highest_bid_amount = format_as_currency(highest_bid.amount)
             subject = f"Success! You've placed a bid on {listing.title}"
-            message = f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully. This item has been added to your watchlist. Good luck!"
-            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid.amount} on {listing.title} has been placed successfully.")
+            message = f"Your bid of {highest_bid_amount} on {listing.title} has been placed successfully. This item has been added to your watchlist. Good luck!"
+            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid_amount} on {listing.title} has been placed successfully.")
         
         # Update listing price to highest bid amount
         listing.price = highest_bid.amount

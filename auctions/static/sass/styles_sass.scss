@@ -203,21 +203,25 @@ a:hover {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  font-size: 0.9em;
+}
+.info-div {
+  background-color: $pale-pink;
 }
 .success-div {
-  background-color: #2d6128;
+  background-color: $money-green;
 }
 .error-div {
-  background-color: #80052c;
+  background-color: $cancel-color-hover;
 }
-.del-x {
+.del-msg {
   @include cursor-pointer-transition;
   margin: 0;
   line-height: 0%;
   font-size: 1.5em;
   color: white;
 }
-.del-x:hover {
+.del-msg:hover {
   font-weight: bold;
 }
 
