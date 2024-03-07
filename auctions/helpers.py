@@ -143,10 +143,15 @@ def place_bid(request, amount, listing_id):
             status, listing = check_bids_funds(request, listing_id)
             
             if status == True:
-                logger.info(f"Success placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
+                logger.info(f"Success placing bid - bidder {current_user.username} - listing ID {listing.id} - amount {amount}")
+                # Message the seller
+                site_account = User.objects.get(pk=12)
+                subject_bid_to_seller = f"New bid on '{listing.title}'"
+                message_bid_to_seller = f"{current_user.username} has placed a new {format_as_currency(amount)} bid on your listing, '{listing.title}'."
+                send_message(site_account, listing.user, subject_bid_to_seller, message_bid_to_seller)
             # Should never execute this block unless database error
             elif status == False:
-                logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user} - listing ID {listing.id} - amount {amount}")
+                logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user.name} - listing ID {listing.id} - amount {format_as_currency(amount)}")
                 contrib_messages.add_message(request, contrib_messages.ERROR, f"Unexpected error placing bid. Please try again. If this issue persists, contact the admins.")
 
             # Automatically add the item to the user's watchlist 
