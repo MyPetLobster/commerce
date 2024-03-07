@@ -161,13 +161,13 @@
             visibleBids[listingId] = true;
         } else {
             row.classList.add('hidden');
-            row.classList.add('old-bid')
+            row.classList.add('child-bid')
         }
     });
 
     bidRows.forEach(function(row) {
         row.addEventListener('click', function() {
-            if (row.classList.contains('old-bid')) {
+            if (row.classList.contains('child-bid')) {
                 return;
             }
             var listingId = row.classList[row.classList.length - 1];
@@ -204,7 +204,7 @@
         var hiddenBids = document.querySelectorAll(`.${listingId}.hidden`);
         if (hiddenBids.length > 0) {
             bid.style.cursor = 'pointer';
-            bid.style.backgroundColor = '#969da4';
+            bid.style.backgroundColor = '#8d949a';
         }
     });
 

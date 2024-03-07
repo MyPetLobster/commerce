@@ -976,6 +976,21 @@ footer li {
   color: #0a5f76 !important;
 }
 
+.child-bid {
+  background-color: #969da4 !important;
+  color: #babfc8;
+  font-style: italic;
+  cursor: default !important;
+}
+.child-bid a {
+  color: #babfc8 !important;
+  font-style: italic !important;
+}
+.child-bid a:hover {
+  cursor: default !important;
+  color: #983554 !important;
+}
+
 .dark-mode-table {
   background-color: #6c757d;
   color: #f4f4f4;
@@ -1174,20 +1189,6 @@ footer li {
 .thumb-img:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
-}
-
-.old-bid {
-  color: #babfc8;
-  font-style: italic;
-  cursor: default !important;
-}
-.old-bid a {
-  color: #babfc8 !important;
-  font-style: italic !important;
-}
-.old-bid a:hover {
-  cursor: default !important;
-  color: #983554 !important;
 }
 
 /* ABOUT PAGE */

@@ -51,7 +51,8 @@ $background-color-light: #e2e2e2;
 $background-color-dark: #303133;
 $light-gray: #babfc8;
 $medium-gray: #6c757d;
-$medium-gray-alt: #969da4;
+$medium-gray-alt: #8d949a;
+$medium-gray-alt-light: #969da4;
 $med-dark-gray: #495057;
 $dark-gray: #343a40;
 $cancel-color: #a90000;
@@ -810,6 +811,21 @@ footer {
   }
 }
 
+.child-bid {
+  background-color: $medium-gray-alt-light !important;
+  color: $light-gray;
+  font-style: italic;
+  cursor: default !important;
+  a {
+    color: $light-gray !important;
+    font-style: italic !important;
+  }
+  a:hover {
+    cursor: default !important;
+    color: $btn-hover !important;
+  }
+}
+
 .dark-mode-table {
   background-color: $medium-gray;
   color: $text-color-light;
@@ -976,19 +992,6 @@ footer {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
 }
 
-.old-bid {
-  color: $light-gray;
-  font-style: italic;
-  cursor: default !important;
-  a {
-    color: $light-gray !important;
-    font-style: italic !important;
-  }
-  a:hover {
-    cursor: default !important;
-    color: $btn-hover !important;
-  }
-}
 
 
 /* ABOUT PAGE */
