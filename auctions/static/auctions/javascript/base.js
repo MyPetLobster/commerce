@@ -3,7 +3,7 @@ setTimeout(function () {
   if (message) {
     message.style.display = "none";
   }
-}, 3000);
+}, 4500);
 
 
 

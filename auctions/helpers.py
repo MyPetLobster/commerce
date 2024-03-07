@@ -119,7 +119,13 @@ def generate_time_left_string(difference_seconds):
 
     return time_left
 
-
+# TODO - msg previous high bidder
+def message_previous_high_bidder(request, listing_id, previous_high_bidder, previous_high_bid):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    subject = f"Outbid on '{listing.title}'"
+    message = f"You have been outbid on '{listing.title}'. The current bid is {format_as_currency(listing.price)}, which is {format_as_currency(listing.price - previous_high_bid)} more than your bid."
+    send_message(site_account, previous_high_bidder, subject, message)
 
 
 # Used in views.listing POST request
@@ -133,6 +139,10 @@ def place_bid(request, amount, listing_id):
         if amount <= current_price:
             return False, listing
         else:
+            # TODO message previous high bidder
+            previous_high_bidder = listing.bids.order_by("-amount").first().user
+            previous_high_bid = listing.price
+
             Bid.objects.create(
                 amount=amount,
                 listing=listing,
@@ -149,6 +159,12 @@ def place_bid(request, amount, listing_id):
                 subject_bid_to_seller = f"New bid on '{listing.title}'"
                 message_bid_to_seller = f"{current_user.username} has placed a new {format_as_currency(amount)} bid on your listing, '{listing.title}'."
                 send_message(site_account, listing.user, subject_bid_to_seller, message_bid_to_seller)
+
+                # TODO TEST THIS - message to previous high bidder
+                # Message the previous high bidder
+                if previous_high_bidder and previous_high_bidder != current_user:
+                    message_previous_high_bidder(request, listing_id, previous_high_bidder, previous_high_bid)
+
             # Should never execute this block unless database error
             elif status == False:
                 logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user.name} - listing ID {listing.id} - amount {format_as_currency(amount)}")
@@ -267,8 +283,15 @@ def show_hide_read_messages(request):
 # Used in views.profile
 def check_if_old_bid(bid, listing):
     user_bids = Bid.objects.filter(user=bid.user, listing=listing)
-    if user_bids.count() > 1:
-        if bid.amount < listing.price:
+    if user_bids.exists():
+        user_highest_bid = user_bids.order_by("-amount").first()
+        if bid.amount < listing.price and bid.amount < user_highest_bid.amount:
             return True
         else:
             return False
+    else:
+        return False
+
+
+
+

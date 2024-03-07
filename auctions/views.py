@@ -12,11 +12,13 @@ import decimal
 import logging
 from datetime import timedelta
 
+# Uncomment the following line to use the maintenance functions
+# from . import maintenance
+
 from . import helpers
 from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist
 from .tasks import send_message
 from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
-
 
 
 logger = logging.getLogger(__name__)
@@ -112,6 +114,9 @@ def category(request, category_id):
 def index(request):
     current_user = request.user
     listings = Listing.objects.all()
+
+    # Set Closing Dates for Listings after modifications to test listings
+    # maintenance.force_set_closing_dates()
 
     if current_user.is_authenticated:
         messages = contrib_messages.get_messages(request)
@@ -293,7 +298,7 @@ def profile(request, user_id):
         is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
         highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
         highest_bid_amount = highest_bid.amount if highest_bid else 0
-        difference = bid.amount - highest_bid.amount
+        difference = (bid.amount - highest_bid.amount) * -1 if highest_bid else 0
 
         user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid_amount, difference)
         bid_info_list.append(user_bid_info)

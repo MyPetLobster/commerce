@@ -108,6 +108,11 @@ p {
   font-size: 1em;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+}
+
 .small-font {
   font-size: 0.8em;
 }
@@ -170,16 +175,19 @@ a:hover {
 
 /* ALERT MESSAGE STYLES */
 .alert-div {
+  position: fixed;
+  margin-top: 30px;
   width: 300px;
   height: auto;
   border-radius: 8px;
   padding: 10px;
   text-align: center;
   font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 
 .info-div {
-  background-color: #976f7b;
+  background-color: #c55176;
 }
 
 .success-div {
@@ -196,7 +204,7 @@ a:hover {
   margin: 0;
   line-height: 0%;
   font-size: 1.5em;
-  color: white;
+  color: white !important;
 }
 
 .del-msg:hover {
@@ -476,6 +484,8 @@ legend {
 footer {
   position: absolute;
   bottom: 0;
+  margin-bottom: 20px;
+  margin-top: 40px;
 }
 footer ul {
   display: flex;
@@ -489,11 +499,6 @@ footer ul {
 }
 footer li {
   list-style-type: none;
-}
-
-#center-footer-item {
-  position: relative;
-  left: 17px;
 }
 
 /* ALL BUTTON STYLES */
