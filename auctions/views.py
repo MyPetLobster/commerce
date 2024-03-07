@@ -305,6 +305,8 @@ def profile(request, user_id):
 
     bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.date, reverse=True)
 
+    user_active_listings_count = len([listing for listing in listings if listing.active])
+    user_inactive_listings_count = len([listing for listing in listings if not listing.active])
 
     return render(request, "auctions/profile.html", {
         "user": user,
@@ -314,7 +316,9 @@ def profile(request, user_id):
         "current_user": current_user,
         "messages": messages,
         "unread_message_count": unread_message_count,
-        "bid_info_list": bid_info_list
+        "bid_info_list": bid_info_list,
+        "user_active_listings_count": user_active_listings_count,
+        "user_inactive_listings_count": user_inactive_listings_count
     })
 
 

@@ -140,11 +140,12 @@
     <div class="profile-listings">
         <hr>
     </div>
+    {% if current_user == user %}
     <div class="user-bids">
-        <h2>Bids</h2>
+        <h2>My Bids</h2>
         <p class="center-container"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Bidding History</a></p>
         <div class="center-container">
-            <ul>
+            <ul class="no-list-style-center">
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
                 {% else %}
@@ -183,85 +184,102 @@
             </ul>
         </div>
     </div>
-
     <div class="profile-listings">
         <hr>
     </div>
-
-    {% if user == current_user %}
-        <h2>My Active Listings</h2>
-    {% else %}
-        <h2>{{ user.username }}'s Active Listings</h2>
     {% endif %}
-    
-    <div class="profile-listings">
-        {% if user.listings.all.count == 0 %}
-            <div class="center-container">
-                <p>No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
-            </div>
-        {% endif %}
-        <ul>
-            {% for listing in user.listings.all %}
-                {% if listing.active == True %}
-                    <li class="li-listing">  
-                        <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-        <hr style="margin-top:30px;">
-    </div>  
 
+        {% if user == current_user %}
+            <h2>My Active Listings</h2>
+        {% else %}
+            <h2>{{ user.username }}'s Active Listings</h2>
+        {% endif %}
+        
+        {% if user_active_listings_count == 0 %}
+            <div class="center-container">
+                <p class="no-listings">No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
+            </div>
+        {% else %}
+            <div class="profile-listings">
+                {% if user.listings.all.count == 0 %}
+                    <div class="center-container">
+                        <p>No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
+                    </div>
+                {% endif %}
+                <ul class="no-list-style-center">
+                    {% for listing in user.listings.all %}
+                        {% if listing.active == True %}
+                            <li class="li-listing">  
+                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <hr style="margin-top:30px;">
+            </div>  
+        {% endif %}
+
+    
     {% if user == current_user %}
         <h2>My Closed Listings</h2>
     {% else %}
         <h2>{{ user.username }}'s Closed Listings</h2>
     {% endif %}
 
-    <div id="profile-closed-listings" class="profile-listings">
-        <ul>
-            {% for listing in user.listings.all %}
-                {% if listing.active == False %}
-                    <li class="li-listing">
-                            <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                    </li>
-                    {% if listing.price == listing.starting_bid %}
-                        <p style="display:inline" class="bold">No bids</p>
-                    {% else %}
-                    <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
-                            {% if listing.winner %}
-                                <span class="bold">Winner:</span> {{ listing.winner.username }}
-                            {% else %}
-                                No winner
-                            {% endif %}
-                    </p>
+    {% if user_inactive_listings_count == 0 %}
+        <div class="center-container">
+            <p class="no-listings">No closed listings.</p>
+        </div>
+    {% else %}
+        <div id="profile-closed-listings" class="profile-listings">
+            <ul class="thin-list">
+                {% for listing in user.listings.all %}
+                    {% if listing.active == False %}
+                        <li class="li-listing">
+                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                        </li>
+                        {% if listing.price == listing.starting_bid %}
+                            <p style="display:inline" class="bold">No bids</p>
+                        {% else %}
+                        <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
+                                {% if listing.winner %}
+                                    <span class="bold">Winner:</span> {{ listing.winner.username }}
+                                {% else %}
+                                    No winner
+                                {% endif %}
+                        </p>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-
-<div class="center-container">
-    <p>See Dangerous Options</p>
-    <div class="delete-account-div">
-
-    </div>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 <div class="divider-med"></div>
+<div class="center-container">
+    <p>See Dangerous Options</p>
+<div class="delete-account-div">
+
+    </div>
+</div>
+<div class="divider-small"></div>
 <script>
     // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
     // which section to scroll into view
     const transactionHistoryLink = document.getElementById('transaction-history-link');
     const bidHistoryLink = document.getElementById('bid-history-link');
 
-    transactionHistoryLink.addEventListener('click', () => {
-        localStorage.setItem('transactionsPageSection', 'transactions');
-    });
+    if (transactionHistoryLink) {
+        transactionHistoryLink.addEventListener('click', () => {
+            localStorage.setItem('transactionsPageSection', 'transactions');
+        });
+    }
 
-    bidHistoryLink.addEventListener('click', () => {
-        localStorage.setItem('transactionsPageSection', 'bids');
-    });
+    if (bidHistoryLink) {
+        bidHistoryLink.addEventListener('click', () => {
+            localStorage.setItem('transactionsPageSection', 'bids');
+        });
+    }
 
     const sendMsgButton = document.getElementById('send-usr-msg-btn');
     const sendMsgForm = document.getElementById('send-usr-msg-form');
@@ -285,58 +303,71 @@
     const depositForm = document.querySelector('.deposit-form');
     const cancelDeposit = document.getElementById('cancel-deposit-btn');
 
-    depositButton.addEventListener('click', () => {
-        depositForm.classList.remove('hidden');
-        depositForm.classList.add('visible');
-    });
-
-    cancelDeposit.addEventListener('click', () => {
-        depositForm.classList.add('hidden');
-        depositForm.classList.remove('visible');
-    });
-
     const withdrawButton = document.getElementById('withdraw-btn');
     const withdrawForm = document.querySelector('.withdraw-form');
     const cancelWithdraw = document.getElementById('cancel-withdraw-btn');
-
-    withdrawButton.addEventListener('click', () => {
-        withdrawForm.classList.remove('hidden');
-        withdrawForm.classList.add('visible');
-    });
-
-    cancelWithdraw.addEventListener('click', () => {
-        withdrawForm.classList.add('hidden');
-        withdrawForm.classList.remove('visible');
-    });
-
 
     const editButton = document.getElementById('edit-button');
     const editProfile = document.getElementById('edit-profile');
     const cancelButton = document.getElementById('cancel-edit-profile-button');
 
-    editButton.addEventListener('click', () => {
-        editProfile.classList.remove('hidden');
-        editProfile.classList.add('visible');
-    });
-
-    cancelButton.addEventListener('click', () => {
-        editProfile.classList.add('hidden');
-        editProfile.classList.remove('visible');
-    });
-
     const changePassword = document.getElementById('change-password');
     const changePasswordForm = document.getElementById('change-password-form');
     const cancelPassword = document.getElementById('cancel-password-btn');
 
-    changePassword.addEventListener('click', () => {
-        changePasswordForm.classList.remove('hidden');
-        changePasswordForm.classList.add('visible');
-    });
+    if (depositButton) {
+        depositButton.addEventListener('click', () => {
+            depositForm.classList.remove('hidden');
+            depositForm.classList.add('visible');
+        });
 
-    cancelPassword.addEventListener('click', () => {
-        changePasswordForm.classList.add('hidden');
-        changePasswordForm.classList.remove('visible');
-    });
+        cancelDeposit.addEventListener('click', () => {
+            depositForm.classList.add('hidden');
+            depositForm.classList.remove('visible');
+        });
+
+        withdrawButton.addEventListener('click', () => {
+            withdrawForm.classList.remove('hidden');
+            withdrawForm.classList.add('visible');
+        });
+
+        cancelWithdraw.addEventListener('click', () => {
+            withdrawForm.classList.add('hidden');
+            withdrawForm.classList.remove('visible');
+        });
+
+        editButton.addEventListener('click', () => {
+            editProfile.classList.remove('hidden');
+            editProfile.classList.add('visible');
+        });
+
+        cancelButton.addEventListener('click', () => {
+            editProfile.classList.add('hidden');
+            editProfile.classList.remove('visible');
+        });
+
+
+        changePassword.addEventListener('click', () => {
+            changePasswordForm.classList.remove('hidden');
+            changePasswordForm.classList.add('visible');
+        });
+
+        cancelPassword.addEventListener('click', () => {
+            changePasswordForm.classList.add('hidden');
+            changePasswordForm.classList.remove('visible');
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 {% endblock %}

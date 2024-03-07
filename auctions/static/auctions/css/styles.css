@@ -154,6 +154,11 @@ ul {
   height: 40px;
 }
 
+.divider-small {
+  width: 100%;
+  height: 20px;
+}
+
 /* LINK STYLES */
 a {
   color: #1696b9;
@@ -859,11 +864,11 @@ footer li {
 
 .profile-listings {
   width: 600px;
-  align-items: flex-start;
 }
 
 #profile-closed-listings {
-  margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
 }
 #profile-closed-listings li {
   margin-top: 4px;
@@ -874,6 +879,20 @@ footer li {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.no-list-style-center {
+  list-style-type: none;
+  text-align: center;
+}
+
+.thin-list {
+  width: 250px;
+}
+
+.no-listings {
+  font-style: italic;
+  color: #7a7575;
 }
 
 /* WATCHLIST PAGE */
