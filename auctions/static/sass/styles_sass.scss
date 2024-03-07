@@ -81,7 +81,8 @@ $orange: #b36f1b;
 .light-mode-text {
   color: $text-color-dark;
 }
-.dark-mode-text {
+.dark-mode-text,
+.white {
   color: $text-color-light;
 }
 

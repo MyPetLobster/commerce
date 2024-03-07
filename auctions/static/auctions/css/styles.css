@@ -13,7 +13,8 @@
   color: #303133;
 }
 
-.dark-mode-text {
+.dark-mode-text,
+.white {
   color: #f4f4f4;
 }
 
