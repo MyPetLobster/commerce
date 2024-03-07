@@ -338,9 +338,22 @@ def transactions(request, user_id):
     unread_message_count = unread_messages.count()
 
     user_bids = Bid.objects.filter(user=user)
-    user_bids = user_bids.order_by("-date")
+    user_bids_by_date = sorted(user_bids, key=lambda x: x.date, reverse=True)
 
-    active_bid_count = user_bids.filter(listing__active=True).values("listing").distinct().count()
+    # Group bids by the listing, groups are sorted by date of the most recent bid
+    # Then turn back into a list of bids while retaining the order of the groups
+    bid_listing_groups = {}
+    for bid in user_bids_by_date:
+        if bid.listing.id in bid_listing_groups:
+            bid_listing_groups[bid.listing.id].append(bid)
+        else:
+            bid_listing_groups[bid.listing.id] = [bid]
+
+    user_bids = []
+    for key, value in bid_listing_groups.items():
+        user_bids.extend(value)
+
+    active_bid_count = len(set([bid.listing for bid in user_bids if bid.listing.active]))
 
     return render(request, "auctions/transactions.html", {
         'transactions': transactions,
