@@ -35,8 +35,10 @@
             {% endfor %}
         {% endif %}
         <div class="hero">
+            <a class="hero-link" href="{% url 'about' %}">
             <h1 class="yard-sale">Yard Sale</h1>
-            <a href="{% url 'about' %}">
+            </a>
+            <a class="hero-link" href="{% url 'about' %}">
                 <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
                 <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
             </a>
