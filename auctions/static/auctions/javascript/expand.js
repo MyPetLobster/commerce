@@ -9,10 +9,12 @@ var fullOrTitle = localStorage.getItem("fullOrTitle")
 
 showFullListings.addEventListener("click", () => {
     showFull();
+    initializeShowMoreBasedOnLocalStorage();
 });
 
 showTitleOnly.addEventListener("click", () => {
     showTitle();
+    initializeShowMoreBasedOnLocalStorage();
 });
 
 
@@ -88,13 +90,7 @@ document.querySelectorAll(".expand-link").forEach((link) => {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (fullOrTitle === "full") {
-    showFull();
-  } else if (fullOrTitle === "title") {
-    showTitle();
-  }
-});
+
 
 // NUMBER OF LISTINGS TO DISPLAY
 
@@ -107,6 +103,7 @@ function handleShowMore(listingListItems, showMore, visibleListings) {
         if (index < visibleListings) {
             listing.classList.add('display-listing');
             listing.classList.remove('hide-listing');
+            showMore.classList.remove('hidden');
         }
     });
     if (visibleListings >= listingListItems.length) {
@@ -158,3 +155,13 @@ function initializeShowMoreBasedOnLocalStorage() {
 
 // Initialize show more functionality
 initializeShowMoreBasedOnLocalStorage();
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (fullOrTitle === "full") {
+    showFull();
+    initializeShowMoreBasedOnLocalStorage();
+  } else if (fullOrTitle === "title") {
+    showTitle();
+  }
+});

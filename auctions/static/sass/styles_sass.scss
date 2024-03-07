@@ -535,6 +535,7 @@ footer {
 /* Listings/Index Toggle Full Listings - Title Only */
 .opt-selected {
   font-weight: bold;
+  font-size: 1.1em;
   color: $primary-pink;
 }
 .opt-not-selected {
@@ -1056,5 +1057,10 @@ footer {
 #show-more,
 #show-more-closed {
   @include cursor-pointer-transition;
+  color: $medium-gray;
+}
+
+#show-more:hover,
+#show-more-closed:hover {
   color: $primary-pink;
 }

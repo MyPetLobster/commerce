@@ -644,6 +644,7 @@ footer li {
 /* Listings/Index Toggle Full Listings - Title Only */
 .opt-selected {
   font-weight: bold;
+  font-size: 1.1em;
   color: #c55176;
 }
 
@@ -1264,6 +1265,11 @@ footer li {
 #show-more-closed {
   cursor: pointer;
   transition: 0.15s;
+  color: #6c757d;
+}
+
+#show-more:hover,
+#show-more-closed:hover {
   color: #c55176;
 }
 
