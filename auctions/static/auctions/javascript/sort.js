@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const sortByOptions = document.querySelectorAll(".sort-by-option");
-  window.scrollTo(0, localStorage.getItem("scrollY"));
+  // window.scrollTo(0, localStorage.getItem("scrollY"));
 
   sortByOptions.forEach((option) => {
     option.addEventListener("click", function () {
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.getItem("sort-by-direction") === "asc" ? "desc" : "asc";
       localStorage.setItem("sort-by", sortBy);
       localStorage.setItem("sort-by-direction", direction);
-      localStorage.setItem("scrollY", window.scrollY);
+      // localStorage.setItem("scrollY", window.scrollY);
       document.querySelector("#sort-by").value = sortBy;
       document.querySelector("#sort-by-direction").value = direction;
       document.querySelector(".sort-by-form").submit();
@@ -66,10 +66,19 @@ document.addEventListener("DOMContentLoaded", function () {
     activeListings.scrollIntoView();
   });
 
-  // if user clicks away from page, save scroll position
-  window.addEventListener("beforeunload", () => {
-    localStorage.setItem("scrollY", window.scrollY);
+  // if user clicks on navbar, reset sort by to date
+  const navBar = document.querySelector(".nav");
+  navBar.addEventListener("click", () => {
+    localStorage.setItem("sort-by", "date");
+    localStorage.setItem("sort-by-direction", "desc");
+    updateSortUI();
   });
+
+
+  // if user clicks away from page, save scroll position
+  // window.addEventListener("beforeunload", () => {
+  //   localStorage.setItem("scrollY", window.scrollY);
+  // });
 });
 
 

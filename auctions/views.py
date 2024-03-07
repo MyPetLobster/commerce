@@ -111,7 +111,7 @@ def category(request, category_id):
 
 def index(request):
     current_user = request.user
-    listings = Listing.objects.all().order_by("-date")
+    listings = Listing.objects.all()
 
     if current_user.is_authenticated:
         messages = contrib_messages.get_messages(request)
@@ -119,7 +119,7 @@ def index(request):
         unread_message_count = unread_messages.count()
 
         helpers.set_inactive(listings)
-        listings = Listing.objects.all()
+        listings = Listing.objects.all().order_by("-date")
 
         return render(request, "auctions/index.html" , {
             "listings": listings,
