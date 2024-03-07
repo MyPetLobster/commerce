@@ -174,6 +174,9 @@ def comment(request, listing_id):
         listing=listing,
         user=request.user
     )
+
+    helpers.notify_mentions(comment)
+
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 

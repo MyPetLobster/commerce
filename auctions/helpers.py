@@ -229,6 +229,29 @@ def check_bids_funds(request, listing_id):
         return False, listing
 
 
+def check_for_mentions(comment):
+    comment = comment.comment.split()
+    mentions = []
+    for word in comment:
+        if word[0] == "@":
+            mentions.append(word[1:])
+    return mentions
+
+
+def notify_mentions(comment):
+    listing_id = comment.listing.id
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    mentions = check_for_mentions(comment)
+    for mention in mentions:
+        try:
+            mention_user = User.objects.get(username=mention)
+            subject = f"Someone's talking about you!"
+            message = f"You've been mentioned by {comment.user} in a comment on '{listing.title}'."
+            send_message(site_account, mention_user, subject, message)
+        except User.DoesNotExist:
+            pass
+
 
 # Used in views.messages, actions.sort_messages
 def determine_message_sort(request, sent_messages, inbox_messages):
