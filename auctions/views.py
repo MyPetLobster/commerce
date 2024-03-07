@@ -147,7 +147,7 @@ def listings(request):
     unread_message_count = unread_messages.count()
 
     helpers.set_inactive(listings)
-    listings = get_list_or_404(Listing.objects.all())
+    listings = Listing.objects.all().order_by("-date")
 
     return render(request, "auctions/listings.html", {
         "listings": listings,
