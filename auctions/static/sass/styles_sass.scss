@@ -979,12 +979,13 @@ footer {
 .old-bid {
   color: $light-gray;
   font-style: italic;
-
+  cursor: default !important;
   a {
     color: $light-gray !important;
     font-style: italic !important;
   }
   a:hover {
+    cursor: default !important;
     color: $btn-hover !important;
   }
 }

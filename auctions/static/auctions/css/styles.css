@@ -1179,12 +1179,14 @@ footer li {
 .old-bid {
   color: #babfc8;
   font-style: italic;
+  cursor: default !important;
 }
 .old-bid a {
   color: #babfc8 !important;
   font-style: italic !important;
 }
 .old-bid a:hover {
+  cursor: default !important;
   color: #983554 !important;
 }
 

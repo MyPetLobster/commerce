@@ -167,7 +167,9 @@
 
     bidRows.forEach(function(row) {
         row.addEventListener('click', function() {
-        
+            if (row.classList.contains('old-bid')) {
+                return;
+            }
             var listingId = row.classList[row.classList.length - 1];
             var listingBids = document.querySelectorAll(`.${listingId}`);
             var hiddenBids = Array.from(listingBids).filter(function(bid) {
