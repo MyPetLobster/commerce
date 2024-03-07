@@ -1260,7 +1260,8 @@ footer li {
   display: inherit;
 }
 
-#show-more {
+#show-more,
+#show-more-closed {
   cursor: pointer;
   transition: 0.15s;
   color: #c55176;

@@ -73,7 +73,9 @@
     </div>
     <ul class="long-listings visible">
         {% for listing in listings %}
+            
             {% if listing.active == True %}
+            <div class="li-listing-div hide-listing">
                 <li class="li-listing">
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
@@ -111,9 +113,11 @@
                 </li>
                 <hr>
             </br>
+            </div>
             {% endif %}
         {% endfor %}
     </ul>
+    <div class="center-container"><span id="show-more" style="margin-bottom:40px;"></span></div>
 
     <ul class="short-listings hidden">
         {% for listing in listings %}
@@ -151,6 +155,7 @@
     <ul class="long-listings visible">
         {% for listing in listings %}
             {% if listing.active == False %}
+            <div class="li-listing-closed-div hide-listing">
                 <li class="li-listing">
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
@@ -178,9 +183,12 @@
                 </li>
                 <hr>
             </br>
+            </div>
             {% endif %}
+
         {% endfor %}
     </ul>
+        <div class="center-container"><span id="show-more-closed">Show next 25 closed listings</span></div>
     <ul class="short-listings hidden">
         {% for listing in listings %}
             {% if listing.active == False %}

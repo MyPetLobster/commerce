@@ -95,3 +95,66 @@ document.addEventListener("DOMContentLoaded", () => {
     showTitle();
   }
 });
+
+// NUMBER OF LISTINGS TO DISPLAY
+
+// numberOfListings will control how many listings are displayed at a time across index and listings pages
+const numberOfListings = 10;
+
+// Function to handle show more button click
+function handleShowMore(listingListItems, showMore, visibleListings) {
+    listingListItems.forEach((listing, index) => {
+        if (index < visibleListings) {
+            listing.classList.add('display-listing');
+            listing.classList.remove('hide-listing');
+        }
+    });
+    if (visibleListings >= listingListItems.length) {
+        showMore.classList.add('hidden');
+    }
+}
+
+// Function to initialize show more functionality
+function initializeShowMore(listingListItems, showMore, itemCount) {
+    let visibleListings = numberOfListings;
+    showMore.textContent = `Show next ${numberOfListings} listings`;
+
+    if (itemCount <= numberOfListings) {
+        showMore.classList.add('hidden');
+    }
+
+    handleShowMore(listingListItems, showMore, visibleListings);
+
+    showMore.addEventListener('click', () => {
+        visibleListings += numberOfListings;
+        handleShowMore(listingListItems, showMore, visibleListings);
+    });
+}
+
+// Function to initialize show more for active listings
+function initializeActiveListings() {
+    const listingListItems = document.querySelectorAll('.li-listing-div');
+    const showMore = document.getElementById('show-more');
+    initializeShowMore(listingListItems, showMore, listingListItems.length);
+}
+
+// Function to initialize show more for closed listings
+function initializeClosedListings() {
+    const allClosedListings = document.querySelectorAll('.li-listing-closed-div');
+    const showMoreClosed = document.getElementById('show-more-closed');
+    initializeShowMore(allClosedListings, showMoreClosed, allClosedListings.length);
+}
+
+// Function to check and initialize based on localStorage value
+function initializeShowMoreBasedOnLocalStorage() {
+    if (localStorage.getItem('fullOrTitle') === 'full' || localStorage.getItem('fullOrTitle') === null) {
+        initializeActiveListings();
+        initializeClosedListings();
+    } else {
+        const showMore = document.getElementById('show-more');
+        showMore.classList.add('hidden');
+    }
+}
+
+// Initialize show more functionality
+initializeShowMoreBasedOnLocalStorage();

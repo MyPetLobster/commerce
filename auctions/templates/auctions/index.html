@@ -120,47 +120,8 @@
                 {% endif %}
             {% endfor %}
         </ul>
-        <p><span id="show-more">Show next 25 listings</span></p>
+        <p><span id="show-more"></span></p>
         <p><span id="back-to-top">Back to top</span></p>
     </div>
 
-    <script>
-        if (localStorage.getItem('fullOrTile') === 'full' || localStorage.getItem('fullOrTile') === null) {
-            const listingListItems = document.querySelectorAll('.li-listing-div');
-            const showMore = document.getElementById('show-more');
-            const listingItemCount = listingListItems.length;
-
-            let visibleListings = 25;
-
-            if (listingItemCount <= 25) {
-                showMore.classList.add('hidden');
-            }
-
-            listingListItems.forEach((listing, index) => {
-                if (index < visibleListings) {
-                    listing.classList.add('display-listing');
-                    listing.classList.remove('hide-listing')
-                }
-            });
-
-            showMore.addEventListener('click', () => {
-                visibleListings += 25;
-                listingListItems.forEach((listing, index) => {
-                    if (index < visibleListings) {
-                        listing.classList.add('display-listing');
-                        listing.classList.remove('hide-listing')
-                    }
-                });
-                if (visibleListings >= listingItemCount) {
-                showMore.classList.add('hidden');
-            }
-            });
-        } else {
-            const showMore = document.getElementById('show-more');
-            showMore.classList.add('hidden');
-        }
-        
-        
-
-    </script>
 {% endblock %}

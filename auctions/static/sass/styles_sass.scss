@@ -1053,7 +1053,8 @@ footer {
 }
 
 
-#show-more {
+#show-more,
+#show-more-closed {
   @include cursor-pointer-transition;
   color: $primary-pink;
 }
