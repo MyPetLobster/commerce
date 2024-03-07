@@ -250,15 +250,17 @@
 </div>
 <div class="divider-med"></div>
 <script>
+    // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
+    // which section to scroll into view
     const transactionHistoryLink = document.getElementById('transaction-history-link');
     const bidHistoryLink = document.getElementById('bid-history-link');
 
     transactionHistoryLink.addEventListener('click', () => {
-        localStorage.setItem('transactions-page-section', 'transactions');
+        localStorage.setItem('transactionsPageSection', 'transactions');
     });
 
     bidHistoryLink.addEventListener('click', () => {
-        localStorage.setItem('transactions-page-section', 'bids');
+        localStorage.setItem('transactionsPageSection', 'bids');
     });
 
     const sendMsgButton = document.getElementById('send-usr-msg-btn');
