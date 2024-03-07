@@ -104,7 +104,11 @@ def remove_from_watchlist(request, listing_id):
         watchlist_item.delete()
     except Watchlist.DoesNotExist:
         contrib_messages.add_message(request, contrib_messages.ERROR, "Listing not on watchlist")
-    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+    clicked_from = request.POST["clicked-from"]
+    if clicked_from == "listing":
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+    elif clicked_from == "watchlist":
+        return HttpResponseRedirect(reverse("watchlist"))
     
 
 @login_required

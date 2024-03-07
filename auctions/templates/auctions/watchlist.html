@@ -45,6 +45,7 @@
       </div>
       <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}
+        <input type="hidden" name="clicked-from" value="watchlist" />
         <button
           class="btn btn-primary cancel-btn"
           id="remove-from-watchlist-btn"

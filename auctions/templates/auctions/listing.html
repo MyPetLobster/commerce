@@ -177,6 +177,7 @@
             <div id="watchlist-check-content-remove" class="center-container hidden">
                 <form class="center-container" action="/remove_from_watchlist/{{ listing.id }}" method="post">
                     {% csrf_token %}
+                    <input type="hidden" name="clicked-from" value="listing" />
                     <button class="btn btn-primary cancel-btn" type="submit">Remove from Watchlist</button>
                 </form>
             </div>
