@@ -292,11 +292,14 @@ def profile(request, user_id):
         bid_listing = bid.listing
         is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
         highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
+        highest_bid_amount = highest_bid.amount if highest_bid else 0
         difference = bid.amount - highest_bid.amount
-        user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid, difference)
+
+        user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid_amount, difference)
         bid_info_list.append(user_bid_info)
 
     bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.date, reverse=True)
+
 
     return render(request, "auctions/profile.html", {
         "user": user,

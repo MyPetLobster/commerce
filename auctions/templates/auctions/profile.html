@@ -168,8 +168,13 @@
                             {% if bid_info.user_bid == bid_info.highest_bid %}
                                 <p><span class="bold">Bid: </span>{% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="green">(You Won!)</span></p>
                             {% else %}
-                                <p><span class="bold">Bid: </span>{% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="red">({{ bid_info.user_bid.listing.winner.username }} won this auction)</span></p>
+                                <p>
+                                <span class="bold">Bid: </span>{% with formatted_currency=bid_info.user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} <span class="red">({{ bid_info.user_bid.listing.winner.username }} won this auction)</span>
+                                </br>
+                                <span>This auction has ended</span>
+                                </p>
                             {% endif %}
+                                
                         </div>
                     {% endif %}
                 </li>
