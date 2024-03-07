@@ -245,11 +245,11 @@
                     {% if comment.anonymous == True %}
                     <li><span class="bold">Anonymous:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% elif comment.user == current_user %}
-                    <li><span class="user_own_comment bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li><span><a id="user-own-comment" class="bold" href="{ url 'profile' comment.user.id }">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% elif comment.user == listing.user %}
-                    <li><span class="seller_comment bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li><span><a id="seller-comment" class="bold" href="{ url 'profile' comment.user.id }"> (seller) {{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% else %}
-                    <li><span class="bold">{{ comment.user.username }}:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li><span><a id="other-comment" class="bold"href="{ url 'profile' comment.user.id }">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% endif %}
                     
                 {% endfor %}

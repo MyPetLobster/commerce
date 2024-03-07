@@ -45,7 +45,7 @@ $link-color: #1696b9;
 $link-color-hover: #0a5f76;
 $washed-link: #268aa0;
 $washed-link-hover: #5c6b6e;
-$nav-color: #8c8787;
+$nav-color: #7a7575;
 $primary-pink: #c55176;
 $background-color-light: #e2e2e2;
 $background-color-dark: #303133;
@@ -59,7 +59,7 @@ $cancel-color: #a90000;
 $cancel-color-hover: #80052c;
 $btn-focus: #e75684;
 $btn-hover: #983554;
-$money-green: #2d6128;
+$money-green: #3a7635;
 $money-green-hover: #1f3f1a;
 $green: #247b1c;
 $pale-pink: #976f7b;
@@ -634,6 +634,24 @@ footer {
   li {
     list-style-type: disc;
     margin-bottom: 20px;
+  }
+  #user-own-comment {
+    color: $pale-pink;
+  }
+  #user-own-comment:hover {
+    color: $primary-pink;
+  }
+  #seller-comment {
+    color: $money-green;
+  }
+  #seller-comment:hover {
+    color: $money-green-hover;
+  } 
+  #other-comment {
+    color: $nav-color;
+  }
+  #other-comment:hover {
+    color: $med-dark-gray;
   }
 }
 .anon-checkbox {

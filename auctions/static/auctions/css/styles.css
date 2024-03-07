@@ -191,7 +191,7 @@ a:hover {
 }
 
 .success-div {
-  background-color: #2d6128;
+  background-color: #3a7635;
 }
 
 .error-div {
@@ -437,7 +437,7 @@ legend {
 .footer-link {
   cursor: pointer;
   transition: 0.15s;
-  color: #8c8787;
+  color: #7a7575;
 }
 
 #msg-admin-link:hover,
@@ -572,7 +572,7 @@ footer li {
 }
 
 #deposit-btn:hover {
-  background-color: #2d6128;
+  background-color: #3a7635;
 }
 
 #withdraw-btn:hover {
@@ -761,6 +761,24 @@ footer li {
 .comments-div li {
   list-style-type: disc;
   margin-bottom: 20px;
+}
+.comments-div #user-own-comment {
+  color: #976f7b;
+}
+.comments-div #user-own-comment:hover {
+  color: #c55176;
+}
+.comments-div #seller-comment {
+  color: #3a7635;
+}
+.comments-div #seller-comment:hover {
+  color: #1f3f1a;
+}
+.comments-div #other-comment {
+  color: #7a7575;
+}
+.comments-div #other-comment:hover {
+  color: #495057;
 }
 
 .anon-checkbox {
@@ -959,7 +977,7 @@ footer li {
   font-size: 0.9em;
 }
 .winning-bid-closed a {
-  color: #2d6128 !important;
+  color: #3a7635 !important;
   font-style: italic !important;
 }
 .winning-bid-closed a:hover {
@@ -1119,7 +1137,7 @@ footer li {
 }
 
 .mark-as-read-button:hover {
-  color: #8c8787;
+  color: #7a7575;
 }
 
 .mark-as-read-button:active {
@@ -1227,7 +1245,7 @@ footer li {
 
 .faq-question {
   font-size: 1.9em;
-  color: #8c8787;
+  color: #7a7575;
 }
 
 .faq-answer {
