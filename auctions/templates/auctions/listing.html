@@ -84,12 +84,25 @@
                 {% if user_bid.amount == listing.price %}
                     <div class="fields-item">
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You are the current highest bidder!)</span></br>
+                        <span><span class="spacer-text bold">Your Bid:&nbsp;&nbsp;</span> <span class="bold" id="cancel-bid-link">Cancel Bid</span></span>
                     </div>
                 {% else %}
                     <div class="fields-item">
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (Your bid is {% with formatted_currency=difference|format_currency %}{{ formatted_currency }}{% endwith %} less than the current highest bid)</span></br>
+                        <span><span class="spacer-text bold">Your Bid:&nbsp;&nbsp;</span><span class="bold" id="cancel-bid-link">Cancel Bid</span></span>
                     </div>
                 {% endif %} 
+                    <div id="confirm-cancel-bid" class="hidden">
+                            <form id="cancel-bid-confirm-popup" class="popup-form center-container" action="{% url 'cancel_bid' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <h5 style="text-align:center;">Are you sure you want to cancel your bid?</h5>
+                                <div class="form-btn-box">
+                                    <button class="btn btn-primary" type="submit">Confirm Cancellation</button>
+                                    <button id="cancel-cancel" class="btn btn-primary cancel-btn" type="button">Cancel</button>
+                                </div>
+                            </form>  
+                    </div>
+                
             {% endif %}
             <div class="fields-item">
                 <span class="bold">Listing Date:&nbsp;&nbsp;</span><span class="lightweight">{{ listing.date }}</span></br>
@@ -176,9 +189,9 @@
                         <p>
                             By placing a bid, you are agreeing to purchase the item at the price you bid. 
                             If you are the highest bidder when the listing closes, you will be required to 
-                            pay the amount of your bid. A bid may be canceled within 12 hours of placing it, 
-                            as long as there are more than 24 hours left in the auction. See our terms and
-                            conditions for more information.
+                            pay the amount of your bid. A bid may be canceled as long as there are more 
+                            than 24 hours left in the auction. See our terms and conditions for more 
+                            information.
                         </p>
                         <p>
                             If you have read this and understand, you may confirm your bid below.
@@ -268,6 +281,22 @@
 </div>
 
 <script>
+    const cancelBidLink = document.querySelector('#cancel-bid-link');
+    const confirmCancelBid = document.querySelector('#confirm-cancel-bid');
+    const cancelCancel = document.querySelector('#cancel-cancel');
+
+    if (cancelBidLink) {
+        cancelBidLink.addEventListener('click', function() {
+            confirmCancelBid.classList.remove('hidden');
+        });
+
+        cancelCancel.addEventListener('click', function() {
+            confirmCancelBid.classList.add('hidden');
+        });
+    }
+
+
+
     const confirmBidBtn = document.querySelector('#confirm-bid-btn');
     const confirmBidPopupContent = document.querySelector('.confirm-bid-popup-content');
     const cancelBid = document.querySelector('#cancel-bid');

@@ -1655,4 +1655,22 @@ footer li {
   color: #c55176;
 }
 
+.spacer-text {
+  color: rgba(0, 0, 0, 0);
+}
+
+#cancel-bid-link {
+  cursor: pointer;
+  transition: 0.15s;
+  color: #a90000;
+}
+
+#cancel-bid-link:hover {
+  color: #80052c;
+}
+
+#cancel-bid-confirm-popup {
+  width: 250px;
+}
+
 /*# sourceMappingURL=styles.css.map */

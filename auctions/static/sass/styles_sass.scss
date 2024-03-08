@@ -1418,3 +1418,23 @@ footer {
 .search-result-desc-dark:hover {
   color: $primary-pink;
 }
+
+
+
+
+.spacer-text {
+  color: rgba(0, 0, 0, 0)
+}
+#cancel-bid-link {
+  @include cursor-pointer-transition;
+  color: $cancel-color;
+}
+#cancel-bid-link:hover {
+  color: $cancel-color-hover;
+}
+
+
+
+#cancel-bid-confirm-popup {
+  width: 250px;
+}

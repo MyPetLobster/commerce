@@ -12,7 +12,7 @@ import logging
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
-from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller, notify_all_early_closing, charge_early_closing_fee
+from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller, notify_all_early_closing, charge_early_closing_fee, send_message
 
 
 logger = logging.getLogger(__name__)
@@ -193,6 +193,46 @@ def move_to_escrow(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+@login_required
+def cancel_bid(request, listing_id):
+    current_user = request.user
+    listing = Listing.objects.get(pk=listing_id)
+
+    all_user_bids_for_listing = Bid.objects.filter(user=current_user, listing=listing)
+
+    if listing.active == True and listing.closing_date - timezone.now() > timezone.timedelta(hours=24):
+        for bid in all_user_bids_for_listing:
+            bid.delete()
+
+        site_account = User.objects.get(pk=12)
+        seller = listing.user
+        all_bids_on_listing = Bid.objects.filter(listing=listing).order_by("-amount")
+        
+        
+        if all_bids_on_listing:
+            highest_bid = all_bids_on_listing.first()
+            highest_bidder = highest_bid.user
+            listing.price = highest_bid.amount
+            listing.save()
+
+            subject_new_high_bidder = f"Your bid on {listing.title} is now the highest bid."
+            message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
+
+            send_message(site_account, highest_bidder, subject_new_high_bidder, message_new_high_bidder)
+
+            subject_seller = f"A user has cancelled their bid on {listing.title}."
+            message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now ${highest_bid.amount}."    
+        else: 
+            listing.price = listing.starting_bid
+            listing.save()
+            subject_seller = f"A user has cancelled their bid on {listing.title}."
+            message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
+
+        send_message(site_account, seller, subject_seller, message_seller)
+    else:
+        contrib_messages.error(request, "Cannot cancel bid with less than 24 hours remaining.")
+
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
 # PROFILE FUNCTIONS

@@ -34,4 +34,5 @@ urlpatterns = [
     path('sort_messages', actions.sort_messages, name='sort_messages'),
     path('move_to_escrow/<int:listing_id>', actions.move_to_escrow, name='move_to_escrow'),
     path('delete_account/<int:user_id>', actions.delete_account, name='delete_account'),
+    path('cancel_bid/<int:listing_id>', actions.cancel_bid, name='cancel_bid'),
 ]
