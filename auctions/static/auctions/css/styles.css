@@ -1253,7 +1253,7 @@ footer li {
 
 .thumb-img:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.47), 0 0 25px rgba(97, 14, 39, 0.18);
 }
 
 /* ABOUT PAGE */
