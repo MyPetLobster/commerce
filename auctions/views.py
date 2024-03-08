@@ -315,6 +315,8 @@ def profile(request, user_id):
     user_active_listings_count = len([listing for listing in listings if listing.active])
     user_inactive_listings_count = len([listing for listing in listings if not listing.active])
 
+    user_active_bids_count = len([bid for bid in user_bids if bid.listing.active])
+
     return render(request, "auctions/profile.html", {
         "user": user,
         "listings": listings,
@@ -325,7 +327,8 @@ def profile(request, user_id):
         "unread_message_count": unread_message_count,
         "bid_info_list": bid_info_list,
         "user_active_listings_count": user_active_listings_count,
-        "user_inactive_listings_count": user_inactive_listings_count
+        "user_inactive_listings_count": user_inactive_listings_count,
+        "user_active_bids_count": user_active_bids_count
     })
 
 

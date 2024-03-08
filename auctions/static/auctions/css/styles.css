@@ -1488,4 +1488,36 @@ footer li {
   cursor: pointer;
 }
 
+.delete-account-button {
+  background-color: #7a7575;
+  color: #303133;
+  transition: 3s;
+}
+
+.delete-account-neon {
+  color: #f4f4f4;
+  background-color: #f4008a;
+  transition: 3s;
+}
+
+.delete-account-neon:hover,
+.delete-account-button:hover {
+  background-color: #303133;
+  color: #f4f4f4;
+}
+
+.delete-account-neon:active,
+.delete-account-neon:focus,
+.delete-account-neon:visited,
+.delete-account-button:active,
+.delete-account-button:focus,
+.delete-account-button:visited {
+  background-color: #303133 !important;
+  color: #303133 !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 5s;
+}
+
 /*# sourceMappingURL=styles.css.map */

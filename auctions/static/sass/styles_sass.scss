@@ -1256,3 +1256,34 @@ footer {
 
 
 
+.delete-account-button {
+  background-color: $nav-color;
+  color: $background-color-dark;
+  transition: 3s;
+}
+
+
+.delete-account-neon {
+  color: $text-color-light;
+  background-color: #f4008a;
+  transition: 3s;
+}
+.delete-account-neon:hover,
+.delete-account-button:hover {
+  background-color: $background-color-dark;
+  color: $text-color-light;
+}
+
+.delete-account-neon:active,
+.delete-account-neon:focus,
+.delete-account-neon:visited,
+.delete-account-button:active,
+.delete-account-button:focus,
+.delete-account-button:visited {
+  background-color: $background-color-dark !important;
+  color: $background-color-dark!important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 5s;
+}

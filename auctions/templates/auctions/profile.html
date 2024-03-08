@@ -234,9 +234,27 @@
 </div>
 <div class="divider-med"></div>
 <div class="center-container">
-    <p>See Dangerous Options</p>
-<div class="delete-account-div">
-
+    <button id="delete-account" class="btn btn-primary delete-account-button">Delete Account</button>
+    <div class="delete-account-div hidden">
+    {% if user_active_listings_count != 0 and user_bids_count != 0 %}
+        <div class="delete-account-permitted">
+            <form class="popup-form center-container" action="#" method="post">
+                {% csrf_token %}
+                <h4 class="form-title">Delete Account</h4>
+                <p>Are you sure you want to delete your account?</p>
+                <p>This action cannot be undone.</p>
+                <div class="form-btn-box">
+                    <button class="btn btn-primary delete-account-neon" type="submit">Delete Account</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-delete-account">Cancel</button>
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="delete-account-forbidden center-container" style="width:250px; text-align:center;">
+            <p>Sorry, you cannot delete your account while you have active listings or bids.</p>
+            <button class="btn btn-primary" type="button" id="cancel-delete-account">Ah, that makes sense.</button>
+        </div>
+    {% endif %}
     </div>
 </div>
 <div class="divider-small"></div>
@@ -244,6 +262,21 @@
     localStorage.setItem('activePage', 'profile');
     // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
     // which section to scroll into view
+
+    const deleteAccountButton = document.getElementById('delete-account');
+    const deleteAccountDiv = document.querySelector('.delete-account-div');
+
+    deleteAccountButton.addEventListener('click', () => {
+        deleteAccountDiv.classList.remove('hidden');
+        deleteAccountDiv.classList.add('popup-form');
+    });
+
+    const cancelDeleteAccount = document.getElementById('cancel-delete-account');
+    cancelDeleteAccount.addEventListener('click', () => {
+        deleteAccountDiv.classList.add('hidden');
+        deleteAccountDiv.classList.remove('popup-form');
+    });
+
 
     const bidItem = document.querySelectorAll('.bid-item');
     // display only the first 10 bidItems
