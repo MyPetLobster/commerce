@@ -163,6 +163,10 @@ ul {
   height: 20px;
 }
 
+.padding-zero {
+  padding: 0 !important;
+}
+
 /* LINK STYLES */
 a {
   color: #1696b9;
@@ -879,11 +883,11 @@ footer li {
   width: 600px;
 }
 
-#profile-closed-listings {
+.profile-closed-listings {
   display: flex;
   justify-content: center;
 }
-#profile-closed-listings li {
+.profile-closed-listings li {
   margin-top: 4px;
 }
 
@@ -1453,6 +1457,14 @@ footer li {
 .status-link:hover,
 .active-dropdown-header {
   color: #c55176;
+}
+
+#acct-balance-header,
+#my-bids-header,
+#information-header,
+#active-listings-header,
+#closed-listings-header {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=styles.css.map */

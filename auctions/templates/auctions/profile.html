@@ -35,9 +35,9 @@
         {% endif %}
     {% endif %}
     <p></p>
-    <h2>Information</h2>
+    <h2 id="information-header">Information</h2>
     <div class="profile-info">
-        <ul>
+        <ul class="info-section-element">
             <li>Username: {{ user.username }}</li>
             <li>Email: {{ user.email }}</li>
             <li>First Name: {{ user.first_name }}</li>
@@ -45,8 +45,8 @@
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
     {% if current_user == user %}
-            <button id="edit-button" class="btn btn-primary" style="margin-top:20px">Edit Profile</button>
-            <button id="change-password" class="btn btn-primary">Change Password</button>
+            <button id="edit-button" class="btn btn-primary info-section-element" style="margin-top:20px">Edit Profile</button>
+            <button id="change-password" class="btn btn-primary info-section-element">Change Password</button>
             
         </div>
 
@@ -80,11 +80,11 @@
         </div>
 
         <div class="account-balance">
-            <h2>Account Balance</h2>
-            <p style="font-size: 1.3em">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
-            <p><a id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
-            <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
-            <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
+            <h2 id="acct-balance-header">Account Balance</h2>
+            <p class="acct-section-element" style="font-size: 1.3em">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+            <p><a class="acct-section-element" id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
+            <button id="deposit-btn" class="btn btn-primary acct-section-element">Deposit Funds</button>
+            <button id="withdraw-btn" class="btn btn-primary acct-section-element">Withdraw Funds</button>
         </div>
 
         <div class="deposit-form hidden">
@@ -110,15 +110,15 @@
             </form>
         </div>
     {% endif %}
-    <p></p>
+    <p class="acct-section-element"></p>
     <div class="profile-listings">
         <hr>
     </div>
     {% if current_user == user %}
     <div class="user-bids">
-        <h2>My Bids</h2>
-        <p class="center-container"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Full Bidding History</a></p>
-        <div class="center-container">
+        <h2 id="my-bids-header">My Bids</h2>
+        <p class="center-container bids-section-element"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Full Bidding History</a></p>
+        <div class="center-container bids-section-element">
             <ul class="no-list-style-center">
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
@@ -164,23 +164,23 @@
     {% endif %}
 
         {% if user == current_user %}
-            <h2>My Active Listings</h2>
+            <h2 id="active-listings-header">My Active Listings</h2>
         {% else %}
-            <h2>{{ user.username }}'s Active Listings</h2>
+            <h2 id="active-listings-header">{{ user.username }}'s Active Listings</h2>
         {% endif %}
         
         {% if user_active_listings_count == 0 %}
-            <div class="center-container">
+            <div class="center-container active-listings-element">
                 <p class="no-listings">No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
             </div>
         {% else %}
             <div class="profile-listings">
                 {% if user.listings.all.count == 0 %}
-                    <div class="center-container">
+                    <div class="center-container active-listings-element">
                         <p>No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
                     </div>
                 {% endif %}
-                <ul class="no-list-style-center">
+                <ul class="no-list-style-center active-listings-element">
                     {% for listing in user.listings.all %}
                         {% if listing.active == True %}
                             <li class="li-listing">  
@@ -195,17 +195,18 @@
 
     
     {% if user == current_user %}
-        <h2>My Closed Listings</h2>
+        <h2 id="closed-listings-header">My Closed Listings</h2>
     {% else %}
-        <h2>{{ user.username }}'s Closed Listings</h2>
+        <h2 id="closed-listings-header">{{ user.username }}'s Closed Listings</h2>
     {% endif %}
 
     {% if user_inactive_listings_count == 0 %}
-        <div class="center-container">
+        <div class="center-container closed-listings-element">
             <p class="no-listings">No closed listings.</p>
         </div>
     {% else %}
-        <div id="profile-closed-listings" class="profile-listings">
+        <div id="closed-listings-element">
+        <div class="profile-listings profile-closed-listings">
             <ul class="thin-list">
                 {% for listing in user.listings.all %}
                     {% if listing.active == False %}
@@ -227,6 +228,7 @@
                     {% endif %}
                 {% endfor %}
             </ul>
+        </div>
         </div>
     {% endif %}
 </div>
@@ -352,6 +354,43 @@
     }
 
 
+    const acctBalanceHeader = document.getElementById('acct-balance-header');
+    const acctSectionElements = document.querySelectorAll('.acct-section-element');
+    acctBalanceHeader.addEventListener('click', () => {
+        acctSectionElements.forEach((element) => {
+            element.classList.toggle('hidden');
+        });
+    });
+
+    const bidsHeader = document.getElementById('my-bids-header');
+    const bidsSectionElements = document.querySelectorAll('.bids-section-element');
+    bidsHeader.addEventListener('click', () => {
+        bidsSectionElements.forEach((element) => {
+            element.classList.toggle('hidden');
+        });
+    });
+
+    const profileInfoHeader = document.getElementById('information-header');
+    const profileInfoElements = document.querySelectorAll('.info-section-element');
+    const profileInfoDiv = document.querySelector('.profile-info');
+    profileInfoHeader.addEventListener('click', () => {
+        profileInfoElements.forEach((element) => {
+            element.classList.toggle('hidden');
+        });
+        profileInfoDiv.classList.toggle('padding-zero');
+    });
+
+    const activeListingsHeader = document.getElementById('active-listings-header');
+    const activeListingsElement = document.querySelector('.active-listings-element');
+    activeListingsHeader.addEventListener('click', () => {
+        activeListingsElement.classList.toggle('hidden');
+    });
+
+    const closedListingsHeader = document.getElementById('closed-listings-header');
+    const closedListingsElement = document.querySelector('#closed-listings-element');
+    closedListingsHeader.addEventListener('click', () => {
+        closedListingsElement.classList.toggle('hidden');
+    });
 
 
 
