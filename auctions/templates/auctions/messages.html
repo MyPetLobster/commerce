@@ -4,26 +4,7 @@
   {{ current_user.username }}'s Messages
 {% endblock %} 
 
-{% block navbar %}
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
-</li>
-{% endblock %} {% block body %}
+{% block body %}
 
 <div class="page-content">
 

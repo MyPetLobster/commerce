@@ -1,26 +1,7 @@
 {% extends "auctions/layout.html" %} 
 {% block title %} Categories {% endblock %}
-{% block navbar %}
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
-</li>
 
-{% endblock %} 
+
 {% block body %}
 <div class="page-content">
   <h1 id="h1-all-categories">All Categories</h1>
@@ -36,16 +17,19 @@
 </div>
 
 <script>
-    document.querySelectorAll(".page-content li").forEach((li) => {
-        li.addEventListener("mouseover", () => {
-        li.querySelector(".description").classList.remove("hidden");
-        li.querySelector(".description").classList.add("visible-categories");
-        });
-        li.addEventListener("mouseout", () => {
-        li.querySelector(".description").classList.remove("visible-categories");
-        li.querySelector(".description").classList.add("hidden");
-        });
-    });
+  localStorage.setItem('activePage', 'categories');
+
+
+  document.querySelectorAll(".page-content li").forEach((li) => {
+      li.addEventListener("mouseover", () => {
+      li.querySelector(".description").classList.remove("hidden");
+      li.querySelector(".description").classList.add("visible-categories");
+      });
+      li.addEventListener("mouseout", () => {
+      li.querySelector(".description").classList.remove("visible-categories");
+      li.querySelector(".description").classList.add("hidden");
+      });
+  });
 </script>
 
 {% endblock %}

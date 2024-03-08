@@ -1,25 +1,8 @@
 {% extends "auctions/layout.html" %} {% load custom_filters %} {% block title %}
-{{ current_user.username }}'s Watchlist {% endblock %} {% block navbar %}
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'listings' %}">All Listings</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'categories' %}">All Categories</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'messages' current_user.id %}">Messages</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
-</li>
+{{ current_user.username }}'s Watchlist {% endblock %}
 
-{% endblock %} {% block body %}
+
+{% block body %}
 <div class="watchlist-content">
   <h1>{{ current_user.username }}'s Watchlist</h1>
   {% if listings %}
@@ -61,4 +44,8 @@
   <p>Your watchlist is empty.</p>
   {% endif %}
 </div>
+
+<script>
+  localStorage.setItem('activePage', 'watchlist');
+</script>
 {% endblock %}

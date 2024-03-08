@@ -371,6 +371,12 @@ legend {
 
 
 /* NAV and FOOTER STYLES*/
+
+.active-nav {
+  font-weight: bold;
+  color: $pale-pink !important;
+}
+
 .nav-container {
   @include flex-row;
   justify-content: space-between;
@@ -1045,7 +1051,10 @@ footer {
   border-radius: 8px;
   font-size: 0.9em;
   margin-top: 20px;
+}
 
+#top-about-section {
+  margin-top: 0;
 }
 
 .about-header {
@@ -1100,6 +1109,11 @@ footer {
   text-align: left;
   margin-bottom: 20px;
 }
+
+
+
+
+
 
 
 

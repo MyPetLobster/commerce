@@ -223,6 +223,10 @@ def listing(request, listing_id):
     })
 
 
+def search(request):
+    ...
+
+
 def about(request):
     current_user = request.user
     messages = contrib_messages.get_messages(request)

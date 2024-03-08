@@ -423,6 +423,11 @@ legend {
 }
 
 /* NAV and FOOTER STYLES*/
+.active-nav {
+  font-weight: bold;
+  color: #976f7b !important;
+}
+
 .nav-container {
   display: flex;
   flex-direction: row;
@@ -1247,6 +1252,10 @@ footer li {
   border-radius: 8px;
   font-size: 0.9em;
   margin-top: 20px;
+}
+
+#top-about-section {
+  margin-top: 0;
 }
 
 .about-header {

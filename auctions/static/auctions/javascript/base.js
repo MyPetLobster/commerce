@@ -7,6 +7,7 @@ setTimeout(function () {
 
 
 
+
 // DARK and LIGHT MODES
 // Check if the user has a theme preference and set it when page loads
 if (localStorage.getItem("theme") === "dark") {
@@ -292,4 +293,31 @@ function checkForUnreadMessages() {
     return 0;
   }
 }
+
+
+
+document.onreadystatechange = () => {
+  if (document.readyState === "complete") {
+    // Get localStorage value for activePage and make the appropriate link bold. 
+    const activePage = localStorage.getItem("activePage");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    if (activePage !== null && activePage !== 'non-nav') {
+      navLinks.forEach((link) => {
+        if (link.id === `nav-${activePage}`) {
+          link.classList.add("active-nav");
+        } else {
+          link.classList.remove("active-nav");
+        }
+      });
+    } else {
+      
+      return;
+    }
+    
+  } else {
+    return;
+  }
+}
+
 

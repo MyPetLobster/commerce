@@ -19,6 +19,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="{% static 'images/favicon_io/favicon.ico' %}">
         <script src="{% static 'auctions/javascript/base.js' %}" defer></script>
+        <script>
+            localStorage.setItem('activePage', 'non-nav');
+        </script>
         {% block script %}{% endblock %}
     </head>
     <body class="light-mode">
@@ -35,10 +38,10 @@
             {% endfor %}
         {% endif %}
         <div class="hero">
-            <a class="hero-link" href="{% url 'about' %}">
+            <a class="hero-link" href="{% url 'index' %}">
             <h1 class="yard-sale">Yard Sale</h1>
             </a>
-            <a class="hero-link" href="{% url 'about' %}">
+            <a class="hero-link" href="{% url 'index' %}">
                 <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
                 <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
             </a>
@@ -47,7 +50,27 @@
         <div class="nav-container">
             <ul class="nav">
                 {% if current_user.is_authenticated %}
-                    {% block navbar %}{% endblock %}
+                    <li class="nav-item">
+                        <a id="nav-listings" class="nav-link" href="{% url 'listings' %}">All Listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-create-listing" class="nav-link" href="{% url 'create' %}">Create Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-categories" class="nav-link" href="{% url 'categories' %}">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-watchlist" class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-search" class="nav-link" href="{% url 'search' %}">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-about" class="nav-link" href="{% url 'about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-profile" class="nav-link" href="{% url 'profile' current_user.id %}">My Yard</a>
+                    </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
@@ -62,7 +85,6 @@
                 {% if current_user.is_authenticated %}
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
                     <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <div class="mail-icon-div">
                         <span id="mail-icon-default" class="mail-icon visible"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;"></span>
                         <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" style="width:25px;"></a></span>
@@ -70,6 +92,7 @@
                     </div>
                     <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>
                     <span class="signed-in-as"><a href="{% url 'profile' current_user.id %}">Signed in as <strong>{{ current_user.username }}</a></strong></span>
+                    <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 {% else %}
                     <ul class="nav">
                         <li class="nav-item">
