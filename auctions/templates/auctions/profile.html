@@ -249,7 +249,7 @@
             </form>
         </div>
         <div class="et-tu-brute hidden">
-            <form id="brute-form" class="popup-form" style="text-align:center;" action="#" method="post">
+            <form id="brute-form" class="popup-form" style="text-align:center;" action="{% url 'delete_account' current_user.id %} " method="post">
                 {% csrf_token %}
                 <h4 class="form-title">Sorry to see you go.</h4>
                 <p>We hope you'll come back soon and give us another shot.</p>

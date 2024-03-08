@@ -235,6 +235,23 @@ def change_password(request, user_id):
     })
 
 
+@login_required
+def delete_account(request, user_id):
+    user = User.objects.get(pk=user_id)
+    user_listings = Listing.objects.filter(user=user)
+    user_bids = Bid.objects.filter(user=user)
+
+    for listing in user_listings:
+        if listing.active == True:
+            contrib_messages.error(request, "Cannot delete account with active listings")
+            return redirect("profile", user_id=user_id)
+    for bid in user_bids:
+        if bid.listing.active == True:
+            contrib_messages.error(request, "Cannot delete account with active bids")
+            return redirect("profile", user_id=user_id)
+
+    user.delete()
+    return redirect("index")
 
 
 # Profile - Money Related Functions
