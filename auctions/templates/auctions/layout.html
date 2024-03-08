@@ -84,15 +84,23 @@
             <div class="user-status">
                 {% if current_user.is_authenticated %}
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
-                    <a class="balance-link logout-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    <a class="balance-link status-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <div class="mail-icon-div">
                         <span id="mail-icon-default" class="mail-icon visible"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;"></span>
                         <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" style="width:25px;"></a></span>
                         <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" style="width:25px;"></span>&nbsp;&nbsp;
                     </div>
                     <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>
-                    <span class="signed-in-as"><a href="{% url 'profile' current_user.id %}">Signed in as <strong>{{ current_user.username }}</a></strong></span>
-                    <a class="logout-link" href="{% url 'logout' %}">Log Out&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+                    <div class="dropdown">
+                        <div class="center-container">
+                            <input id="full-dropdown-div" class="text-box" type="text" readonly><a id="status-profile" class="status-link" href="{% url 'profile' current_user.id %}"><strong>hi, {{ current_user.username }}!</strong></a>
+                        </div>
+                        <div id="dropdown-options" class="options">
+                            <div><a class="profile-dropdown-link" href="{% url 'profile' current_user.id %}">My Yard</a></div>
+                            <div><a class="logout-dropdown-link" href="{% url 'logout' %}">Log Out</a></div>
+                        </div>
+                    </div>                    
                 {% else %}
                     <ul class="nav">
                         <li class="nav-item">
@@ -166,6 +174,34 @@
                     error_message.style.display = 'none';
                 });
             }
+
+            const fullDropDownDiv = document.querySelector("#full-dropdown-div");
+            const statusProfile = document.querySelector("#status-profile");
+
+            fullDropDownDiv.addEventListener("mouseover", () => {
+                statusProfile.classList.add("active-dropdown-header");
+            });
+
+            fullDropDownDiv.addEventListener("mouseout", () => {
+                statusProfile.classList.remove("active-dropdown-header");
+            });
+
+
+            function show(value) {
+                document.querySelector(".text-box").value = value;
+            }
+            
+            const dropdown = document.querySelector(".dropdown")
+            dropdown.onclick = function() {
+                dropdown.classList.toggle("active")
+            }
+
+            document.addEventListener('click', function(event) {
+                const dropdown = document.querySelector('.dropdown');
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
         </script>
     </body>
 </html>
