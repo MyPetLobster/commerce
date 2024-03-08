@@ -97,8 +97,8 @@
                             <input id="full-dropdown-div" class="text-box" type="text" readonly><a id="status-profile" class="status-link" href="{% url 'profile' current_user.id %}"><strong>hi, {{ current_user.username }}!</strong></a>
                         </div>
                         <div id="dropdown-options" class="options">
-                            <div><a class="profile-dropdown-link" href="{% url 'profile' current_user.id %}">My Yard</a></div>
-                            <div><a class="logout-dropdown-link" href="{% url 'logout' %}">Log Out</a></div>
+                            <div><a class="profile-dropdown-link nav" href="{% url 'profile' current_user.id %}">My Yard</a></div>
+                            <div><a class="logout-dropdown-link nav" href="{% url 'logout' %}">Log Out</a></div>
                         </div>
                     </div>                    
                 {% else %}
@@ -154,13 +154,13 @@
         <footer>
             <ul class="footer-links">
                 <li>
-                    <a class="footer-link" href="https://github.com/MyPetLobster/commerce">GitHub Repo</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="footer-link nav" href="https://github.com/MyPetLobster/commerce">GitHub Repo</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </li>
                 <li id="center-footer-item">
-                    <a class="footer-link" href="{% url 'about' %}">&copy; Yard Sale 2024</a>
+                    <a class="footer-link nav" href="{% url 'about' %}">&copy; Yard Sale 2024</a>
                 </li>
                 <li>
-                    <a id="theme-mode-toggle" class="footer-link" href="#">Toggle Dark Mode</a>
+                    <a id="theme-mode-toggle" class="footer-link nav" href="#">Toggle Dark Mode</a>
                 </li>
             </ul>
         </footer>

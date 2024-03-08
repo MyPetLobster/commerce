@@ -67,13 +67,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // if user clicks on navbar, reset sort by to date
-  const navBar = document.querySelector(".nav");
-  navBar.addEventListener("click", () => {
-    localStorage.setItem("sort-by", "date");
-    localStorage.setItem("sort-by-direction", "desc");
-    updateSortUI();
-  });
+  const navBar = document.querySelectorAll(".nav");
 
+  navBar.forEach((nav) => {
+    nav.addEventListener("click", () => {
+      localStorage.setItem("sort-by", "date");
+      localStorage.setItem("sort-by-direction", "desc");
+      updateSortUI();
+    });
+  });
 
   // if user clicks away from page, save scroll position
   // window.addEventListener("beforeunload", () => {
