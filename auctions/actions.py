@@ -123,13 +123,15 @@ def close_listing(request, listing_id):
 
         if highest_bid is None:
             highest_bid = listing.starting_bid
+        else:
+            highest_bid = highest_bid.amount
 
         try:
             # If there are less than 24 hours left, the listing cannot be closed manually
             if listing.closing_date - timezone.now() < timezone.timedelta(hours=24):
                 contrib_messages.error(request, "Listing cannot be closed with less than 24 hours remaining.")
                 return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-
+            
             # If there are active bids, there will be 24 hour delay before closing
             # and all bidders will be notified
             if highest_bid > starting_bid:
@@ -217,8 +219,11 @@ def cancel_bid(request, listing_id):
 
             subject_new_high_bidder = f"Your bid on {listing.title} is now the highest bid."
             message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
-
             send_message(site_account, highest_bidder, subject_new_high_bidder, message_new_high_bidder)
+
+            subject_cancelled_bid = f"Your bid on {listing.title} has been cancelled."
+            message_cancelled_bid = f"Your bid on {listing.title} has been cancelled. This process automatically removes older bids on the same listing."
+            send_message(site_account, current_user, subject_cancelled_bid, message_cancelled_bid)
 
             subject_seller = f"A user has cancelled their bid on {listing.title}."
             message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now ${highest_bid.amount}."    

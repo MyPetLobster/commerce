@@ -161,10 +161,10 @@ def listing(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
     current_user = request.user
 
-    # Calculate Time Left (7 days from listing date)    
-    listing_date = listing.date
+    # Calculate Time Left in seconds using listing.closing_date    
+    closing_date = listing.closing_date
     current_date_time = timezone.now()
-    diff_seconds = round((listing_date - current_date_time).total_seconds() * -1.0, 2)
+    diff_seconds = (closing_date - current_date_time).total_seconds()
 
     # Generate time left string for JavaScript display, live countdown
     if helpers.check_expiration(listing_id) == "closed - expired":

@@ -110,7 +110,7 @@ def get_listing_values(request, listing):
 
 def generate_time_left_string(difference_seconds):
     # Generate time left string to be handled in the template JS
-    seconds_left = max(0, 604800 - difference_seconds)
+    seconds_left = difference_seconds
     days_left, seconds_left = divmod(seconds_left, 86400)
     hours_left, remainder = divmod(seconds_left, 3600)
     minutes_left, seconds_left = divmod(remainder, 60)
