@@ -224,8 +224,27 @@ def listing(request, listing_id):
 
 
 def search(request):
-    ...
+    current_user = request.user
+    messages = contrib_messages.get_messages(request)
+    unread_messages = Message.objects.filter(recipient=current_user, read=False)
+    unread_message_count = unread_messages.count()
 
+    if request.method == "POST":
+        search_query = request.POST["search-query"]
+        listings = Listing.objects.filter(title__icontains=search_query).filter(active=True).order_by("-date")
+
+        return render(request, "auctions/search.html", {
+            "listings": listings,
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
+    else:
+        return render(request, "auctions/search.html", {
+            "current_user": current_user,
+            "messages": messages,
+            "unread_message_count": unread_message_count
+        })
 
 def about(request):
     current_user = request.user

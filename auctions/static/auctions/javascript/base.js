@@ -21,6 +21,8 @@ if (localStorage.getItem("theme") === "dark") {
     setTransactionDarkMode();
   }
   toggleDeleteAccountButtonColor();
+  setSearchResultDescColor();
+
 }
 
 if (localStorage.getItem("theme") === "light") {
@@ -34,6 +36,8 @@ if (localStorage.getItem("theme") === "light") {
     setTransactionLightMode();
   }
   toggleDeleteAccountButtonColor();
+  setSearchResultDescColor();
+
 }
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
@@ -47,10 +51,9 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
     toggleTransactionMode();  
     toggleTimeLeftTextColor();
     toggleTimeLeftTextColor();
-    toggleDeleteAccountButtonColor();
   }
+  toggleDeleteAccountButtonColor();
 
-  
   localStorage.setItem(
     "theme",
     document.querySelector("body").classList.contains("dark-mode")
@@ -58,6 +61,7 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
       : "light"
   );
 
+  setSearchResultDescColor();
 
   // change the colors of the message divs if they exist and sender links in msgs
   const messagePageCheck = document.querySelector("#this-is-message-page");
@@ -127,37 +131,56 @@ function toggleDeleteAccountButtonColor() {
   const reallySubmitDeleteButton = document.getElementById('really-submit-delete-btn');
 
   if (localStorage.getItem('theme') === 'dark') {
-      deleteAccountButton.classList.add('del-acct-btn-dark');
-      if (deleteAccountButton.classList.contains('del-acct-btn-light')) {
-          deleteAccountButton.classList.remove('del-acct-btn-light');
-      }
-      if (submitDeleteButton) {
-          submitDeleteButton.classList.add('del-acct-neon-btn-dark');
-          reallySubmitDeleteButton.classList.add('del-acct-neon-btn-dark');
-          if (submitDeleteButton.classList.contains('del-acct-neon-btn-light')) {
-              submitDeleteButton.classList.remove('del-acct-neon-btn-light');
-              reallySubmitDeleteButton.classList.remove('del-acct-neon-btn-light');
-          }
+      if (deleteAccountButton) {
+        deleteAccountButton.classList.add('del-acct-btn-dark');
+        if (deleteAccountButton.classList.contains('del-acct-btn-light')) {
+            deleteAccountButton.classList.remove('del-acct-btn-light');
+        }
+        if (submitDeleteButton) {
+            submitDeleteButton.classList.add('del-acct-neon-btn-dark');
+            reallySubmitDeleteButton.classList.add('del-acct-neon-btn-dark');
+            if (submitDeleteButton.classList.contains('del-acct-neon-btn-light')) {
+                submitDeleteButton.classList.remove('del-acct-neon-btn-light');
+                reallySubmitDeleteButton.classList.remove('del-acct-neon-btn-light');
+            }
+        }
       }
   } else {
-      deleteAccountButton.classList.add('del-acct-btn-light');
-      if (deleteAccountButton.classList.contains('del-acct-btn-dark')) {
-          deleteAccountButton.classList.remove('del-acct-btn-dark');
-      }
-      if (submitDeleteButton) {
-          submitDeleteButton.classList.add('del-acct-neon-btn-light');
-          reallySubmitDeleteButton.classList.add('del-acct-neon-btn-light');
-          if (submitDeleteButton.classList.contains('del-acct-neon-btn-dark')) {
-              submitDeleteButton.classList.remove('del-acct-neon-btn-dark');
-              reallySubmitDeleteButton.classList.remove('del-acct-neon-btn-dark');
-          }
+      if (deleteAccountButton) {
+        deleteAccountButton.classList.add('del-acct-btn-light');
+        if (deleteAccountButton.classList.contains('del-acct-btn-dark')) {
+            deleteAccountButton.classList.remove('del-acct-btn-dark');
+        }
+        if (submitDeleteButton) {
+            submitDeleteButton.classList.add('del-acct-neon-btn-light');
+            reallySubmitDeleteButton.classList.add('del-acct-neon-btn-light');
+            if (submitDeleteButton.classList.contains('del-acct-neon-btn-dark')) {
+                submitDeleteButton.classList.remove('del-acct-neon-btn-dark');
+                reallySubmitDeleteButton.classList.remove('del-acct-neon-btn-dark');
+            }
+        }
       }
   }
 
 }
 
 
+// Search Page Theme Mode Functions
 
+function setSearchResultDescColor() {
+  const searchResultDesc = document.querySelectorAll('.search-result-desc');
+  if (localStorage.getItem('theme') === 'dark') {
+      searchResultDesc.forEach(desc => {
+          desc.classList.add('search-result-desc-dark');
+          desc.classList.remove('search-result-desc-light');  
+      });
+  } else {
+      searchResultDesc.forEach(desc => {  
+          desc.classList.add('search-result-desc-light');
+          desc.classList.remove('search-result-desc-dark');
+      });
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");
@@ -260,7 +283,6 @@ document.addEventListener("DOMContentLoaded", function () {
     changeMessageColors();
     showHideFullMessage();
   }
-
 });
 
 // FUNCTIONS

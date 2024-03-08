@@ -1,5 +1,7 @@
 {% extends "auctions/layout.html" %}
 
+{% load static %}
+
 {% block title %}
     Search
 {% endblock %}
@@ -7,10 +9,41 @@
 
 {% block body %}
     <div class="page-content">
+        <div class="center-container">
+            <h3>Search</h3>
+        </div>
+        <div class="search-form-div">
+            <form action="{% url 'search' %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="search-query" placeholder="Search for an item" class="search-form-input">
+                <button type="submit" class="search-form-button">Search</button>
+            </form>
+        </div>
+        <div class="search-results">
+            {% if listings %}
+                <h3>Results</h3>
+                <div class="search-results-div">
+                    {% for listing in listings %}
+                        <a class="search-listing-div" href="{% url 'listing' listing.id %}">
+                            {% if listing.image %}
+                                <img src="{{ listing.image }}" alt="{{ listing.title }}" class="search-thumb-img">
+                            {% else %}
+                                <img src="{% static 'images/No_Image_Available.jpg' %}" alt="{{ listing.title }}" class="search-thumb-img">
+                            {% endif %}
+                            <p class="search-result-desc">{{ listing.title|truncatechars:25 }} - ${{ listing.price }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h3>No results</h3>
+            {% endif %}
 
+                            
     </div>
 
     <script>
         localStorage.setItem('activePage', 'search');
+        
+
     </script>
 {% endblock %}
