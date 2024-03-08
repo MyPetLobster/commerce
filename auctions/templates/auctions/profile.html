@@ -465,7 +465,11 @@
     });
 
 
-
+    if (localStorage.getItem('fromBalanceLink') === 'true') {
+        acctBalanceHeader.scrollIntoView();
+        window.scrollBy(0, -230);
+        localStorage.setItem('fromBalanceLink', 'false');
+    }
 
 
 

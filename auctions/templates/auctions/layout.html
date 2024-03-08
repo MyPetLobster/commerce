@@ -166,6 +166,13 @@
         </footer>
 
         <script>
+            const balanceLink = document.querySelector('.balance-link');
+            balanceLink.addEventListener('click', () => {
+                localStorage.setItem('fromBalanceLink', 'true');
+            });
+
+
+
             delX = document.querySelector('.del-msg');
             error_message = document.querySelector('.alert-div');
 
@@ -174,6 +181,8 @@
                     error_message.style.display = 'none';
                 });
             }
+
+
 
             const fullDropDownDiv = document.querySelector("#full-dropdown-div");
             const statusProfile = document.querySelector("#status-profile");
