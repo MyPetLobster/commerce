@@ -123,28 +123,43 @@ function toggleTimeLeftTextColor() {
 // Theme support for delete account buttons
 function toggleDeleteAccountButtonColor() {
   const deleteAccountButton = document.getElementById('delete-account');
+  const deleteAccountDiv = document.querySelector('.delete-account-div');
   const submitDeleteButton = document.getElementById('submit-delete-btn');
-  if (deleteAccountButton) {
-    if (localStorage.getItem('theme') === 'dark') {
-        deleteAccountButton.classList.add('del-acct-btn-dark');
-        if (deleteAccountButton.classList.contains('del-acct-btn-light')) {
-            deleteAccountButton.classList.remove('del-acct-btn-light');
-        }
-        submitDeleteButton.classList.add('del-acct-neon-btn-dark');
-        if (submitDeleteButton.classList.contains('del-acct-neon-btn-light')) {
-            submitDeleteButton.classList.remove('del-acct-neon-btn-light');
-        }
-    } else {
-        deleteAccountButton.classList.add('del-acct-btn-light');
-        if (deleteAccountButton.classList.contains('del-acct-btn-dark')) {
-            deleteAccountButton.classList.remove('del-acct-btn-dark');
-        }
-        submitDeleteButton.classList.add('del-acct-neon-btn-light');
-        if (submitDeleteButton.classList.contains('del-acct-neon-btn-dark')) {
-            submitDeleteButton.classList.remove('del-acct-neon-btn-dark');
-        }
-    }
+
+  if (localStorage.getItem('theme') === 'dark') {
+      deleteAccountButton.classList.add('del-acct-btn-dark');
+      if (deleteAccountButton.classList.contains('del-acct-btn-light')) {
+          deleteAccountButton.classList.remove('del-acct-btn-light');
+      }
+      if (submitDeleteButton) {
+          submitDeleteButton.classList.add('del-acct-neon-btn-dark');
+          if (submitDeleteButton.classList.contains('del-acct-neon-btn-light')) {
+              submitDeleteButton.classList.remove('del-acct-neon-btn-light');
+          }
+      }
+  } else {
+      deleteAccountButton.classList.add('del-acct-btn-light');
+      if (deleteAccountButton.classList.contains('del-acct-btn-dark')) {
+          deleteAccountButton.classList.remove('del-acct-btn-dark');
+      }
+      if (submitDeleteButton) {
+          submitDeleteButton.classList.add('del-acct-neon-btn-light');
+          if (submitDeleteButton.classList.contains('del-acct-neon-btn-dark')) {
+              submitDeleteButton.classList.remove('del-acct-neon-btn-dark');
+          }
+      }
   }
+
+  deleteAccountButton.addEventListener('click', () => {
+      deleteAccountDiv.classList.remove('hidden');
+      deleteAccountDiv.classList.add('popup-form');
+  });
+
+  const cancelDeleteAccount = document.getElementById('cancel-delete-account');
+  cancelDeleteAccount.addEventListener('click', () => {
+      deleteAccountDiv.classList.add('hidden');
+      deleteAccountDiv.classList.remove('popup-form');
+  });
 }
 
 
