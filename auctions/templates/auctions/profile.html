@@ -234,18 +234,30 @@
 </div>
 <div class="divider-med"></div>
 <div class="center-container">
-    <button id="delete-account" class="btn btn-primary delete-account-button">Delete Account</button>
+    <button id="delete-account" class="del-acct-btn-base delete-account-button">Delete Account</button>
     <div class="delete-account-div hidden">
-    {% if user_active_listings_count == 0 and user_bids_count == 0 %}
+    {% if user_active_listings_count == 0 and user_active_bids_count == 0 %}
         <div class="delete-account-permitted">
             <form class="popup-form center-container" style="text-align:center;" action="#" method="post">
-                {% csrf_token %}
                 <h4 class="form-title">Delete Account</h4>
                 <p>Are you sure you want to delete your account?</p>
                 <p class="bold" style="text-decoration:underline;">This action cannot be undone.</p>
                 <div class="form-btn-box">
-                    <button id="submit-delete-btn" class="btn btn-primary" type="submit">Delete Account</button>
+                    <button id="submit-delete-btn" class="del-acct-btn-base" type="button">Delete Account</button>
                     <button class="btn btn-primary cancel-btn" type="button" id="cancel-delete-account">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <div class="et-tu-brute hidden">
+            <form id="brute-form" class="popup-form" style="text-align:center;" action="#" method="post">
+                {% csrf_token %}
+                <h4 class="form-title">Sorry to see you go.</h4>
+                <p>We hope you'll come back soon and give us another shot.</p>
+                <p>If you change your mind, we at Yard Sale would like to show our appreciation for your loyalty. 
+                    Here's a promo code for 10% higher fees on your next sale: <span class="bold">ETTUBRUTE</span></p>
+                <div class="form-btn-box">
+                    <button id="really-submit-delete-btn" class="del-acct-btn-base" type="submit" style="font-size:0.8em;">omg just let me delete the goddamn account</button>
+                    <button class="btn btn-primary" type="button" id="brute-cancel-delete-account">Fine, I'll stay.</button>
                 </div>
             </form>
         </div>
@@ -263,7 +275,46 @@
     // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
     // which section to scroll into view
     localStorage.setItem('activePage', 'profile');
-   
+    
+
+    const deleteAccountButton = document.getElementById('delete-account');
+    const deleteAccountDiv = document.querySelector('.delete-account-div');
+    
+    const submitDeleteBtn = document.getElementById('submit-delete-btn');
+    const deleteAcctPermittedDiv = document.querySelector('.delete-account-permitted');
+    const etTuBruteDiv = document.querySelector('.et-tu-brute');
+    const bruteCancelDeleteBtn = document.getElementById('brute-cancel-delete-account');
+
+    const cancelDeleteAccount = document.getElementById('cancel-delete-account');
+
+    deleteAccountButton.addEventListener('click', () => {
+        deleteAccountDiv.classList.toggle('hidden');
+        deleteAccountDiv.classList.toggle('popup-form');
+        deleteAcctPermittedDiv.classList.remove('hidden');
+    });
+
+
+    cancelDeleteAccount.addEventListener('click', () => {
+        deleteAccountDiv.classList.toggle('hidden');
+        deleteAccountDiv.classList.toggle('popup-form');
+    });
+
+
+
+
+    if (submitDeleteBtn) {
+        submitDeleteBtn.addEventListener('click', () => {
+            deleteAcctPermittedDiv.classList.add('hidden');
+            etTuBruteDiv.classList.remove('hidden');
+        });
+
+        bruteCancelDeleteBtn.addEventListener('click', () => {
+            etTuBruteDiv.classList.add('hidden');
+            deleteAcctPermittedDiv.classList.toggle('hidden');
+            deleteAccountDiv.classList.add('hidden');
+            deleteAccountDiv.classList.remove('popup-form');
+        });
+    }
 
 
     const bidItem = document.querySelectorAll('.bid-item');

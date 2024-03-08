@@ -1488,16 +1488,36 @@ footer li {
   cursor: pointer;
 }
 
+#brute-form {
+  width: 450px;
+}
+
+.del-acct-btn-base {
+  cursor: pointer;
+  transition: 0.15s;
+  padding: 6px 25px;
+  border-radius: 6px;
+  font-size: 1em;
+  border: none;
+  background-color: #7a7575;
+  color: #303133;
+}
+
+#really-submit-delete-btn {
+  background-color: #303133;
+  color: #f4f4f4;
+}
+
 .del-acct-btn-dark {
   background-color: #7a7575;
   color: #303133;
-  transition: 5s;
+  transition: 3s;
 }
 
 .del-acct-neon-btn-dark {
   color: #f4f4f4;
-  background-color: #f4008a;
-  transition: 5s;
+  background-color: #303133;
+  transition: 3s;
 }
 
 .del-acct-neon-btn-dark:hover {
@@ -1535,16 +1555,17 @@ footer li {
 .del-acct-btn-light {
   background-color: #7a7575;
   color: #303133;
-  transition: 5s;
+  transition: 3s;
 }
 
 .del-acct-neon-btn-light {
   color: #f4f4f4;
   background-color: #f4008a;
-  transition: 5s;
+  transition: 3s;
 }
 
-.del-acct-neon-btn-light:hover {
+.del-acct-neon-btn-light:hover,
+#really-submit-delete-btn:hover {
   background-color: #7a9196;
   color: #6c757d;
 }
@@ -1556,7 +1577,10 @@ footer li {
 
 .del-acct-neon-btn-light:active,
 .del-acct-neon-btn-light:focus,
-.del-acct-neon-btn-light:visited {
+.del-acct-neon-btn-light:visited,
+#really-submit-delete-btn:active,
+#really-submit-delete-btn:focus,
+#really-submit-delete-btn:visited {
   background-color: #7a9196 !important;
   color: #7a9196 !important;
   outline: none !important;
