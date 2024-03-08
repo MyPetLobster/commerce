@@ -287,15 +287,17 @@ def watchlist(request):
 @login_required
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    listings = Listing.objects.filter(user=user)
+    listings = Listing.objects.filter(user=user).order_by("-date")
     watchlist = Watchlist.objects.filter(user=user)
     current_user = request.user
     messages = contrib_messages.get_messages(request)
     unread_messages = Message.objects.filter(recipient=current_user, read=False)
     unread_message_count = unread_messages.count()
-    user_bids = Bid.objects.filter(user=user)
-    bid_info_list = []
 
+    user_bids = Bid.objects.filter(user=user)
+    user_bids = [bid for bid in user_bids if bid.listing.active]
+
+    bid_info_list = []
 
     for bid in user_bids:
         bid_listing = bid.listing
@@ -307,7 +309,8 @@ def profile(request, user_id):
         user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid_amount, difference)
         bid_info_list.append(user_bid_info)
 
-    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.date, reverse=True)
+    # sort the list by oldest listing to newest listing
+    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)
 
     user_active_listings_count = len([listing for listing in listings if listing.active])
     user_inactive_listings_count = len([listing for listing in listings if not listing.active])

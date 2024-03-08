@@ -45,7 +45,7 @@
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
     {% if current_user == user %}
-            <button id="edit-button" class="btn btn-primary">Edit Profile</button>
+            <button id="edit-button" class="btn btn-primary" style="margin-top:20px">Edit Profile</button>
             <button id="change-password" class="btn btn-primary">Change Password</button>
             
         </div>
@@ -81,7 +81,7 @@
 
         <div class="account-balance">
             <h2>Account Balance</h2>
-            <p>{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+            <p style="font-size: 1.3em">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
             <p><a id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
             <button id="deposit-btn" class="btn btn-primary">Deposit Funds</button>
             <button id="withdraw-btn" class="btn btn-primary">Withdraw Funds</button>
@@ -117,13 +117,13 @@
     {% if current_user == user %}
     <div class="user-bids">
         <h2>My Bids</h2>
-        <p class="center-container"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Bidding History</a></p>
+        <p class="center-container"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Full Bidding History</a></p>
         <div class="center-container">
             <ul class="no-list-style-center">
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
                 {% else %}
-                <li class="li-listing">
+                <li class="li-listing bid-item">
                 
                     {% if bid_info.user_bid.listing.active == True %}
                         <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
@@ -209,9 +209,9 @@
             <ul class="thin-list">
                 {% for listing in user.listings.all %}
                     {% if listing.active == False %}
-                        <li class="li-listing">
-                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-                        </li>
+                        <li class="li-listing closed-listing-li">
+                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a></br>
+                        
                         {% if listing.price == listing.starting_bid %}
                             <p style="display:inline" class="bold">No bids</p>
                         {% else %}
@@ -222,6 +222,7 @@
                                     No winner
                                 {% endif %}
                         </p>
+                        </li>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -241,6 +242,23 @@
     localStorage.setItem('activePage', 'profile');
     // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
     // which section to scroll into view
+
+    const bidItem = document.querySelectorAll('.bid-item');
+    // display only the first 10 bidItems
+    for (let i = 0; i < bidItem.length; i++) {
+        if (i > 9) {
+            bidItem[i].classList.add('hidden');
+        }
+    }
+
+    const closedListingLi = document.querySelectorAll('.closed-listing-li');
+    // display only the first 10 closedListingLi
+    for (let i = 0; i < closedListingLi.length; i++) {
+        if (i > 9) {
+            closedListingLi[i].classList.add('hidden');
+        }
+    }
+
     const transactionHistoryLink = document.getElementById('transaction-history-link');
     const bidHistoryLink = document.getElementById('bid-history-link');
 
