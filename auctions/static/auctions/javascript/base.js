@@ -20,6 +20,7 @@ if (localStorage.getItem("theme") === "dark") {
   if (document.querySelector("#this-is-transactions-page")) {
     setTransactionDarkMode();
   }
+  toggleDeleteAccountButtonColor();
 }
 
 if (localStorage.getItem("theme") === "light") {
@@ -32,6 +33,7 @@ if (localStorage.getItem("theme") === "light") {
   if (document.querySelector("#this-is-transactions-page")) {
     setTransactionLightMode();
   }
+  toggleDeleteAccountButtonColor();
 }
 
 document.querySelector("#theme-mode-toggle").onclick = function () {
@@ -45,6 +47,7 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
     toggleTransactionMode();  
     toggleTimeLeftTextColor();
     toggleTimeLeftTextColor();
+    toggleDeleteAccountButtonColor();
   }
 
   
@@ -116,6 +119,35 @@ function toggleTimeLeftTextColor() {
     }
   }
 }
+
+// Theme support for delete account buttons
+function toggleDeleteAccountButtonColor() {
+  const deleteAccountButton = document.getElementById('delete-account');
+  const submitDeleteButton = document.getElementById('submit-delete-btn');
+  if (deleteAccountButton) {
+    if (localStorage.getItem('theme') === 'dark') {
+        deleteAccountButton.classList.add('del-acct-btn-dark');
+        if (deleteAccountButton.classList.contains('del-acct-btn-light')) {
+            deleteAccountButton.classList.remove('del-acct-btn-light');
+        }
+        submitDeleteButton.classList.add('del-acct-neon-btn-dark');
+        if (submitDeleteButton.classList.contains('del-acct-neon-btn-light')) {
+            submitDeleteButton.classList.remove('del-acct-neon-btn-light');
+        }
+    } else {
+        deleteAccountButton.classList.add('del-acct-btn-light');
+        if (deleteAccountButton.classList.contains('del-acct-btn-dark')) {
+            deleteAccountButton.classList.remove('del-acct-btn-dark');
+        }
+        submitDeleteButton.classList.add('del-acct-neon-btn-light');
+        if (submitDeleteButton.classList.contains('del-acct-neon-btn-dark')) {
+            submitDeleteButton.classList.remove('del-acct-neon-btn-dark');
+        }
+    }
+  }
+}
+
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

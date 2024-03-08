@@ -1488,36 +1488,92 @@ footer li {
   cursor: pointer;
 }
 
-.delete-account-button {
+.del-acct-btn-dark {
   background-color: #7a7575;
   color: #303133;
-  transition: 3s;
+  transition: 5s;
 }
 
-.delete-account-neon {
+.del-acct-neon-btn-dark {
   color: #f4f4f4;
   background-color: #f4008a;
-  transition: 3s;
+  transition: 5s;
 }
 
-.delete-account-neon:hover,
-.delete-account-button:hover {
+.del-acct-neon-btn-dark:hover {
+  background-color: #7a9196;
+  color: #6c757d;
+}
+
+.del-acct-btn-dark:hover {
   background-color: #303133;
   color: #f4f4f4;
 }
 
-.delete-account-neon:active,
-.delete-account-neon:focus,
-.delete-account-neon:visited,
-.delete-account-button:active,
-.delete-account-button:focus,
-.delete-account-button:visited {
+.del-acct-neon-btn-dark:active,
+.del-acct-neon-btn-dark:focus,
+.del-acct-neon-btn-dark:visited {
+  background-color: #7a9196 !important;
+  color: #7a9196 !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
+}
+
+.del-acct-btn-dark:active,
+.del-acct-btn-dark:focus,
+.del-acct-btn-dark:visited {
   background-color: #303133 !important;
   color: #303133 !important;
   outline: none !important;
   border-color: none !important;
   box-shadow: none !important;
+  transition: 3s;
+}
+
+.del-acct-btn-light {
+  background-color: #7a7575;
+  color: #303133;
   transition: 5s;
+}
+
+.del-acct-neon-btn-light {
+  color: #f4f4f4;
+  background-color: #f4008a;
+  transition: 5s;
+}
+
+.del-acct-neon-btn-light:hover {
+  background-color: #7a9196;
+  color: #6c757d;
+}
+
+.del-acct-btn-light:hover {
+  background-color: #e2e2e2;
+  color: #303133;
+}
+
+.del-acct-neon-btn-light:active,
+.del-acct-neon-btn-light:focus,
+.del-acct-neon-btn-light:visited {
+  background-color: #7a9196 !important;
+  color: #7a9196 !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
+}
+
+.del-acct-btn-light:active,
+.del-acct-btn-light:focus,
+.del-acct-btn-light:visited {
+  background-color: #e2e2e2 !important;
+  color: #e2e2e2 !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
 }
 
 /*# sourceMappingURL=styles.css.map */

@@ -66,6 +66,7 @@ $green: #247b1c;
 $pale-pink: #976f7b;
 $yellow: #e6d00c;
 $orange: #b36f1b;
+$universal-form-color: #7a9196;
 
 
 
@@ -1256,34 +1257,87 @@ footer {
 
 
 
-.delete-account-button {
+.del-acct-btn-dark {
   background-color: $nav-color;
   color: $background-color-dark;
-  transition: 3s;
+  transition: 5s;
 }
 
-
-.delete-account-neon {
+.del-acct-neon-btn-dark {
   color: $text-color-light;
   background-color: #f4008a;
-  transition: 3s;
+  transition: 5s;
 }
-.delete-account-neon:hover,
-.delete-account-button:hover {
+.del-acct-neon-btn-dark:hover {
+  background-color: $universal-form-color;
+  color: $medium-gray;
+
+}
+.del-acct-btn-dark:hover {
   background-color: $background-color-dark;
   color: $text-color-light;
 }
 
-.delete-account-neon:active,
-.delete-account-neon:focus,
-.delete-account-neon:visited,
-.delete-account-button:active,
-.delete-account-button:focus,
-.delete-account-button:visited {
+.del-acct-neon-btn-dark:active,
+.del-acct-neon-btn-dark:focus,
+.del-acct-neon-btn-dark:visited {
+  background-color: $universal-form-color !important;
+  color: $universal-form-color !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
+}
+.del-acct-btn-dark:active,
+.del-acct-btn-dark:focus,
+.del-acct-btn-dark:visited {
   background-color: $background-color-dark !important;
   color: $background-color-dark!important;
   outline: none !important;
   border-color: none !important;
   box-shadow: none !important;
+  transition: 3s;
+}
+
+
+.del-acct-btn-light {
+  background-color: $nav-color;
+  color: $background-color-dark;
   transition: 5s;
+}
+.del-acct-neon-btn-light {
+  color: $text-color-light;
+  background-color: #f4008a;
+  transition: 5s;
+}
+.del-acct-neon-btn-light:hover {
+  background-color: $universal-form-color;
+  color: $medium-gray;
+}
+
+.del-acct-btn-light:hover {
+  background-color: $background-color-light;
+  color: $text-color-dark;
+}
+
+.del-acct-neon-btn-light:active,
+.del-acct-neon-btn-light:focus,
+.del-acct-neon-btn-light:visited {
+  background-color: $universal-form-color !important;
+  color: $universal-form-color !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
+
+}
+.del-acct-btn-light:active,
+.del-acct-btn-light:focus,
+.del-acct-btn-light:visited {
+  background-color: $background-color-light !important;
+  color: $background-color-light !important;
+  outline: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  transition: 3s;
 }
