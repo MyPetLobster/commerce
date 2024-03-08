@@ -173,6 +173,7 @@ def place_bid(request, amount, listing_id):
             elif status == False:
                 logger.error(f"(Err01989)Unexpected error placing bid - bidder {current_user.name} - listing ID {listing.id} - amount {format_as_currency(amount)}")
                 contrib_messages.add_message(request, contrib_messages.ERROR, f"Unexpected error placing bid. Please try again. If this issue persists, contact the admins.")
+                return False, listing
 
             # Automatically add the item to the user's watchlist 
             if check_if_watchlist(current_user, listing) == False:
@@ -203,6 +204,10 @@ def check_bids_funds(request, listing_id):
         # from closing. There is a check in views.listing() to skip this if the listing is 
         # less than 24 hours from closing.
         if highest_bid.amount > highest_bid.user.balance:
+            if listing.closing_date - timezone.timedelta(days=1) < now:
+                highest_bid.delete()
+                return False, listing
+
             time_left_to_deposit = listing.closing_date - timezone.timedelta(days=1) - now
             if time_left_to_deposit.days == 0:
                 time_left_to_deposit = f"{time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"

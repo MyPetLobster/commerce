@@ -1673,4 +1673,27 @@ footer li {
   width: 250px;
 }
 
+#create-confirm-popup {
+  width: 450px;
+}
+
+.fine-print {
+  width: 175px;
+  font-size: 0.2em;
+}
+
+.expanded-fine-print {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+  width: 350px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  background-color: rgba(197, 81, 118, 0.563);
+  padding: 10px;
+}
+
 /*# sourceMappingURL=styles.css.map */

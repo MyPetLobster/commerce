@@ -9,17 +9,89 @@
     <div class="page-content">
         <h1>List an item for sale</h1>
         <div class="create-form-div">
-            <form class="create-listing-form" action="/create" method="post">
+            <form id="create-listing-form" action="{% url 'create' %}" method="post">
                 {% csrf_token %}
                 {{ form }}
                 <div class="center-container">
-                    <button class="btn btn-primary" type="submit">List Item</button>
+                    <button id="faux-create-submit-btn" class="btn btn-primary" type="button">List Item</button>
                 </div>
             </form>
         </div>
     </div>
+    <div id="create-confirmation-popup-div" class="hidden">
+        <form id="create-confirm-popup" class="popup-form">
+            <div class="center-container" style="text-align: center;">
+                <h5>Confirm New Listing</h5>
+                <p>
+                    Are you sure you want to list this item? Once an item is listed for sale,
+                    it will remain active for 7 days. 
+                </p>
+                <p class="fine-print"> If you decide to remove the listing from the marketplace and there are active bids 
+                    on the listing, the listing will remain active for 24 hours from this moment and 
+                    all bidders will be notified of the cancellation. In addition to our normal 10% 
+                    fee, you will be charged a 5% fee of the item's initial listing price. This fee 
+                    will be charged to your account immediately upon cancellation.
+
+                    Furthermore, this extends to situations where there are no bids on the item. In such cases 
+                    the listing may be taken down immediately, but you will still be charged a 5% fee of the
+                    item's initial listing price. See our terms and conditions by clicking the link in the 
+                    footer for further details.
+                </p>
+                <div class="form-btn-box" style="margin-top:0;">
+                    <button id="confirm-create-btn" class="btn btn-primary" type="button" >Confirm New Listing</button>
+                    <button id="cancel-create-btn" class="btn btn-secondary" type="button">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+        <p class="expanded-fine-print hidden"> If you decide to remove the listing from the marketplace and there are active bids 
+            on the listing, the listing will remain active for 24 hours from this moment and 
+            all bidders will be notified of the cancellation. In addition to our normal 10% 
+            fee, you will be charged a 5% fee of the item's initial listing price. This fee 
+            will be charged to your account immediately upon cancellation.
+
+            Furthermore, this extends to situations where there are no bids on the item. In such cases 
+            the listing may be taken down immediately, but you will still be charged a 5% fee of the
+            item's initial listing price. See our terms and conditions by clicking the link in the 
+            footer for further details.
+        </p>
+
 
     <script>
         localStorage.setItem('activePage', 'create-listing');
+
+        const fauxCreateSubmitBtn = document.getElementById('faux-create-submit-btn');
+        const confirmationPopupDiv = document.getElementById('create-confirmation-popup-div');
+        const cancelBtn = document.getElementById('cancel-create-btn');
+        const confirmCreateBtn = document.getElementById('confirm-create-btn');
+        const pageContent = document.querySelector('.page-content');
+        const createForm = document.getElementById('create-listing-form');
+
+        fauxCreateSubmitBtn.addEventListener('click', () => {
+            confirmationPopupDiv.classList.remove('hidden');
+            pageContent.classList.add('hidden');
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            confirmationPopupDiv.classList.add('hidden');
+            pageContent.classList.remove('hidden');
+        });
+
+        confirmCreateBtn.addEventListener('click', () => {
+            createForm.submit();
+        });
+
+        const finePrint = document.querySelector('.fine-print');
+        const expandedFinePrint = document.querySelector('.expanded-fine-print');   
+
+        finePrint.addEventListener('mouseover', () => {
+            expandedFinePrint.classList.toggle('hidden');
+            confirmationPopupDiv.classList.toggle('hidden');
+        });
+        finePrint.addEventListener('mouseout', () => {
+            expandedFinePrint.classList.toggle('hidden');
+            confirmationPopupDiv.classList.toggle('hidden');
+        });
     </script>
 {% endblock %}

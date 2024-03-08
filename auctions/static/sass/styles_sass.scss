@@ -1438,3 +1438,20 @@ footer {
 #cancel-bid-confirm-popup {
   width: 250px;
 }
+
+#create-confirm-popup {
+  width: 450px;
+}
+.fine-print {
+  width: 175px;
+  font-size: 0.2em;
+}
+.expanded-fine-print {
+  @include floating-form;
+  text-align: center;
+  width: 350px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  background-color: rgba(197, 81, 118, 0.563);
+  padding: 10px;
+}

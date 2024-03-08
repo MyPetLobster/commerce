@@ -179,7 +179,8 @@ def listing(request, listing_id):
     if request.method == "POST":
         amount = request.POST.get("amount")
         amount = decimal.Decimal(amount)
-        time_left_b = listing.date + timedelta(days=7) - timezone.now()
+        amount_str = f"${amount:.2f}"
+        time_left_b = listing.closing_date - timezone.now()
         total_seconds_left = time_left_b.total_seconds()
 
         # Check if there is less than 24 hours left on the listing
@@ -187,9 +188,11 @@ def listing(request, listing_id):
         if total_seconds_left <= 86400:
             if amount > current_user.balance:
                 site_account = User.objects.get(pk=12)
-                subject = f"Insufficient funds for {listing.title}",
-                message =f"Your bid of {amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account then try placing your bid again."
-                contrib_messages.add_message(request, contrib_messages.ERROR, f"Your bid of {amount} on {listing.title} has been cancelled due to insufficient funds. Please add funds to your account to continue bidding.")
+                subject = f"Insufficient funds for '{listing.title}' bid"
+                message =f"""With less than 24 hours remaining on an auction, your account must have sufficient funds to cover any bids 
+                on that auction. Your bid of {amount_str} on '{listing.title}' has been cancelled due to insufficient funds. Please 
+                add funds to your account then try placing your bid again."""
+                contrib_messages.add_message(request, contrib_messages.ERROR, f"Insufficient funds. Less than 24 hours remain on this auction. Bids must be covered by your account balance.")
                 send_message(site_account, current_user, subject, message)
             else:
                 success, updated_listing = helpers.place_bid(request, amount, listing_id)
