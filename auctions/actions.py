@@ -138,9 +138,9 @@ def close_listing(request, listing_id):
                 listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
                 listing.save()
                 contrib_messages.error(request, "Listing cannot be closed with active bids. There will be a 24 hour delay before closing.")
+
                 notify_all_early_closing(listing.id)
                 return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-                
             # No bids, charge early closing fee and close listing
             else:
                 try:

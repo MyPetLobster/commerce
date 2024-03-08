@@ -130,19 +130,22 @@ def notify_all_early_closing(listing_id):
     seller = listing.user
     all_unique_bidders = User.objects.filter(bids__listing=listing).distinct()
 
+    new_closing_date = listing.closing_date
+    new_closing_date = f'{new_closing_date.month}/{new_closing_date.day}/{new_closing_date.year}'
+
     if all_unique_bidders.exists():
-        subject = f"A listing you been on is being closed early"
+        subject = f"An auction you been on is being closed early"
         message = f"""The listing for {listing.title} is being closed early by the seller. You have 
-                    24 hours to continue bidding on this item. {listing.title} will be closed at 
-                    {listing.closing_date}. Thank you for using Yard Sale!"""
+                    24 hours to continue bidding on this item. {listing.title} will be closed on 
+                    {new_closing_date}. Thank you for using Yard Sale!"""
 
         for bidder in all_unique_bidders:
-            user = User.objects.get(pk=bidder['user'])
+            user = User.objects.get(pk=bidder.id)
             send_message(site_account, user, subject, message)
 
-        subject_seller = f"Your listing is being closed early"
-        message_seller = f"""The listing for {listing.title} is being closed early. The new closing date is 
-                            set for {listing.closing_date}. Because of the early cancellation, you will be 
+        subject_seller = f"Your auction is being closed early"
+        message_seller = f"""The auction for {listing.title} is being closed early. The new closing date is 
+                            set for {new_closing_date}. Because of the early cancellation, you will be 
                             charged an additional 5% fee when funds are transferred to you from escrow. 
                             If you did not close this listing, please contact support immediately. 
                             Thank you for using Yard Sale!"""
@@ -157,7 +160,15 @@ def charge_early_closing_fee(listing_id):
     seller = listing.user
     amount = listing.price
     fee_amount = amount * decimal.Decimal(0.05)
+    fee_amount = round(fee_amount, 2)
+    fee_amount_str = f"{fee_amount:,.2f}"
 
+    subject = f"Early Closing Fee for {listing.title}"
+    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
+                {fee_amount_str}. This fee will be deducted from your balance directly. If this overdraws your account, you 
+                have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
+                Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
+    send_message(site_account, seller, subject, message)
 
     Transaction.objects.create(
         sender=seller,

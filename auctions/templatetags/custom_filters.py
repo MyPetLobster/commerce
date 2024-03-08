@@ -27,7 +27,7 @@ def get_user_high_bid(value, user_id,):
 def get_time_left(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     now = timezone.now()
-    time_left = listing.date + timezone.timedelta(days=7) - now
+    time_left = listing.closing_date - now
     if time_left.days < 1:
         if time_left.seconds < 43200:
             status = 'red'
