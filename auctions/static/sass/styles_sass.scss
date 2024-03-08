@@ -391,12 +391,14 @@ legend {
   margin: 0;
 }
 #msg-admin-link,
+#msg-admin-link-two,
 .nav-link,
 .footer-link {
   @include cursor-pointer-transition;
   color: $nav-color;
 }
 #msg-admin-link:hover,
+#msg-admin-link-two:hover,
 .nav-link:hover,
 .logout-link:hover,
 .footer-link:hover {
@@ -1039,6 +1041,11 @@ footer {
 
 
 /* ABOUT PAGE */
+.about-page-content {
+  @include flex-column;
+  padding: 20px 20px 0px 20px;
+  width: 100%;
+}
 
 .about-section {
   @include flex-column;
@@ -1052,6 +1059,7 @@ footer {
 
 #top-about-section {
   margin-top: 0;
+  padding-bottom: 0;
 }
 
 .about-header {
@@ -1068,16 +1076,22 @@ footer {
   text-align: center;
 }
 .faq-question {
+  @include cursor-pointer-transition;
+  margin-top: 20px;
   font-size: 1.9em;
   color: $nav-color
 }
+.faq-question:hover {
+  color: $primary-pink;
+}
 .faq-answer {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 
 #show-terms-conditions {
   @include cursor-pointer-transition;
+  margin-top: 40px;
   color: $primary-pink;
 }
 #show-terms-conditions:hover {

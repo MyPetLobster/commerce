@@ -455,6 +455,7 @@ legend {
 }
 
 #msg-admin-link,
+#msg-admin-link-two,
 .nav-link,
 .footer-link {
   cursor: pointer;
@@ -463,6 +464,7 @@ legend {
 }
 
 #msg-admin-link:hover,
+#msg-admin-link-two:hover,
 .nav-link:hover,
 .logout-link:hover,
 .footer-link:hover {
@@ -1255,6 +1257,16 @@ footer li {
 }
 
 /* ABOUT PAGE */
+.about-page-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 20px 0px 20px;
+  width: 100%;
+}
+
 .about-section {
   display: flex;
   flex-direction: column;
@@ -1271,6 +1283,7 @@ footer li {
 
 #top-about-section {
   margin-top: 0;
+  padding-bottom: 0;
 }
 
 .about-header {
@@ -1289,17 +1302,25 @@ footer li {
 }
 
 .faq-question {
+  cursor: pointer;
+  transition: 0.15s;
+  margin-top: 20px;
   font-size: 1.9em;
   color: #7a7575;
 }
 
+.faq-question:hover {
+  color: #c55176;
+}
+
 .faq-answer {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 #show-terms-conditions {
   cursor: pointer;
   transition: 0.15s;
+  margin-top: 40px;
   color: #c55176;
 }
 

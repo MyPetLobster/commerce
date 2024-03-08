@@ -185,6 +185,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const messageAdminForm = document.querySelector("#msg-admin-form");
   const cancelMsgAdminBtn = document.querySelector("#cancel-msg-admin");
 
+  // Message admin link in FAQ
+  const messageAdminLinkTwo = document.querySelector("#msg-admin-link-two");
+  if (messageAdminLinkTwo) {
+    messageAdminLinkTwo.onclick = function () {
+      messageAdminForm.classList.remove("hidden");
+      messageAdminForm.classList.add("send-msg-form");
+    };
+  }
+
   messageAdminBtn.onclick = function () {
     messageAdminForm.classList.remove("hidden");
     messageAdminForm.classList.add("send-msg-form");

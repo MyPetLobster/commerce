@@ -7,7 +7,7 @@
 
 
 {% block body %}
-<div class="page-content">
+<div class="about-page-content">
     <div id="top-about-section" class="about-section">
             <h2 class="about-header">About Yard Sale</h2>
             <p class="about-paragraph">
@@ -25,7 +25,7 @@
         <ul class="faq-list">
             <li class="faq-item">
                 <h3 class="faq-question">How do I create a listing?</h3>
-                <p class="faq-answer">To create a listing, click the "Create Listing" link in the navigation bar. 
+                <p class="faq-answer hidden">To create a listing, click the "Create Listing" link in the navigation bar. 
                     You will be prompted to enter a title, description, starting bid, and category for your item. 
                     You can also upload an image of your item. Once you submit the form, your listing will be 
                     added to the site. Listing's are live for 7 days. There is a non-negotiable 10% fee for all 
@@ -34,7 +34,7 @@
             </li>
             <li class="faq-item">
                 <h3 class="faq-question">How do I bid on an item?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     To bid on an item, click the title of the listing to view the item's details. You will see a 
                     form where you can enter your bid. Once you submit the form, your bid will be added to the 
                     listing. If your bid is the highest, you will be notified that you are the highest bidder. 
@@ -44,14 +44,14 @@
             </li>
             <li class="faq-item">
                 <h3 class="faq-question">How do I add an item to my watchlist?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     To add an item to your watchlist, click the "Add to Watchlist" button on the listing's details 
                     page. You can view your watchlist by clicking the "Watchlist" link in the navigation bar.
                 </p>
             </li>
             <li class="faq-item">
                 <h3 class="faq-question">How do I send a message to another user?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     To send a message to another user, navigate to their profile page from the link on their listing. 
                     There will be a button and popup form to send them a message. You can also view your messages by
                     clicking the "Messages" link in the navigation bar.</br></br>
@@ -63,7 +63,7 @@
             </li>
             <li class="faq-item">
                 <h3 class="faq-question">How do I close a listing early?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     There are a few situations to consider if you want to close a listing early. Please read the descriptions
                     of each scenario below and follow the instructions accordingly.</br></br>
                     As a seller, you may close a listing early if there are more than 24 hours left before your listing 
@@ -83,7 +83,7 @@
             </li>
             <li>
                 <h3 class="faq-question">How do I request a refund?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     As a buyer, you may request a refund if the item you received is not as described in the listing, or if the item
                     is damaged. You must complete the dispute form within 3 days of receiving the item. The seller will be notified
                     of the dispute and will have 3 days to respond. If the seller does not respond, the refund will be processed. If
@@ -98,7 +98,7 @@
             </li>
             <li>
                 <h3 class="faq-question">What if I change my mind? Can I cancel my bids?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     As a bidder, you have 12 hours to change your mind and cancel your bid. If you cancel your bid within 12 hours of placing
                     it, you will not be charged a fee. If you cancel your bid after 12 hours, you will be charged a non-negotiable 10% fee, 
                     half of which is paid to the site and half of which is paid to the seller. This is true whether or not your bid is the 
@@ -110,8 +110,8 @@
                 </p>
             <li>
                 <h3 class="faq-question">I'm nervous about selling stuff, any tips?</h3>
-                <p class="faq-answer">
-                    Selling items can be a bit nerve-wracking, but it can also be a lot of fun. Here are a few tips to help you get started:</br>
+                <div class="faq-answer hidden">
+                    <p>Selling items can be a bit nerve-wracking, but it can also be a lot of fun. Here are a few tips to help you get started:</p></br>
                     <ul class="tips-list">
                         <li>
                             1. Take clear photos of your item. Make sure to show any damage or wear and tear. Buyers appreciate honesty.</br></br>
@@ -135,11 +135,11 @@
                             7. Have fun! Selling items can be a great way to make some extra money and clear out clutter. Enjoy the process and don't be afraid to try new things.
                         </li>
                     </ul>
-                </p>
+                </div>
             </li>
             <li>
                 <h3 class="faq-question">I have a very rare/high value item, is Yard Sale a safe place for me to sell this?</h3>
-                <p class="faq-answer">
+                <p class="faq-answer hidden">
                     Yard Sale is a great place to sell rare and high value items. We take security very seriously and have a 
                     number of measures in place to protect our users. Here are a few things to keep in mind:</br></br>
                     1. We use a secure payment system to process all transactions. This helps protect both buyers and sellers from fraud.</br></br>
@@ -161,8 +161,8 @@
             </li>
             <li>
                 <h3 class="faq-question">I have a question that isn't answered here, how can I get in touch with Yard Sale?</h3>
-                <p class="faq-answer">
-                    If you have a question that isn't answered here, please feel free to send us a message. We are here to help and will do 
+                <p class="faq-answer hidden">
+                    If you have a question that isn't answered here, please feel free to <a id="msg-admin-link-two">send us a message.</a> We are here to help and will do 
                     everything we can to ensure that your experience on Yard Sale is a positive one. You can send us a message by clicking 
                     the "Send us a message" right below the navbar. We look forward to hearing from you!
                 </p>
@@ -211,6 +211,13 @@
     });
     document.getElementById("terms-and-conditions").addEventListener("click", function() {
         document.getElementById("terms-and-conditions").classList.toggle("hidden");
+    });
+
+    faqQuestions = document.querySelectorAll(".faq-question");
+    faqQuestions.forEach(function(question) {
+        question.addEventListener("click", function() {
+            question.nextElementSibling.classList.toggle("hidden");
+        });
     });
 </script>
 
