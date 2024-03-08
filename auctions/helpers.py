@@ -140,7 +140,11 @@ def place_bid(request, amount, listing_id):
             return False, listing
         else:
             # TODO message previous high bidder
-            previous_high_bidder = listing.bids.order_by("-amount").first().user
+            try: 
+                previous_high_bidder = listing.bids.order_by("-amount").first().user
+            except: 
+                previous_high_bidder = None
+                
             previous_high_bid = listing.price
 
             Bid.objects.create(

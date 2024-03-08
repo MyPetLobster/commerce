@@ -167,8 +167,28 @@
                         <span id="dollar-sign">$</span>
                         <input class="form-control" type="number" name="amount" step="0.01" min="{{ listing.price }}">
                     </div>
-                    <button class="btn btn-primary" type="submit">Place Bid</button>
+                    <button id="confirm-bid-btn" class="btn btn-primary" type="button">Place Bid</button>
+                    <button class="hidden" type="submit">Place Bid</button>
                 </form>
+                <div class="confirm-bid-popup-content hidden">
+                    <div class="center-container" style="text-align:center; width:400px;">
+                        <h5>Are you sure you want to place a bid?</h5>
+                        <p>
+                            By placing a bid, you are agreeing to purchase the item at the price you bid. 
+                            If you are the highest bidder when the listing closes, you will be required to 
+                            pay the amount of your bid. A bid may be canceled within 12 hours of placing it, 
+                            as long as there are more than 24 hours left in the auction. See our terms and
+                            conditions for more information.
+                        </p>
+                        <p>
+                            If you have read this and understand, you may confirm your bid below.
+                        </p>
+                        <div class="form-btn-box">
+                            <button id="submit-bid-btn" class="btn btn-primary">Confirm Bid</button>
+                            <button id="cancel-bid" class="btn btn-primary cancel-btn" type="button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
 
             {% if listing.user == current_user %}
@@ -248,6 +268,30 @@
 </div>
 
 <script>
+    const confirmBidBtn = document.querySelector('#confirm-bid-btn');
+    const confirmBidPopupContent = document.querySelector('.confirm-bid-popup-content');
+    const cancelBid = document.querySelector('#cancel-bid');
+    const submitBidBtn = document.querySelector('#submit-bid-btn');
+
+    if (confirmBidBtn) {
+        confirmBidBtn.onclick = function() {
+            confirmBidPopupContent.classList.remove('hidden');
+            confirmBidPopupContent.classList.add('popup-form');
+        }
+
+        cancelBid.onclick = function() {
+            confirmBidPopupContent.classList.add('hidden');
+            confirmBidPopupContent.classList.remove('popup-form');
+        }
+    }   
+
+    if (submitBidBtn) {
+        submitBidBtn.onclick = function() {
+            document.querySelector('.bid-form-div').submit();
+        }
+    }
+
+
     const closeListingBtn = document.querySelector('#close-listing-btn');
     const closeBidConfirmation = document.querySelector('#close-bid-confirmation');
     const cancelClose = document.querySelector('#cancel-close');
