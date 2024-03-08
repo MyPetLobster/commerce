@@ -268,7 +268,7 @@ def create(request):
             listing = form.save(commit=False)
             listing.user = request.user
             listing.starting_bid = listing.price
-            listing.closing_date = listing.date + timedelta(days=7)
+            listing.closing_date = timezone.now() + timedelta(days=7)
             listing.save()
             form.save_m2m()
             return HttpResponseRedirect(reverse("index"))

@@ -209,7 +209,8 @@ def check_bids_funds(request, listing_id):
             else:
                 time_left_to_deposit = f"{time_left_to_deposit.days} days, {time_left_to_deposit.seconds//3600} hours, {time_left_to_deposit.seconds%3600//60} minutes"
             highest_bid_amount = format_as_currency(highest_bid.amount)
-            subject = f"Insufficient funds for '{listing.title}'",
+            # The line below is the one that is surrounded by parentheses in the template
+            subject = f"Insufficient funds for '{listing.title}'"
             message = f"Your bid of {highest_bid_amount} on '{listing.title}'. You have {time_left_to_deposit} to add funds to your account before your bid for this listing is cancelled."
             contrib_messages.add_message(request, contrib_messages.INFO, f"Your bid of {highest_bid_amount} has been placed successfully, but you need to deposit funds. Check your messages for details.")
 
@@ -217,8 +218,8 @@ def check_bids_funds(request, listing_id):
         elif highest_bid.amount <= highest_bid.user.balance:
             highest_bid_amount = format_as_currency(highest_bid.amount)
             subject = f"Success! You've placed a bid on {listing.title}"
-            message = f"Your bid of {highest_bid_amount} on {listing.title} has been placed successfully. This item has been added to your watchlist. Good luck!"
-            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid_amount} on {listing.title} has been placed successfully.")
+            message = f"Your bid of {highest_bid_amount} on '{listing.title}' has been placed successfully. This item has been added to your watchlist. Good luck!"
+            contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid_amount} on '{listing.title}' has been placed successfully.")
         
         # Update listing price to highest bid amount
         listing.price = highest_bid.amount
