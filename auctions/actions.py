@@ -9,10 +9,11 @@ from django.utils import timezone
 import decimal
 import logging
 
+from . import auto_messages as a_msg
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
-from .tasks import notify_all_closed_listing, transfer_to_escrow, transfer_to_seller, notify_all_early_closing, charge_early_closing_fee, send_message
+from .tasks import transfer_to_escrow, transfer_to_seller, charge_early_closing_fee, send_message
 
 
 logger = logging.getLogger(__name__)
@@ -139,7 +140,7 @@ def close_listing(request, listing_id):
                 listing.save()
                 contrib_messages.error(request, "Listing cannot be closed with active bids. There will be a 24 hour delay before closing.")
 
-                notify_all_early_closing(listing.id)
+                a_msg.notify_all_early_closing(listing.id)
                 return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
             # No bids, charge early closing fee and close listing
             else:
@@ -177,7 +178,7 @@ def comment(request, listing_id):
         user=request.user
     )
 
-    helpers.notify_mentions(comment)
+    a_msg.notify_mentions(comment)
 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 

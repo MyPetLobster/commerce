@@ -10,7 +10,7 @@ from datetime import timedelta
 
 from . import auto_messages as a_msg 
 from .models import Bid, Listing, Watchlist, User, Message
-from .tasks import notify_all_closed_listing, send_message, transfer_to_escrow
+from .tasks import send_message, transfer_to_escrow
 
 
 
@@ -74,17 +74,7 @@ def check_if_watchlist(user, listing):
         return False
     
 
-def declare_winner(listing):
-    if listing.winner:
-        return
-    
-    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
-    if highest_bid:
-        winner = highest_bid.user
-        listing.winner = winner
-        
-        transfer_to_escrow(winner, listing.id)
-        notify_all_closed_listing(listing.id)
+
 
 
 def format_as_currency(amount):
@@ -93,6 +83,7 @@ def format_as_currency(amount):
 
 
 # HELPER FUNCTIONS - VIEWS.PY
+# Used in views.listing, this chain of functions gets time left, and closes auctions if expired
 def calculate_time_left(listing_id):
     '''
     This function calculates the time left on a listing and returns a string
@@ -121,6 +112,67 @@ def calculate_time_left(listing_id):
         seconds_left = math.floor(seconds_left)
         return f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
     
+
+def check_expiration(listing_id):
+    '''
+    This function checks if a listing is expired or closed by the seller. If the 
+    listing is expired, it sets the listing to inactive and calls the declare_winner() 
+    function to determine the winner if not yet set. Checks if the closing date is
+    set to the default 7 days after the listing date, and if so, returns "closed - expired",
+    otherwise, returns "closed - by seller".
+
+    args: listing_id
+    returns: string (used in calculate_time_left() function)
+
+    called by: calculate_time_left()
+    '''
+
+    listing = get_object_or_404(Listing, pk=listing_id)
+    if listing.active:
+        now = timezone.now()
+        if listing.closing_date < now:
+            listing.active = False
+            listing.save()
+            if listing.winner == None:
+                declare_winner(listing)
+                
+            return "closed - expired"
+        else:
+            return "active"
+    else:
+        if listing.closing_date == listing.date + timedelta(days=7):
+            return "closed - expired"
+        else:
+            return "closed - by seller"
+        
+
+def declare_winner(listing):
+    '''
+    Called when a listing is closed and no winner has been set. This function 
+    sets the winner of the listing to the user with the highest bid. It then
+    calls the transfer_to_escrow() function to transfer the winning bid amount
+    from the winner's account to the escrow account. Finally, it calls the
+    notify_all_closed_listing() function to notify all users that the listing
+    has closed.
+
+    args: listing
+    returns: None
+
+    called by: check_expiration()
+    '''
+    if listing.winner:
+        return
+    
+    highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+    if highest_bid:
+        winner = highest_bid.user
+        listing.winner = winner
+        listing.save()
+        
+        transfer_to_escrow(winner, listing.id)
+        a_msg.notify_all_closed_listing(listing.id)
+        
+        
 
 # Place Bid Flow
 @login_required
@@ -266,28 +318,7 @@ def check_bids_funds(request, listing_id):
 
 
 
-def check_for_mentions(comment):
-    comment = comment.comment.split()
-    mentions = []
-    for word in comment:
-        if word[0] == "@":
-            mentions.append(word[1:])
-    return mentions
 
-
-def notify_mentions(comment):
-    listing_id = comment.listing.id
-    listing = Listing.objects.get(pk=listing_id)
-    site_account = User.objects.get(pk=12)
-    mentions = check_for_mentions(comment)
-    for mention in mentions:
-        try:
-            mention_user = User.objects.get(username=mention)
-            subject = f"Someone's talking about you!"
-            message = f"You've been mentioned by {comment.user} in a comment on '{listing.title}'."
-            send_message(site_account, mention_user, subject, message)
-        except User.DoesNotExist:
-            pass
 
 
 # Used in views.messages, actions.sort_messages
@@ -314,18 +345,9 @@ def determine_message_sort(request, sent_messages, inbox_messages):
 
 def show_hide_read_messages(request):  
     current_user = request.user
-    try:
-        if request.session["show_read"] == None:
-            request.session["show_read"] = False
-        
-        if request.session["show_read"] == True:
-            show_read_messages = "True"
-        else:
-            show_read_messages = "False"
-    except:
-        show_read_messages = "False"
+    show_read_messages = request.session.get("show_read", False)
 
-    if show_read_messages == "True":
+    if show_read_messages:
         sent_messages = Message.objects.filter(sender=current_user)
         inbox_messages = Message.objects.filter(recipient=current_user)
     else:
@@ -356,24 +378,30 @@ def check_if_old_bid(bid, listing):
 
 
 # Used in views.listing
-def check_expiration(listing_id):
-    listing = get_object_or_404(Listing, pk=listing_id)
-    if listing.active:
-        now = timezone.now()
-        if listing.closing_date < now:
-            listing.active = False
-            listing.save()
-            try:
-                declare_winner(listing)
-            except:
-                pass
-            return "closed - expired"
-        else:
-            return "active"
-    else:
-        if listing.closing_date < timezone.now():
-            return "closed - expired"
-        else:
-            return "closed - by seller"
-        
 
+        
+# views.profile
+def create_bid_info_object_list(user_active_bids):
+    '''
+    Create a list of UserBidInfo objects to pass to the profile view. These objects
+    provide additional information used in profile.html template. 
+
+    Args: list of active bids for a user
+    Returns: list of UserBidInfo objects
+
+    Called by: views.profile
+    '''
+    bid_info_list = []
+
+    for bid in user_active_bids:
+        bid_listing = bid.listing
+        is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
+        highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
+        highest_bid_amount = highest_bid.amount if highest_bid else 0
+        difference = (bid.amount - highest_bid.amount) * -1 if highest_bid else 0
+
+        user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid_amount, difference)
+        bid_info_list.append(user_bid_info)
+
+    # sort the list by oldest listing to newest listing
+    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)

@@ -75,3 +75,107 @@ def message_previous_high_bidder(listing_id, previous_high_bidder, previous_high
     subject = f"Outbid on '{listing.title}'"
     message = f"You have been outbid on '{listing.title}'. The current bid is {format_as_currency(listing.price)}, which is {format_as_currency(listing.price - previous_high_bid)} more than your bid."
     send_message(site_account, previous_high_bidder, subject, message)
+
+
+def notify_all_closed_listing(listing_id):
+    message_winner(listing_id)
+    message_seller_on_sale(listing_id)
+    message_losing_bidders(listing_id)
+
+
+def message_winner(listing_id):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    winner = listing.winner
+
+    subject = f"Congratulations! You won the auction for {listing.title}"
+    message = f"""If you have sufficient funds already deposited in your account, then you're all set and you should 
+                have already received a message confirming funds have been moved to escrow. You will receive a message 
+                with tracking information once the seller has shipped your item. If there is any further action 
+                required on your part, you should have a message detailing the next steps. Thank you for using Yard Sale!"""
+    send_message(site_account, winner, subject, message)
+
+def message_seller_on_sale(listing_id):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    seller = listing.user
+
+    subject = f"Congratulations! Your item has been sold!"
+    message = f"""Your item, {listing.title}, has been sold! Please ship the item to the buyer as soon as possible.
+                We make the process easy! A shipping label as been emailed to you. As soon as you ship the item, navigate back to
+                the listing page via this link: <a href="/index/{listing.id}">{listing.id}</a> and click the 'Confirm Shipping' 
+                button to confirm the sale. Once the item has been shipped, you will receive a message with tracking information. 
+                Thank you for using Yard Sale!"""
+    send_message(site_account, seller, subject, message)
+
+def message_losing_bidders(listing_id):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
+
+    winner = listing.winner
+    all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
+    all_unique_bidders = all_unique_bidders.exclude(user=winner)
+
+    for bidder in all_unique_bidders:
+        user = User.objects.get(pk=bidder['user'])
+        subject = f"Sorry, you lost the auction for {listing.title}"
+        message = f"""Sorry, you lost the auction for {listing.title}. The winning bid was {winner.amount}. If there are 
+                    and issues confirming the sale, the next highest bid will be contacted. Thank you for using Yard Sale!"""
+        send_message(site_account, user, subject, message)
+
+
+def notify_all_early_closing(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    seller = listing.user
+    all_unique_bidders = User.objects.filter(bids__listing=listing).distinct()
+
+    new_closing_date = listing.closing_date
+    new_closing_date = f'{new_closing_date.month}/{new_closing_date.day}/{new_closing_date.year}'
+
+    if all_unique_bidders.exists():
+        subject = f"An auction you been on is being closed early"
+        message = f"""The listing for {listing.title} is being closed early by the seller. You have 
+                    24 hours to continue bidding on this item. {listing.title} will be closed on 
+                    {new_closing_date}. Thank you for using Yard Sale!"""
+
+        for bidder in all_unique_bidders:
+            user = User.objects.get(pk=bidder.id)
+            send_message(site_account, user, subject, message)
+
+        subject_seller = f"Your auction is being closed early"
+        message_seller = f"""The auction for {listing.title} is being closed early. The new closing date is 
+                            set for {new_closing_date}. Because of the early cancellation, you will be 
+                            charged an additional 5% fee when funds are transferred to you from escrow. 
+                            If you did not close this listing, please contact support immediately. 
+                            Thank you for using Yard Sale!"""
+        
+        send_message(site_account, seller, subject_seller, message_seller)
+
+
+
+
+
+def notify_mentions(comment):
+    listing_id = comment.listing.id
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    mentions = check_for_mentions(comment)
+    for mention in mentions:
+        try:
+            mention_user = User.objects.get(username=mention)
+            subject = f"Someone's talking about you!"
+            message = f"You've been mentioned by {comment.user} in a comment on '{listing.title}'."
+            send_message(site_account, mention_user, subject, message)
+        except User.DoesNotExist:
+            pass
+
+
+def check_for_mentions(comment):
+    comment = comment.comment.split()
+    mentions = []
+    for word in comment:
+        if word[0] == "@":
+            mentions.append(word[1:])
+    return mentions

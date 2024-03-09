@@ -174,33 +174,24 @@ def search(request):
     unread_message_count = unread_messages.count()
 
     if request.method == "POST":
+        post = True
         search_query = request.POST["search-query"]
         listings = Listing.objects.filter(title__icontains=search_query).filter(active=True).order_by("-date")
-
-        return render(request, "auctions/search.html", {
-            "listings": listings,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
-    else:
-        return render(request, "auctions/search.html", {
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
+    
+    return render(request, "auctions/search.html", {
+        "listings": listings if post else None,
+        "current_user": current_user,
+        "messages": messages,
+        "unread_message_count": unread_message_count
+    })
 
 
 def about(request):
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
     return render(request, "auctions/about.html", {
         "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
     })
 
 
@@ -209,65 +200,39 @@ def about(request):
 # VIEWS - LOGIN REQUIRED
 @login_required
 def listings(request):
-    current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-    listings = Listing.objects.all().order_by("-date")
-
     return render(request, "auctions/listings.html", {
-        "listings": listings,
-        "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
+        "listings": Listing.objects.all().order_by("-date"),
+        "current_user": request.user,
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
     })
+
+
 
 
 @login_required
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     listings = Listing.objects.filter(user=user).order_by("-date")
-    watchlist = Watchlist.objects.filter(user=user)
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
 
+    # Create a list of bid info objects (see classes.py for BidInfo class definition)
     user_bids = Bid.objects.filter(user=user)
-    user_bids = [bid for bid in user_bids if bid.listing.active]
-
-    bid_info_list = []
-
-    for bid in user_bids:
-        bid_listing = bid.listing
-        is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
-        highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
-        highest_bid_amount = highest_bid.amount if highest_bid else 0
-        difference = (bid.amount - highest_bid.amount) * -1 if highest_bid else 0
-
-        user_bid_info = UserBidInfo(bid, is_old_bid, highest_bid_amount, difference)
-        bid_info_list.append(user_bid_info)
-
-    # sort the list by oldest listing to newest listing
-    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)
-
-    user_active_listings_count = len([listing for listing in listings if listing.active])
-    user_inactive_listings_count = len([listing for listing in listings if not listing.active])
-
-    user_active_bids_count = len([bid for bid in user_bids if bid.listing.active])
-
+    user_active_bids = [bid for bid in user_bids if bid.listing.active]
+    bid_info_list = helpers.create_bid_info_object_list(user_active_bids)
+   
     return render(request, "auctions/profile.html", {
         "user": user,
-        "listings": listings,
-        "watchlist": watchlist,
-        "user_info_form": UserInfoForm(instance=user),
         "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count,
+        "listings": listings,
+        "watchlist": Watchlist.objects.filter(user=user),
+        "user_info_form": UserInfoForm(instance=user),
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
         "bid_info_list": bid_info_list,
-        "user_active_listings_count": user_active_listings_count,
-        "user_inactive_listings_count": user_inactive_listings_count,
-        "user_active_bids_count": user_active_bids_count
+        "user_active_listings_count": len([listing for listing in listings if listing.active]),
+        "user_inactive_listings_count": len([listing for listing in listings if not listing.active]),
+        "user_active_bids_count": len([bid for bid in user_active_bids if bid.listing.active])
     })
 
 
@@ -284,25 +249,23 @@ def create(request):
             form.save_m2m()
             return HttpResponseRedirect(reverse("index"))
     else:
-        form = ListingForm()
-        current_user = request.user
-        messages = contrib_messages.get_messages(request)
-        unread_messages = Message.objects.filter(recipient=current_user, read=False)
-        unread_message_count = unread_messages.count()
         return render(request, "auctions/create.html", {
             "form": ListingForm(),
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
+            "current_user": request.user,
+            "messages": contrib_messages.get_messages(request),
+            "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
         })
     
 
 @login_required
 def messages(request, user_id):
-
     current_user = request.user
 
+    if user_id !=  current_user.id:
+        return HttpResponse("Unauthorized", status=401)
+    
     if request.method == "POST":
+        # Show/Hide Read Messages
         try:
             visibility = request.POST["show-hide-input"]
 
@@ -313,6 +276,7 @@ def messages(request, user_id):
         except:
             visibility = "unset"
 
+        # Send Message
         try:
             if visibility == "show" or visibility == "hide":
                 pass
@@ -327,29 +291,23 @@ def messages(request, user_id):
         except:
             contrib_messages.error(request, "Error sending message")
 
-    if user_id !=  current_user.id:
-        return HttpResponse("Unauthorized", status=401)
+
     
     # Dynamic Show Read Messages
     sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
 
     # Dynamic Sort Messages
     sent_messages, inbox_messages, sort_by_direction = helpers.determine_message_sort(request, sent_messages, inbox_messages)
-    
-    # alert-msgs
-    messages = contrib_messages.get_messages(request)
 
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
 
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
         'inbox_messages': inbox_messages,
+        'show_read_messages': show_read_messages,
         'current_user': current_user,
-        'messages': messages,
-        'unread_message_count': unread_message_count,
-        'sort_by_direction': sort_by_direction,
-        'show_read_messages': show_read_messages
+        'messages': contrib_messages.get_messages(request),
+        'unread_message_count': Message.objects.filter(recipient=current_user, read=False).count(),
+        'sort_by_direction': sort_by_direction
     })
 
 

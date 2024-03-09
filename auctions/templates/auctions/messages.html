@@ -52,12 +52,12 @@
     </form>
     <div class="center-container">
       <span class="show-hide-button" style="margin-bottom: 20px;">
-        {% if show_read_messages == "True" %}Hide{% else %}Show{% endif %} Read Messages
+        {% if show_read_messages %}Hide{% else %}Show{% endif %} Read Messages
       </span>
     </div>
 
 
-    {% if unread_message_count == 0 and show_read_messages == False %}
+    {% if unread_message_count == 0 and !show_read_messages %}
       <div class="center-container" style="margin-top: 20px">
         <p>No unread messages</p>
       </div>
