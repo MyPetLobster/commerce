@@ -263,53 +263,42 @@ def create(request):
 def messages(request, user_id):
     current_user = request.user
 
+    # Check if user is authorized to view messages
     if user_id !=  current_user.id:
         return HttpResponse("Unauthorized", status=401)
     
+    # There are two types of POST requests: show/hide read messages and send message
     if request.method == "POST":
         # Show/Hide Read Messages
-        try:
-            visibility = request.POST["show-hide-input"]
+        visibility = request.POST.get("show-hide-input", "unset")
+        if visibility == "show":
+            request.session["show_read"] = True
+        else:
+            request.session["show_read"] = False
 
-            if visibility == "show":
-                request.session["show_read"] = True
-            else:
-                request.session["show_read"] = False
-        except:
-            visibility = "unset"
+        # Send Message if not a show/hide request
+        if visibility == "unset":
+            recipient_id = request.POST["recipient"]
+            recipient = User.objects.get(pk=recipient_id)
+            subject = request.POST["subject"]
+            message = request.POST["message"]
+            send_message(request.user, recipient, subject, message)
+            return HttpResponseRedirect(reverse("messages", args=(user_id,)))
 
-        # Send Message
-        try:
-            if visibility == "show" or visibility == "hide":
-                pass
-            else:
-                recipient_id = request.POST["recipient"]
-                recipient = User.objects.get(pk=recipient_id)
-                subject = request.POST["subject"]
-                message = request.POST["message"]
-
-                send_message(request.user, recipient, subject, message)
-                return HttpResponseRedirect(reverse("messages", args=(user_id,)))
-        except:
-            contrib_messages.error(request, "Error sending message")
-
-
-    
-    # Dynamic Show Read Messages
+    # Get messages filtered by show/hide read messages
     sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
-
-    # Dynamic Sort Messages
-    sent_messages, inbox_messages, sort_by_direction = helpers.determine_message_sort(request, sent_messages, inbox_messages)
-
+    # Sort messages by user preference, newest first is default
+    sort_by_direction = request.POST.get("sort_by_direction", "newest-first")
+    sent_messages, inbox_messages, sort_by_direction = helpers.set_message_sort(request, sent_messages, inbox_messages)
 
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
         'inbox_messages': inbox_messages,
         'show_read_messages': show_read_messages,
+        'sort_by_direction': sort_by_direction,
         'current_user': current_user,
         'messages': contrib_messages.get_messages(request),
-        'unread_message_count': Message.objects.filter(recipient=current_user, read=False).count(),
-        'sort_by_direction': sort_by_direction
+        'unread_message_count': Message.objects.filter(recipient=current_user, read=False).count()
     })
 
 

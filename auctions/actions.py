@@ -378,6 +378,19 @@ def confirm_shipping(request, listing_id):
 
 # MESSAGES FUNCTIONS
 def sort_messages(request):
+    ''' 
+    This action is called when the user clicks on the sort button in the messages page.
+    It sets the sort_by_direction session variable to the value of the sort-by-direction
+    form field. It then calls the show_hide_read_messages and set_message_sort functions
+    to handle the sorting and filtering of messages to pass to the messages.html template.
+
+    Args: request (HttpRequest): The request object
+    Returns: HttpResponseRedirect: Redirects to the messages page
+
+    Called by: messages.html
+    Helper Functions Called: show_hide_read_messages, set_message_sort 
+    
+    '''
     current_user = request.user
     
     if request.method == "POST":
@@ -385,18 +398,14 @@ def sort_messages(request):
         request.session["sort_by_direction"] = sort_by_direction
 
     sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
-    sent_messages, inbox_messages, sort_by_direction = helpers.determine_message_sort(request, sent_messages, inbox_messages)
-
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
+    sent_messages, inbox_messages, sort_by_direction = helpers.set_message_sort(request, sent_messages, inbox_messages)
 
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
         'inbox_messages': inbox_messages,
         'current_user': current_user,
-        'messages': messages,
-        'unread_message_count': unread_message_count,
+        'messages': contrib_messages.get_messages(request),
+        'unread_message_count': Message.objects.filter(recipient=current_user, read=False).count(),
         'sort_by_direction': sort_by_direction,
         'show_read_messages': show_read_messages
     })

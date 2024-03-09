@@ -75,9 +75,6 @@ def check_if_watchlist(user, listing):
         return False
     
 
-
-
-
 def format_as_currency(amount):
     return f"${amount:,.2f}"
 
@@ -92,10 +89,11 @@ def calculate_time_left(listing_id):
     looks for a string in the format "days, hours, minutes, seconds" or a string
     that begins with "Listing" to determine what to display.
 
-    args: listing_id
-    returns: string
+    Args: listing_id
+    Returns: string
 
-    called by: views.listing
+    Called by: views.listing
+    Function Calls: check_expiration()
     '''
 
     closing_date = Listing.objects.get(pk=listing_id).closing_date
@@ -122,10 +120,11 @@ def check_expiration(listing_id):
     set to the default 7 days after the listing date, and if so, returns "closed - expired",
     otherwise, returns "closed - by seller".
 
-    args: listing_id
-    returns: string (used in calculate_time_left() function)
+    Args: listing_id
+    Returns: string (used in calculate_time_left() function)
 
-    called by: calculate_time_left()
+    Called by: calculate_time_left()
+    Function Calls: declare_winner()
     '''
 
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -156,10 +155,11 @@ def declare_winner(listing):
     notify_all_closed_listing() function to notify all users that the listing
     has closed.
 
-    args: listing
-    returns: None
+    Args: listing
+    Returns: None
 
-    called by: check_expiration()
+    Called by: check_expiration()
+    Function Calls: transfer_to_escrow(), notify_all_closed_listing()
     '''
     if listing.winner:
         return
@@ -183,10 +183,11 @@ def check_valid_bid(request, listing_id, amount):
     if they have sufficient funds to cover the bid. This function checks these conditions,
     then calls the place_bid function if the conditions are met.
 
-    args: request, listing_id, amount
-    returns: None
+    Args: request, listing_id, amount
+    Returns: None
 
-    called by: views.listing
+    Called by: views.listing
+    Function Calls: place_bid(), send_insufficient_funds_notification()
     '''
 
     current_user = request.user
@@ -211,10 +212,12 @@ def place_bid(request, amount, listing_id):
     the check_bids_funds() function to handle the bid and send messages to the bidder and
     the previous high bidder if there was one. 
     
-    args: request, amount, listing_id
+    Args: request, amount, listing_id
     returns: updated listing object
 
-    called by: check_valid_bid()
+    Called by: check_valid_bid()
+    Function Calls: check_bids_funds(), send_bid_success_message_seller(), message_previous_high_bidder(),
+                    check_if_watchlist()
     '''
     try: 
         listing = Listing.objects.get(pk=listing_id)
@@ -278,10 +281,12 @@ def check_bids_funds(request, listing_id):
     24 hours before auction closes). If bid is not fully funded and less than 24 hours remain
     on auction, bid is cancelled and user is notified with an error message from place_bid().
 
-    args: request, listing_id
+    Args: request, listing_id
     returns: status, listing
 
-    called by: place_bid()
+    Called by: place_bid()
+    Function Calls: send_bid_success_message_bidder(), send_bid_success_message_low_funds(),
+                    send_bid_success_message_seller(), message_previous_high_bidder()
     '''
     listing = Listing.objects.get(pk=listing_id)
     now = timezone.now()
@@ -323,17 +328,22 @@ def check_bids_funds(request, listing_id):
 
 
 # Used in views.messages, actions.sort_messages
-def determine_message_sort(request, sent_messages, inbox_messages):
-    try:
-        if request.session["sort_by_direction"] == None:
-            sort_by_direction = "newest-first"
-            request.session["sort_by_direction"] = sort_by_direction
-        else:
-            sort_by_direction = request.session["sort_by_direction"]
-    except:
-        sort_by_direction = "newest-first"
-        request.session["sort_by_direction"] = sort_by_direction
+def set_message_sort(sort_by_direction, sent_messages, inbox_messages):
+    '''
+    This function sets the sort order for the user's sent and inbox messages. It is called
+    by the views.messages view when the page is loaded, and called by the actions.sort_messages()
+    function when the user clicks the "Sort" button. 
 
+    Args: sort_by_direction - string,
+                sent_messages - queryset of sent messages,
+                inbox_messages - queryset of inbox messages
+    Returns: sent_messages - queryset of sent messages,
+                inbox_messages - queryset of inbox messages,
+                sort_by_direction - string
+
+    Called by: views.messages, actions.sort_messages
+    '''
+    
     if sort_by_direction == "oldest-first":
         sent_messages = sent_messages.order_by("date")
         inbox_messages = inbox_messages.order_by("date")
@@ -345,6 +355,19 @@ def determine_message_sort(request, sent_messages, inbox_messages):
 
 
 def show_hide_read_messages(request):  
+    '''
+    This function toggles the display of read messages in the user's inbox. It is called
+    by the views.messages view when the user clicks the "Show Read" button. It sets the
+    show_read session variable to the opposite of its current value.
+
+    Args: request
+    Returns: sent_messages - queryset of sent messages,
+                inbox_messages - queryset of inbox messages,
+                show_read_messages - boolean,
+                sort_by_direction - string
+
+    Called by: views.messages
+    '''
     current_user = request.user
     show_read_messages = request.session.get("show_read", False)
 
