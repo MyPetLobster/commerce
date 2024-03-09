@@ -97,23 +97,32 @@ def check_if_bids_funded():
         user_balance = user.balance
 
         listing = bid.listing
+
+        # Update the listing.price to highest bid each iteration
+        highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+        listing.price = highest_bid.amount
+        listing.save()
+
         now = timezone.now()
         listing_closing_date = listing.closing_date
         cutoff_date = listing_closing_date - timezone.timedelta(days=1)
         listing_price = listing.price
 
         time_left = listing_closing_date - now
-        time_left_str = f"{time_left.total_seconds() // 3600} hours, {(time_left.total_seconds() % 3600) // 60} minutes"
+        hours_left = time_left.total_seconds() // 3600
+        minutes_left = (time_left.total_seconds() % 3600) // 60
+        time_left_str = f"{int(hours_left)} hours and {int(minutes_left)} minutes"
 
         if now > cutoff_date and user_balance < listing_price:
             bid.delete()
             if not messaged_users_listings[(user.id, listing.id)]:
                 subject = f"Insufficient funds for {listing.title}"
-                message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled. As of the time this 
-                            message was sent, there are {time_left_str} left in the auction. Feel free to deposit funds and place 
-                            another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
+                message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled and removed. 
+                            At the time of this message, there are {time_left_str} left in the auction. Feel free to deposit 
+                            funds and place another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
                 send_message(site_account, user, subject, message)
                 messaged_users_listings[(user.id, listing.id)] = 1
+        
 
 
 

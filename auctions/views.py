@@ -17,7 +17,7 @@ from datetime import timedelta
 
 from . import helpers
 from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist
-from .tasks import send_message
+from .tasks import send_message, check_if_bids_funded
 from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
 
 
@@ -117,6 +117,9 @@ def index(request):
 
     # Set Closing Dates for Listings after modifications to test listings
     # maintenance.force_set_closing_dates()
+    
+    # Celery task here for now
+    check_if_bids_funded()
 
     if current_user.is_authenticated:
         messages = contrib_messages.get_messages(request)
