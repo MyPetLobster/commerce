@@ -9,6 +9,7 @@ import math
 from datetime import timedelta
 
 from . import auto_messages as a_msg 
+from .classes import UserBidInfo
 from .models import Bid, Listing, Watchlist, User, Message
 from .tasks import send_message, transfer_to_escrow
 
@@ -395,7 +396,7 @@ def create_bid_info_object_list(user_active_bids):
 
     for bid in user_active_bids:
         bid_listing = bid.listing
-        is_old_bid = helpers.check_if_old_bid(bid, bid_listing)
+        is_old_bid = check_if_old_bid(bid, bid_listing)
         highest_bid = Bid.objects.filter(listing=bid_listing).order_by("-amount").first()
         highest_bid_amount = highest_bid.amount if highest_bid else 0
         difference = (bid.amount - highest_bid.amount) * -1 if highest_bid else 0

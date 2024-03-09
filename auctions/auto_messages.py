@@ -4,7 +4,7 @@ from django.utils import timezone
 from datetime import timedelta
 import logging
 
-from .models import Listing, User
+from .models import Listing, User, Bid
 from .tasks import send_message
 
 logger = logging.getLogger(__name__)

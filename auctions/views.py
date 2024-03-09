@@ -200,9 +200,10 @@ def about(request):
 # VIEWS - LOGIN REQUIRED
 @login_required
 def listings(request):
+    current_user = request.user
     return render(request, "auctions/listings.html", {
         "listings": Listing.objects.all().order_by("-date"),
-        "current_user": request.user,
+        "current_user": current_user,
         "messages": contrib_messages.get_messages(request),
         "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
     })
@@ -238,6 +239,7 @@ def profile(request, user_id):
 
 @login_required
 def create(request):
+    current_user = request.user
     if request.method == "POST":
         form = ListingForm(request.POST)
         if form.is_valid():
@@ -251,7 +253,7 @@ def create(request):
     else:
         return render(request, "auctions/create.html", {
             "form": ListingForm(),
-            "current_user": request.user,
+            "current_user": current_user,
             "messages": contrib_messages.get_messages(request),
             "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
         })
