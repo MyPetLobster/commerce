@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.html import strip_tags
 
+from collections import defaultdict
 import decimal
 import logging
 import os
@@ -21,8 +22,24 @@ logger = logging.getLogger(__name__)
 my_email = os.environ.get('MY_EMAIL') 
 
 
+# Local Functions for this file
+def send_error_notification(error_message):
+    try:
+        site_account = User.objects.get(pk=12)
+        admin = User.objects.get(pk=2)
+        subject = "An error occurred in the Yard Sale application"
+        message = error_message
+        send_message(site_account, admin, subject, message)
 
-# Exclusively Celery Tasks
+    except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
+        logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
+
+
+
+
+# Periodic Tasks
 @shared_task
 def check_listing_expiration():
     try:
@@ -59,23 +76,48 @@ def check_listing_expiration():
         send_error_notification(str(e))
 
 
-def send_error_notification(error_message):
-    try:
-        site_account = User.objects.get(pk=12)
-        admin = User.objects.get(pk=2)
-        subject = "An error occurred in the Yard Sale application"
-        message = error_message
-        send_message(site_account, admin, subject, message)
+@shared_task
+def check_if_bids_funded():
+    '''
+    Should be run once every hour. Also used upon reload of index page
+    '''
+    # Retrieve all the active bids that are closing within the next 24 hours
+    active_bids = Bid.objects.filter(listing__active=True,
+                                      listing__closing_date__gt=timezone.now(),
+                                      listing__closing_date__lt=timezone.now() + timezone.timedelta(days=1))
 
-    except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
-        logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
-    except Exception as e:
-        logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
+    # Dictionary to hold users and listings so we only message each user once for each unique listing
+    # Even if we are deleting multiple bids they have placed
+    messaged_users_listings = defaultdict(int)
+
+    site_account = User.objects.get(pk=12)
+
+    for bid in active_bids:
+        user = bid.user
+        user_balance = user.balance
+
+        listing = bid.listing
+        now = timezone.now()
+        listing_closing_date = listing.closing_date
+        cutoff_date = listing_closing_date - timezone.timedelta(days=1)
+        listing_price = listing.price
+
+        time_left = listing_closing_date - now
+        time_left_str = f"{time_left.total_seconds() // 3600} hours, {(time_left.total_seconds() % 3600) // 60} minutes"
+
+        if now > cutoff_date and user_balance < listing_price:
+            bid.delete()
+            if not messaged_users_listings[(user.id, listing.id)]:
+                subject = f"Insufficient funds for {listing.title}"
+                message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled. As of the time this 
+                            message was sent, there are {time_left_str} left in the auction. Feel free to deposit funds and place 
+                            another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
+                send_message(site_account, user, subject, message)
+                messaged_users_listings[(user.id, listing.id)] = 1
 
 
 
 
-# Helper Functions for Celery Tasks (Also used in views/actions/helpers.py)
 def notify_all_closed_listing(listing_id):
     message_winner(listing_id)
     message_seller_on_sale(listing_id)
