@@ -53,8 +53,10 @@ class UserInfoForm(ModelForm):
         }
 
 
-# Class to hold user bid info, used in views.profile
 class UserBidInfo:
+    '''
+    Class to hold user bid info, used in views.profile
+    '''
     def __init__(self, user_bid, is_old_bid, highest_bid, difference):
         self.user_bid = user_bid
         self.is_old_bid = is_old_bid
