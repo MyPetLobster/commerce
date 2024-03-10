@@ -191,7 +191,7 @@ def category(request, category_id):
 def search(request):
     current_user = request.user
     post = False
-    
+
     if request.method == "POST":
         post = True
         search_query = request.POST["search-query"]
@@ -392,7 +392,7 @@ def transactions(request, user_id):
     for key, value in bid_listing_groups.items():
         user_bids.extend(value)
 
-    active_bid_count = user_bids.filter(listing__active=True).distinct().count()
+    active_bid_count = Bid.objects.filter(user=user, listing__active=True).count()
 
     return render(request, "auctions/transactions.html", {
         'user': user,

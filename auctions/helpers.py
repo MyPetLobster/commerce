@@ -290,7 +290,7 @@ def place_bid(request, amount, listing_id):
             a_msg.send_bid_success_message_seller(request, amount, listing_id)
             # Message the previous high bidder if there was one
             if previous_high_bidder and previous_high_bidder != current_user:
-                a_msg.message_previous_high_bidder(request, listing_id, previous_high_bidder, previous_high_bid)
+                a_msg.message_previous_high_bidder(listing_id, previous_high_bidder, previous_high_bid)
 
         # Should never execute this block unless database error. Status will only be false if no bids exist
         # or if bid slipped through check_valid_bid()'s <24hr & <bid amount check
@@ -300,7 +300,7 @@ def place_bid(request, amount, listing_id):
             return listing
 
         # Automatically add the item to the user's watchlist 
-        if check_if_watchlist(current_user, listing) == False:
+        if check_if_watchlist(request, listing) == False:
             Watchlist.objects.create(
                 user=current_user,
                 listing=listing
@@ -365,7 +365,7 @@ def check_bids_funds(request, listing_id):
         return False, listing
 
 @login_required
-def check_if_watchlist(user, listing):
+def check_if_watchlist(request, listing):
     '''
     This function checks if a listing is on the user's watchlist. It is called by the
     place_bid() function to automatically add the listing to the user's watchlist if it
@@ -381,7 +381,7 @@ def check_if_watchlist(user, listing):
     Function Calls: None
     '''
 
-    watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
+    watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
     if watchlist_item.exists():
         return True
     else:

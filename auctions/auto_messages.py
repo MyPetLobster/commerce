@@ -44,6 +44,8 @@ def check_for_mentions(comment):
     mentions = []
     for word in comment:
         if word[0] == "@":
+            if word[-1] == "," or word[-1] == ".":
+                mentions.append(word[1:-1])
             mentions.append(word[1:])
     return mentions
 
