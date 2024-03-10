@@ -541,26 +541,28 @@ footer li {
   font-size: 1em;
   background-color: #c55176;
   border: none;
+  transition: 0.25s;
 }
 
 .btn:hover {
   background-color: #983554;
   color: #f4f4f4;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
 }
 
 .btn-primary:focus,
 .btn-primary:active,
 .btn-primary:visited {
-  background-color: #e75684 !important;
+  background-color: #803e53 !important;
   color: #f4f4f4 !important;
   outline: none !important;
   border-color: #c55176 !important;
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(197, 81, 118, 0.6);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(131, 43, 70, 0.823);
 }
 
 .btn-primary:active {
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 3px rgba(131, 43, 70, 0.823) !important;
   border: none !important;
 }
 
@@ -1168,7 +1170,7 @@ input {
 }
 
 .reply-button:active {
-  color: #e75684;
+  color: #803e53;
 }
 
 .mark-as-unread-button {
@@ -1182,7 +1184,7 @@ input {
 }
 
 .mark-as-unread-button:active {
-  color: #e75684;
+  color: #803e53;
 }
 
 .mark-as-read-button {
@@ -1640,16 +1642,11 @@ input {
 }
 
 .search-form-input {
-  border: 1px solid #fff;
   border-radius: 8px;
   width: 250px;
   font-size: 0.9em;
   padding: 6px 10px;
-}
-
-.search-form-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #c55176 inset;
+  border: 1px solid rgba(197, 81, 118, 0.173);
 }
 
 .search-thumb-img {
