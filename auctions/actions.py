@@ -19,6 +19,8 @@ from .tasks import transfer_to_escrow, transfer_to_seller, send_message
 logger = logging.getLogger(__name__)
 
 
+
+
 # INDEX/LISTINGS FUNCTIONS
 def sort(request):
     '''
@@ -296,22 +298,52 @@ def cancel_bid(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+
+
 # PROFILE FUNCTIONS
 @login_required
 def edit(request, user_id):
+    '''
+    This function is called when the user clicks the "Edit" button on the profile page. It renders the
+    profile.html template with the user_info_form form. If the form is valid, it saves the changes to
+    the user object and redirects to the profile page. If the form is invalid, it adds an error message
+    and redirects to the profile page.
+
+    Args: request (HttpRequest): The request object
+            user_id (int): The ID of the user to edit
+    Returns: HttpResponseRedirect: Redirects to the profile page
+    Called by: profile.html
+    Functions Called: None
+
+    '''
     user = User.objects.get(pk=user_id)
     form = UserInfoForm(request.POST, instance=user)
     if form.is_valid():
         form.save()
         return redirect("profile", user_id=user_id)
     else:
-        return render(request, "auctions/profile.html", {
-            "user_info_form": form
-        })
+        contrib_messages.error(request, "Invalid form data")
+        return redirect("profile", user_id=user_id)
     
 
 @login_required
 def change_password(request, user_id):
+    '''
+    This function is called when the user submits the change password form on the profile page. It
+    checks if the old password is correct and if the new password and new password confirm match.
+    If the old password is incorrect, it adds an error message and redirects to the profile page. 
+    It also checks a number of other password requirements and adds error messages if they are not met.
+    
+    Args: 
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to change the password for
+    Returns: 
+            HttpResponseRedirect: Redirects to the profile page
+
+    Called by: profile.html
+    Functions Called: None
+    '''
+    
     user = User.objects.get(pk=user_id)
 
     old_password = request.POST["old_password"]
@@ -320,20 +352,23 @@ def change_password(request, user_id):
 
     if not user.check_password(old_password):
         contrib_messages.error(request, "Old password is incorrect")
-        return redirect("profile", user_id=user_id)
-
-    if new_password != new_password_confirm:
+    elif new_password != new_password_confirm:
         contrib_messages.error(request, "Passwords do not match")
         return redirect("profile", user_id=user_id)
-    
-    user.set_password(new_password)
-    user.save()
-    
-    contrib_messages.success(request, "Password changed successfully")
-    return render(request, "auctions/profile.html", {
-        "user_id": user_id,
-        "current_user": request.user
-    })
+    elif new_password == old_password:
+        contrib_messages.error(request, "New password cannot be the same as old password")
+        return redirect("profile", user_id=user_id)
+    elif len(new_password) < 8:
+        contrib_messages.error(request, "Password must be at least 8 characters long")
+        return redirect("profile", user_id=user_id)
+    elif new_password.isalpha() or new_password.isdigit():
+        contrib_messages.error(request, "Password must contain at least one letter and one number")
+    else: 
+        contrib_messages.success(request, "Password changed successfully")
+        user.set_password(new_password)
+        user.save()
+
+    return redirect("profile", user_id=user_id)
 
 
 @login_required
