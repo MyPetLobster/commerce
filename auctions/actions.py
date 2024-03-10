@@ -256,6 +256,8 @@ def move_to_escrow(request, listing_id):
 
     Called by: listing.html
     Functions Called: transfer_to_escrow()
+
+    *Note* This is not the same as the transfer_to_escrow() function
     '''
 
     current_user = request.user
@@ -325,6 +327,8 @@ def cancel_bid(request, listing_id):
 
 
 # PROFILE FUNCTIONS
+
+# Profile - User Info Related Actions
 @login_required
 def edit(request, user_id):
     '''
@@ -400,6 +404,21 @@ def change_password(request, user_id):
 
 @login_required
 def delete_account(request, user_id):
+    '''
+    This function is called when the user clicks the "Delete Account" button on the profile page. It
+    checks if the user has any active listings or bids. If they do, it adds an error message and
+    redirects to the profile page. If they do not, it deletes the user and redirects to the index page.
+
+    Args:
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to delete
+    Returns:
+            HttpResponseRedirect: Redirects to the index page
+
+    Called by: profile.html
+    Functions Called: None
+    '''
+
     user = User.objects.get(pk=user_id)
     user_listings = Listing.objects.filter(user=user)
     user_bids = Bid.objects.filter(user=user)
@@ -417,7 +436,7 @@ def delete_account(request, user_id):
     return redirect("index")
 
 
-# Profile - Money Related Functions
+# Profile - Money Related Actions
 @login_required
 def deposit(request, user_id):
     '''
