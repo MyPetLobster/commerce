@@ -1101,6 +1101,8 @@ input {
 /* MESSAGES PAGE */
 .message-div,
 .message-div-full {
+  cursor: pointer;
+  transition: 0.15s;
   width: 600px;
   padding: 10px;
   margin-bottom: 10px;

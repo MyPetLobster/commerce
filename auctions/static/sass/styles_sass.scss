@@ -939,6 +939,7 @@ input {
 /* MESSAGES PAGE */
 .message-div,
 .message-div-full {
+  @include cursor-pointer-transition;
   width: 600px;
   padding: 10px;
   margin-bottom: 10px;
