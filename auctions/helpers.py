@@ -505,7 +505,7 @@ def create_bid_info_object_list(user_active_bids):
         bid_info_list.append(user_bid_info)
 
     # sort the list by oldest listing to newest listing
-    bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)
+    return sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)
 
 
 

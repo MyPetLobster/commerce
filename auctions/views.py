@@ -246,10 +246,8 @@ def profile(request, user_id):
     current_user = request.user
 
     # Create a list of bid info objects (see classes.py for BidInfo class definition)
-    user_bids = Bid.objects.filter(user=user)
-    user_active_bids = [bid for bid in user_bids if bid.listing.active]
+    user_active_bids = Bid.objects.filter(user=user, listing__active=True)
     bid_info_list = helpers.create_bid_info_object_list(user_active_bids)
-   
     return render(request, "auctions/profile.html", {
         "user": user,
         "current_user": current_user,
@@ -259,9 +257,9 @@ def profile(request, user_id):
         "messages": contrib_messages.get_messages(request),
         "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
         "bid_info_list": bid_info_list,
-        "user_active_listings_count": len([listing for listing in listings if listing.active]),
-        "user_inactive_listings_count": len([listing for listing in listings if not listing.active]),
-        "user_active_bids_count": len([bid for bid in user_active_bids if bid.listing.active])
+        "user_active_listings_count": Bid.objects.filter(user=user, listing__active=True).count(),
+        "user_inactive_listings_count": Bid.objects.filter(user=user, listing__active=False).count(),
+        "user_active_bids_count": Bid.objects.filter(user=user, listing__active=True).count()
     })
 
 
