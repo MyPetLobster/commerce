@@ -21,12 +21,22 @@ logger = logging.getLogger(__name__)
 
 # INDEX/LISTINGS FUNCTIONS
 def sort(request):
-    # Sort Form Fields: Title, Seller, Date, Price
-    # Sort Order: Ascending, Descending
+    '''
+    This function is called when the user clicks on the sort button in the index or listings page.
+    It sorts the listings based on the sort_by and sort_by_direction form fields and then redirects
+    to the index or listings page.
+
+    Form Fields (POST): title, seller, date, price
+    Sort Order (POST): asc, desc
+
+    Args: request (HttpRequest): The request object
+    Returns: HttpResponseRedirect: Redirects to the index or listings page
+    Called by: index.html, listings.html
+    Functions Called: None
+    '''
     page = request.POST["page"]
     sort_by = request.POST["sort-by"]
     sort_by_direction = request.POST["sort-by-direction"]
-
 
     listings = Listing.objects.all()
 
@@ -52,26 +62,18 @@ def sort(request):
             listings = listings.order_by("-price")
     else:
         listings = listings
-        
+    
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
+    render_vals = {
+        "listings": listings,
+        "current_user": current_user,
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
+    }
     if page == "index":
-        return render(request, "auctions/index.html", {
-            "listings": listings,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
+        return render(request, "auctions/index.html", render_vals)
     elif page == "listings":
-        return render(request, "auctions/listings.html", {
-            "listings": listings,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
+        return render(request, "auctions/listings.html", render_vals)
     
 
 
@@ -79,6 +81,16 @@ def sort(request):
 # LISTING FUNCTIONS
 @login_required
 def add_to_watchlist(request, listing_id):
+    ''' 
+    This function is called when the user clicks the "Add to Watchlist" button on the listing page.
+    It creates a new watchlist item in the database and redirects to the listing page.
+
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to be added to the watchlist
+    Returns: HttpResponseRedirect: Redirects to the listing page
+    Called by: listing.html
+    Functions Called: None
+    '''
     listing = Listing.objects.get(pk=listing_id)
     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, listing=listing)
     if created:
@@ -90,6 +102,17 @@ def add_to_watchlist(request, listing_id):
 
 @login_required
 def remove_from_watchlist(request, listing_id):
+    '''
+    This function is called when the user clicks the "Remove from Watchlist" button on the listing page 
+    or the watchlist page. It deletes the watchlist item from the database and redirects to the page
+    the user clicked from.
+    
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to be removed from the watchlist
+    Returns: HttpResponseRedirect: Redirects to the listing or watchlist page
+    Called by: listing.html, watchlist.html
+    Functions Called: None
+    '''
     try:
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
         watchlist_item.delete()
@@ -174,6 +197,7 @@ def comment(request, listing_id):
     Args: request (HttpRequest): The request object
             listing_id (int): The ID of the listing to comment on   
     Returns: HttpResponseRedirect: Redirects to the listing page
+    Called by: listing.html
     Functions Called: notify_mentions()
     '''
     listing = Listing.objects.get(pk=listing_id)
@@ -208,6 +232,7 @@ def move_to_escrow(request, listing_id):
     Args: request (HttpRequest): The request object
             listing_id (int): The ID of the listing to be moved to escrow   
     Returns: HttpResponseRedirect: Redirects to the listing page
+    Called by: listing.html
     Functions Called: transfer_to_escrow()
     '''
     current_user = request.user
@@ -223,6 +248,19 @@ def move_to_escrow(request, listing_id):
 
 @login_required
 def cancel_bid(request, listing_id):
+    '''
+    This function is called when a user clicks the "Cancel Bid" button on the listing page. It deletes
+    all of the user's bids on the listing and then calls functions to notify all parties involved.
+
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to cancel the bid on
+    Returns: HttpResponseRedirect: Redirects to the listing page
+    Called by: listing.html
+    Functions Called: send_bid_cancelled_message_confirmation(), send_bid_cancelled_message_new_high_bidder(),
+                        send_bid_cancelled_message_seller_bids(), send_bid_cancelled_message_seller_no_bids(),
+                        send_message()
+
+    '''
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
 
