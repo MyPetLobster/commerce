@@ -15,8 +15,10 @@
         <div class="search-form-div">
             <form action="{% url 'search' %}" method="post">
                 {% csrf_token %}
-                <input type="text" name="search-query" placeholder="Search for an item" class="search-form-input">
-                <button type="submit" class="search-form-button">Search</button>
+                <div class="form-btn-box">
+                    <input type="text" name="search-query" placeholder="Search for an item" class="search-form-input">
+                    <button class="btn btn-primary" type="submit" class="search-form-button">Search</button>
+                </div>
             </form>
         </div>
         <div class="search-results">
@@ -34,8 +36,9 @@
                         </a>
                     {% endfor %}
                 </div>
-            {% else %}
+            {% elif not listings and request.method == "POST" %}
                 <h3>No results</h3>
+            {% else %}
             {% endif %}
 
                             

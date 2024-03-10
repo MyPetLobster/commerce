@@ -1624,6 +1624,19 @@ input {
   font-size: 0.8em;
 }
 
+.search-form-input {
+  border: 1px solid #fff;
+  border-radius: 8px;
+  width: 250px;
+  font-size: 0.9em;
+  padding: 6px 10px;
+}
+
+.search-form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #c55176 inset;
+}
+
 .search-thumb-img {
   height: 120px;
   width: 120px;

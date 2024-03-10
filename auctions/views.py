@@ -190,7 +190,8 @@ def category(request, category_id):
 
 def search(request):
     current_user = request.user
-
+    post = False
+    
     if request.method == "POST":
         post = True
         search_query = request.POST["search-query"]
