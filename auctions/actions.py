@@ -649,3 +649,40 @@ def delete_message(request, message_id):
     message.deleted_by.add(current_user)
     message.save()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
+
+
+
+
+# WATCHLIST FUNCTIONS
+
+@login_required
+def remove_inactive_from_watchlist(request):
+    '''
+    This function is called when the user clicks the "Remove Inactive Listings" button on the watchlist
+    page. It deletes all watchlist items for listings that are not active and then redirects to the
+    watchlist page.
+
+    Args:
+            request (HttpRequest): The request object
+    Returns:
+            HttpResponseRedirect: Redirects to the watchlist page
+
+    Called by: watchlist.html
+    Functions Called: None
+    '''
+
+    watchlist_items = Watchlist.objects.filter(user=request.user)
+    for item in watchlist_items:
+        if item.listing.active == False:
+            item.delete()
+    
+    watchlist_items = Watchlist.objects.filter(user=request.user)
+    listings = [item.listing for item in watchlist_items]
+    current_user = request.user
+    return render(request, "auctions/watchlist.html", {
+        "listings": listings,
+        "current_user": current_user,
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
+        "inactive_watchlist_items_count": Watchlist.objects.filter(user=current_user, listing__active=False).count()
+    })

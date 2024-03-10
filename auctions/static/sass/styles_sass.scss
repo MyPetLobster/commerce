@@ -1533,3 +1533,16 @@ input {
   background-color: $cancel-color;
   border: 1px solid $cancel-color;
 }
+
+
+#remove-all-inactive-watchlist {
+  @include cursor-pointer-transition;
+  font-size: 0.7em;
+  color: $nav-color;
+}
+#remove-all-inactive-watchlist:hover,
+#remove-all-inactive-watchlist:active,
+#remove-all-inactive-watchlist:focus,
+#remove-all-inactive-watchlist:visited {
+  color: $primary-pink;
+}

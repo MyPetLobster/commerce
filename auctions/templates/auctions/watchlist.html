@@ -6,6 +6,11 @@
 {% block body %}
 <div class="watchlist-content">
   <h1>{{ current_user.username }}'s Watchlist</h1>
+  {% if inactive_watchlist_items_count > 0 %}
+  <span id="remove-all-inactive-watchlist">
+    Remove all inactive listings from your watchlist
+  </span>
+  {% endif %}
   {% if listings %}
   <div class="watchlist-div">
   <div class="watchlist-grid">
@@ -60,5 +65,11 @@
 
 <script>
   localStorage.setItem('activePage', 'watchlist');
+
+  removeAllInactiveWatchlist = document.getElementById('remove-all-inactive-watchlist');
+
+  removeAllInactiveWatchlist.addEventListener('click', () => {
+      window.location.href = '{% url "remove_inactive_from_watchlist" %}';
+  });
 </script>
 {% endblock %}

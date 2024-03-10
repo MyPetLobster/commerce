@@ -413,5 +413,6 @@ def watchlist(request):
         "listings": listings,
         "current_user": current_user,
         "messages": contrib_messages.get_messages(request),
-        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
+        "inactive_watchlist_items_count": Watchlist.objects.filter(user=current_user, listing__active=False).count()
     })

@@ -1768,4 +1768,18 @@ input {
   border: 1px solid #a90000;
 }
 
+#remove-all-inactive-watchlist {
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.7em;
+  color: #7a7575;
+}
+
+#remove-all-inactive-watchlist:hover,
+#remove-all-inactive-watchlist:active,
+#remove-all-inactive-watchlist:focus,
+#remove-all-inactive-watchlist:visited {
+  color: #c55176;
+}
+
 /*# sourceMappingURL=styles.css.map */
