@@ -8,8 +8,13 @@ import random
 from .models import Listing, User, Bid
 from .tasks import send_message
 
+
 logger = logging.getLogger(__name__)
 
+
+
+
+# MESSAGE HELPER FUNCTIONS
 def format_as_currency(amount):
     return f"${amount:,.2f}"
 
@@ -19,9 +24,19 @@ def get_msg_info(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     return current_user, site_account, listing
 
+def check_for_mentions(comment):
+    comment = comment.comment.split()
+    mentions = []
+    for word in comment:
+        if word[0] == "@":
+            mentions.append(word[1:])
+    return mentions
 
 
 
+
+# BID MESSAGES
+# helpers.check_valid_bid()
 def send_insufficient_funds_notification(request, amount, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     subject = f"Insufficient funds for '{listing.title}' bid"
@@ -32,7 +47,7 @@ def send_insufficient_funds_notification(request, amount, listing_id):
                                  Bids must be covered by your account balance.""")
     send_message(site_account, current_user, subject, message)
 
-
+# helpers.place_bid()
 def send_bid_success_message_seller(request, amount, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     subject = f"New bid on '{listing.title}'"
@@ -40,7 +55,15 @@ def send_bid_success_message_seller(request, amount, listing_id):
     send_message(site_account, listing.user, subject, message)
     logger.info(f"Success placing bid - bidder {current_user.username} - listing ID {listing.id} - amount {amount}")
 
+# helpers.place_bid()
+def message_previous_high_bidder(listing_id, previous_high_bidder, previous_high_bid):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    subject = f"Outbid on '{listing.title}'"
+    message = f"You have been outbid on '{listing.title}'. The current bid is {format_as_currency(listing.price)}, which is {format_as_currency(listing.price - previous_high_bid)} more than your bid."
+    send_message(site_account, previous_high_bidder, subject, message)
 
+# helpers.check_bids_funds()
 def send_bid_success_message_bidder(request, amount, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     highest_bid_amount = format_as_currency(amount)
@@ -49,8 +72,7 @@ def send_bid_success_message_bidder(request, amount, listing_id):
     send_message(site_account, current_user, subject, message)
     contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid_amount} on '{listing.title}' has been placed successfully.")
 
-
-
+# helpers.check_bids_funds()
 def send_bid_success_message_low_funds(request, highest_bid, listing_id):
     now = timezone.now()
     current_user, site_account, listing = get_msg_info(request, listing_id)
@@ -69,20 +91,16 @@ def send_bid_success_message_low_funds(request, highest_bid, listing_id):
                                  but you need to deposit funds. Check your messages for details.""")
 
 
-def message_previous_high_bidder(listing_id, previous_high_bidder, previous_high_bid):
-    site_account = User.objects.get(pk=12)
-    listing = Listing.objects.get(pk=listing_id)
-    subject = f"Outbid on '{listing.title}'"
-    message = f"You have been outbid on '{listing.title}'. The current bid is {format_as_currency(listing.price)}, which is {format_as_currency(listing.price - previous_high_bid)} more than your bid."
-    send_message(site_account, previous_high_bidder, subject, message)
 
 
+# CLOSE LISTING MESSAGES
+# helpers.declare_winner()
 def notify_all_closed_listing(listing_id):
     message_winner(listing_id)
     message_seller_on_sale(listing_id)
     message_losing_bidders(listing_id)
 
-
+## notify_all_closed_listing()
 def message_winner(listing_id):
     site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
@@ -95,6 +113,7 @@ def message_winner(listing_id):
                 required on your part, you should have a message detailing the next steps. Thank you for using Yard Sale!"""
     send_message(site_account, winner, subject, message)
 
+## notify_all_closed_listing()
 def message_seller_on_sale(listing_id):
     site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
@@ -108,6 +127,7 @@ def message_seller_on_sale(listing_id):
                 Thank you for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
 
+## notify_all_closed_listing()
 def message_losing_bidders(listing_id):
     site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
@@ -124,7 +144,7 @@ def message_losing_bidders(listing_id):
                     and issues confirming the sale, the next highest bid will be contacted. Thank you for using Yard Sale!"""
         send_message(site_account, user, subject, message)
 
-
+# actions.close_listing()
 def notify_all_early_closing(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     site_account = User.objects.get(pk=12)
@@ -153,10 +173,20 @@ def notify_all_early_closing(listing_id):
         
         send_message(site_account, seller, subject_seller, message_seller)
 
+# actions.charge_early_closing_fee()
+def send_early_closing_fee_message(listing, fee_amount):
+    site_account = User.objects.get(pk=12)
+    fee_amount_str = format_as_currency(fee_amount)
+    subject = f"Early Closing Fee for '{listing.title}'"
+    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
+                {fee_amount_str}. This fee will be deducted from your balance directly. If this overdraws your account, you 
+                have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
+                Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
+    send_message(site_account, listing.seller, subject, message)
 
 
-
-
+# NOTIFY IF MENTIONED IN COMMENT
+# actions.comment()
 def notify_mentions(comment):
     listing_id = comment.listing.id
     listing = Listing.objects.get(pk=listing_id)
@@ -172,28 +202,7 @@ def notify_mentions(comment):
             pass
 
 
-def check_for_mentions(comment):
-    comment = comment.comment.split()
-    mentions = []
-    for word in comment:
-        if word[0] == "@":
-            mentions.append(word[1:])
-    return mentions
-
-
-def send_early_closing_fee_message(listing, fee_amount):
-    site_account = User.objects.get(pk=12)
-    fee_amount_str = format_as_currency(fee_amount)
-    subject = f"Early Closing Fee for '{listing.title}'"
-    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
-                {fee_amount_str}. This fee will be deducted from your balance directly. If this overdraws your account, you 
-                have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
-                Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
-    send_message(site_account, listing.seller, subject, message)
-
-
-
-# Bid Cancel Messages
+# CANCELLED BID MESSAGES - actions.cancel_bid() 
 def send_bid_cancelled_message_confirmation(request, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     subject_cancelled_bid = f"Your bid on {listing.title} has been cancelled."
@@ -206,20 +215,22 @@ def send_bid_cancelled_message_new_high_bidder(request, listing_id, highest_bid)
     message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
     send_message(site_account, highest_bid.user, subject_new_high_bidder, message_new_high_bidder)
 
-def send_bid_cancelled_message_seller_bids(request, listing_id, highest_bid):
+def get_bid_cancelled_message_seller_bids(request, listing_id, highest_bid):
     current_user, site_account, listing = get_msg_info(request, listing_id)  
     highest_bid_amount = format_as_currency(highest_bid.amount)
     subject_seller = f"A user has cancelled their bid on {listing.title}."
     message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now {highest_bid_amount}." 
     return subject_seller, message_seller
 
-def send_bid_cancelled_message_seller_no_bids(request, listing_id):
+def get_bid_cancelled_message_seller_no_bids(request, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     subject_seller = f"A user has cancelled their bid on {listing.title}."
     message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
     return subject_seller, message_seller
 
 
+# ESCROW MESSAGES 
+# helpers.transfer_to_escrow()
 def get_escrow_fail_message(listing):
     subject = f"Insufficient funds for {listing.title}"
     message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
@@ -234,7 +245,7 @@ def get_escrow_success_message(listing):
     Thank you for using Yard Sale!"""
     return subject, message
 
-
+# helpers.transfer_to_seller()
 def send_escrow_empty_alert_message(listing_id):
     site_account = User.objects.get(pk=12)
     admin = User.objects.get(pk=2)
@@ -242,7 +253,6 @@ def send_escrow_empty_alert_message(listing_id):
     subject = f"(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
     message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
     send_message(site_account, admin, subject, message)
-
 
 def send_shipping_confirmation_messages(listing_id):
     site_account = User.objects.get(pk=12)

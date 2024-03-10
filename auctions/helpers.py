@@ -337,8 +337,7 @@ def check_bids_funds(request, listing_id):
             listing (Listing): the listing object
 
     Called by: place_bid()
-    Function Calls: send_bid_success_message_bidder(), send_bid_success_message_low_funds(),
-                    send_bid_success_message_seller(), message_previous_high_bidder()
+    Function Calls: send_bid_success_message_bidder(), send_bid_success_message_low_funds()
     '''
 
     listing = Listing.objects.get(pk=listing_id)

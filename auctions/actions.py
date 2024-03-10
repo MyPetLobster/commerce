@@ -310,11 +310,11 @@ def cancel_bid(request, listing_id):
 
             a_msg.send_bid_cancelled_message_confirmation(request, listing.id)
             a_msg.send_bid_cancelled_message_new_high_bidder(request, listing.id, highest_bid)
-            subject_seller, message_seller = a_msg.send_bid_cancelled_message_seller_bids(request, listing.id, highest_bid)   
+            subject_seller, message_seller = a_msg.get_bid_cancelled_message_seller_bids(request, listing.id, highest_bid)   
         else: 
             listing.price = listing.starting_bid
             listing.save()
-            subject_seller, message_seller = a_msg.send_bid_cancelled_message_seller_no_bids(request, listing.id)
+            subject_seller, message_seller = a_msg.get_bid_cancelled_message_seller_no_bids(request, listing.id)
 
         helpers.send_message(site_account, seller, subject_seller, message_seller)
     else:
