@@ -102,11 +102,26 @@ def remove_from_watchlist(request, listing_id):
     elif clicked_from == "watchlist":
         return HttpResponseRedirect(reverse("watchlist"))
     else:
+        logger.error(f"(Err22222) Invalid or missing 'clicked-from' value in the request")
         raise Http404("Invalid or missing 'clicked-from' value in the request")
     
 
 @login_required
 def close_listing(request, listing_id):
+    '''
+    This function is called when the seller clicks the "Close Listing" button on the listing page.
+    It checks if the listing has any active bids. If there are active bids, it sets the closing_date
+    to 24 hours from the current time and returns to the listing page. If there are no active bids, it
+    charges the early closing fee and sets the listing to inactive and cancelled. Users cannot close a
+    listing with less than 24 hours remaining.
+
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to be closed
+    Returns: HttpResponseRedirect: Redirects to the index page
+
+    Called by: listing.html
+    Functions Called: charge_early_closing_fee, notify_all_early_closing
+    '''
     try:
         listing = Listing.objects.get(pk=listing_id)
         
@@ -151,6 +166,16 @@ def close_listing(request, listing_id):
 
 @login_required
 def comment(request, listing_id):
+    '''
+    This function is called when a user submits a comment on a listing page. It creates a new comment
+    object and saves it to the database. It then calls the notify_mentions function to notify any
+    mentioned users.
+    
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to comment on   
+    Returns: HttpResponseRedirect: Redirects to the listing page
+    Functions Called: notify_mentions()
+    '''
     listing = Listing.objects.get(pk=listing_id)
     comment = request.POST["comment"]
     anonymous = request.POST.get("anonymous", "off")
@@ -174,6 +199,17 @@ def comment(request, listing_id):
 
 @login_required
 def move_to_escrow(request, listing_id):
+    '''
+    This function is called when the seller clicks the "Move to Escrow" button on the listing page.
+    The option will only be available to users who are the winner of a listing and for whom the 
+    automatic transfer to escrow failed. It calls the transfer_to_escrow function to transfer the
+    winner's funds to escrow.
+
+    Args: request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to be moved to escrow   
+    Returns: HttpResponseRedirect: Redirects to the listing page
+    Functions Called: transfer_to_escrow()
+    '''
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
     winner = listing.winner
@@ -203,25 +239,17 @@ def cancel_bid(request, listing_id):
         
         if all_bids_on_listing:
             highest_bid = all_bids_on_listing.first()
-            highest_bidder = highest_bid.user
+            
             listing.price = highest_bid.amount
             listing.save()
 
-            subject_new_high_bidder = f"Your bid on {listing.title} is now the highest bid."
-            message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
-            send_message(site_account, highest_bidder, subject_new_high_bidder, message_new_high_bidder)
-
-            subject_cancelled_bid = f"Your bid on {listing.title} has been cancelled."
-            message_cancelled_bid = f"Your bid on {listing.title} has been cancelled. This process automatically removes older bids on the same listing."
-            send_message(site_account, current_user, subject_cancelled_bid, message_cancelled_bid)
-
-            subject_seller = f"A user has cancelled their bid on {listing.title}."
-            message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now ${highest_bid.amount}."    
+            a_msg.send_bid_cancelled_message_confirmation(request, listing.id)
+            a_msg.send_bid_cancelled_message_new_high_bidder(request, listing.id, highest_bid)
+            subject_seller, message_seller = a_msg.send_bid_cancelled_message_seller_bids(request, listing.id, highest_bid)   
         else: 
             listing.price = listing.starting_bid
             listing.save()
-            subject_seller = f"A user has cancelled their bid on {listing.title}."
-            message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
+            subject_seller, message_seller = a_msg.send_bid_cancelled_message_seller_no_bids(request, listing.id)
 
         send_message(site_account, seller, subject_seller, message_seller)
     else:
@@ -424,5 +452,3 @@ def delete_message(request, message_id):
     message.deleted_by.add(current_user)
     message.save()
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
-
-

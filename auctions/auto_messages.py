@@ -189,3 +189,31 @@ def send_early_closing_fee_message(listing, fee_amount):
                 have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
                 Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
     send_message(site_account, listing.seller, subject, message)
+
+
+
+# Bid Cancel Messages
+def send_bid_cancelled_message_confirmation(request, listing_id):
+    current_user, site_account, listing = get_msg_info(request, listing_id)
+    subject_cancelled_bid = f"Your bid on {listing.title} has been cancelled."
+    message_cancelled_bid = f"Your bid on {listing.title} has been cancelled. This process automatically removes older bids on the same listing."
+    send_message(site_account, current_user, subject_cancelled_bid, message_cancelled_bid)
+
+def send_bid_cancelled_message_new_high_bidder(request, listing_id, highest_bid):
+    current_user, site_account, listing = get_msg_info(request, listing_id)
+    subject_new_high_bidder = f"Your bid on {listing.title} is now the highest bid."
+    message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
+    send_message(site_account, highest_bid.user, subject_new_high_bidder, message_new_high_bidder)
+
+def send_bid_cancelled_message_seller_bids(request, listing_id, highest_bid):
+    current_user, site_account, listing = get_msg_info(request, listing_id)  
+    highest_bid_amount = format_as_currency(highest_bid.amount)
+    subject_seller = f"A user has cancelled their bid on {listing.title}."
+    message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now {highest_bid_amount}." 
+    return subject_seller, message_seller
+
+def send_bid_cancelled_message_seller_no_bids(request, listing_id):
+    current_user, site_account, listing = get_msg_info(request, listing_id)
+    subject_seller = f"A user has cancelled their bid on {listing.title}."
+    message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
+    return subject_seller, message_seller
