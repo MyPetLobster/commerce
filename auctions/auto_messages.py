@@ -12,8 +12,7 @@ import os
 import random
 import smtplib
 
-from .models import Listing, User, Bid
-from .tasks import send_message
+from .models import Listing, User, Bid, Message
 
 
 my_email = os.environ.get('MY_EMAIL') 
@@ -23,6 +22,14 @@ logger = logging.getLogger(__name__)
 
 
 # MESSAGE HELPER FUNCTIONS
+def send_message(sender, recipient, subject, message):
+    Message.objects.create(
+        sender=sender,
+        recipient=recipient,
+        subject=subject,
+        message=message
+    )   
+
 def format_as_currency(amount):
     return f"${amount:,.2f}"
 

@@ -14,7 +14,7 @@ from datetime import timedelta
 # Uncomment the following line to use the maintenance functions
 # from . import maintenance
 
-from . import auto_messages
+from .auto_messages import send_message
 from . import helpers
 from . import tasks
 from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist
@@ -22,8 +22,6 @@ from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
 
 
 logger = logging.getLogger(__name__)
-
-
 
 
 # VIEWS - AUTHENTICATION
@@ -334,7 +332,7 @@ def messages(request, user_id):
             recipient = User.objects.get(pk=recipient_id)
             subject = request.POST["subject"]
             message = request.POST["message"]
-            tasks.send_message(request.user, recipient, subject, message)
+            send_message(request.user, recipient, subject, message)
             return HttpResponseRedirect(reverse("messages", args=(user_id,)))
 
     # Get messages filtered by show/hide read messages

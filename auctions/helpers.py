@@ -23,14 +23,6 @@ logger = logging.getLogger(__name__)
 
 # GENERAL UTILITY HELPER FUNCTIONS
 
-def send_message(sender, recipient, subject, message):
-    Message.objects.create(
-        sender=sender,
-        recipient=recipient,
-        subject=subject,
-        message=message
-    )   
-
 def format_as_currency(amount):
     return f"${amount:,.2f}"
 
@@ -566,7 +558,7 @@ def transfer_to_escrow(winner, listing_id):
 
         subject, message = a_msg.get_escrow_success_message(listing)
 
-    send_message(site_account, buyer, subject, message)
+    a_msg.send_message(site_account, buyer, subject, message)
     
 
 def transfer_to_seller(listing_id):
