@@ -10,7 +10,6 @@ from django.utils.html import strip_tags
 
 from collections import defaultdict
 from datetime import timedelta
-import decimal
 import logging
 import os
 import smtplib

@@ -7,13 +7,12 @@ from django.utils import timezone
 import decimal
 import logging
 import math
-import random
 from datetime import timedelta
 
 from . import auto_messages as a_msg 
 from .classes import UserBidInfo
 from .models import Bid, Listing, Watchlist, User, Message, Transaction
-from .tasks import send_message, transfer_to_escrow
+
 
 
 
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 
-# General Utility Helper Functions 
+# GENERAL UTILITY HELPER FUNCTIONS
 
 def send_message(sender, recipient, subject, message):
     Message.objects.create(
@@ -523,6 +522,19 @@ def create_bid_info_object_list(user_active_bids):
 # MONEY TRANSFER FUNCTIONS
 
 def transfer_to_escrow(winner, listing_id):
+    '''
+    This function transfers the winning bid amount from the winner's account to the escrow account.
+    It is called by the declare_winner() function when a listing closes and a winner is declared.
+
+    Args:
+            winner (User): the winner of the listing,
+            listing_id (int): the id of the listing
+    Returns: None
+
+    Called by: declare_winner(), actions.move_to_escrow(), tasks.check_listing_expiration()
+    Function Calls: get_escrow_fail_message(), get_escrow_success_message(), send_message()
+    '''
+
     listing = Listing.objects.get(pk=listing_id)
     buyer = winner.user
     amount = listing.price
@@ -531,67 +543,64 @@ def transfer_to_escrow(winner, listing_id):
 
     if amount > buyer.balance: 
         if listing.in_escrow == False:
-            subject = f"Insufficient funds for {listing.title}"
-            message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
-            funds to complete the transaction. Please add funds to your account to complete the purchase.
-            Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
-            the transaction.
-            """   
+            subject, message = a_msg.get_escrow_fail_message(listing)
         else: 
-            logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
-        
+            logger.error(f"""(Err01989) Unexpected conflict with escrow status for {listing.title}. Expected 
+                         {listing.in_escrow} to be False, but it is {listing.in_escrow}""")
     else:
-        subject = f"Your funds have been deposited in escrow for {listing.title}"
-        message = f"As soon as the buyer ships the item, you will receive confirmation and tracking information. Thank you for using Yard Sale!"
+        try:
+            Transaction.objects.create(
+                sender=buyer,
+                recipient=escrow_account,
+                amount=amount,
+                listing=listing
+            )
 
-        Transaction.objects.create(
-            sender=buyer,
-            recipient=escrow_account,
-            amount=amount,
-            listing=listing
-        )
+            buyer.balance -= amount
+            buyer.save()
+            escrow_account.balance += amount
+            escrow_account.save()
+            listing.in_escrow = True
+            listing.save()
+        except (IntegrityError, ValueError) as e:
+            logger.error(f"(Err01989) Unexpected error transferring funds to escrow account: {e}")
 
-        buyer.balance -= amount
-        buyer.save()
-        escrow_account.balance += amount
-        escrow_account.save()
-        listing.in_escrow = True
-        listing.save()
+        subject, message = a_msg.get_escrow_success_message(listing)
 
     send_message(site_account, buyer, subject, message)
     
 
 def transfer_to_seller(listing_id):
+    '''
+    This function transfers the winning bid amount from the escrow account to the seller's account.
+    It is called by the actions.confirm_shipping() function when the seller confirms that the item has
+    been shipped.
+
+    Args:
+            listing_id (int): the id of the listing
+    Returns: None
+
+    Called by: actions.confirm_shipping()
+    Function Calls: send_message()
+    '''
+    
     listing = Listing.objects.get(pk=listing_id)
     seller = listing.user
-    amount = listing.price
-    buyer = listing.winner
+    sale_price = listing.price
     escrow_account = User.objects.get(pk=11)
     site_account = User.objects.get(pk=12)
-    admin = User.objects.get(pk=2)
 
     if listing.in_escrow == True:
-        if amount > escrow_account.balance:
-
+        if sale_price > escrow_account.balance:
             # Send Alert Message to Admin if escrow account is empty when it shouldn't be
-            subject = "(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
-            message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
-            send_message(site_account, admin, subject, message)
-
+            a_msg.send_escrow_empty_alert_message(listing.id)
             logger.error(f"(Err01989) Escrow account is empty for {listing.title}")
             return False
         else:
+            fee_amount = round(sale_price * decimal.Decimal(0.10), 2)
+            sale_price -= fee_amount
 
-            #TODO Make sure to add cancellation charge when user lists item, and in terms
-
-            # Check if the closing_date is less than 7 days after the listing date, signifying a cancellation
-            if listing.closing_date < listing.date + timezone.timedelta(days=7):
-                fee_amount = amount * decimal.Decimal(0.15)
-            else:
-                fee_amount = amount * decimal.Decimal(0.1)
-
-            amount -= fee_amount
-
+            # Create Transaction objects for the fee and the sale
             fee_transaction = Transaction.objects.create(
                 sender=escrow_account,
                 recipient=site_account,
@@ -603,41 +612,23 @@ def transfer_to_seller(listing_id):
             sell_transaction = Transaction.objects.create(
                 sender=escrow_account,
                 recipient=seller,
-                amount=amount,
+                amount=sale_price,
                 listing=listing
             )
             sell_transaction.save()
 
-            escrow_account.balance -= amount
+            # Update the balances for the seller and the escrow account
+            escrow_account.balance -= sale_price
             escrow_account.save()
-            seller.balance += amount
+            seller.balance += sale_price
             seller.save()
 
             listing.in_escrow = False
 
-            tracking_number = random.randint(1000000000, 9999999999)
-
-            # Send confirmation message to seller after shipping confirmed
-            subject = f"Your tracking information has been received for {listing.title}"
-            message = f"""The funds held in escrow for {listing.title} have been released to your account. 
-                        Your balance should be updated within 1-2 business days. Here is the tracking 
-                        number for your records #{tracking_number}. Thank you for using Yard Sale!
-                        """
-            send_message(site_account, seller, subject, message)
-
-
-            # Send confirmation message to buyer after shipping confirmed
-            subject = f"{listing.title} has been shipped!"
-            message = f"""The funds held in escrow for {listing.title} have been released to the seller's account 
-                        and your item has been shipped. Here is your tracking number: #{tracking_number}. 
-                        Thank you for using Yard Sale!"""
-            send_message(site_account, buyer, subject, message)
+            # Send confirmation message to seller and buyer after shipping confirmed
+            a_msg.send_shipping_confirmation_messages(listing.id)
 
             return True
     else:
         logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
         return False
-
-
-
-

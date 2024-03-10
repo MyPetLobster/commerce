@@ -13,7 +13,6 @@ from . import auto_messages as a_msg
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
-from .tasks import transfer_to_escrow, transfer_to_seller, send_message
 
 
 logger = logging.getLogger(__name__)
@@ -266,7 +265,7 @@ def move_to_escrow(request, listing_id):
 
     if winner == current_user:
         if listing.active == False and listing.in_escrow == False and listing.shipped == False:
-            transfer_to_escrow(winner, listing_id)
+            helpers.transfer_to_escrow(winner, listing_id)
             
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
@@ -286,7 +285,7 @@ def cancel_bid(request, listing_id):
     Called by: listing.html
     Functions Called: send_bid_cancelled_message_confirmation(), send_bid_cancelled_message_new_high_bidder(),
                         send_bid_cancelled_message_seller_bids(), send_bid_cancelled_message_seller_no_bids(),
-                        send_message()
+                        helpers.send_message()
     '''
 
     current_user = request.user
@@ -317,7 +316,7 @@ def cancel_bid(request, listing_id):
             listing.save()
             subject_seller, message_seller = a_msg.send_bid_cancelled_message_seller_no_bids(request, listing.id)
 
-        send_message(site_account, seller, subject_seller, message_seller)
+        helpers.send_message(site_account, seller, subject_seller, message_seller)
     else:
         contrib_messages.error(request, "Cannot cancel bid with less than 24 hours remaining.")
 
@@ -532,7 +531,7 @@ def confirm_shipping(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
     if listing.shipped == False:
-        if transfer_to_seller(listing_id):
+        if helpers.transfer_to_seller(listing_id):
             listing.shipped = True
             listing.save()    
             contrib_messages.success(request, "Shipping confirmed")
@@ -544,6 +543,8 @@ def confirm_shipping(request, listing_id):
         contrib_messages.error(request, "Unexpected error confirming shipping, contact admins.")
     
     return redirect("listing", listing_id=listing_id)
+
+
 
 
 # MESSAGES FUNCTIONS

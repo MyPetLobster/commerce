@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from datetime import timedelta
 import logging
+import random
 
 from .models import Listing, User, Bid
 from .tasks import send_message
@@ -217,3 +218,48 @@ def send_bid_cancelled_message_seller_no_bids(request, listing_id):
     subject_seller = f"A user has cancelled their bid on {listing.title}."
     message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
     return subject_seller, message_seller
+
+
+def get_escrow_fail_message(listing):
+    subject = f"Insufficient funds for {listing.title}"
+    message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
+    funds to complete the transaction. Please add funds to your account to complete the purchase.
+    Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
+    the transaction."""   
+    return subject, message
+
+def get_escrow_success_message(listing):
+    subject = f"Your funds have been deposited in escrow for {listing.title}"
+    message = f"""As soon as the buyer ships the item, you will receive confirmation and tracking information. 
+    Thank you for using Yard Sale!"""
+    return subject, message
+
+
+def send_escrow_empty_alert_message(listing_id):
+    site_account = User.objects.get(pk=12)
+    admin = User.objects.get(pk=2)
+    listing = Listing.objects.get(pk=listing_id)
+    subject = f"(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
+    message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
+    send_message(site_account, admin, subject, message)
+
+
+def send_shipping_confirmation_messages(listing_id):
+    site_account = User.objects.get(pk=12)
+    listing = Listing.objects.get(pk=listing_id)
+    seller = listing.user
+    buyer = listing.winner
+    tracking_number = random.randint(1000000000, 9999999999)
+
+    subject_seller = f"Your tracking information has been received for {listing.title}"
+    message_seller = f"""The funds held in escrow for {listing.title} have been released to your account. 
+                Your balance should be updated within 1-2 business days. Here is the tracking 
+                number for your records #{tracking_number}. Thank you for using Yard Sale!
+                """
+    subject_buyer = f"{listing.title} has been shipped!"
+    message_buyer = f"""The funds held in escrow for {listing.title} have been released to the seller's account 
+                and your item has been shipped. Here is your tracking number: #{tracking_number}. 
+                Thank you for using Yard Sale!"""
+    
+    send_message(site_account, seller, subject_seller, message_seller)
+    send_message(site_account, buyer, subject_buyer, message_buyer)
