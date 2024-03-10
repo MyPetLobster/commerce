@@ -503,6 +503,27 @@ footer {
 
 
 /* CREATE LISTING PAGE */
+
+.category-checkbox {
+  accent-color: $primary-pink !important;
+}
+#id_categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+#id_categories div label {
+  @include flex-row;
+  gap: 5px;
+  justify-content: flex-start;
+  align-content: flex-start;
+  line-height: 1em;
+  padding: 0;
+}
+input {
+  height: 100%;
+  @include flex-column;
+}
+
 .create-form-div {
   @include flex-column;
   @include universal-form;
@@ -521,6 +542,7 @@ footer {
 
   /* Target categories field, use grid to display checkboxes in 2 columns */
   #id_categories {
+    margin-top: 20px;
     font-size: 0.9em;
     display: grid;
     grid-template-columns: 1fr 1fr;
