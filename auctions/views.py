@@ -1,7 +1,7 @@
 from django.contrib import messages as contrib_messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
+from django.db import IntegrityError, models
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.urls import reverse
@@ -80,6 +80,18 @@ def register(request):
 
 # VIEWS - PUBLIC
 def index(request):
+    '''
+    Render the index/active listings page. 
+
+    Args:
+        request (HttpRequest): The request object
+    Returns:
+        HttpResponse: The index template
+
+    Function Calls: check_if_bids_funded(), helpers.set_inactive()
+    Optional Function Calls: maintenance.force_set_closing_dates()
+    '''
+
     # Uncomment the following lines to use the maintenance functions
     # maintenance.force_set_closing_dates()
     
@@ -102,6 +114,17 @@ def index(request):
 
 
 def listing(request, listing_id):
+    '''
+    Render the listing page and handle POST requests for placing bids and adding comments
+
+    Args:
+        request (HttpRequest): The request object
+        listing_id (int): The id of the listing to view
+    Returns:
+        HttpResponse: The listing template
+
+    Function Calls: check_valid_bid(), get_listing_values(), calculate_time_left()
+    '''
     listing = get_object_or_404(Listing, pk=listing_id)
     current_user = request.user
 
@@ -169,9 +192,6 @@ def category(request, category_id):
 
 def search(request):
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
 
     if request.method == "POST":
         post = True
@@ -181,8 +201,8 @@ def search(request):
     return render(request, "auctions/search.html", {
         "listings": listings if post else None,
         "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
     })
 
 
@@ -209,10 +229,19 @@ def listings(request):
     })
 
 
-
-
 @login_required
 def profile(request, user_id):
+    '''
+    Render the user's profile page and handle POST requests for updating user info
+
+    Args:
+        request (HttpRequest): The request object
+        user_id (int): The user id of the user to view
+    Returns:
+        HttpResponse: The user's profile page
+
+    Function Calls: create_bid_info_object_list()
+    '''
     user = get_object_or_404(User, pk=user_id)
     listings = Listing.objects.filter(user=user).order_by("-date")
     current_user = request.user
@@ -239,6 +268,16 @@ def profile(request, user_id):
 
 @login_required
 def create(request):
+    '''
+    Render the create listing form and handle POST requests for creating a new listing
+
+    Args:
+        request (HttpRequest): The request object
+    Returns:
+        HttpResponse: The create listing form template
+
+    Function Calls: None
+    '''
     current_user = request.user
     if request.method == "POST":
         form = ListingForm(request.POST)
@@ -261,6 +300,19 @@ def create(request):
 
 @login_required
 def messages(request, user_id):
+    '''
+    Render messages template and handle POST requests for sending messages and the 
+    option to show/hide read messages. If user calls actions.sort_messages(), the
+    environment variable set by that action will be used here to sort the messages
+    on page load.
+    
+    Args:
+        user_id (int): The user id of the recipient of the message
+    Returns:
+        HttpResponse: The messages template
+    
+    Function Calls: show_hide_read_messages(), set_message_sort(), send_message()
+'''
     current_user = request.user
 
     # Check if user is authorized to view messages
@@ -306,20 +358,23 @@ def messages(request, user_id):
 def transactions(request, user_id):
     '''
     View all bid and transaction history, link will only
-    appear on a user's own profile page
+    appear on a user's own profile page.
+
+    Args:
+        user_id (int): The user id of the user to view
+    Returns:
+        HttpResponse: The transactions template
+
+    Function Calls: None
     '''
     current_user = request.user
-    if user_id != current_user.id:
+    user = get_object_or_404(User, pk=user_id)
+    if user != current_user:
         return HttpResponse("Unauthorized", status=401)
-    user = User.objects.get(pk=user_id)
-    sent_transactions = Transaction.objects.filter(sender=user)
-    received_transactions = Transaction.objects.filter(recipient=user)
-    transactions = sent_transactions | received_transactions
+    
+    # Fetch transactions
+    transactions = Transaction.objects.filter(models.Q(sender=user) | models.Q(recipient=user))
     transactions = transactions.order_by("-date")
-
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
 
     user_bids = Bid.objects.filter(user=user)
     user_bids_by_date = sorted(user_bids, key=lambda x: x.date, reverse=True)
@@ -333,18 +388,19 @@ def transactions(request, user_id):
         else:
             bid_listing_groups[bid.listing.id] = [bid]
 
+    # Create list of bids grouped by listing and sorted by date
     user_bids = []
     for key, value in bid_listing_groups.items():
         user_bids.extend(value)
 
-    active_bid_count = len(set([bid.listing for bid in user_bids if bid.listing.active]))
+    active_bid_count = user_bids.filter(listing__active=True).distinct().count()
 
     return render(request, "auctions/transactions.html", {
-        'transactions': transactions,
         'user': user,
         'current_user': current_user,
-        'messages': messages,
-        'unread_message_count': unread_message_count,
+        'transactions': transactions,
+        'messages': contrib_messages.get_messages(request),
+        'unread_message_count': Message.objects.filter(recipient=current_user, read=False).count(),
         'user_bids': user_bids,
         'active_bid_count': active_bid_count
     })
@@ -355,13 +411,9 @@ def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
     current_user = request.user
-    messages = contrib_messages.get_messages(request)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
-
     return render(request, "auctions/watchlist.html", {
         "listings": listings,
         "current_user": current_user,
-        "messages": messages,
-        "unread_message_count": unread_message_count
+        "messages": contrib_messages.get_messages(request),
+        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
     })
