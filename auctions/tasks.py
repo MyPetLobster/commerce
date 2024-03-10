@@ -13,11 +13,10 @@ from datetime import timedelta
 import decimal
 import logging
 import os
-import random
 import smtplib
 
 from . import auto_messages as a_msg
-from .helpers import declare_winner
+from . import helpers
 from .models import Bid, Listing, User, Transaction, Message
 
 
@@ -73,7 +72,7 @@ def check_if_bids_funded():
                 message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled and removed. 
                             At the time of this message, there are {time_left_str} left in the auction. Feel free to deposit 
                             funds and place another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
-                send_message(site_account, user, subject, message)
+                helpers.send_message(site_account, user, subject, message)
                 messaged_users_listings[(user.id, listing.id)] = 1
         
 
@@ -87,7 +86,7 @@ def set_inactive():
             listing.active = False
             listing.save()
             try: 
-                declare_winner(listing)
+                helpers.declare_winner(listing)
             except:
                 pass
         else:
@@ -101,7 +100,7 @@ def send_error_notification(error_message):
         admin = User.objects.get(pk=2)
         subject = "An error occurred in the Yard Sale application"
         message = error_message
-        send_message(site_account, admin, subject, message)
+        helpers.send_message(site_account, admin, subject, message)
 
     except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
         logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
@@ -134,7 +133,7 @@ def check_listing_expiration():
                 listing.winner = winner
                 listing.save()
 
-                transfer_to_escrow(winner)
+                helpers.transfer_to_escrow(winner)
                 a_msg.notify_all_closed_listing(listing.id)
             else: 
                 pass
@@ -150,131 +149,6 @@ def check_listing_expiration():
 
 
 
-
-def transfer_to_escrow(winner, listing_id):
-    listing = Listing.objects.get(pk=listing_id)
-    buyer = winner.user
-    amount = listing.price
-    escrow_account = User.objects.get(pk=11)
-    site_account = User.objects.get(pk=12)
-
-    if amount > buyer.balance: 
-        if listing.in_escrow == False:
-            subject = f"Insufficient funds for {listing.title}"
-            message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
-            funds to complete the transaction. Please add funds to your account to complete the purchase.
-            Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
-            the transaction.
-            """   
-        else: 
-            logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
-        
-    else:
-        subject = f"Your funds have been deposited in escrow for {listing.title}"
-        message = f"As soon as the buyer ships the item, you will receive confirmation and tracking information. Thank you for using Yard Sale!"
-
-        Transaction.objects.create(
-            sender=buyer,
-            recipient=escrow_account,
-            amount=amount,
-            listing=listing
-        )
-
-        buyer.balance -= amount
-        buyer.save()
-        escrow_account.balance += amount
-        escrow_account.save()
-        listing.in_escrow = True
-        listing.save()
-
-    send_message(site_account, buyer, subject, message)
-    
-
-def transfer_to_seller(listing_id):
-    listing = Listing.objects.get(pk=listing_id)
-    seller = listing.user
-    amount = listing.price
-    buyer = listing.winner
-    escrow_account = User.objects.get(pk=11)
-    site_account = User.objects.get(pk=12)
-    admin = User.objects.get(pk=2)
-
-    if listing.in_escrow == True:
-        if amount > escrow_account.balance:
-
-            # Send Alert Message to Admin if escrow account is empty when it shouldn't be
-            subject = "(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
-            message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
-            send_message(site_account, admin, subject, message)
-
-            logger.error(f"(Err01989) Escrow account is empty for {listing.title}")
-            return False
-        else:
-
-            #TODO Make sure to add cancellation charge when user lists item, and in terms
-
-            # Check if the closing_date is less than 7 days after the listing date, signifying a cancellation
-            if listing.closing_date < listing.date + timezone.timedelta(days=7):
-                fee_amount = amount * decimal.Decimal(0.15)
-            else:
-                fee_amount = amount * decimal.Decimal(0.1)
-
-            amount -= fee_amount
-
-            fee_transaction = Transaction.objects.create(
-                sender=escrow_account,
-                recipient=site_account,
-                amount=fee_amount,
-                listing=listing
-            )
-            fee_transaction.save()
-
-            sell_transaction = Transaction.objects.create(
-                sender=escrow_account,
-                recipient=seller,
-                amount=amount,
-                listing=listing
-            )
-            sell_transaction.save()
-
-            escrow_account.balance -= amount
-            escrow_account.save()
-            seller.balance += amount
-            seller.save()
-
-            listing.in_escrow = False
-
-            tracking_number = random.randint(1000000000, 9999999999)
-
-            # Send confirmation message to seller after shipping confirmed
-            subject = f"Your tracking information has been received for {listing.title}"
-            message = f"""The funds held in escrow for {listing.title} have been released to your account. 
-                        Your balance should be updated within 1-2 business days. Here is the tracking 
-                        number for your records #{tracking_number}. Thank you for using Yard Sale!
-                        """
-            send_message(site_account, seller, subject, message)
-
-
-            # Send confirmation message to buyer after shipping confirmed
-            subject = f"{listing.title} has been shipped!"
-            message = f"""The funds held in escrow for {listing.title} have been released to the seller's account 
-                        and your item has been shipped. Here is your tracking number: #{tracking_number}. 
-                        Thank you for using Yard Sale!"""
-            send_message(site_account, buyer, subject, message)
-
-            return True
-    else:
-        logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
-        return False
-    
-
-def send_message(sender, recipient, subject, message):
-    Message.objects.create(
-        sender=sender,
-        recipient=recipient,
-        subject=subject,
-        message=message
-    )
 
 
 

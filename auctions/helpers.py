@@ -7,6 +7,7 @@ from django.utils import timezone
 import decimal
 import logging
 import math
+import random
 from datetime import timedelta
 
 from . import auto_messages as a_msg 
@@ -23,8 +24,56 @@ logger = logging.getLogger(__name__)
 
 # General Utility Helper Functions 
 
+def send_message(sender, recipient, subject, message):
+    Message.objects.create(
+        sender=sender,
+        recipient=recipient,
+        subject=subject,
+        message=message
+    )   
 
-# LISTING.PY
+def format_as_currency(amount):
+    return f"${amount:,.2f}"
+
+
+
+
+# HELPER FUNCTIONS - ACTIONS.PY
+
+# actions.close_listing()    
+def charge_early_closing_fee(listing_id):
+    '''
+    This function charges the seller a 5% fee if they close the listing early. It is called
+    by the actions.close_listing() view when the seller closes the listing early.
+
+    Args:
+            listing_id (int): the id of the listing
+    Returns: None
+
+    Called by: actions.close_listing()
+    Function Calls: send_early_closing_fee_message()
+    '''
+
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    seller = listing.user
+    fee_amount = round(listing.starting_bid * decimal.Decimal(0.05), 2)
+ 
+    a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+
+    Transaction.objects.create(
+        sender=seller,
+        recipient=site_account,
+        amount=fee_amount,
+        listing=listing
+    )
+
+
+
+
+# HELPER FUNCTIONS - VIEWS.PY
+
+# views.listing() 
 def get_listing_values(request, listing):
     '''
     This function retrieves the winner, user's bid, difference between user's bid and
@@ -71,22 +120,7 @@ def get_listing_values(request, listing):
     return winner, user_bid, difference, watchlist_item
 
 
-# Used Locally Only. Helpers for Helper Functions
-def check_if_watchlist(user, listing):
-    watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
-    if watchlist_item.exists():
-        return True
-    else:
-        return False
-    
-
-def format_as_currency(amount):
-    return f"${amount:,.2f}"
-
-
-
-# HELPER FUNCTIONS - VIEWS.PY
-# Used in views.listing, this chain of functions gets time left, and closes auctions if expired
+# views.listing() - calculate_time_left -> check_expiration -> declare_winner
 def calculate_time_left(listing_id):
     '''
     This function calculates the time left on a listing and returns a string
@@ -94,8 +128,10 @@ def calculate_time_left(listing_id):
     looks for a string in the format "days, hours, minutes, seconds" or a string
     that begins with "Listing" to determine what to display.
 
-    Args: listing_id
-    Returns: string
+    Args:
+            listing_id (int): the id of the listing
+    Returns:
+            string: the time left on the listing in the format "days, hours, minutes, seconds"
 
     Called by: views.listing
     Function Calls: check_expiration()
@@ -115,7 +151,6 @@ def calculate_time_left(listing_id):
         minutes_left, seconds_left = divmod(remainder, 60)
         seconds_left = math.floor(seconds_left)
         return f"{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
-    
 
 def check_expiration(listing_id):
     '''
@@ -125,8 +160,10 @@ def check_expiration(listing_id):
     set to the default 7 days after the listing date, and if so, returns "closed - expired",
     otherwise, returns "closed - by seller".
 
-    Args: listing_id
-    Returns: string (used in calculate_time_left() function)
+    Args: 
+            listing_id (int): the id of the listing
+    Returns:
+            string: "active", "closed - expired", "closed - by seller"
 
     Called by: calculate_time_left()
     Function Calls: declare_winner()
@@ -149,7 +186,6 @@ def check_expiration(listing_id):
             return "closed - expired"
         else:
             return "closed - by seller"
-        
 
 def declare_winner(listing):
     '''
@@ -160,7 +196,9 @@ def declare_winner(listing):
     notify_all_closed_listing() function to notify all users that the listing
     has closed.
 
-    Args: listing
+    Args: 
+            listing (Listing): the listing object
+
     Returns: None
 
     Called by: check_expiration()
@@ -179,8 +217,7 @@ def declare_winner(listing):
         a_msg.notify_all_closed_listing(listing.id)
         
         
-
-# Place Bid Flow
+# views.listing() - check_valid_bid -> place_bid -> check_bids_funds
 @login_required
 def check_valid_bid(request, listing_id, amount):
     '''
@@ -188,7 +225,11 @@ def check_valid_bid(request, listing_id, amount):
     if they have sufficient funds to cover the bid. This function checks these conditions,
     then calls the place_bid function if the conditions are met.
 
-    Args: request, listing_id, amount
+    Args:
+            request (HttpRequest): the request object,
+            listing_id (int): the id of the listing,
+            amount (decimal): the amount of the bid
+
     Returns: None
 
     Called by: views.listing
@@ -209,7 +250,6 @@ def check_valid_bid(request, listing_id, amount):
         listing = place_bid(request, amount, listing.id)      
     return listing 
 
-
 @login_required
 def place_bid(request, amount, listing_id):
     '''
@@ -217,13 +257,18 @@ def place_bid(request, amount, listing_id):
     the check_bids_funds() function to handle the bid and send messages to the bidder and
     the previous high bidder if there was one. 
     
-    Args: request, amount, listing_id
-    returns: updated listing object
+    Args: 
+            request (HttpRequest): the request object,
+            amount (decimal): the amount of the bid,
+            listing_id (int): the id of the listing
+    Returns:
+            listing (Listing): the listing object
 
     Called by: check_valid_bid()
     Function Calls: check_bids_funds(), send_bid_success_message_seller(), message_previous_high_bidder(),
                     check_if_watchlist()
     '''
+
     try: 
         listing = Listing.objects.get(pk=listing_id)
         current_price = listing.price
@@ -276,7 +321,6 @@ def place_bid(request, amount, listing_id):
         logger.error(f"(Err22222) Unexpected Error placing bid: {e}")
         return listing
 
-
 @login_required
 def check_bids_funds(request, listing_id):
     '''
@@ -286,13 +330,18 @@ def check_bids_funds(request, listing_id):
     24 hours before auction closes). If bid is not fully funded and less than 24 hours remain
     on auction, bid is cancelled and user is notified with an error message from place_bid().
 
-    Args: request, listing_id
-    returns: status, listing
+    Args:
+            request (HttpRequest): the request object,
+            listing_id (int): the id of the listing
+    Returns:
+            boolean: True if bid is valid and fully funded, False if bid is not fully funded
+            listing (Listing): the listing object
 
     Called by: place_bid()
     Function Calls: send_bid_success_message_bidder(), send_bid_success_message_low_funds(),
                     send_bid_success_message_seller(), message_previous_high_bidder()
     '''
+
     listing = Listing.objects.get(pk=listing_id)
     now = timezone.now()
     bids = Bid.objects.filter(listing=listing)
@@ -325,25 +374,50 @@ def check_bids_funds(request, listing_id):
     else:
         return False, listing
 
+@login_required
+def check_if_watchlist(user, listing):
+    '''
+    This function checks if a listing is on the user's watchlist. It is called by the
+    place_bid() function to automatically add the listing to the user's watchlist if it
+    is not already there.
+
+    Args:
+            user (User): the user object,
+            listing (Listing): the listing object
+    Returns:
+            boolean: True if the listing is on the user's watchlist, False if the listing is not
+
+    Called by: place_bid()
+    Function Calls: None
+    '''
+
+    watchlist_item = Watchlist.objects.filter(user=user, listing=listing)
+    if watchlist_item.exists():
+        return True
+    else:
+        return False
 
 
-
-# Used in views.messages, actions.sort_messages
+# views.messages(), actions.sort_messages()
 def set_message_sort(sort_by_direction, sent_messages, inbox_messages):
     '''
     This function sets the sort order for the user's sent and inbox messages. It is called
     by the views.messages view when the page is loaded, and called by the actions.sort_messages()
     function when the user clicks the "Sort" button. 
 
-    Args: sort_by_direction - string,
-                sent_messages - queryset of sent messages,
-                inbox_messages - queryset of inbox messages
-    Returns: sent_messages - queryset of sent messages,
-                inbox_messages - queryset of inbox messages,
-                sort_by_direction - string
-
-    Called by: views.messages, actions.sort_messages
+    Args: 
+            sort_by_direction (str): the current sort order,
+            sent_messages (QuerySet): the user's sent messages,
+            inbox_messages (QuerySet): the user's inbox messages
+    Returns:
+            sent_messages (QuerySet): the user's sent messages,
+            inbox_messages (QuerySet): the user's inbox messages,
+            sort_by_direction (str): the new sort order
+    
+    Called by: views.messages(), actions.sort_messages()
+    Function Calls: None
     '''
+
     date = "date" if sort_by_direction == "oldest-first" else "-date"
     sent_messages = sent_messages.order_by(date)
     inbox_messages = inbox_messages.order_by(date)
@@ -351,20 +425,24 @@ def set_message_sort(sort_by_direction, sent_messages, inbox_messages):
     return sent_messages, inbox_messages, sort_by_direction
 
 
+# views.messages()
 def show_hide_read_messages(request):  
     '''
     This function toggles the display of read messages in the user's inbox. It is called
     by the views.messages view when the user clicks the "Show Read" button. It sets the
     show_read session variable to the opposite of its current value.
 
-    Args: request
-    Returns: sent_messages - queryset of sent messages,
-                inbox_messages - queryset of inbox messages,
-                show_read_messages - boolean,
-                sort_by_direction - string
+    Args: 
+            request (HttpRequest): the request object
+    Returns:
+            sent_messages (QuerySet): the user's sent messages,
+            inbox_messages (QuerySet): the user's inbox messages,
+            show_read_messages (bool): the new value of the show_read session variable
 
-    Called by: views.messages
+    Called by: views.messages() 
+    Function Calls: None
     '''
+
     current_user = request.user
     show_read_messages = request.session.get("show_read", False)
 
@@ -381,10 +459,23 @@ def show_hide_read_messages(request):
     return sent_messages, inbox_messages, show_read_messages
 
 
-
-
-# Used in views.profile
+# views.profile()
 def check_if_old_bid(bid, listing):
+    '''
+    This function checks if a bid is old. A bid is considered old if it is less than the
+    current price of the listing and less than the user's highest bid on the listing. It    
+    is called by the create_bid_info_object_list() function to determine if a bid is old.
+
+    Args:
+            bid (Bid): the bid object,
+            listing (Listing): the listing object
+    Returns:
+            boolean: True if the bid is old, False if the bid is not old
+
+    Called by: create_bid_info_object_list()
+    Function Calls: None
+    '''
+
     user_bids = Bid.objects.filter(user=bid.user, listing=listing)
     if user_bids.exists():
         user_highest_bid = user_bids.order_by("-amount").first()
@@ -396,22 +487,21 @@ def check_if_old_bid(bid, listing):
         return False
 
 
-
-
-# Used in views.listing
-
-        
-# views.profile
+# views.profile()
 def create_bid_info_object_list(user_active_bids):
     '''
     Create a list of UserBidInfo objects to pass to the profile view. These objects
     provide additional information used in profile.html template. 
 
-    Args: list of active bids for a user
-    Returns: list of UserBidInfo objects
+    Args: 
+            user_active_bids (QuerySet): the user's active bids
+    Returns:
+            bid_info_list (list): a list of UserBidInfo objects
 
     Called by: views.profile
+    Function Calls: check_if_old_bid()
     '''
+
     bid_info_list = []
 
     for bid in user_active_bids:
@@ -430,20 +520,124 @@ def create_bid_info_object_list(user_active_bids):
 
 
 
-# ACTIONS.PY
-    
-def charge_early_closing_fee(listing_id):
-    listing = Listing.objects.get(pk=listing_id)
-    site_account = User.objects.get(pk=12)
-    seller = listing.user
-    fee_amount = round(listing.starting_bid * decimal.Decimal(0.05), 2)
- 
-    a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+# MONEY TRANSFER FUNCTIONS
 
-    Transaction.objects.create(
-        sender=seller,
-        recipient=site_account,
-        amount=fee_amount,
-        listing=listing
-    )
+def transfer_to_escrow(winner, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    buyer = winner.user
+    amount = listing.price
+    escrow_account = User.objects.get(pk=11)
+    site_account = User.objects.get(pk=12)
+
+    if amount > buyer.balance: 
+        if listing.in_escrow == False:
+            subject = f"Insufficient funds for {listing.title}"
+            message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
+            funds to complete the transaction. Please add funds to your account to complete the purchase.
+            Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
+            the transaction.
+            """   
+        else: 
+            logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
+        
+    else:
+        subject = f"Your funds have been deposited in escrow for {listing.title}"
+        message = f"As soon as the buyer ships the item, you will receive confirmation and tracking information. Thank you for using Yard Sale!"
+
+        Transaction.objects.create(
+            sender=buyer,
+            recipient=escrow_account,
+            amount=amount,
+            listing=listing
+        )
+
+        buyer.balance -= amount
+        buyer.save()
+        escrow_account.balance += amount
+        escrow_account.save()
+        listing.in_escrow = True
+        listing.save()
+
+    send_message(site_account, buyer, subject, message)
+    
+
+def transfer_to_seller(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    seller = listing.user
+    amount = listing.price
+    buyer = listing.winner
+    escrow_account = User.objects.get(pk=11)
+    site_account = User.objects.get(pk=12)
+    admin = User.objects.get(pk=2)
+
+    if listing.in_escrow == True:
+        if amount > escrow_account.balance:
+
+            # Send Alert Message to Admin if escrow account is empty when it shouldn't be
+            subject = "(Err 01989) Escrow Account Empty Alert - Listing: {listing.title}"
+            message = f"""The escrow account is empty for {listing.title}. Please investigate and resolve this issue."""
+            send_message(site_account, admin, subject, message)
+
+            logger.error(f"(Err01989) Escrow account is empty for {listing.title}")
+            return False
+        else:
+
+            #TODO Make sure to add cancellation charge when user lists item, and in terms
+
+            # Check if the closing_date is less than 7 days after the listing date, signifying a cancellation
+            if listing.closing_date < listing.date + timezone.timedelta(days=7):
+                fee_amount = amount * decimal.Decimal(0.15)
+            else:
+                fee_amount = amount * decimal.Decimal(0.1)
+
+            amount -= fee_amount
+
+            fee_transaction = Transaction.objects.create(
+                sender=escrow_account,
+                recipient=site_account,
+                amount=fee_amount,
+                listing=listing
+            )
+            fee_transaction.save()
+
+            sell_transaction = Transaction.objects.create(
+                sender=escrow_account,
+                recipient=seller,
+                amount=amount,
+                listing=listing
+            )
+            sell_transaction.save()
+
+            escrow_account.balance -= amount
+            escrow_account.save()
+            seller.balance += amount
+            seller.save()
+
+            listing.in_escrow = False
+
+            tracking_number = random.randint(1000000000, 9999999999)
+
+            # Send confirmation message to seller after shipping confirmed
+            subject = f"Your tracking information has been received for {listing.title}"
+            message = f"""The funds held in escrow for {listing.title} have been released to your account. 
+                        Your balance should be updated within 1-2 business days. Here is the tracking 
+                        number for your records #{tracking_number}. Thank you for using Yard Sale!
+                        """
+            send_message(site_account, seller, subject, message)
+
+
+            # Send confirmation message to buyer after shipping confirmed
+            subject = f"{listing.title} has been shipped!"
+            message = f"""The funds held in escrow for {listing.title} have been released to the seller's account 
+                        and your item has been shipped. Here is your tracking number: #{tracking_number}. 
+                        Thank you for using Yard Sale!"""
+            send_message(site_account, buyer, subject, message)
+
+            return True
+    else:
+        logger.error(f"(Err01989) Unexpected conflict with escrow status for {listing.title}")
+        return False
+
+
+
 
