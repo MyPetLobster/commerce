@@ -284,8 +284,8 @@ def cancel_bid(request, listing_id):
 
     Called by: listing.html
     Functions Called: send_bid_cancelled_message_confirmation(), send_bid_cancelled_message_new_high_bidder(),
-                        send_bid_cancelled_message_seller_bids(), send_bid_cancelled_message_seller_no_bids(),
-                        helpers.send_message()
+                        get_bid_cancelled_message_seller_bids(), get_bid_cancelled_message_seller_no_bids(),
+                        send_message()
     '''
 
     current_user = request.user
@@ -316,7 +316,7 @@ def cancel_bid(request, listing_id):
             listing.save()
             subject_seller, message_seller = a_msg.get_bid_cancelled_message_seller_no_bids(request, listing.id)
 
-        helpers.send_message(site_account, seller, subject_seller, message_seller)
+        a_msg.send_message(site_account, seller, subject_seller, message_seller)
     else:
         contrib_messages.error(request, "Cannot cancel bid with less than 24 hours remaining.")
 
@@ -654,7 +654,6 @@ def delete_message(request, message_id):
 
 
 # WATCHLIST FUNCTIONS
-
 @login_required
 def remove_inactive_from_watchlist(request):
     '''
@@ -687,3 +686,50 @@ def remove_inactive_from_watchlist(request):
         "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
         "inactive_watchlist_items_count": Watchlist.objects.filter(user=current_user, listing__active=False).count()
     })
+
+
+
+
+
+
+
+
+# All functions in this file:
+#   - sort 
+#   - add_to_watchlist
+#   - remove_from_watchlist
+#   - close_listing
+#   - comment
+#   - move_to_escrow
+#   - cancel_bid
+#   - edit
+#   - change_password
+#   - delete_account
+#   - deposit
+#   - withdraw
+#   - confirm_shipping
+#   - sort_messages
+#   - mark_as_read
+#   - mark_all_as_read
+#   - delete_message
+#   - remove_inactive_from_watchlist
+
+
+
+
+# All outside functions used in this file:
+#   - auto_messages.py:
+#       - notify_mentions
+#       - send_bid_cancelled_message_confirmation
+#       - send_bid_cancelled_message_new_high_bidder
+#       - get_bid_cancelled_message_seller_bids
+#       - get_bid_cancelled_message_seller_no_bids
+#       - send_message
+#       - notify_all_early_closing
+
+#   - helpers.py:
+#       - charge_early_closing_fee
+#       - transfer_to_escrow
+#       - transfer_to_seller
+#       - show_hide_read_messages
+#       - set_message_sort

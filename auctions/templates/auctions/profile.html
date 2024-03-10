@@ -177,7 +177,7 @@
             <div class="profile-listings">
                 {% if user.listings.all.count == 0 %}
                     <div class="center-container active-listings-element">
-                        <p>No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
+                        <p>No active listings. <a class="italic" href="{% url 'create' %}">Want to change that?</a></p>
                     </div>
                 {% endif %}
                 <ul class="no-list-style-center active-listings-element">
