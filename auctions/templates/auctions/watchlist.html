@@ -1,45 +1,58 @@
 {% extends "auctions/layout.html" %} {% load custom_filters %} {% block title %}
 {{ current_user.username }}'s Watchlist {% endblock %}
 
+{% load static %}
 
 {% block body %}
 <div class="watchlist-content">
   <h1>{{ current_user.username }}'s Watchlist</h1>
   {% if listings %}
-  <ul>
+  <div class="watchlist-div">
+  <div class="watchlist-grid">
     {% for listing in listings %}
-    <li class="watchlist-listing">
-      <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
-      <div style="display: inline">
-        {% if listing.active == False %} -- BIDDING CLOSED -- <br />
-          {% if listing.winner == current_user %}
-            You Won! (See email for details on how to proceed.) 
-          {% else %} 
-            Winner: {{ listing.winner.username }} 
-          {% endif %} 
-        {% else %} 
-          Current Bid: {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}<br />
-          Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br />
-          {% with time_left_and_status=listing.id|get_time_left %}
-            <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>
-          {% endwith %} 
+    <div class="watchlist-listing">
+      <a href="{% url 'listing' listing.id %}">
+        {% if listing.image != "" %}
+            <div class="watchlist-thumb-div">
+                <img class="watchlist-thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
+            </div>
+        {% else %}
+            <div class="watchlist-thumb-div">
+                <img class="watchlist-thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
+            </div>
         {% endif %}
-
-      </div>
-      <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
+      </a>
+      <a class="watchlist-item-title" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+        <div class="watchlist-description">
+            {% if listing.active == False %} -- BIDDING CLOSED -- <br />
+              {% if listing.winner == current_user %}
+                You Won! (See email for details on how to proceed.) 
+              {% else %} 
+                Winner: {{ listing.winner.username }} 
+              {% endif %} 
+            {% else %} 
+              Current Bid: {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}<br />
+              Your Bid: {{ listing.id|get_user_high_bid:current_user.id }} <br />
+              {% with time_left_and_status=listing.id|get_time_left %}
+                <span class="{{ time_left_and_status.1 }}">{{ time_left_and_status.0 }}</span>
+              {% endwith %} 
+            {% endif %}
+        </div>
+        <form action="/remove_from_watchlist/{{ listing.id }}" method="post">
         {% csrf_token %}
         <input type="hidden" name="clicked-from" value="watchlist" />
         <button
-          class="btn btn-primary cancel-btn"
-          id="remove-from-watchlist-btn"
+          class="btn btn-primary"
+          id="remove-from-watchlist-button"
           type="submit"
         >
           Remove from Watchlist
         </button>
       </form>
-    </li>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
+  </div>
   {% else %}
   <p>Your watchlist is empty.</p>
   {% endif %}

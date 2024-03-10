@@ -488,12 +488,7 @@ footer {
 .cancel-btn:visited {
   background-color: $cancel-color-hover !important;
 }
-/* Watchlist Page - Small Buttons */
-#remove-from-watchlist-btn {
-  font-size: 0.7em;
-  padding: 4px 15px;
-  margin: 5px;
-}
+
 /* Profile Page - Deposit and Withdraw Buttons */
 #deposit-btn,
 #withdraw-btn {
@@ -758,29 +753,29 @@ footer {
     left: 20px;
   }
 }
-.watchlist-listing {
-  @include flex-column;
-  width: 600px;
-  gap: 0px;
-  align-items: flex-start;
-  div {
-    font-size: 0.8em;
-  }
-  a {
-    font-size: 0.9em;
-  }
-  a,
-  div {
-    width: 100%;
-    text-align: center;
-  }
-  form {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
-  }
-}
+// .watchlist-listing {
+//   @include flex-column;
+//   width: 600px;
+//   gap: 0px;
+//   align-items: flex-start;
+//   div {
+//     font-size: 0.8em;
+//   }
+//   a {
+//     font-size: 0.9em;
+//   }
+//   a,
+//   div {
+//     width: 100%;
+//     text-align: center;
+//   }
+//   form {
+//     width: 100%;
+//     display: flex;
+//     justify-content: center;
+//     margin-bottom: 12px;
+//   }
+// }
 
 
 /* CATEGORY and CATEGORIES PAGES */
@@ -1454,4 +1449,65 @@ footer {
   font-size: 0.7em;
   background-color: rgba(197, 81, 118, 0.563);
   padding: 10px;
+}
+
+
+.watchlist-div {
+  @include flex-column;
+  width: 90%;
+  padding: 8px;
+}
+.watchlist-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; 
+  gap: 40px;
+  margin: 20px;
+}
+.watchlist-listing {
+  @include flex-column;
+  
+}
+.watchlist-description {
+  text-align: center;
+  font-size: 0.8em;
+}
+.watchlist-thumb-img {
+  height: 150px;
+  width: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+  transition-duration: 0.2s;
+}
+.watchlist-thumb-img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.47), 0 0 25px rgba(97, 14, 39, 0.18);
+}
+.watchlist-item-title {
+  font-size: 0.8em;
+  text-align: center;
+  transition-duration: 0.2s;
+}
+.watchlist-item-title:hover {
+  color: $primary-pink;
+}
+/* Watchlist Page - Small Buttons */
+#remove-from-watchlist-button {
+  font-size: 0.7em;
+  padding: 4px 15px;
+  margin: 5px;
+  font-weight: bold;
+  color: $nav-color;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid $nav-color;
+  transition: 0.3s;
+}
+#remove-from-watchlist-button:hover,
+#remove-from-watchlist-button:active,
+#remove-from-watchlist-button:focus,
+#remove-from-watchlist-button:visited {
+  color: $text-color-light;
+  background-color: $cancel-color;
+  border: 1px solid $cancel-color;
 }

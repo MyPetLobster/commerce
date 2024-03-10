@@ -257,7 +257,7 @@
                     {% elif comment.user == current_user %}
                     <li><span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% elif comment.user == listing.user %}
-                    <li><span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}"> (seller) {{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li><span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% else %}
                     <li><span><a id="other-comment" class="bold"href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
                     {% endif %}
