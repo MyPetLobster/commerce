@@ -37,21 +37,15 @@ class Listing(models.Model):
 
 
 class Transaction(models.Model):
-    TRANSACTION_TYPE_CHOICES = [
-        ('deposit', 'Deposit'),
-        ('withdrawal', 'Withdrawal'),
-        ('transaction', 'Transaction'),
-    ]
     date = models.DateTimeField(auto_now_add=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_transactions")
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_transactions")
     listing = models.ForeignKey('Listing', on_delete=models.CASCADE, blank=True, null=True, related_name="transactions")
-    type = models.CharField(max_length=20, choices=TRANSACTION_TYPE_CHOICES, default='transaction')
     notes = models.TextField(max_length=1080, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.date} - {self.amount} - {self.sender} - {self.recipient} - {self.type} - {self.listing}"
+        return f"{self.date} - {self.amount} - {self.sender} - {self.recipient} - {self.listing}"
     
 
 class Message(models.Model):
