@@ -31,11 +31,15 @@ def sort(request):
     Form Fields (POST): title, seller, date, price
     Sort Order (POST): asc, desc
 
-    Args: request (HttpRequest): The request object
-    Returns: HttpResponseRedirect: Redirects to the index or listings page
+    Args: 
+            request (HttpRequest): The request object
+    Returns: 
+            HttpResponseRedirect: Redirects to the index or listings page
+
     Called by: index.html, listings.html
     Functions Called: None
     '''
+
     page = request.POST["page"]
     sort_by = request.POST["sort-by"]
     sort_by_direction = request.POST["sort-by-direction"]
@@ -87,12 +91,15 @@ def add_to_watchlist(request, listing_id):
     This function is called when the user clicks the "Add to Watchlist" button on the listing page.
     It creates a new watchlist item in the database and redirects to the listing page.
 
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to be added to the watchlist
-    Returns: HttpResponseRedirect: Redirects to the listing page
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
     Called by: listing.html
     Functions Called: None
     '''
+
     listing = Listing.objects.get(pk=listing_id)
     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, listing=listing)
     if created:
@@ -109,12 +116,15 @@ def remove_from_watchlist(request, listing_id):
     or the watchlist page. It deletes the watchlist item from the database and redirects to the page
     the user clicked from.
     
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to be removed from the watchlist
-    Returns: HttpResponseRedirect: Redirects to the listing or watchlist page
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing or watchlist page
     Called by: listing.html, watchlist.html
     Functions Called: None
     '''
+
     try:
         watchlist_item = Watchlist.objects.get(user=request.user, listing_id=listing_id)
         watchlist_item.delete()
@@ -140,13 +150,16 @@ def close_listing(request, listing_id):
     charges the early closing fee and sets the listing to inactive and cancelled. Users cannot close a
     listing with less than 24 hours remaining.
 
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to be closed
-    Returns: HttpResponseRedirect: Redirects to the index page
+    Returns: 
+            HttpResponseRedirect: Redirects to the index page
 
     Called by: listing.html
     Functions Called: charge_early_closing_fee, notify_all_early_closing
     '''
+
     try:
         listing = Listing.objects.get(pk=listing_id)
         
@@ -196,12 +209,16 @@ def comment(request, listing_id):
     object and saves it to the database. It then calls the notify_mentions function to notify any
     mentioned users.
     
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to comment on   
-    Returns: HttpResponseRedirect: Redirects to the listing page
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
+
     Called by: listing.html
     Functions Called: notify_mentions()
     '''
+
     listing = Listing.objects.get(pk=listing_id)
     comment = request.POST["comment"]
     anonymous = request.POST.get("anonymous", "off")
@@ -231,12 +248,16 @@ def move_to_escrow(request, listing_id):
     automatic transfer to escrow failed. It calls the transfer_to_escrow function to transfer the
     winner's funds to escrow.
 
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to be moved to escrow   
-    Returns: HttpResponseRedirect: Redirects to the listing page
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
+
     Called by: listing.html
     Functions Called: transfer_to_escrow()
     '''
+
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
     winner = listing.winner
@@ -254,15 +275,18 @@ def cancel_bid(request, listing_id):
     This function is called when a user clicks the "Cancel Bid" button on the listing page. It deletes
     all of the user's bids on the listing and then calls functions to notify all parties involved.
 
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             listing_id (int): The ID of the listing to cancel the bid on
-    Returns: HttpResponseRedirect: Redirects to the listing page
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
+
     Called by: listing.html
     Functions Called: send_bid_cancelled_message_confirmation(), send_bid_cancelled_message_new_high_bidder(),
                         send_bid_cancelled_message_seller_bids(), send_bid_cancelled_message_seller_no_bids(),
                         send_message()
-
     '''
+
     current_user = request.user
     listing = Listing.objects.get(pk=listing_id)
 
@@ -309,13 +333,16 @@ def edit(request, user_id):
     the user object and redirects to the profile page. If the form is invalid, it adds an error message
     and redirects to the profile page.
 
-    Args: request (HttpRequest): The request object
+    Args: 
+            request (HttpRequest): The request object
             user_id (int): The ID of the user to edit
-    Returns: HttpResponseRedirect: Redirects to the profile page
+    Returns: 
+            HttpResponseRedirect: Redirects to the profile page
+
     Called by: profile.html
     Functions Called: None
-
     '''
+
     user = User.objects.get(pk=user_id)
     form = UserInfoForm(request.POST, instance=user)
     if form.is_valid():
@@ -343,7 +370,7 @@ def change_password(request, user_id):
     Called by: profile.html
     Functions Called: None
     '''
-    
+
     user = User.objects.get(pk=user_id)
 
     old_password = request.POST["old_password"]
@@ -393,10 +420,24 @@ def delete_account(request, user_id):
 # Profile - Money Related Functions
 @login_required
 def deposit(request, user_id):
+    '''
+    This function is called when the user submits the deposit form on the profile page. It creates a
+    new transaction object and updates the user's balance. It then redirects to the profile page.
+
+    Args:
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to deposit money for
+    Returns:
+            HttpResponseRedirect: Redirects to the profile page
+
+    Called by: profile.html
+    Functions Called: None
+    '''
+
     fake_bank_account = User.objects.get(pk=13)
     user = User.objects.get(pk=user_id)
-    amount = request.POST["amount"]
-    amount = decimal.Decimal(amount)
+    amount = decimal.Decimal(request.POST["amount"])
+
     if amount <= 0:
         contrib_messages.error(request, "Deposit amount must be greater than 0")
         return redirect("profile", user_id=user_id)
@@ -411,43 +452,65 @@ def deposit(request, user_id):
     fake_bank_account.save()
     user.balance += decimal.Decimal(amount)
     user.save()
+    contrib_messages.success(request, "Deposit successful")
+
     return redirect("profile", user_id=user_id)
 
 
 @login_required
 def withdraw(request, user_id):
+    '''
+    This function is called when the user submits the withdraw form on the profile page. It creates a
+    new transaction object and updates the user's balance. It then redirects to the profile page.
+
+    Args:
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to withdraw money from
+    Returns:
+            HttpResponseRedirect: Redirects to the profile page
+
+    Called by: profile.html
+    Functions Called: None
+    '''
+
     fake_bank_account = User.objects.get(pk=13)
     user = User.objects.get(pk=user_id)
-    amount = request.POST["amount"]
-    amount = decimal.Decimal(amount)
+    amount = decimal.Decimal(request.POST["amount"])
     if amount <= 0:
         contrib_messages.error(request, "Withdrawal amount must be greater than 0")
-        return redirect("profile", user_id=user_id)
-    if amount > user.balance:
+    elif amount > user.balance:
         contrib_messages.error(request, "Insufficient funds")
-        return redirect("profile", user_id=user_id)
-    
-    Transaction.objects.create(
-        amount=amount,
-        sender=user,
-        recipient=fake_bank_account
-    )
+    else:
+        Transaction.objects.create(
+            amount=amount,
+            sender=user,
+            recipient=fake_bank_account
+        )
+        fake_bank_account.balance += amount
+        fake_bank_account.save()
+        user.balance -= amount
+        user.save()
+        contrib_messages.success(request, "Withdrawal successful")
 
-    fake_bank_account.balance += amount
-    fake_bank_account.save()
-    user.balance -= amount
-    user.save()
     return redirect("profile", user_id=user_id)
 
 
 @login_required
 def confirm_shipping(request, listing_id):
     '''
-    Seller will have a button on profile to confirm shipping once the 
-    winner's funds have been transferred to escrow.
+    Seller will have a button on profile to confirm shipping once the winner's funds have been 
+    transferred to escrow. Once pressed, money will be transferred from escrow to seller.
 
-    Once pressed, money will be transferred from escrow to seller.
+    Args:
+            request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to confirm shipping for 
+    Returns:
+            HttpResponseRedirect: Redirects to the listing page
+
+    Called by: profile.html
+    Functions Called: transfer_to_seller()
     '''
+
     listing = Listing.objects.get(pk=listing_id)
     if listing.shipped == False:
         if transfer_to_seller(listing_id):
@@ -464,8 +527,6 @@ def confirm_shipping(request, listing_id):
     return redirect("listing", listing_id=listing_id)
 
 
-
-
 # MESSAGES FUNCTIONS
 def sort_messages(request):
     ''' 
@@ -474,13 +535,15 @@ def sort_messages(request):
     form field. It then calls the show_hide_read_messages and set_message_sort functions
     to handle the sorting and filtering of messages to pass to the messages.html template.
 
-    Args: request (HttpRequest): The request object
-    Returns: HttpResponseRedirect: Redirects to the messages page
+    Args: 
+        request (HttpRequest): The request object
+    Returns: 
+        HttpResponseRedirect: Redirects to the messages page
 
     Called by: messages.html
-    Helper Functions Called: show_hide_read_messages, set_message_sort 
-    
+    Functions Called: show_hide_read_messages, set_message_sort 
     '''
+
     current_user = request.user
     
     if request.method == "POST":
@@ -502,16 +565,42 @@ def sort_messages(request):
 
 
 def mark_as_read(request, message_id):
+    '''
+    This function is called when the user clicks the "Mark as Read" button on the messages page.
+    It toggles the read field of the message and then redirects to the messages page.
+
+    Args:
+            request (HttpRequest): The request object
+            message_id (int): The ID of the message to mark as read
+    Returns:
+            HttpResponseRedirect: Redirects to the messages page
+
+    Called by: messages.html    
+    Functions Called: None
+    '''
+
     message = Message.objects.get(pk=message_id)
-    if message.read == False:
-        message.read = True
-    else:
-        message.read = False
+    message.read = not message.read
     message.save()
+
     return HttpResponseRedirect(reverse("messages", args=(request.user.id,)))
 
 
 def mark_all_as_read(request, user_id):
+    '''
+    This function is called when the user clicks the "Mark All as Read" button on the messages page.
+    It sets the read field of all messages to True and then redirects to the messages page.
+
+    Args:
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to mark all messages as read for
+    Returns:
+            HttpResponseRedirect: Redirects to the messages page
+
+    Called by: messages.html
+    Functions Called: None
+    '''
+
     messages = Message.objects.filter(recipient=request.user)
     for message in messages:
         message.read = True
@@ -520,6 +609,21 @@ def mark_all_as_read(request, user_id):
 
 
 def delete_message(request, message_id):
+    '''
+    This function is called when the user clicks the "Delete" button on the messages page. It adds
+    the user to the deleted_by field of the message and then redirects to the messages page. This 
+    is so that the message is not deleted from the db and can still be viewed by the other party.
+
+    Args:
+            request (HttpRequest): The request object
+            message_id (int): The ID of the message to delete
+    Returns:
+            HttpResponseRedirect: Redirects to the messages page
+
+    Called by: messages.html
+    Functions Called: None
+    '''
+
     current_user = request.user
     message = Message.objects.get(pk=message_id)
     message.deleted_by.add(current_user)
