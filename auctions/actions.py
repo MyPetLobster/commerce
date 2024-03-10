@@ -1,7 +1,7 @@
 from django.contrib import messages as contrib_messages
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Lower
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -13,7 +13,7 @@ from . import auto_messages as a_msg
 from . import helpers
 from .classes import UserInfoForm
 from .models import Bid, Listing, Watchlist, User, Message, Comment, Transaction
-from .tasks import transfer_to_escrow, transfer_to_seller, charge_early_closing_fee, send_message
+from .tasks import transfer_to_escrow, transfer_to_seller, send_message
 
 
 logger = logging.getLogger(__name__)
@@ -84,18 +84,8 @@ def add_to_watchlist(request, listing_id):
     if created:
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     else:
-        listings = Listing.objects.all()
-        current_user = request.user
         contrib_messages.add_message(request, contrib_messages.ERROR, "Listing already on watchlist")
-        messages = contrib_messages.get_messages(request)
-        unread_messages = Message.objects.filter(recipient=current_user, read=False)
-        unread_message_count = unread_messages.count()
-        return render(request, "auctions/index.html" , {
-            "listings": listings,
-            "current_user": current_user,
-            "messages": messages,
-            "unread_message_count": unread_message_count
-        })
+        return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
 @login_required
@@ -106,56 +96,55 @@ def remove_from_watchlist(request, listing_id):
     except Watchlist.DoesNotExist:
         contrib_messages.add_message(request, contrib_messages.ERROR, "Listing not on watchlist")
     clicked_from = request.POST["clicked-from"]
+
     if clicked_from == "listing":
         return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
     elif clicked_from == "watchlist":
         return HttpResponseRedirect(reverse("watchlist"))
+    else:
+        raise Http404("Invalid or missing 'clicked-from' value in the request")
     
 
 @login_required
 def close_listing(request, listing_id):
-
-    listing = Listing.objects.get(pk=listing_id)
-
-    # Only the seller can close the listing
-    if request.user == listing.user:
+    try:
+        listing = Listing.objects.get(pk=listing_id)
+        
+        # Only the seller can close the listing
+        if request.user != listing.user:
+            contrib_messages.error(request, "You cannot close a listing that you did not create.")
+            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        
         starting_bid = listing.starting_bid
         highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
+        highest_bid = highest_bid.amount if highest_bid else starting_bid
 
-        if highest_bid is None:
-            highest_bid = listing.starting_bid
-        else:
-            highest_bid = highest_bid.amount
-
-        try:
+        if listing.closing_date - timezone.now() < timezone.timedelta(hours=24):
             # If there are less than 24 hours left, the listing cannot be closed manually
-            if listing.closing_date - timezone.now() < timezone.timedelta(hours=24):
-                contrib_messages.error(request, "Listing cannot be closed with less than 24 hours remaining.")
-                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
-            
-            # If there are active bids, there will be 24 hour delay before closing
-            # and all bidders will be notified
-            if highest_bid > starting_bid:
-                listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
-                listing.save()
-                contrib_messages.error(request, "Listing cannot be closed with active bids. There will be a 24 hour delay before closing.")
+            contrib_messages.error(request, "Listing cannot be closed with less than 24 hours remaining.")
+            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
-                a_msg.notify_all_early_closing(listing.id)
-                return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        if highest_bid > starting_bid:
+            # If there are active bids, there will be 24 hour delay before closing
+            listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
+            listing.save()
+            contrib_messages.info(request, "You have active bids on this listing. There will be a 24 hour delay before closing.")
+            a_msg.notify_all_early_closing(listing.id)
+            return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+        else:
             # No bids, charge early closing fee and close listing
-            else:
-                try:
-                    charge_early_closing_fee(listing_id)
-                    listing.cancelled = True
-                    listing.active = False
-                    listing.save()
-                except:
-                    logger.error(f"(Err01989) Unexpected charging early closing fee {listing_id}")
-                    contrib_messages.error(request, "Unexpected error charging closing fee contact admins.")
-            
-        except:
-            logger.error(f"(Err01989) Unexpected error closing listing for listing ID {listing_id}")
-            contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
+            helpers.charge_early_closing_fee(listing_id)
+            listing.cancelled = True
+            listing.active = False
+            listing.save()
+
+    except Listing.DoesNotExist:
+        logger.error(f"(Err22222) Unexpected error closing listing ID {listing_id}. Listing does not exist.")
+        contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
+
+    except Exception as e:
+        logger.error(f"(Err01989) Unexpected error closing listing ID {listing_id}. {e}")
+        contrib_messages.error(request, "Unexpected error closing listing, contact admins.")
 
     return HttpResponseRedirect(reverse("index"))
 

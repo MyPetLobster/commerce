@@ -130,29 +130,6 @@ def check_if_bids_funded():
 
 
 
-def charge_early_closing_fee(listing_id):
-
-    listing = Listing.objects.get(pk=listing_id)
-    site_account = User.objects.get(pk=12)
-    seller = listing.user
-    amount = listing.starting_bid
-    fee_amount = amount * decimal.Decimal(0.05)
-    fee_amount = round(fee_amount, 2)
-    fee_amount_str = f"{fee_amount:,.2f}"
-
-    subject = f"Early Closing Fee for '{listing.title}'"
-    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
-                ${fee_amount_str}. This fee will be deducted from your balance directly. If this overdraws your account, you 
-                have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
-                Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
-    send_message(site_account, seller, subject, message)
-
-    Transaction.objects.create(
-        sender=seller,
-        recipient=site_account,
-        amount=fee_amount,
-        listing=listing
-    )
 
 
 def transfer_to_escrow(winner, listing_id):

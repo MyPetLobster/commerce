@@ -4,13 +4,14 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
+import decimal
 import logging
 import math
 from datetime import timedelta
 
 from . import auto_messages as a_msg 
 from .classes import UserBidInfo
-from .models import Bid, Listing, Watchlist, User, Message
+from .models import Bid, Listing, Watchlist, User, Message, Transaction
 from .tasks import send_message, transfer_to_escrow
 
 
@@ -429,3 +430,24 @@ def create_bid_info_object_list(user_active_bids):
 
     # sort the list by oldest listing to newest listing
     bid_info_list = sorted(bid_info_list, key=lambda x: x.user_bid.listing.date)
+
+
+
+
+# ACTIONS.PY
+    
+def charge_early_closing_fee(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    seller = listing.user
+    fee_amount = round(listing.starting_bid * decimal.Decimal(0.05), 2)
+ 
+    a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+
+    Transaction.objects.create(
+        sender=seller,
+        recipient=site_account,
+        amount=fee_amount,
+        listing=listing
+    )
+
