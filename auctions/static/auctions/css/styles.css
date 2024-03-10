@@ -1782,4 +1782,50 @@ input {
   color: #c55176;
 }
 
+.winner-alert-div,
+.seller-alert-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: block;
+  color: #f4f4f4;
+  background-color: #7a9196;
+  height: auto;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #f4f4f4;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+  font-size: 0.9em;
+  width: 600px;
+}
+.winner-alert-div input,
+.seller-alert-div input {
+  margin-bottom: 10px;
+}
+.winner-alert-div p,
+.seller-alert-div p {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.small-font {
+  font-size: 0.7em;
+}
+
+.smaller-font {
+  font-size: 0.5em;
+}
+
+.listing-cancelled-div p {
+  font-size: 1.3em;
+  text-align: center;
+}
+
 /*# sourceMappingURL=styles.css.map */
