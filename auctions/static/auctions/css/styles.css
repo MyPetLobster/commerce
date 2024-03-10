@@ -318,10 +318,21 @@ a:hover {
 }
 
 /* Categories Page - category description on hover */
-.visible-categories {
+.vis-cat-auth {
   display: block;
   position: absolute;
-  top: 49%;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+  color: #c55176;
+}
+
+.vis-cat-no-auth {
+  display: block;
+  position: absolute;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;

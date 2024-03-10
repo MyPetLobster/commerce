@@ -15,21 +15,38 @@
     {% endfor %}
   </ul>
 </div>
+{% if current_user.is_authenticated %}
+  <div id="auth-check-categories" class="hidden"></div>
+{% endif %}
 
 <script>
   localStorage.setItem('activePage', 'categories');
 
-
-  document.querySelectorAll(".page-content li").forEach((li) => {
+  const authCheck = document.getElementById("auth-check-categories");
+  if (authCheck) {
+    document.querySelectorAll(".page-content li").forEach((li) => {
       li.addEventListener("mouseover", () => {
       li.querySelector(".description").classList.remove("hidden");
-      li.querySelector(".description").classList.add("visible-categories");
+      li.querySelector(".description").classList.add("vis-cat-auth");
       });
       li.addEventListener("mouseout", () => {
-      li.querySelector(".description").classList.remove("visible-categories");
       li.querySelector(".description").classList.add("hidden");
+      li.querySelector(".description").classList.remove("vis-cat-auth");
       });
-  });
+    });
+  } else {
+    document.querySelectorAll(".page-content li").forEach((li) => {
+      li.addEventListener("mouseover", () => {
+      li.querySelector(".description").classList.remove("hidden");
+      li.querySelector(".description").classList.add("vis-cat-no-auth");
+      });
+      li.addEventListener("mouseout", () => {
+      li.querySelector(".description").classList.add("hidden");
+      li.querySelector(".description").classList.remove("vis-cat-no-auth");
+      });
+    });
+  }
+  
 </script>
 
 {% endblock %}

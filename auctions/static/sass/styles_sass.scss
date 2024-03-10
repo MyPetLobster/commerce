@@ -306,16 +306,29 @@ a:hover {
   }
 }
 /* Categories Page - category description on hover */
-.visible-categories {
+.vis-cat-auth {
   display: block;
   position: absolute;
-  top: 49%;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+  color: $primary-pink;
+  
+}
+.vis-cat-no-auth {
+  display: block;
+  position: absolute;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
   text-align: center;
   color: $primary-pink;
 }
+
+
 /* Profile Page - Edit Info, Change Password, Deposit and Withdraw Forms */
 /* Listing Page - Leave Comment Form */
 .popup-form {
