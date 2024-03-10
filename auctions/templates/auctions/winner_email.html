@@ -8,11 +8,12 @@
 </head>
 <body>
     <h1 style="text-align: center">Congratulations!</h1>
-    <h3 style="text-align: center">You are the winner of the auction for "{{ listing_title }}".</h3>
-    <p>${{ listing_price }} will be withdrawn from your account when shipping confirmation is confirmed. 
-        Shipping details will be sent to you via email.
+    <h3 style="text-align: center">Congrats, {winner.username}! You are the winner of the auction for "{{ listing_title }}".</h3>
+    <p>${{ listing_price }} will be withdrawn from your account and placed into escrow. Once the seller confirms the item has 
+        shipped and we receive the tracking number, we will release the funds to the seller and send you confirmation and tracking information.
     </p>
-    <p>Any question? Try reaching out to the seller ({{ seller_name }}) at {{ seller_email }}</p>
+    <p>Please do not message the seller directly with any disputes or issues. If you have any problems, please contact us at 
+        <a href="mailto:{{ admin_email }}">Yard Sale Team</a> and we will help you resolve the issue.</p>
     <p style="text-align: center">Thanks from the Yard Sale team!</p>
 </body>
 </html>

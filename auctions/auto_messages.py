@@ -1,14 +1,22 @@
+from django.conf import settings
 from django.contrib import messages as contrib_messages
+from django.core.mail import send_mail
+from django.template.exceptions import TemplateDoesNotExist
+from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
 
-from datetime import timedelta
+
 import logging
+import os
 import random
+import smtplib
 
 from .models import Listing, User, Bid
 from .tasks import send_message
 
 
+my_email = os.environ.get('MY_EMAIL') 
 logger = logging.getLogger(__name__)
 
 
@@ -273,3 +281,69 @@ def send_shipping_confirmation_messages(listing_id):
     
     send_message(site_account, seller, subject_seller, message_seller)
     send_message(site_account, buyer, subject_buyer, message_buyer)
+
+
+
+# PERIODIC TASKS MESSAGES
+def send_bid_removed_message(user, listing, time_left_str):
+    site_account = User.objects.get(pk=12)
+    subject = f"Insufficient funds for {listing.title}"
+    message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled and removed. 
+                At the time of this message, there are {time_left_str} left in the auction. Feel free to deposit 
+                funds and place another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
+    send_message(site_account, user, subject, message)
+
+
+
+
+# EMAIL MESSAGES
+def email_winner(winner, listing):
+    try:
+        # Get the winner's email
+        winner_username = winner.username
+
+        # Create the email subject
+        subject = f"Congratulations! You have the winning bid for '{listing.title}' (ID: {listing.id})"
+
+        listing_price = listing.price
+        listing_title = listing.title
+        seller_name = listing.user.username
+        seller_email = listing.user.email
+
+        # Create the email message
+        message = render_to_string('auctions/winner_email.html', {
+            'admin_email': my_email,
+            'winner_username': winner_username,
+            'listing_title': listing_title,
+            'listing_price': listing_price,
+            'seller_name': seller_name,
+            'seller_email': seller_email
+        })
+        
+        #TODO currently using MY_EMAIL as the recipient for testing, change to winner_email
+        # Send the email
+        send_mail(
+            subject,
+            strip_tags(message),
+            settings.EMAIL_HOST_USER,
+            [my_email,],
+            html_message=message
+        )
+    except (smtplib.SMTPException, smtplib.SMTPAuthenticationError, TemplateDoesNotExist) as e:
+        logger.error(f"An error occurred while notifying the winner: {str(e)}")
+        send_error_msg_to_admin(str(e))
+
+
+# Local Functions for this file
+def send_error_msg_to_admin(error_message):
+    try:
+        site_account = User.objects.get(pk=12)
+        admin = User.objects.get(pk=2)
+        subject = "An error occurred in the Yard Sale application"
+        message = error_message
+        send_message(site_account, admin, subject, message)
+
+    except (smtplib.SMTPException, smtplib.SMTPAuthenticationError) as e:
+        logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
