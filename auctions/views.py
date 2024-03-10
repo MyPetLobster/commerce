@@ -16,8 +16,8 @@ from datetime import timedelta
 
 from . import auto_messages
 from . import helpers
+from . import tasks
 from .models import Bid, Category, Comment, Listing, Message, Transaction, User, Watchlist
-from .tasks import send_message, check_if_bids_funded
 from .classes import CommentForm, ListingForm, UserBidInfo, UserInfoForm
 
 
@@ -88,7 +88,7 @@ def index(request):
     Returns:
         HttpResponse: The index template
 
-    Function Calls: check_if_bids_funded(), helpers.set_inactive()
+    Function Calls: check_if_bids_funded(), tasks.set_inactive()
     Optional Function Calls: maintenance.force_set_closing_dates()
     '''
 
@@ -96,8 +96,8 @@ def index(request):
     # maintenance.force_set_closing_dates()
     
     # Celery periodic task here for now
-    check_if_bids_funded()
-    helpers.set_inactive()
+    tasks.check_if_bids_funded()
+    tasks.set_inactive()
 
     current_user = request.user
     listings = Listing.objects.all().order_by("-date")
@@ -334,7 +334,7 @@ def messages(request, user_id):
             recipient = User.objects.get(pk=recipient_id)
             subject = request.POST["subject"]
             message = request.POST["message"]
-            send_message(request.user, recipient, subject, message)
+            tasks.send_message(request.user, recipient, subject, message)
             return HttpResponseRedirect(reverse("messages", args=(user_id,)))
 
     # Get messages filtered by show/hide read messages

@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.html import strip_tags
 
 from collections import defaultdict
+from datetime import timedelta
 import decimal
 import logging
 import os
@@ -16,11 +17,81 @@ import random
 import smtplib
 
 from . import auto_messages as a_msg
+from .helpers import declare_winner
 from .models import Bid, Listing, User, Transaction, Message
+
 
 
 logger = logging.getLogger(__name__)
 my_email = os.environ.get('MY_EMAIL') 
+
+
+
+# Periodic Tasks
+# Used in - views.index
+@shared_task
+def check_if_bids_funded():
+    '''
+    Should be run once every hour. Also used upon reload of index page
+    '''
+    # Retrieve all the active bids that are closing within the next 24 hours
+    active_bids = Bid.objects.filter(listing__active=True,
+                                      listing__closing_date__gt=timezone.now(),
+                                      listing__closing_date__lt=timezone.now() + timezone.timedelta(days=1))
+
+    # Dictionary to hold users and listings so we only message each user once for each unique listing
+    # Even if we are deleting multiple bids they have placed
+    messaged_users_listings = defaultdict(int)
+
+    site_account = User.objects.get(pk=12)
+
+    for bid in active_bids:
+        user = bid.user
+        user_balance = user.balance
+
+        listing = bid.listing
+
+        # Update the listing.price to highest bid each iteration
+        highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+        listing.price = highest_bid.amount
+        listing.save()
+
+        now = timezone.now()
+        listing_closing_date = listing.closing_date
+        cutoff_date = listing_closing_date - timezone.timedelta(days=1)
+        listing_price = listing.price
+
+        time_left = listing_closing_date - now
+        hours_left = time_left.total_seconds() // 3600
+        minutes_left = (time_left.total_seconds() % 3600) // 60
+        time_left_str = f"{int(hours_left)} hours and {int(minutes_left)} minutes"
+
+        if now > cutoff_date and user_balance < listing_price:
+            bid.delete()
+            if not messaged_users_listings[(user.id, listing.id)]:
+                subject = f"Insufficient funds for {listing.title}"
+                message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled and removed. 
+                            At the time of this message, there are {time_left_str} left in the auction. Feel free to deposit 
+                            funds and place another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
+                send_message(site_account, user, subject, message)
+                messaged_users_listings[(user.id, listing.id)] = 1
+        
+
+@shared_task
+def set_inactive():
+    listings = Listing.objects.filter(active=True)
+    for listing in listings:
+        if listing.closing_date == None:
+            listing.closing_date = listing.date + timedelta(days=7)
+        if listing.closing_date < timezone.now():
+            listing.active = False
+            listing.save()
+            try: 
+                declare_winner(listing)
+            except:
+                pass
+        else:
+            pass
 
 
 # Local Functions for this file
@@ -73,58 +144,6 @@ def check_listing_expiration():
     except Exception as e:
         logger.error(f"An unexpected error occurred while checking listing expiration: {str(e)}")
         send_error_notification(str(e))
-
-
-@shared_task
-def check_if_bids_funded():
-    '''
-    Should be run once every hour. Also used upon reload of index page
-    '''
-    # Retrieve all the active bids that are closing within the next 24 hours
-    active_bids = Bid.objects.filter(listing__active=True,
-                                      listing__closing_date__gt=timezone.now(),
-                                      listing__closing_date__lt=timezone.now() + timezone.timedelta(days=1))
-
-    # Dictionary to hold users and listings so we only message each user once for each unique listing
-    # Even if we are deleting multiple bids they have placed
-    messaged_users_listings = defaultdict(int)
-
-    site_account = User.objects.get(pk=12)
-
-    for bid in active_bids:
-        user = bid.user
-        user_balance = user.balance
-
-        listing = bid.listing
-
-        # Update the listing.price to highest bid each iteration
-        highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
-        listing.price = highest_bid.amount
-        listing.save()
-
-        now = timezone.now()
-        listing_closing_date = listing.closing_date
-        cutoff_date = listing_closing_date - timezone.timedelta(days=1)
-        listing_price = listing.price
-
-        time_left = listing_closing_date - now
-        hours_left = time_left.total_seconds() // 3600
-        minutes_left = (time_left.total_seconds() % 3600) // 60
-        time_left_str = f"{int(hours_left)} hours and {int(minutes_left)} minutes"
-
-        if now > cutoff_date and user_balance < listing_price:
-            bid.delete()
-            if not messaged_users_listings[(user.id, listing.id)]:
-                subject = f"Insufficient funds for {listing.title}"
-                message = f"""As per the terms of the auction, your bid for '{listing.title}' has been cancelled and removed. 
-                            At the time of this message, there are {time_left_str} left in the auction. Feel free to deposit 
-                            funds and place another bid. We apologize for any inconvenience. Thank you for using Yard Sale!"""
-                send_message(site_account, user, subject, message)
-                messaged_users_listings[(user.id, listing.id)] = 1
-        
-
-
-
 
 
 

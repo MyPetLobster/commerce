@@ -20,50 +20,54 @@ logger = logging.getLogger(__name__)
 
 
 
-# TODO Maybe move these to tasks.py
-
-# Used in - views.index, views.listings
-def set_inactive():
-    listings = Listing.objects.filter(active=True)
-    for listing in listings:
-        if listing.closing_date == None:
-            listing.closing_date = listing.date + timedelta(days=7)
-        if listing.closing_date < timezone.now():
-            listing.active = False
-            listing.save()
-            try: 
-                declare_winner(listing)
-            except:
-                pass
-        else:
-            pass
-
-
-
 
 # General Utility Helper Functions 
+
+
+# LISTING.PY
 def get_listing_values(request, listing):
+    '''
+    This function retrieves the winner, user's bid, difference between user's bid and
+    the current price, and whether the listing is on the user's watchlist. It is called
+    by the views.listing view to provide additional information to the listing.html template.
+
+    Args: 
+            request (HttpRequest): the request object,
+            listing (Listing): the listing object
+    Returns:
+            winner (User): the winner of the listing,
+            user_bid (Bid): the user's highest bid,
+            difference (decimal): the difference between the user's bid and the current price,
+            watchlist_item (Watchlist): the watchlist item if it exists, otherwise "not on watchlist"
+    
+    Called by: views.listing
+    Function Calls: None
+    '''
+    
+    winner = None
+    user_bid = None
+    difference = None
+    watchlist_item = "not on watchlist"
+
+
     try:
-        winner = User.objects.get(won_listings=listing)
-    except User.DoesNotExist:
-        winner = None
+        winner = listing.winner
+    except AttributeError:
+        pass 
     try:
         user_bid = Bid.objects.filter(listing=listing, user=request.user).order_by("-amount").first()
-    except:
-        user_bid = None
-    try:
-        difference = listing.price - user_bid.amount
-    except:
-        difference = None
-    try:
-        watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
-    except:
-        watchlist_item = None
-    if watchlist_item.exists():
-        pass
-    else:
-        watchlist_item = "not on watchlist"
+    except Exception as e:
+        pass 
 
+    if user_bid:
+        difference = listing.price - user_bid.amount
+
+    if request.user.is_authenticated:
+        try:
+            watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+        except Watchlist.DoesNotExist:
+            pass
+            
     return winner, user_bid, difference, watchlist_item
 
 
@@ -324,10 +328,6 @@ def check_bids_funds(request, listing_id):
 
 
 
-
-
-
-
 # Used in views.messages, actions.sort_messages
 def set_message_sort(sort_by_direction, sent_messages, inbox_messages):
     '''
@@ -344,13 +344,9 @@ def set_message_sort(sort_by_direction, sent_messages, inbox_messages):
 
     Called by: views.messages, actions.sort_messages
     '''
-    
-    if sort_by_direction == "oldest-first":
-        sent_messages = sent_messages.order_by("date")
-        inbox_messages = inbox_messages.order_by("date")
-    else:
-        sent_messages = sent_messages.order_by("-date")
-        inbox_messages = inbox_messages.order_by("-date")
+    date = "date" if sort_by_direction == "oldest-first" else "-date"
+    sent_messages = sent_messages.order_by(date)
+    inbox_messages = inbox_messages.order_by(date)
 
     return sent_messages, inbox_messages, sort_by_direction
 
