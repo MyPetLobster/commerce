@@ -26,9 +26,9 @@
                     {% for listing in listings %}
                         <a class="search-listing-div" href="{% url 'listing' listing.id %}">
                             {% if listing.image %}
-                                <img src="{{ listing.image }}" alt="{{ listing.title }}" class="search-thumb-img">
+                                <img src="{{ listing.image }}" alt="{{ listing.title }}" class="search-thumb-img" alt="thumbnail image of {{ listing.title }}">
                             {% else %}
-                                <img src="{% static 'images/No_Image_Available.jpg' %}" alt="{{ listing.title }}" class="search-thumb-img">
+                                <img src="{% static 'images/No_Image_Available.jpg' %}" alt="{{ listing.title }}" class="search-thumb-img" alt="no image available">
                             {% endif %}
                             <p class="search-result-desc">{{ listing.title|truncatechars:25 }} - ${{ listing.price }}</p>
                         </a>

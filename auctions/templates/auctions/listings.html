@@ -78,11 +78,11 @@
                         <a href="{% url 'listing' listing.id %}">
                             {% if listing.image != "" %}
                                 <div class="thumb-div">
-                                    <img class="thumb-img" src="{{ listing.image }}">
+                                    <img class="thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
                                 </div>
                             {% else %}
                                 <div class="thumb-div">
-                                    <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}">
+                                    <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
                                 </div>
                             {% endif %}
                         </a>
@@ -158,11 +158,11 @@
                         <a href="{% url 'listing' listing.id %}">
                             {% if listing.image != "" %}
                                 <div class="thumb-div">
-                                    <img class="thumb-img" src="{{ listing.image }}">
+                                    <img class="thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
                                 </div>
                             {% else %}
                                 <div class="thumb-div">
-                                    <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}">
+                                    <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
                                 </div>
                             {% endif %}
                         </a>

@@ -60,7 +60,7 @@
     <h2 class="page-heading-h2">{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
-        <img class="listing-img" src="{{ listing.image }}">
+        <img class="listing-img" src="{{ listing.image }}" alt="image of {{ listing.title }}">
     {% endif %}
     <div class="listing-desc">
         <p class="fields-div">
