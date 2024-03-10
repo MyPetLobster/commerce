@@ -408,6 +408,7 @@ def transactions(request, user_id):
 def watchlist(request):
     watchlist_items = Watchlist.objects.filter(user=request.user)
     listings = [item.listing for item in watchlist_items]
+    listings.sort(key=lambda x: x.date)
     current_user = request.user
     return render(request, "auctions/watchlist.html", {
         "listings": listings,

@@ -1698,14 +1698,14 @@ input {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 90%;
+  width: 70%;
   padding: 8px;
 }
 
 .watchlist-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 40px;
   margin: 20px;
 }
