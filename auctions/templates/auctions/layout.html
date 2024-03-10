@@ -116,12 +116,12 @@
         </div>
 
         <hr class="divider">
-
-        <div class="center-container">
-            <p style="text-align:center;"><span class="bold">🥴 from clutter to cash 🤑<br /><br />
-            <span style="font-size:0.8em;">Have any questions or comments? <a id="msg-admin-link">Send us a message,</a> we're here to help!</span></p>
-        </div>
-
+        {% if current_user.is_authenticated %}
+            <div class="center-container">
+                <p style="text-align:center;"><span class="bold">🥴 from clutter to cash 🤑<br /><br />
+                <span style="font-size:0.8em;">Have any questions or comments? <a id="msg-admin-link">Send us a message,</a> we're here to help!</span></p>
+            </div>
+        {% endif %}
     <p></p>
 
     {% if current_user.is_authenticated %}

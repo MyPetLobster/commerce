@@ -137,21 +137,21 @@ def listing(request, listing_id):
     winner, user_bid, difference, watchlist_item = helpers.get_listing_values(request, listing)
     messages = contrib_messages.get_messages(request)
     comments = Comment.objects.filter(listing=listing)
-    unread_messages = Message.objects.filter(recipient=current_user, read=False)
-    unread_message_count = unread_messages.count()
+    if current_user.is_authenticated:
+        unread_message_count = Message.objects.filter(recipient=current_user, read=False).count()
     time_left = helpers.calculate_time_left(listing_id)
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "winner": winner,
         "comments": comments,
-        "comment_form": CommentForm(),
+        "comment_form": CommentForm() if current_user.is_authenticated else None,
         "time_left": time_left,
-        "user_bid": user_bid,
-        "difference": difference,
-        "watchlist_item": watchlist_item,
+        "user_bid": user_bid if current_user.is_authenticated else None,
+        "difference": difference if user_bid else None,
+        "watchlist_item": watchlist_item if current_user.is_authenticated else None,
         "current_user" : request.user,
-        "unread_message_count": unread_message_count,
+        "unread_message_count": unread_message_count if current_user.is_authenticated else None,
         "messages": messages
     })
 
