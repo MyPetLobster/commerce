@@ -15,6 +15,7 @@
 {% block body %}
     <div class="page-content">
         <h2 id="active-listings" class="page-heading-h2">Active Listings</h2>
+        {% if current_user.is_authenticated %}
 
         <form
             class="sort-by-form"
@@ -39,6 +40,7 @@
             <p class="sort-by-option" data-sort-by="date">Listing Date</p>
             <p class="sort-by-option" data-sort-by="price">Price</p>
         </div>
+        {% endif %}
 
         <div class="full-or-title">
             <p>

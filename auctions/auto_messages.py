@@ -246,6 +246,37 @@ def get_bid_cancelled_message_seller_no_bids(request, listing_id):
     return subject_seller, message_seller
 
 
+# WITHDRAW FUNDS MESSAGES - actions.withdraw()
+def send_message_withdrawal_success(user_id, amount):
+    site_account = User.objects.get(pk=12)
+    user = User.objects.get(pk=user_id)
+    subject = "Withdrawal Request Approved"
+    message = f"Your withdrawal request for {format_as_currency(amount)} has been approved. Thank you for using Yard Sale!"
+    send_message(site_account, user, subject, message)
+
+def send_message_withdrawal_72(user_id, amount, total_funds_72, first_listing_to_close):
+    site_account = User.objects.get(pk=12)
+    user = User.objects.get(pk=user_id)
+    subject = "Withdrawal Request Denied"
+    message = f"""Your withdrawal request for {format_as_currency(amount)} has been processed. However, this has left your account with 
+                insufficient funds to cover active bids you've made on listings closing in less than 72 hours. As of the time of this message,
+                your minimum balance needed to cover these bids is {format_as_currency(total_funds_72)} and your current balance is 
+                {format_as_currency(user.balance)}. Our systems will automatically cancel and remove these bids if your balance is insufficient
+                for each listing when it has 24 hours remaining. The listing that will expire first is '{first_listing_to_close.title}'. 
+                We apologize for any inconvenience. Thank you for using Yard Sale!"""
+    send_message(site_account, user, subject, message)
+
+def send_message_deny_withdrawal(user_id, amount, total_funds_24):
+    site_account = User.objects.get(pk=12)
+    user = User.objects.get(pk=user_id)
+    subject = "Withdrawal Request Denied"
+    message = f"""Your withdrawal request for {format_as_currency(amount)} has been denied. You have active bids on listings closing
+                in less than 24 hours and this withdrawal would leave your account balance below the amount needed to cover these bids. 
+                As of the time of this message, your minimum balance needed to cover these bids is {format_as_currency(total_funds_24)}.
+                We apologize for any inconvenience. Thank you for using Yard Sale!"""
+    send_message(site_account, user, subject, message)
+
+
 # ESCROW MESSAGES 
 # helpers.transfer_to_escrow()
 def get_escrow_fail_message(listing):

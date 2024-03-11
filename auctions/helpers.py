@@ -61,6 +61,34 @@ def charge_early_closing_fee(listing_id):
     )
 
 
+# actions.withdraw
+def validate_withdrawal_request(request, amount):
+    current_user = request.user
+    all_user_active_bids = Bid.objects.filter(user=current_user, listing__active=True)
+    all_listings_bid_on = list(set([bid.listing for bid in all_user_active_bids]))
+
+    # filter only listings closing in less than 72 hours
+    all_listings_72 = [listing for listing in all_listings_bid_on if listing.closing_date - timezone.now() < timezone.timedelta(hours=72)]
+    total_funds_72 = 0
+    for listing in all_listings_72:
+        total_funds_72 += Bid.objects.filter(listing=listing, user=current_user).order_by("-amount").first().amount
+
+    # filter only listings closing in less than 24 hours
+    all_listings_24 = [listing for listing in all_listings_bid_on if listing.closing_date - timezone.now() < timezone.timedelta(hours=24)]
+    total_funds_24 = 0
+    for listing in all_listings_24:
+        total_funds_24 += Bid.objects.filter(listing=listing, user=current_user).order_by("-amount").first().amount
+    
+    all_listings_72.sort(key=lambda x: x.closing_date)
+    first_listing_to_close = all_listings_72[0]
+
+    if current_user.balance - amount < total_funds_24:
+        return "denied", total_funds_24, total_funds_72, first_listing_to_close
+    elif current_user.balance - amount < total_funds_72:
+        return "warn", total_funds_24, total_funds_72, first_listing_to_close
+    else:
+        return "approved", total_funds_24, total_funds_72, first_listing_to_close
+    
 
 
 # HELPER FUNCTIONS - VIEWS.PY

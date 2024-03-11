@@ -492,6 +492,8 @@ def withdraw(request, user_id):
     Functions Called: None
     '''
 
+
+    
     fake_bank_account = User.objects.get(pk=13)
     user = User.objects.get(pk=user_id)
     amount = decimal.Decimal(request.POST["amount"])
@@ -500,17 +502,28 @@ def withdraw(request, user_id):
     elif amount > user.balance:
         contrib_messages.error(request, "Insufficient funds")
     else:
-        Transaction.objects.create(
-            amount=amount,
-            sender=user,
-            recipient=fake_bank_account,
-            notes="Withdrawal"
-        )
-        fake_bank_account.balance += amount
-        fake_bank_account.save()
-        user.balance -= amount
-        user.save()
-        contrib_messages.success(request, "Withdrawal successful")
+        status, total_funds_24, total_funds_72, first_listing_to_close = helpers.validate_withdrawal(user_id, amount)
+
+        if status == "denied":
+            contrib_messages.error(request, "Insufficient funds. You have active bids closing in less than 24 hours.")
+            a_msg.send_message_deny_withdrawal(request, user_id, amount, total_funds_24)
+        elif status == "warn":
+            contrib_messages.info(request, "Successful withdrawal, but you have active bids closing in less than 72 hours. See messages for details.")
+            a_msg.send_message_withdrawal_72(request, user_id, amount, total_funds_72, first_listing_to_close)
+        else:
+            Transaction.objects.create(
+                amount=amount,
+                sender=user,
+                recipient=fake_bank_account,
+                notes="Withdrawal"
+            )
+            fake_bank_account.balance += amount
+            fake_bank_account.save()
+            user.balance -= amount
+            user.save()
+            
+            contrib_messages.success(request, "Withdrawal successful")
+            a_msg.send_message_withdrawal_success(user_id, amount)
 
     return redirect("profile", user_id=user_id)
 
