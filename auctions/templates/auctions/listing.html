@@ -190,6 +190,21 @@
                     <button id="confirm-bid-btn" class="btn btn-primary" type="button">Place Bid</button>
                     <button class="hidden" type="submit">Place Bid</button>
                 </form>
+                <div class="center-container">
+                    <p id="report-listing-text">Report This Listing</p>
+                </div>
+                <form class="report-listing-form center-container hidden" action="/report_listing/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                        <h4 style="text-align:center;">Are you sure you want to report this listing?</h4>
+                        <h5>Select a reason:</h5>
+                        <select name="reason">
+                            <option value="inappropriate">Inappropriate</option>
+                            <option value="spam">Scam/spam</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <button class="btn btn-primary cancel-btn" type="submit">Report</button>
+                        <button class="btn btn-primary cancel-report-listing-btn" type="button">Nevermind</button>
+                </form>
                 <div class="confirm-bid-popup-content hidden">
                     <div class="center-container" style="text-align:center; width:400px;">
                         <h5>Are you sure you want to place a bid?</h5>
@@ -333,6 +348,25 @@
 </div>
 
 <script>
+
+    const reportListingText = document.querySelector('#report-listing-text');
+    const reportListingForm = document.querySelector('.report-listing-form');
+    const cancelReportListingBtn = document.querySelector('.cancel-report-listing-btn');
+
+    if (reportListingText) {
+        reportListingText.addEventListener('click', function() {
+            reportListingForm.classList.remove('hidden');
+        });
+
+        cancelReportListingBtn.addEventListener('click', function() {
+            reportListingForm.classList.add('hidden');
+        });
+    }
+    
+
+
+
+
 
     const userBidDiv = document.querySelector('#user-bid-div');
 

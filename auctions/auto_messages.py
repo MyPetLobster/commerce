@@ -332,6 +332,12 @@ def send_comment_report_admin(current_user, comment, reason):
                 for the following reason: {reason}. Here is the text of the comment: {comment.comment}"""
     send_message(site_account, admin, subject, message)
 
+def send_listing_report_admin(current_user, listing, reason):
+    site_account = User.objects.get(pk=12)
+    admin = User.objects.get(pk=2)
+    subject = f"{current_user.username} reported a listing"
+    message = f"""{current_user.username} has reported the listing '{listing.title}' for the following reason: {reason}."""
+    send_message(site_account, admin, subject, message)
 
 # PERIODIC TASKS MESSAGES
 def send_bid_removed_message(user, listing, time_left_str):

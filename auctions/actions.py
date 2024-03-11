@@ -331,8 +331,22 @@ def report_comment(request, comment_id):
     current_user = request.user
     reason = request.POST["reason"]
     comment = Comment.objects.get(pk=comment_id)
-
     a_msg.send_comment_report_admin(current_user, comment, reason)
+
+    return HttpResponseRedirect(reverse("listing", args=(comment.listing.id,)))
+
+
+@login_required
+def report_listing(request, listing_id):
+    '''
+    This function is called when the user clicks the "Report" button on a listing. 
+    '''
+    current_user = request.user
+    reason = request.POST["reason"]
+    listing = Listing.objects.get(pk=listing_id)
+    a_msg.send_listing_report_admin(current_user, listing, reason)
+
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
 
