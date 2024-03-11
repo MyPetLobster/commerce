@@ -115,14 +115,18 @@
             </div>
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
-                    <div class="fields-item">
+                    <div id="user-bid-div" class="fields-item">
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You are the current highest bidder!)</span></br>
-                        <span><span class="spacer-text bold">Your Bid:&nbsp;&nbsp;</span> <span class="bold" id="cancel-bid-link">Cancel Bid</span></span>
+                        <div id="cancel-bid-div" class="center-container hidden">
+                            <span class="bold" id="cancel-bid-link">Cancel Bid</span>
+                        </div>
                     </div>
                 {% else %}
-                    <div class="fields-item">
+                    <div id="user-bid-div" class="fields-item">
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (Your bid is {% with formatted_currency=difference|format_currency %}{{ formatted_currency }}{% endwith %} less than the current highest bid)</span></br>
-                        <span><span class="spacer-text bold">Your Bid:&nbsp;&nbsp;</span><span class="bold" id="cancel-bid-link">Cancel Bid</span></span>
+                        <div id="cancel-bid-div" class="center-container hidden">
+                            <span class="bold" id="cancel-bid-link">Cancel Bid</span>
+                        </div>
                     </div>
                 {% endif %} 
                     <div id="confirm-cancel-bid" class="hidden">
@@ -329,6 +333,19 @@
 </div>
 
 <script>
+
+    const userBidDiv = document.querySelector('#user-bid-div');
+
+    userBidDiv.addEventListener('mouseover', function() {
+        document.querySelector('#cancel-bid-div').classList.remove('hidden');
+    });
+
+    userBidDiv.addEventListener('mouseout', function() {
+        document.querySelector('#cancel-bid-div').classList.add('hidden');
+    });
+
+
+
     const commentListItems = document.querySelectorAll('.comment-list-item');
 
     commentListItems.forEach(function(item) {

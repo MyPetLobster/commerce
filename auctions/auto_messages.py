@@ -323,6 +323,15 @@ def send_shipping_confirmation_messages(listing_id):
     send_message(site_account, buyer, subject_buyer, message_buyer)
 
 
+# REPORT MESSAGES
+def send_comment_report_admin(current_user, comment, reason):
+    site_account = User.objects.get(pk=12)
+    admin = User.objects.get(pk=2)
+    subject = f"{current_user.username} reported a comment"
+    message = f"""{current_user.username} has reported a comment by {comment.user.username} on the listing '{comment.listing.title}' 
+                for the following reason: {reason}. Here is the text of the comment: {comment.comment}"""
+    send_message(site_account, admin, subject, message)
+
 
 # PERIODIC TASKS MESSAGES
 def send_bid_removed_message(user, listing, time_left_str):

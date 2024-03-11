@@ -323,6 +323,17 @@ def cancel_bid(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+@login_required
+def report_comment(request, comment_id):
+    '''
+    This function is called when the user clicks the "Report" button on a comment. 
+    '''
+    current_user = request.user
+    reason = request.POST["reason"]
+    comment = Comment.objects.get(pk=comment_id)
+
+    a_msg.send_comment_report_admin(current_user, comment, reason)
+
 
 
 # PROFILE FUNCTIONS
@@ -492,8 +503,6 @@ def withdraw(request, user_id):
     Functions Called: None
     '''
 
-
-    
     fake_bank_account = User.objects.get(pk=13)
     user = User.objects.get(pk=user_id)
     amount = decimal.Decimal(request.POST["amount"])

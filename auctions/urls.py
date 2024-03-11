@@ -30,6 +30,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("remove_from_watchlist/<int:listing_id>", actions.remove_from_watchlist, name="remove_from_watchlist"),
     path("remove_inactive_from_watchlist", actions.remove_inactive_from_watchlist, name="remove_inactive_from_watchlist"),
+    path("report_comment/<int:comment_id>", actions.report_comment, name="report_comment"),
     path("search", views.search, name="search"),
     path("sort", actions.sort, name="sort"),
     path("sort_messages", actions.sort_messages, name="sort_messages"),
