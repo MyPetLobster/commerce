@@ -81,6 +81,11 @@ def charge_early_closing_fee(listing_id):
     seller = listing.user
     fee_amount = round(listing.starting_bid * decimal.Decimal(0.05), 2)
     if seller.balance < fee_amount:
+        amount_paid = seller.balance
+        seller.balance -= fee_amount
+        seller.save()
+        
+        site_account.balance += amount_paid
         now = timezone.now()
         seller.fee_failure_date = now
         seller.save()
@@ -99,7 +104,7 @@ def charge_early_closing_fee(listing_id):
             listing=listing,
             notes="Early Closing Fee"
         )
-        
+
         a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
 
 

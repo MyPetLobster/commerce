@@ -514,6 +514,7 @@ def deposit(request, user_id):
     '''
 
     fake_bank_account = User.objects.get(pk=13)
+    site_account = User.objects.get(pk=12)
     user = User.objects.get(pk=user_id)
     amount = decimal.Decimal(request.POST["amount"])
 
@@ -521,20 +522,63 @@ def deposit(request, user_id):
         contrib_messages.error(request, "Deposit amount must be greater than 0")
         return redirect("profile", user_id=user_id)
     
-    Transaction.objects.create(
-        amount=amount,
-        sender=fake_bank_account,
-        recipient=user,
-        notes="Deposit"
-    )
+    if user.balance < 0: 
+        negative_balance = user.balance * -1
+        if amount > negative_balance:
+            site_account.balance += negative_balance
+            site_account.save()
+            Transaction.objects.create(
+                amount=negative_balance,
+                sender=user,
+                recipient=site_account,
+                notes="Deposit for Fees"
+            )
 
-    fake_bank_account.balance -= decimal.Decimal(amount)
-    fake_bank_account.save()
-    user.balance += decimal.Decimal(amount)
-    user.save()
-    contrib_messages.success(request, "Deposit successful")
+            user.balance += amount
+            user.save()
+            Transaction.objects.create(
+                amount=amount,
+                sender=fake_bank_account,
+                recipient=user,
+                notes="Deposit"
+            )
+            contrib_messages.success(request, "Deposit successful")
+            return redirect("profile", user_id=user_id)
+        else:
+            site_account.balance += amount
+            site_account.save()
+            Transaction.objects.create(
+                amount=amount,
+                sender=user,
+                recipient=site_account,
+                notes="Deposit for Fees"
+            )
 
-    return redirect("profile", user_id=user_id)
+            user.balance += amount
+            user.save()
+            Transaction.objects.create(
+                amount=amount,
+                sender=fake_bank_account,
+                recipient=user,
+                notes="Deposit"
+            )
+            contrib_messages.info(request, "Deposit successful, but you still have a negative balance. Fees will be charged after 7 days. See terms for more details.")
+            return redirect("profile", user_id=user_id)
+    else:
+        Transaction.objects.create(
+            amount=amount,
+            sender=fake_bank_account,
+            recipient=user,
+            notes="Deposit"
+        )
+
+        fake_bank_account.balance -= decimal.Decimal(amount)
+        fake_bank_account.save()
+        user.balance += decimal.Decimal(amount)
+        user.save()
+        contrib_messages.success(request, "Deposit successful")
+
+        return redirect("profile", user_id=user_id)
 
 
 @login_required
