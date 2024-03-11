@@ -6,6 +6,7 @@ from django.db import models
 
 class User(AbstractUser):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    fee_failure_date = models.DateTimeField(blank=True, null=True)
 
 
 class Category(models.Model):

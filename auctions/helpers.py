@@ -80,16 +80,28 @@ def charge_early_closing_fee(listing_id):
     site_account = User.objects.get(pk=12)
     seller = listing.user
     fee_amount = round(listing.starting_bid * decimal.Decimal(0.05), 2)
- 
-    a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+    if seller.balance < fee_amount:
+        now = timezone.now()
+        seller.fee_failure_date = now
+        seller.save()
+        a_msg.send_fee_failure_message(listing, fee_amount)
+        return False
+    else:
+        seller.balance -= fee_amount
+        seller.save()
+        site_account.balance += fee_amount
+        site_account.save()
 
-    Transaction.objects.create(
-        sender=seller,
-        recipient=site_account,
-        amount=fee_amount,
-        listing=listing,
-        notes="Early Closing Fee"
-    )
+        Transaction.objects.create(
+            sender=seller,
+            recipient=site_account,
+            amount=fee_amount,
+            listing=listing,
+            notes="Early Closing Fee"
+        )
+        
+        a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+
 
 
 # actions.withdraw

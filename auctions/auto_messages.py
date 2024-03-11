@@ -190,14 +190,26 @@ def notify_all_early_closing(listing_id):
         
         send_message(site_account, seller, subject_seller, message_seller)
 
-# actions.charge_early_closing_fee()
+# helpers.charge_early_closing_fee()
+def send_fee_failure_message(listing, fee_amount):
+    site_account = User.objects.get(pk=12)
+    fee_amount_str = format_as_currency(fee_amount)
+    seller = listing.user
+    subject = f"Failed to charge early closing fee for '{listing.title}'"
+    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
+                {fee_amount_str}. We were unable to charge your account for this fee. Please deposit funds to cover this fee 
+                within 7 business days to avoid additional fees. Thank you for your understanding and for using Yard Sale!"""
+    send_message(site_account, seller, subject, message)
+
+
+
+# helpers.charge_early_closing_fee()
 def send_early_closing_fee_message(listing, fee_amount):
     site_account = User.objects.get(pk=12)
     fee_amount_str = format_as_currency(fee_amount)
     subject = f"Early Closing Fee for '{listing.title}'"
     message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
-                {fee_amount_str}. This fee will be deducted from your balance directly. If this overdraws your account, you 
-                have 7 business days to deposit funds to cover the fee, before additional fees begin to accrue. 
+                {fee_amount_str}. This fee will be deducted from your balance directly.  
                 Thank you for your understanding and for using Yard Sale! (and for the free $$$$)"""
     send_message(site_account, listing.seller, subject, message)
 
