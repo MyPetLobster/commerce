@@ -463,7 +463,8 @@ def deposit(request, user_id):
     Transaction.objects.create(
         amount=amount,
         sender=fake_bank_account,
-        recipient=user
+        recipient=user,
+        notes="Deposit"
     )
 
     fake_bank_account.balance -= decimal.Decimal(amount)
@@ -502,7 +503,8 @@ def withdraw(request, user_id):
         Transaction.objects.create(
             amount=amount,
             sender=user,
-            recipient=fake_bank_account
+            recipient=fake_bank_account,
+            notes="Withdrawal"
         )
         fake_bank_account.balance += amount
         fake_bank_account.save()

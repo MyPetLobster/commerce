@@ -56,7 +56,8 @@ def charge_early_closing_fee(listing_id):
         sender=seller,
         recipient=site_account,
         amount=fee_amount,
-        listing=listing
+        listing=listing,
+        notes="Early Closing Fee"
     )
 
 
@@ -544,7 +545,8 @@ def transfer_to_escrow(winner, listing_id):
                 sender=buyer,
                 recipient=escrow_account,
                 amount=amount,
-                listing=listing
+                listing=listing,
+                notes="Buyer to Escrow Transfer"
             )
 
             buyer.balance -= amount
@@ -596,7 +598,8 @@ def transfer_to_seller(listing_id):
                 sender=escrow_account,
                 recipient=site_account,
                 amount=fee_amount,
-                listing=listing
+                listing=listing,
+                notes="Sale Fee"
             )
             fee_transaction.save()
 
@@ -604,7 +607,8 @@ def transfer_to_seller(listing_id):
                 sender=escrow_account,
                 recipient=seller,
                 amount=sale_price,
-                listing=listing
+                listing=listing,
+                notes="Escrow to Seller Transfer"
             )
             sell_transaction.save()
 
