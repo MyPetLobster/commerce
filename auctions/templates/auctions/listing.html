@@ -293,7 +293,15 @@
                     </li>
                     {% elif comment.user == current_user %}
                     <li class="comment-list-item">>
-                        <span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span>
+                        <span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br>
+                        <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Delete Comment</span>
+                        <form class="report-comment-form center-container hidden" action="/delete_comment/{{ comment.id }}" method="post">
+                            {% csrf_token %}
+                                <h4 style="text-align:center;">Are you sure you want to delete this comment?</h4>
+                                <p>We all say things that we regret. Good thing you can delete this comment and no one will ever know.</p>
+                                <button class="btn btn-primary cancel-btn" type="submit">Delete Comment</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                        </form>
                     </li>
                     {% elif comment.user == listing.user %}
                     <li class="comment-list-item">> <span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br>

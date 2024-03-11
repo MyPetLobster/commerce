@@ -219,7 +219,7 @@ def comment(request, listing_id):
     '''
 
     listing = Listing.objects.get(pk=listing_id)
-    comment = helpers.profanity_filter(request.POST["comment"])
+    comment = helpers.filter_profanity(request.POST["comment"])
     anonymous = request.POST.get("anonymous", "off")
 
     if anonymous == "on":
@@ -235,6 +235,29 @@ def comment(request, listing_id):
     )
 
     a_msg.notify_mentions(comment)
+
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+
+@login_required
+def delete_comment(request, comment_id):
+    '''
+    This function is called when a user clicks the "Delete" button on a comment. It deletes the comment
+    from the database and then redirects to the listing page. User can only delete their own comments.
+
+    Args: 
+            request (HttpRequest): The request object
+            comment_id (int): The ID of the comment to delete   
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
+
+    Called by: listing.html
+    Functions Called: None
+    '''
+    comment = Comment.objects.get(pk=comment_id)
+    listing_id = comment.listing.id
+    if request.user == comment.user:
+        comment.delete()
 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 

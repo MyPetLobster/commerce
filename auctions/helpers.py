@@ -7,6 +7,7 @@ from django.utils import timezone
 import decimal
 import logging
 import math
+import re
 from datetime import timedelta
 
 from .banned_words import banned_words_list
@@ -28,7 +29,7 @@ def format_as_currency(amount):
     return f"${amount:,.2f}"
 
 
-def profanity_filter(text):
+def filter_profanity(text):
     '''
     This function filters out profanity from text. It is called by the actions.comment() function
     to filter out profanity from user comments.
@@ -42,22 +43,21 @@ def profanity_filter(text):
     Function Calls: None
     '''
     banned_words = banned_words_list() 
-    text = text.split()
-    # remove punctuation
-    words = [word.lower() for word in text]
-    # replace banned words with asterisks
-    for i in range(len(words)):
-        # check if word contains a dash
-        if "-" in words[i]:
-            words[i] = words[i].split("-")
-            for j in range(len(words[i])):
-                if words[i][j].lower().strip(".,!?") in banned_words:
-                    words[i][j] = "*" * len(words[i][j])
-            words[i] = "-".join(words[i])
-        if words[i].lower().strip(".,!?") in banned_words:
-            words[i] = "*" * len(words[i])
+    words = re.findall(r'\b[\w\'\-]+\b|[.,!?;: ]', text)  # Split text into words and retain punctuation and whitespace
+    censored_text = []
 
-    return " ".join(words)
+    for word in words:
+        censored_word = word
+        if word not in '.,!?;:':  # Skip punctuation marks and whitespace
+            for banned_word in banned_words:
+                if banned_word in word.lower():
+                    censored_word = '*' * len(word)
+                    break  # Stop checking once a banned word is found in the word
+        censored_text.append(censored_word)
+
+    return ''.join(censored_text)
+
+
 
 
 # HELPER FUNCTIONS - ACTIONS.PY

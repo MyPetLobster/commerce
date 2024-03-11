@@ -1,10 +1,15 @@
+import re
+
 def banned_words_list():
     return [       
         "asshole",   
         "a$$hole", 
         "bastard",    
-        "bitch",    
-        "cock",    
+        "bitch", 
+        "bitchass"   
+        "cock",
+        "cock",
+        "cock"    
         "cunt",        
         "dick",    
         "fuck",  

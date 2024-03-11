@@ -729,7 +729,7 @@ input {
     border-radius: 8px;
     height: 30px;
     width: 150px;
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     outline: none;
   }
 
@@ -751,7 +751,6 @@ input {
 #report-listing-text:hover,
 #report-user-text:hover {
   color: $cancel-color;
-  font-weight: 400;
 }
 /* Make a Bid */
 .bid-form-div {
