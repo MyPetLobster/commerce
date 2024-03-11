@@ -9,6 +9,7 @@ import logging
 import math
 from datetime import timedelta
 
+from .banned_words import banned_words_list
 from . import auto_messages as a_msg 
 from .classes import UserBidInfo
 from .models import Bid, Listing, Watchlist, User, Message, Transaction
@@ -27,6 +28,36 @@ def format_as_currency(amount):
     return f"${amount:,.2f}"
 
 
+def profanity_filter(text):
+    '''
+    This function filters out profanity from text. It is called by the actions.comment() function
+    to filter out profanity from user comments.
+
+    Args:
+            text (str): the text to be filtered
+    Returns:
+            text (str): the filtered text, replacing profanity with asterisks
+
+    Called by: actions.comment()
+    Function Calls: None
+    '''
+    banned_words = banned_words_list() 
+    text = text.split()
+    # remove punctuation
+    words = [word.lower() for word in text]
+    # replace banned words with asterisks
+    for i in range(len(words)):
+        # check if word contains a dash
+        if "-" in words[i]:
+            words[i] = words[i].split("-")
+            for j in range(len(words[i])):
+                if words[i][j].lower().strip(".,!?") in banned_words:
+                    words[i][j] = "*" * len(words[i][j])
+            words[i] = "-".join(words[i])
+        if words[i].lower().strip(".,!?") in banned_words:
+            words[i] = "*" * len(words[i])
+
+    return " ".join(words)
 
 
 # HELPER FUNCTIONS - ACTIONS.PY

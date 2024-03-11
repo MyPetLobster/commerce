@@ -219,7 +219,7 @@ def comment(request, listing_id):
     '''
 
     listing = Listing.objects.get(pk=listing_id)
-    comment = request.POST["comment"]
+    comment = helpers.profanity_filter(request.POST["comment"])
     anonymous = request.POST.get("anonymous", "off")
 
     if anonymous == "on":

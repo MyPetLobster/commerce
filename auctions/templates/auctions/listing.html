@@ -276,7 +276,7 @@
             <ul>
                 {% for comment in comments %}
                     {% if comment.anonymous == True %}
-                    <li class="comment-list-item">><span class="bold">Anonymous:</span> {{ comment.comment }}</br>
+                    <li class="comment-list-item">> <span class="bold">Anonymous: </span>{{ comment.comment }}</br>
                         <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Report Comment</span>
                         <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
                             {% csrf_token %}
@@ -296,7 +296,7 @@
                         <span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span>
                     </li>
                     {% elif comment.user == listing.user %}
-                    <li class="comment-list-item">><span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br>
+                    <li class="comment-list-item">> <span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br>
                         <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Report Comment</span>
                         <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
                             {% csrf_token %}
