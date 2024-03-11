@@ -14,206 +14,215 @@
   <div class="messages-container">
     <h3>Messages</h3>
     <div class="divider-med"></div>
-    <h4 class="center-container">Inbox</h4>
-    <!-- SORT BY CONTAINER -->
-    <div class="center-container" style="margin-top:20px;"><span class="bold small-font">Sort By: </span></div>
-    <div class="newest-oldest-msgs-div">
-      <span id="newest-first" class="bold">Newest First</span>
-      <span id="oldest-first">Oldest First</span>
-    </div>
-    <!-- SORT BY FORM (HIDDEN)-->
-    <form action="{% url 'sort_messages' %}" method="post" id="sort-msg-form">
-      {% csrf_token %}
-      <input
-        id="sort-by-direction"
-        type="hidden"
-        name="sort-by-direction"
-        value=""
-      />
-    </form>
-
-    <hr />
-
-    <!-- MARK ALL AS READ BUTTON -->
-    {% if unread_message_count > 0 %}
-    <div class="center-container" style="padding: 10px;">
-      <a href="{% url 'mark_all_as_read' current_user.id %}" class="mark-all-read">Mark All as Read</a>
-    </div>
-    {% endif %}
-
-    <form action="{% url 'messages' current_user.id %}" method="post" id="show-hide-form" class="hidden">
-      {% csrf_token %}
-      <input
-        id="show-hide-input"
-        type="hidden"
-        name="show-hide-input"
-        value="{% if show_read_messages %}hide{% else %}show{% endif %}"
-      />
-    </form>
-    <div class="center-container">
-      <span class="show-hide-button" style="margin-bottom: 20px;">
-        {% if show_read_messages %}Hide{% else %}Show{% endif %} Read Messages
-      </span>
-    </div>
-
-
-    {% if unread_message_count == 0 and not show_read_messages %}
-      <div class="center-container" style="margin-top: 20px">
-        <p>No unread messages</p>
+    <h4 id="inbox-messages-header" class="center-container">Inbox</h4>
+    <div id="inbox-hidden-div">
+      <!-- SORT BY CONTAINER -->
+      <div class="center-container" style="margin-top:20px;"><span class="bold small-font">Sort By: </span></div>
+      <div class="newest-oldest-msgs-div">
+        <span id="newest-first" class="bold">Newest First</span>
+        <span id="oldest-first">Oldest First</span>
       </div>
-    {% else %}
-      <div class="all-inbox-div">
-        {% if inbox_messages %} 
-        
-        <!-- Start looping over all messages-->
-        {% for message in inbox_messages %}
+      <!-- SORT BY FORM (HIDDEN)-->
+      <form action="{% url 'sort_messages' %}" method="post" id="sort-msg-form">
+        {% csrf_token %}
+        <input
+          id="sort-by-direction"
+          type="hidden"
+          name="sort-by-direction"
+          value=""
+        />
+      </form>
 
-        <!-- hidden check for unread/read -->
-        <div class="is-message-read hidden">
-          {% if message.read == True %}True{% else %}False{% endif %}
+      <hr />
+
+      <!-- MARK ALL AS READ BUTTON -->
+      {% if unread_message_count > 0 %}
+      <div class="center-container" style="padding: 10px;">
+        <a href="{% url 'mark_all_as_read' current_user.id %}" class="mark-all-read">Mark All as Read</a>
+      </div>
+      {% elif unread_message_count == 0 and inbox_count > 0 %}
+      <div class="center-container" style="padding: 10px;">
+        <a href="{% url 'mark_all_as_unread' current_user.id %}" class="mark-all-unread">Mark All as Unread</a>
+      </div>
+      {% endif %}
+      
+
+      <form action="{% url 'messages' current_user.id %}" method="post" id="show-hide-form" class="hidden">
+        {% csrf_token %}
+        <input
+          id="show-hide-input"
+          type="hidden"
+          name="show-hide-input"
+          value="{% if show_read_messages %}hide{% else %}show{% endif %}"
+        />
+      </form>
+      <div class="center-container">
+        <span class="show-hide-button" style="margin-bottom: 20px;">
+          {% if show_read_messages %}Hide{% else %}Show{% endif %} Read Messages
+        </span>
+      </div>
+
+
+      {% if unread_message_count == 0 and not show_read_messages %}
+        <div class="center-container" style="margin-top: 20px">
+          <p>No unread messages</p>
         </div>
+      {% else %}
+        <div class="all-inbox-div">
+          {% if inbox_messages %} 
+          
+          <!-- Start looping over all messages-->
+          {% for message in inbox_messages %}
 
-        <!-- Collapsed Message Div -->
-        <div class="message-div collapsed-message-div">
-          <p class="message-summary">
-            <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
-            <span class="read-unread">
-              {% if message.read == True %}
-              <a
-                class="mark-as-unread-button"
-                href="{% url 'mark_as_read' message.id %}"
-                >Read</a
-              >
-              {% else %}
-              <a
-                class="mark-as-read-button"
-                href="{% url 'mark_as_read' message.id %}"
-                >Mark as Read</a
-              >
-              {% endif %}
-            </span>
-          </p>
-        </div>
-
-        <!-- Full Message Div -->
-        <div class="message-div-full hidden">
-          <p class="message-sender">
-            <span>From: <a class="msg-sender-link" href="{% url 'profile' message.sender.id %}">{{ message.sender }}</a></span>
-            <span class="read-unread">
-              {% if message.read == True %}
-              <a
-                class="mark-as-unread-button"
-                href="{% url 'mark_as_read' message.id %}"
-                >Read</a
-              >
-              {% else %}
-              <a
-                class="mark-as-read-button"
-                href="{% url 'mark_as_read' message.id %}"
-                >Mark as Read</a
-              >
-              {% endif %}
-            </span>
-          </p>
-          <p class="message-date">
-            Date: {{ message.date|date:"F j, Y, g:i a" }}
-          </p>
-          <p class="message-subject">Subject: {{ message.subject }}</p>
-          <p class="message-content">{{ message.message }}</p>
-        </div>
-
-        <div class="reply-delete-container hidden">
-          <div class="reply-delete-div">
-            <span class="reply-button">Reply</span>
-            <div class="reply-form-div hidden">
-              <form
-                action="{% url 'messages' current_user.id %}"
-                method="post"
-                class="reply-form popup-form"
-              >
-                {% csrf_token %}
-                <input
-                  type="hidden"
-                  name="recipient"
-                  value="{{ message.sender.id }}"
-                />
-                <input
-                  type="hidden"
-                  name="subject"
-                  value="Re: {{ message.subject }}"
-                />
-                <div class="center-container" style="margin-bottom: 20px">
-                  <h5>Reply to {{ message.sender }}</h5>
-                </div>
-                <textarea
-                  class="form-control"
-                  id="message"
-                  name="message"
-                  rows="3"
-                ></textarea>
-                <div class="center-container" style="margin-top: 20px">
-                  <button type="submit" class="btn btn-primary">Send</button>
-                  <button
-                    type="button"
-                    class="btn btn-primary cancel-btn cancel-reply"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <span
-              ><a
-                class="delete-msg-button"
-                href="{% url 'delete_message' message.id %}"
-                >Delete</a
-              ></span
-            >
+          <!-- hidden check for unread/read -->
+          <div class="is-message-read hidden">
+            {% if message.read == True %}True{% else %}False{% endif %}
           </div>
+
+          <!-- Collapsed Message Div -->
+          <div class="message-div collapsed-message-div">
+            <p class="message-summary">
+              <span>{{ message.date|date:"y/m/d" }} - {{ message.sender }} - {{ message.subject|truncatechars:30 }}</span></span> 
+              <span class="read-unread">
+                {% if message.read == True %}
+                <a
+                  class="mark-as-unread-button"
+                  href="{% url 'mark_as_read' message.id %}"
+                  >Read</a
+                >
+                {% else %}
+                <a
+                  class="mark-as-read-button"
+                  href="{% url 'mark_as_read' message.id %}"
+                  >Mark as Read</a
+                >
+                {% endif %}
+              </span>
+            </p>
+          </div>
+
+          <!-- Full Message Div -->
+          <div class="message-div-full hidden">
+            <p class="message-sender">
+              <span>From: <a class="msg-sender-link" href="{% url 'profile' message.sender.id %}">{{ message.sender }}</a></span>
+              <span class="read-unread">
+                {% if message.read == True %}
+                <a
+                  class="mark-as-unread-button"
+                  href="{% url 'mark_as_read' message.id %}"
+                  >Read</a
+                >
+                {% else %}
+                <a
+                  class="mark-as-read-button"
+                  href="{% url 'mark_as_read' message.id %}"
+                  >Mark as Read</a
+                >
+                {% endif %}
+              </span>
+            </p>
+            <p class="message-date">
+              Date: {{ message.date|date:"F j, Y, g:i a" }}
+            </p>
+            <p class="message-subject">Subject: {{ message.subject }}</p>
+            <p class="message-content">{{ message.message }}</p>
+          </div>
+
+          <div class="reply-delete-container hidden">
+            <div class="reply-delete-div">
+              <span class="reply-button">Reply</span>
+              <div class="reply-form-div hidden">
+                <form
+                  action="{% url 'messages' current_user.id %}"
+                  method="post"
+                  class="reply-form popup-form"
+                >
+                  {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="recipient"
+                    value="{{ message.sender.id }}"
+                  />
+                  <input
+                    type="hidden"
+                    name="subject"
+                    value="Re: {{ message.subject }}"
+                  />
+                  <div class="center-container" style="margin-bottom: 20px">
+                    <h5>Reply to {{ message.sender }}</h5>
+                  </div>
+                  <textarea
+                    class="form-control"
+                    id="message"
+                    name="message"
+                    rows="3"
+                  ></textarea>
+                  <div class="center-container" style="margin-top: 20px">
+                    <button type="submit" class="btn btn-primary">Send</button>
+                    <button
+                      type="button"
+                      class="btn btn-primary cancel-btn cancel-reply"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <span
+                ><a
+                  class="delete-msg-button"
+                  href="{% url 'delete_message' message.id %}"
+                  >Delete</a
+                ></span
+              >
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <div class="center-container"><p>No messages</p></div>
+          {% endif %}
         </div>
-        {% endfor %} {% else %}
-        <div class="center-container"><p>No messages</p></div>
-        {% endif %}
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
 
     <div class="divider-med"></div>
-    <h4 class="center-container">Sent Messages</h4>
-    <hr />
-    <div class="all-sent-messages">
-      {% if sent_messages %} {% for message in sent_messages %}
-        <div class="message-div collapsed-message-div">
-          <p class="message-summary">
-            <span>{{ message.date|date:"y/m/d" }} - {{ message.recipient }} - {{ message.subject|truncatechars:30 }}</span>
-          </p>
-        </div>
-
-        <div class="message-div-full hidden">
-          <p class="message-sender">To: {{ message.recipient }}</p>
-          <p class="message-date">
-            Date: {{ message.date|date:"F j, Y, g:i a" }}
-          </p>
-          <p class="message-subject">Subject: {{ message.subject }}</p>
-          <p class="message-content">{{ message.message }}</p>
-        </div>
-
-        <div class="reply-delete-container hidden">
-          <div class="reply-delete-div">
-            <span class="delete-msg-button">
-              <a
-                class="delete-msg-button"
-                href="{% url 'delete_message' message.id %}"
-                >Delete</a
-              >
-            </span>
+    <h4 id="sent-messages-header" class="center-container">Sent Messages</h4>
+    <div id="sent-hidden-div">
+      <hr />
+      <div class="all-sent-messages">
+        {% if sent_messages %} {% for message in sent_messages %}
+          <div class="message-div collapsed-message-div">
+            <p class="message-summary">
+              <span>{{ message.date|date:"y/m/d" }} - {{ message.recipient }} - {{ message.subject|truncatechars:30 }}</span>
+            </p>
           </div>
-        </div>
 
-      {% endfor %} {% else %}
-        <div class="center-container"><p>No messages</p></div>
-      {% endif %}
-    </div>  
+          <div class="message-div-full hidden">
+            <p class="message-sender">To: {{ message.recipient }}</p>
+            <p class="message-date">
+              Date: {{ message.date|date:"F j, Y, g:i a" }}
+            </p>
+            <p class="message-subject">Subject: {{ message.subject }}</p>
+            <p class="message-content">{{ message.message }}</p>
+          </div>
+
+          <div class="reply-delete-container hidden">
+            <div class="reply-delete-div">
+              <span class="delete-msg-button">
+                <a
+                  class="delete-msg-button"
+                  href="{% url 'delete_message' message.id %}"
+                  >Delete</a
+                >
+              </span>
+            </div>
+          </div>
+
+        {% endfor %} {% else %}
+          <div class="center-container"><p>No messages</p></div>
+        {% endif %}
+      </div>  
+    </div>
   </div>
   <a
     style="margin-top: 20px"
@@ -228,6 +237,27 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+
+    const inboxHeader = document.getElementById("inbox-messages-header");
+    const sentHeader = document.getElementById("sent-messages-header");
+
+    inboxHeader.addEventListener("click", () => {
+      const inboxHiddenDiv = document.getElementById("inbox-hidden-div");
+      if (inboxHiddenDiv.classList.contains("hidden")) {
+        inboxHiddenDiv.classList.remove("hidden");
+      } else {
+        inboxHiddenDiv.classList.add("hidden");
+      }
+    });
+
+    sentHeader.addEventListener("click", () => {
+      const sentHiddenDiv = document.getElementById("sent-hidden-div");
+      if (sentHiddenDiv.classList.contains("hidden")) {
+        sentHiddenDiv.classList.remove("hidden");
+      } else {
+        sentHiddenDiv.classList.add("hidden");
+      }
+    });
 
     const showHideButton = document.querySelector(".show-hide-button");
     const showHideForm = document.getElementById("show-hide-form");

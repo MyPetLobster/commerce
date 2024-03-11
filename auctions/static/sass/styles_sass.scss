@@ -346,6 +346,10 @@ a:hover {
 .reply-form {
   width: 400px;
 }
+#sent-messages-header,
+#inbox-messages-header {
+  @include cursor-pointer-transition;
+}
 /* Category Page - Listing Hover Description */
 .visible-desc {
   position: absolute;
@@ -1074,6 +1078,7 @@ input {
 #newest-first,
 #oldest-first,
 .mark-all-read,
+.mark-all-unread,
 .show-hide-button {
   @include cursor-pointer-transition;
   font-size: 0.8em;

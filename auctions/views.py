@@ -343,6 +343,7 @@ def messages(request, user_id):
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
         'inbox_messages': inbox_messages,
+        'inbox_count': len(inbox_messages),
         'show_read_messages': show_read_messages,
         'sort_by_direction': sort_by_direction,
         'current_user': current_user,

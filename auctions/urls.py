@@ -24,6 +24,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("delete_comment/<int:comment_id>", actions.delete_comment, name="delete_comment"),
     path("mark_all_as_read/<int:user_id>", actions.mark_all_as_read, name="mark_all_as_read"),
+    path("mark_all_as_unread/<int:user_id>", actions.mark_all_as_unread, name="mark_all_as_unread"),
     path("mark_as_read/<int:message_id>", actions.mark_as_read, name="mark_as_read"),
     path("messages/<int:user_id>", views.messages, name="messages"),
     path("move_to_escrow/<int:listing_id>", actions.move_to_escrow, name="move_to_escrow"),

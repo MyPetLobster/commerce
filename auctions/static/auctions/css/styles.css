@@ -376,6 +376,12 @@ a:hover {
   width: 400px;
 }
 
+#sent-messages-header,
+#inbox-messages-header {
+  cursor: pointer;
+  transition: 0.15s;
+}
+
 /* Category Page - Listing Hover Description */
 .visible-desc {
   position: absolute;
@@ -1283,6 +1289,7 @@ input {
 #newest-first,
 #oldest-first,
 .mark-all-read,
+.mark-all-unread,
 .show-hide-button {
   cursor: pointer;
   transition: 0.15s;

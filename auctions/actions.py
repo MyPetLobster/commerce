@@ -702,6 +702,15 @@ def mark_all_as_read(request, user_id):
     return HttpResponseRedirect(reverse("messages", args=(user_id,)))
 
 
+def mark_all_as_unread(request, user_id):
+    ''' see mark_all_as_read() '''
+    messages = Message.objects.filter(recipient=request.user)
+    for message in messages:
+        message.read = False
+        message.save()
+    return HttpResponseRedirect(reverse("messages", args=(user_id,)))
+
+
 def delete_message(request, message_id):
     '''
     This function is called when the user clicks the "Delete" button on the messages page. It adds
