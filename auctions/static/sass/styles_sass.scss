@@ -712,6 +712,41 @@ input {
   font-size: 0.8em;
   color: $medium-gray;
 }
+.report-comment-form {
+  @include floating-form;
+  text-align: center;
+  width: 350px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  background-color: $nav-color;
+  color: $text-color-light;
+  border: 2px solid $cancel-color;
+  padding: 10px;
+  select {
+    font-size: 1.2em;
+    border-radius: 8px;
+    height: 30px;
+    width: 150px;
+    border: 2px solid #fff;
+    outline: none;
+  }
+
+  select:active,
+  select:focus,
+  select:focus-visible {
+    box-shadow: 0 0 0 2px $cancel-color inset !important;
+  }
+}
+.report-comment {
+  @include cursor-pointer-transition;
+  font-size: 0.8em;
+  color: $medium-gray;
+  font-weight: 300;
+}
+.report-comment:hover {
+  color: $cancel-color;
+  font-weight: 400;
+}
 /* Make a Bid */
 .bid-form-div {
   @include flex-column;
@@ -1573,8 +1608,6 @@ input {
 #remove-all-inactive-watchlist:visited {
   color: $primary-pink;
 }
-
-
 
 
 .winner-alert-div,

@@ -256,13 +256,58 @@
             <ul>
                 {% for comment in comments %}
                     {% if comment.anonymous == True %}
-                    <li><span class="bold">Anonymous:</span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li class="comment-list-item">><span class="bold">Anonymous:</span> {{ comment.comment }}</br>
+                        <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Report Comment</span>
+                        <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
+                            {% csrf_token %}
+                                <h4 style="text-align:center;">Are you sure you want to report this comment?</h4>
+                                <h5>Select a reason:</h5>
+                                <select name="reason">
+                                    <option value="inappropriate">Inappropriate</option>
+                                    <option value="spam">Spam</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <button class="btn btn-primary cancel-btn" type="submit">Report</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                        </form>
+                    </li>
                     {% elif comment.user == current_user %}
-                    <li><span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li class="comment-list-item">>
+                        <span><a id="user-own-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span>
+                    </li>
                     {% elif comment.user == listing.user %}
-                    <li><span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li class="comment-list-item">><span><a id="seller-comment" class="bold" href="{% url 'profile' comment.user.id %}">{{ comment.user.username }} (seller):</a></span> {{ comment.comment }}</br>
+                        <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Report Comment</span>
+                        <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
+                            {% csrf_token %}
+                                <h4 style="text-align:center;">Are you sure you want to report this comment?</h4>
+                                <h5>Select a reason:</h5>
+                                <select name="reason">
+                                    <option value="inappropriate">Inappropriate</option>
+                                    <option value="spam">Spam</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <button class="btn btn-primary cancel-btn" type="submit">Report</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                        </form>
+                    </li>
                     {% else %}
-                    <li><span><a id="other-comment" class="bold"href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br><span class="timestamp lightweight">{{ comment.date }}</span></li>
+                    <li class="comment-list-item">>
+                        <span><a id="other-comment" class="bold"href="{% url 'profile' comment.user.id %}">{{ comment.user.username }}:</a></span> {{ comment.comment }}</br>
+                        <span class="timestamp lightweight">{{ comment.date }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="report-comment hidden">Report Comment</span>
+                        <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
+                            {% csrf_token %}
+                                <h4 style="text-align:center;">Are you sure you want to report this comment?</h4>
+                                <h5>Select a reason:</h5>
+                                <select name="reason">
+                                    <option value="inappropriate">Inappropriate</option>
+                                    <option value="spam">Spam</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <button class="btn btn-primary cancel-btn" type="submit">Report</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                        </form>
+                    </li>
                     {% endif %}
                     
                 {% endfor %}
@@ -284,6 +329,34 @@
 </div>
 
 <script>
+    const commentListItems = document.querySelectorAll('.comment-list-item');
+
+    commentListItems.forEach(function(item) {
+        item.addEventListener('mouseover', function() {
+            item.querySelector('.report-comment').classList.remove('hidden');
+        })
+        item.addEventListener('mouseout', function() {
+            item.querySelector('.report-comment').classList.add('hidden');
+    });
+    });
+
+    const reportComment = document.querySelectorAll('.report-comment');
+    reportComment.forEach(function(item) {
+        item.addEventListener('click', function() {
+            item.nextElementSibling.classList.remove('hidden');
+        });
+    });
+
+    const cancelReportBtn = document.querySelectorAll('.cancel-report-btn');
+    cancelReportBtn.forEach(function(item) {
+        item.addEventListener('click', function() {
+            item.parentElement.classList.add('hidden');
+        });
+    });
+
+
+
+
     const cancelBidLink = document.querySelector('#cancel-bid-link');
     const confirmCancelBid = document.querySelector('#confirm-cancel-bid');
     const cancelCancel = document.querySelector('#cancel-cancel');

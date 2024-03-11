@@ -860,6 +860,48 @@ input {
   color: #6c757d;
 }
 
+.report-comment-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center;
+  width: 350px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  background-color: #7a7575;
+  color: #f4f4f4;
+  border: 2px solid #a90000;
+  padding: 10px;
+}
+.report-comment-form select {
+  font-size: 1.2em;
+  border-radius: 8px;
+  height: 30px;
+  width: 150px;
+  border: 2px solid #fff;
+  outline: none;
+}
+.report-comment-form select:active,
+.report-comment-form select:focus,
+.report-comment-form select:focus-visible {
+  box-shadow: 0 0 0 2px #a90000 inset !important;
+}
+
+.report-comment {
+  cursor: pointer;
+  transition: 0.15s;
+  font-size: 0.8em;
+  color: #6c757d;
+  font-weight: 300;
+}
+
+.report-comment:hover {
+  color: #a90000;
+  font-weight: 400;
+}
+
 /* Make a Bid */
 .bid-form-div {
   display: flex;
