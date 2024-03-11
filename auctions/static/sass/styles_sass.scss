@@ -713,7 +713,8 @@ input {
   color: $medium-gray;
 }
 .report-comment-form,
-.report-listing-form {
+.report-listing-form,
+.report-user-form {
   @include floating-form;
   text-align: center;
   width: 350px;
@@ -739,14 +740,16 @@ input {
   }
 }
 .report-comment, 
-#report-listing-text {
+#report-listing-text,
+#report-user-text {
   @include cursor-pointer-transition;
   font-size: 0.8em;
   color: $medium-gray;
   font-weight: 300;
 }
 .report-comment:hover,
-#report-listing-text:hover {
+#report-listing-text:hover,
+#report-user-text:hover {
   color: $cancel-color;
   font-weight: 400;
 }

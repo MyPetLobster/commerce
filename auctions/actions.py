@@ -352,6 +352,19 @@ def report_listing(request, listing_id):
 
 # PROFILE FUNCTIONS
 
+# Profile - Report User
+@login_required
+def report_user(request, user_id):
+    '''
+    This function is called when the user clicks the "Report" button on the profile page. 
+    '''
+    current_user = request.user
+    reason = request.POST["reason"]
+    reported_user = User.objects.get(pk=user_id)
+    a_msg.send_user_report_admin(current_user, reported_user, reason)
+
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
 # Profile - User Info Related Actions
 @login_required
 def edit(request, user_id):

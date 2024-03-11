@@ -861,7 +861,8 @@ input {
 }
 
 .report-comment-form,
-.report-listing-form {
+.report-listing-form,
+.report-user-form {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -877,7 +878,8 @@ input {
   padding: 10px;
 }
 .report-comment-form select,
-.report-listing-form select {
+.report-listing-form select,
+.report-user-form select {
   font-size: 1.2em;
   border-radius: 8px;
   height: 30px;
@@ -890,12 +892,16 @@ input {
 .report-comment-form select:focus-visible,
 .report-listing-form select:active,
 .report-listing-form select:focus,
-.report-listing-form select:focus-visible {
+.report-listing-form select:focus-visible,
+.report-user-form select:active,
+.report-user-form select:focus,
+.report-user-form select:focus-visible {
   box-shadow: 0 0 0 2px #a90000 inset !important;
 }
 
 .report-comment,
-#report-listing-text {
+#report-listing-text,
+#report-user-text {
   cursor: pointer;
   transition: 0.15s;
   font-size: 0.8em;
@@ -904,7 +910,8 @@ input {
 }
 
 .report-comment:hover,
-#report-listing-text:hover {
+#report-listing-text:hover,
+#report-user-text:hover {
   color: #a90000;
   font-weight: 400;
 }

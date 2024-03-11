@@ -44,6 +44,24 @@
             <li>Last Name: {{ user.last_name }}</li>
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
+    {% if current_user.is_authenticated %}
+        <div class="center-container">
+            <span id="report-user-text">Report This User</span>
+        </div>
+        <form class="report-user-form center-container hidden" action="/report_user/{{ user.id }}" method="post">
+            {% csrf_token %}
+                <h4 style="text-align:center;">Are you sure you want to report this listing?</h4>
+                <select name="reason">
+                    <option class="select-dropdown" value="select" selected disabled>Select a reason</option>
+                    <option value="suspected-illegal">Illegal Activity</option>
+                    <option value="inappropriate">Inappropriate Username</option>
+                    <option value="spam">Scam/spam</option>
+                    <option value="other">Other</option>
+                </select>
+                <button class="btn btn-primary cancel-btn" type="submit">Report</button>
+                <button class="btn btn-primary cancel-report-user-btn" type="button">Nevermind</button>
+        </form>
+                {% endif %}
     {% if current_user == user %}
             <button id="edit-button" class="btn btn-primary info-section-element" style="margin-top:20px">Edit Profile</button>
             <button id="change-password" class="btn btn-primary info-section-element">Change Password</button>
@@ -276,6 +294,17 @@
     // which section to scroll into view
     localStorage.setItem('activePage', 'profile');
     
+
+    const reportUserText = document.querySelector("#report-user-text")
+    const cancelReportUserBtn = document.querySelector(".cancel-report-user-btn")
+    reportUserText.addEventListener("click", () => {
+        document.querySelector(".report-user-form").classList.remove("hidden");
+    })
+    cancelReportUserBtn.addEventListener("click", () => {
+        document.querySelector(".report-user-form").classList.add("hidden");
+    })
+    
+
 
     const deleteAccountButton = document.getElementById('delete-account');
     const deleteAccountDiv = document.querySelector('.delete-account-div');

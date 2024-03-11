@@ -196,9 +196,10 @@
                 <form class="report-listing-form center-container hidden" action="/report_listing/{{ listing.id }}" method="post">
                     {% csrf_token %}
                         <h4 style="text-align:center;">Are you sure you want to report this listing?</h4>
-                        <h5>Select a reason:</h5>
                         <select name="reason">
+                            <option value="select" selected disabled>Select a reason</option>
                             <option value="inappropriate">Inappropriate</option>
+                            <option value="offensive">Offensive Content</option>
                             <option value="spam">Scam/spam</option>
                             <option value="other">Other</option>
                         </select>
@@ -280,8 +281,8 @@
                         <form class="report-comment-form center-container hidden" action="/report_comment/{{ comment.id }}" method="post">
                             {% csrf_token %}
                                 <h4 style="text-align:center;">Are you sure you want to report this comment?</h4>
-                                <h5>Select a reason:</h5>
                                 <select name="reason">
+                                    <option value="select" selected disabled>Select a reason</option>
                                     <option value="inappropriate">Inappropriate</option>
                                     <option value="spam">Spam</option>
                                     <option value="other">Other</option>
