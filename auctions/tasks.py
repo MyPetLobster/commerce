@@ -97,6 +97,7 @@ def set_inactive():
             pass
 
 
+@shared_task
 def check_user_fees():
     '''
         This tasks checks to see if any users have a fee_failure_date that is older than 7 days. 
