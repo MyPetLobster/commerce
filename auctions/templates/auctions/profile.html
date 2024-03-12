@@ -44,7 +44,7 @@
             <li>Last Name: {{ user.last_name }}</li>
             <li>Joined: {{ user.date_joined }}</li>
         </ul>
-    {% if current_user.is_authenticated %}
+    {% if current_user.is_authenticated and user != current_user %}
         <div class="center-container">
             <span id="report-user-text">Report This User</span>
         </div>
@@ -61,7 +61,7 @@
                 <button class="btn btn-primary cancel-btn" type="submit">Report</button>
                 <button class="btn btn-primary cancel-report-user-btn" type="button">Nevermind</button>
         </form>
-                {% endif %}
+    {% endif %}
     {% if current_user == user %}
             <button id="edit-button" class="btn btn-primary info-section-element" style="margin-top:20px">Edit Profile</button>
             <button id="change-password" class="btn btn-primary info-section-element">Change Password</button>

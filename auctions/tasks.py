@@ -100,4 +100,18 @@ def set_inactive():
 def check_user_fees():
     '''
         This tasks checks to see if any users have a user.fee_failure_date that is older than 7 days. 
+        If they do, their balance becomes (negative_balance + (negative_balance * 0.05) * days_overdue)
+
+        If the user still has a negative balance after 28 days, the user is notified of imminent account closure
+        and legal action.
+
+        If the user has a negative balance after 30 days, the account is closed (username changed to "inactive_[username]" and
+        password is reset to a random string). Then a Transaction is created with a notes field indicating "legal" and the 
+        outstanding balance is added to site_account.
+
+        This function also has a helper function to make sure that user.fee_failure_date is set to None if the user has a 
+        positive balance.
+
+ 
+
     '''
