@@ -84,10 +84,13 @@ def charge_early_closing_fee(listing_id):
         amount_paid = seller.balance
         seller.balance -= fee_amount
         seller.save()
-        
+
         site_account.balance += amount_paid
         now = timezone.now()
-        seller.fee_failure_date = now
+        
+        if seller.fee_failure_date == None:
+            seller.fee_failure_date = now
+
         seller.save()
         a_msg.send_fee_failure_message(listing, fee_amount)
         return False

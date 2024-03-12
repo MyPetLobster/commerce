@@ -530,6 +530,7 @@ def deposit(request, user_id):
         if amount > negative_balance:
             # Deposit the full amount to the user's account from the fake bank account
             user.balance += decimal.Decimal(amount)
+            user.fee_failure_date = None
             user.save()
             fake_bank_account.balance -= decimal.Decimal(amount)
             fake_bank_account.save()

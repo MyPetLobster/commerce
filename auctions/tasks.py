@@ -95,3 +95,9 @@ def set_inactive():
             helpers.declare_winner(listing)
         else:
             pass
+
+
+def check_user_fees():
+    '''
+        This tasks checks to see if any users have a user.fee_failure_date that is older than 7 days. 
+    '''
