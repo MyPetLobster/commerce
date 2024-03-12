@@ -500,8 +500,6 @@ def delete_account(request, user_id):
 @login_required
 def deposit(request, user_id):
     '''
-    This function is called when the user submits the deposit form on the profile page. It creates a
-    new transaction object and updates the user's balance. It then redirects to the profile page.
 
     Args:
             request (HttpRequest): The request object
@@ -522,10 +520,27 @@ def deposit(request, user_id):
         contrib_messages.error(request, "Deposit amount must be greater than 0")
         return redirect("profile", user_id=user_id)
     
+    # Handle negative balance
     if user.balance < 0: 
         negative_balance = user.balance * -1
+        '''
+            if the deposit is greater than the negative balance, ensure only the negative balance is 
+            deposited to the site account and the rest is deposited to the user's account. If the deposit
+        '''
         if amount > negative_balance:
-            site_account.balance += negative_balance
+            # Deposit the full amount to the user's account from the fake bank account
+            user.balance += decimal.Decimal(amount)
+            user.save()
+            fake_bank_account.balance -= decimal.Decimal(amount)
+            fake_bank_account.save()
+            Transaction.objects.create(
+                amount=amount,
+                sender=fake_bank_account,
+                recipient=user,
+                notes="Deposit"
+            )
+            # Deposit the negative balance to the site account
+            site_account.balance += decimal.Decimal(negative_balance)
             site_account.save()
             Transaction.objects.create(
                 amount=negative_balance,
@@ -534,18 +549,14 @@ def deposit(request, user_id):
                 notes="Deposit for Fees"
             )
 
-            user.balance += amount
-            user.save()
-            Transaction.objects.create(
-                amount=amount,
-                sender=fake_bank_account,
-                recipient=user,
-                notes="Deposit"
-            )
             contrib_messages.success(request, "Deposit successful")
             return redirect("profile", user_id=user_id)
         else:
-            site_account.balance += amount
+            '''
+                If the deposit is less than the negative balance, deposit the entire amount to the site account
+                and then deposit the entire amount to the user's account.
+            '''
+            site_account.balance += decimal.Decimal(amount)
             site_account.save()
             Transaction.objects.create(
                 amount=amount,
@@ -554,7 +565,7 @@ def deposit(request, user_id):
                 notes="Deposit for Fees"
             )
 
-            user.balance += amount
+            user.balance += decimal.Decimal(amount)
             user.save()
             Transaction.objects.create(
                 amount=amount,
@@ -565,17 +576,16 @@ def deposit(request, user_id):
             contrib_messages.info(request, "Deposit successful, but you still have a negative balance. Fees will be charged after 7 days. See terms for more details.")
             return redirect("profile", user_id=user_id)
     else:
+        fake_bank_account.balance -= decimal.Decimal(amount)
+        fake_bank_account.save()
+        user.balance += decimal.Decimal(amount)
+        user.save()
         Transaction.objects.create(
             amount=amount,
             sender=fake_bank_account,
             recipient=user,
             notes="Deposit"
         )
-
-        fake_bank_account.balance -= decimal.Decimal(amount)
-        fake_bank_account.save()
-        user.balance += decimal.Decimal(amount)
-        user.save()
         contrib_messages.success(request, "Deposit successful")
 
         return redirect("profile", user_id=user_id)
