@@ -96,6 +96,7 @@ def index(request):
     # Celery periodic task here for now
     tasks.check_if_bids_funded()
     tasks.set_inactive()
+    tasks.check_user_fees()
 
     current_user = request.user
     listings = Listing.objects.all().order_by("-date")

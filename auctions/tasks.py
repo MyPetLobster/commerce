@@ -7,7 +7,7 @@ import logging
 
 from . import auto_messages as a_msg
 from . import helpers
-from .models import Bid, Listing
+from .models import Bid, Listing, User, Transaction
 
 
 logger = logging.getLogger(__name__)
@@ -99,19 +99,60 @@ def set_inactive():
 
 def check_user_fees():
     '''
-        This tasks checks to see if any users have a user.fee_failure_date that is older than 7 days. 
-        If they do, their balance becomes (negative_balance + (negative_balance * 0.05) * days_overdue)
+        This tasks checks to see if any users have a fee_failure_date that is older than 7 days. 
+        If they do, they are charged 5% on the outstanding balance for each day that the fee is overdue.
 
-        If the user still has a negative balance after 28 days, the user is notified of imminent account closure
+        If the user has a negative balance after 28 days, the user is notified of imminent account closure
         and legal action.
 
-        If the user has a negative balance after 30 days, the account is closed (username changed to "inactive_[username]" and
-        password is reset to a random string). Then a Transaction is created with a notes field indicating "legal" and the 
-        outstanding balance is added to site_account.
+        If the user has a negative balance after 30 days, the account is closed and negative balance paid 
+        by legal department.
 
-        This function also has a helper function to make sure that user.fee_failure_date is set to None if the user has a 
-        positive balance.
+        Frequency: Every 24 hours
 
- 
+        Args: None
+        Returns: None
 
+        Called by: views.index
     '''
+
+    users_with__late_fees = User.objects.filter(fee_failure_date__lt=timezone.now() - timedelta(days=7))
+    site_account = User.objects.get(pk=12)
+    for user in users_with__late_fees:
+        # Failsafe, should be handled by actions.deposit
+        if user.balance > 0:
+            user.fee_failure_date = None
+            user.save()
+
+            # send error message to admin
+            admin = User.objects.get(pk=2)
+            subject = "FEE FAILURE CONFLICT"
+            message = f"""User {user.username} has a positive balance but a fee_failure_date. Please investigate. 
+                        Source - tasks.check_user_fees()"""
+            a_msg.send_message(admin, user, subject, message)
+            continue
+
+        days_overdue = (timezone.now() - user.fee_failure_date).days if user.fee_failure_date else 0
+        
+        if days_overdue > 7:
+            user.balance = user.balance + (user.balance * 0.05) * (days_overdue - 7)
+            user.save()
+        
+        if user.balance < 0 and days_overdue > 28 and days_overdue <= 30:
+            a_msg.send_account_closure_message(user)
+
+        if user.balance < 0 and days_overdue > 30:
+            user.username = f"inactive_{user.username}"
+            user.set_password(User.objects.make_random_password())
+            user.save()
+            Transaction.objects.create(
+                amount=user.balance * -1, 
+                sender=user,
+                recipient=site_account, 
+                notes="legal"
+            )
+            user.balance = 0
+            user.save()
+            # TODO: Send email to user to notify them and give contact info for collections department
+
+
