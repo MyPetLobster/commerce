@@ -217,6 +217,7 @@
 <script>
     localStorage.setItem('activePage', 'about');
 
+    // Show/hide terms and conditions
     document.getElementById("show-terms-conditions").addEventListener("click", function() {
         document.getElementById("terms-and-conditions").classList.toggle("hidden");
     });
@@ -224,6 +225,7 @@
         document.getElementById("terms-and-conditions").classList.toggle("hidden");
     });
 
+    // Show/hide FAQ answers
     faqQuestions = document.querySelectorAll(".faq-question");
     faqQuestions.forEach(function(question) {
         question.addEventListener("click", function() {

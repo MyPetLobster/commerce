@@ -373,19 +373,17 @@
     }
     
 
-
-
-
-
     const userBidDiv = document.querySelector('#user-bid-div');
+    if (userBidDiv) {
+        userBidDiv.addEventListener('mouseover', function() {
+            document.querySelector('#cancel-bid-div').classList.remove('hidden');
+        });
 
-    userBidDiv.addEventListener('mouseover', function() {
-        document.querySelector('#cancel-bid-div').classList.remove('hidden');
-    });
+        userBidDiv.addEventListener('mouseout', function() {
+            document.querySelector('#cancel-bid-div').classList.add('hidden');
+        });
+    }
 
-    userBidDiv.addEventListener('mouseout', function() {
-        document.querySelector('#cancel-bid-div').classList.add('hidden');
-    });
 
 
 
