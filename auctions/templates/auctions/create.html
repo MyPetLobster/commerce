@@ -39,7 +39,7 @@
                 </p>
                 <div class="form-btn-box" style="margin-top:0;">
                     <button id="confirm-create-btn" class="btn btn-primary" type="button" >Confirm New Listing</button>
-                    <button id="cancel-create-btn" class="btn btn-secondary" type="button">Cancel</button>
+                    <button id="cancel-create-btn" class="btn btn-primary cancel-btn" type="button">Cancel</button>
                 </div>
             </div>
         </form>
@@ -61,6 +61,7 @@
     <script>
         localStorage.setItem('activePage', 'create-listing');
 
+        // Popup confirmation for creating a new listing
         const fauxCreateSubmitBtn = document.getElementById('faux-create-submit-btn');
         const confirmationPopupDiv = document.getElementById('create-confirmation-popup-div');
         const cancelBtn = document.getElementById('cancel-create-btn');
@@ -82,6 +83,8 @@
             createForm.submit();
         });
 
+        
+        // Show fine print on hover in new popup
         const finePrint = document.querySelector('.fine-print');
         const expandedFinePrint = document.querySelector('.expanded-fine-print');   
 

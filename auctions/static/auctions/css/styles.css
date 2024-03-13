@@ -1763,8 +1763,8 @@ input {
 }
 
 .fine-print {
-  width: 175px;
-  font-size: 0.2em;
+  width: 100%;
+  font-size: 0.3em;
 }
 
 .expanded-fine-print {
