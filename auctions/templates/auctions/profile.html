@@ -297,12 +297,15 @@
 
     const reportUserText = document.querySelector("#report-user-text")
     const cancelReportUserBtn = document.querySelector(".cancel-report-user-btn")
-    reportUserText.addEventListener("click", () => {
-        document.querySelector(".report-user-form").classList.remove("hidden");
-    })
-    cancelReportUserBtn.addEventListener("click", () => {
-        document.querySelector(".report-user-form").classList.add("hidden");
-    })
+
+    if (reportUserText) {
+        reportUserText.addEventListener("click", () => {
+            document.querySelector(".report-user-form").classList.remove("hidden");
+        })
+        cancelReportUserBtn.addEventListener("click", () => {
+            document.querySelector(".report-user-form").classList.add("hidden");
+        })
+    }
     
 
 

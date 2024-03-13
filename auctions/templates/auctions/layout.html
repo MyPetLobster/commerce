@@ -166,13 +166,15 @@
         </footer>
 
         <script>
+
+            // Scroll to balance part of profile page if user clicked balance link
             const balanceLink = document.querySelector('.balance-link');
             balanceLink.addEventListener('click', () => {
                 localStorage.setItem('fromBalanceLink', 'true');
             });
 
-
-
+            
+            // django error message close button
             delX = document.querySelector('.del-msg');
             error_message = document.querySelector('.alert-div');
 
@@ -183,22 +185,18 @@
             }
 
 
-
+            // Dropdown Logout/My Yard links
             const fullDropDownDiv = document.querySelector("#full-dropdown-div");
             const statusProfile = document.querySelector("#status-profile");
 
+            // "hi, username" text highlighted on hover
             fullDropDownDiv.addEventListener("mouseover", () => {
                 statusProfile.classList.add("active-dropdown-header");
             });
-
             fullDropDownDiv.addEventListener("mouseout", () => {
                 statusProfile.classList.remove("active-dropdown-header");
             });
 
-
-            function show(value) {
-                document.querySelector(".text-box").value = value;
-            }
             
             const dropdown = document.querySelector(".dropdown")
             dropdown.onclick = function() {
