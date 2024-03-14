@@ -1,3 +1,4 @@
+// Alert message divs will disappear after 4.5 seconds
 setTimeout(function () {
   message = document.querySelector(".alert-div");
   if (message) {
@@ -7,15 +8,12 @@ setTimeout(function () {
 
 
 
-
 // DARK and LIGHT MODES
 // Check if the user has a theme preference and set it when page loads
 if (localStorage.getItem("theme") === "dark") {
   document.querySelector("body").classList.add("dark-mode");
   document.querySelector("body").classList.remove("light-mode");
-  document.querySelector("#standard-hero").classList.add("hidden");
-  document.querySelector("#standard-hero").classList.remove("visible");
-  document.querySelector("#inverted-hero").classList.add("visible");
+  document.querySelector("#standard-hero").classList.add("hidden");;
   document.querySelector("#inverted-hero").classList.remove("hidden");
   if (document.querySelector("#this-is-transactions-page")) {
     setTransactionDarkMode();
@@ -28,10 +26,8 @@ if (localStorage.getItem("theme") === "dark") {
 if (localStorage.getItem("theme") === "light") {
   document.querySelector("body").classList.add("light-mode");
   document.querySelector("body").classList.remove("dark-mode");
-  document.querySelector("#standard-hero").classList.add("visible");
   document.querySelector("#standard-hero").classList.remove("hidden");
   document.querySelector("#inverted-hero").classList.add("hidden");
-  document.querySelector("#inverted-hero").classList.remove("visible");
   if (document.querySelector("#this-is-transactions-page")) {
     setTransactionLightMode();
   }
@@ -40,19 +36,29 @@ if (localStorage.getItem("theme") === "light") {
 
 }
 
+// TOGGLE the theme mode when the footer button is clicked
 document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("dark-mode");
   document.querySelector("body").classList.toggle("light-mode");
-  document.querySelector("#standard-hero").classList.toggle("visible");
   document.querySelector("#standard-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("hidden");
-  document.querySelector("#inverted-hero").classList.toggle("visible");
+
+  // transactions.html - toggle the table colors
   if (document.querySelector("#this-is-transactions-page")) {
-    toggleTransactionMode();  
-    toggleTimeLeftTextColor();
-    toggleTimeLeftTextColor();
+    toggleTransactionMode();
   }
+
+  // messages.html - change the colors of the message divs 
+  const messagePageCheck = document.querySelector("#this-is-message-page");
+  if (messagePageCheck) {
+    changeMessageColors();
+    setSeparateTextColor();
+  }
+
+  // Other theme mode toggles
   toggleDeleteAccountButtonColor();
+  setSearchResultDescColor();
+  toggleTimeLeftTextColor();
 
   localStorage.setItem(
     "theme",
@@ -60,15 +66,6 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
       ? "dark"
       : "light"
   );
-
-  setSearchResultDescColor();
-
-  // change the colors of the message divs if they exist and sender links in msgs
-  const messagePageCheck = document.querySelector("#this-is-message-page");
-  if (messagePageCheck) {
-    changeMessageColors();
-    setSeparateTextColor();
-  }
 };
 
 // TRANSACTIONS PAGE THEME MODE FUNCTIONS
@@ -94,7 +91,7 @@ function toggleTransactionMode() {
 }
 
 // Assorted Theme Mode Functions
-// used for links to sender in messages on messages page
+// messages.html - change the colors of sender links
 function setSeparateTextColor() {
   if (localStorage.getItem("theme") === "dark") {
     document.querySelector(".msg-sender-link").classList.remove("msg-sender-link-light");
@@ -296,14 +293,14 @@ function changeMessageColors() {
     darkModeColorOne = "#2b2c2e";
     darkModeColorTwo = "#353638";
 
-    if (localStorage.getItem("theme") === "light") {
-      modColorOne = lightModeColorOne;
-      modColorTwo = lightModeColorTwo;
-    }
     if (localStorage.getItem("theme") === "dark") {
       modColorOne = darkModeColorOne;
       modColorTwo = darkModeColorTwo;
+    } else {
+      modColorOne = lightModeColorOne;
+      modColorTwo = lightModeColorTwo;
     }
+
 
     messageDivs.forEach((div, index) => {
       if (index % 2 === 0) {

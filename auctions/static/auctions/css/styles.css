@@ -281,10 +281,6 @@ a:hover {
   display: none;
 }
 
-.visible {
-  display: block;
-}
-
 /* Layout Template - Message Admin Form */
 .send-msg-form {
   display: flex;

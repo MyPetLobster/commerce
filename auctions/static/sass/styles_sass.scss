@@ -289,9 +289,9 @@ a:hover {
 .hidden {
   display: none;
 }
-.visible {
-  display: block;
-}
+// .visible {
+//   display: block;
+// }
 /* Layout Template - Message Admin Form */
 .send-msg-form {
   @include flex-column;
