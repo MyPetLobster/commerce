@@ -357,11 +357,10 @@
 </div>
 
 <script>
-
+    // Report Listings
     const reportListingText = document.querySelector('#report-listing-text');
     const reportListingForm = document.querySelector('.report-listing-form');
     const cancelReportListingBtn = document.querySelector('.cancel-report-listing-btn');
-
     if (reportListingText) {
         reportListingText.addEventListener('click', function() {
             reportListingForm.classList.remove('hidden');
@@ -372,39 +371,22 @@
         });
     }
     
-
-    const userBidDiv = document.querySelector('#user-bid-div');
-    if (userBidDiv) {
-        userBidDiv.addEventListener('mouseover', function() {
-            document.querySelector('#cancel-bid-div').classList.remove('hidden');
-        });
-
-        userBidDiv.addEventListener('mouseout', function() {
-            document.querySelector('#cancel-bid-div').classList.add('hidden');
-        });
-    }
-
-
-
-
+    // Report Comments
     const commentListItems = document.querySelectorAll('.comment-list-item');
-
     commentListItems.forEach(function(item) {
         item.addEventListener('mouseover', function() {
             item.querySelector('.report-comment').classList.remove('hidden');
         })
         item.addEventListener('mouseout', function() {
             item.querySelector('.report-comment').classList.add('hidden');
+        });
     });
-    });
-
     const reportComment = document.querySelectorAll('.report-comment');
     reportComment.forEach(function(item) {
         item.addEventListener('click', function() {
             item.nextElementSibling.classList.remove('hidden');
         });
     });
-
     const cancelReportBtn = document.querySelectorAll('.cancel-report-btn');
     cancelReportBtn.forEach(function(item) {
         item.addEventListener('click', function() {
@@ -412,76 +394,71 @@
         });
     });
 
+    // Show user bid info on this listing if it exists
+    const userBidDiv = document.querySelector('#user-bid-div');
+    if (userBidDiv) {
+        userBidDiv.addEventListener('mouseover', function() {
+            document.querySelector('#cancel-bid-div').classList.remove('hidden');
+        });
+        userBidDiv.addEventListener('mouseout', function() {
+            document.querySelector('#cancel-bid-div').classList.add('hidden');
+        });
+    }
 
-
-
+    // Cancel an existing bid
     const cancelBidLink = document.querySelector('#cancel-bid-link');
     const confirmCancelBid = document.querySelector('#confirm-cancel-bid');
     const cancelCancel = document.querySelector('#cancel-cancel');
-
     if (cancelBidLink) {
         cancelBidLink.addEventListener('click', function() {
             confirmCancelBid.classList.remove('hidden');
         });
-
         cancelCancel.addEventListener('click', function() {
             confirmCancelBid.classList.add('hidden');
         });
     }
 
-
-
+    // Place and confirm bid
     const confirmBidBtn = document.querySelector('#confirm-bid-btn');
     const confirmBidPopupContent = document.querySelector('.confirm-bid-popup-content');
     const cancelBid = document.querySelector('#cancel-bid');
     const submitBidBtn = document.querySelector('#submit-bid-btn');
-
     if (confirmBidBtn) {
-        confirmBidBtn.onclick = function() {
+        confirmBidBtn.addEventListener('click', function() {
             confirmBidPopupContent.classList.remove('hidden');
             confirmBidPopupContent.classList.add('popup-form');
-        }
-
-        cancelBid.onclick = function() {
+        });
+        cancelBid.addEventListener('click', function() {
             confirmBidPopupContent.classList.add('hidden');
             confirmBidPopupContent.classList.remove('popup-form');
-        }
-    }   
-
+        });   
+    }
     if (submitBidBtn) {
         submitBidBtn.onclick = function() {
             document.querySelector('.bid-form-div').submit();
         }
     }
 
-
+    // Close Listing
     const closeListingBtn = document.querySelector('#close-listing-btn');
     const closeBidConfirmation = document.querySelector('#close-bid-confirmation');
     const cancelClose = document.querySelector('#cancel-close');
-
     if (closeListingBtn) {
-        closeListingBtn.onclick = function() {
+        closeListingBtn.addEventListener('click', function() {
             closeBidConfirmation.classList.remove('hidden');
-        }
+        });
     }
-
     if (cancelClose) {
-        cancelClose.onclick = function() {
+        cancelClose.addEventListener('click', function() {
             closeBidConfirmation.classList.add('hidden');
-        }
+        });
     }
-
-
-    const commentButton = document.querySelector('#comment-button');
-    const commentForm = document.querySelector('#comment-form');
-    const cancelComment = document.querySelector('#cancel-comment');
-
-    const watchListCheck = document.querySelector('#watchlist-check');
-    const watchListCheckContentAdd = document.querySelector('#watchlist-check-content-add');
-    const watchListCheckContentRemove = document.querySelector('#watchlist-check-content-remove');
     
-    
-    document.addEventListener('DOMContentLoaded', function() {
+    // Leave a comment, show comment form
+    function handleCommentButton() {
+        const commentButton = document.querySelector('#comment-button');
+        const commentForm = document.querySelector('#comment-form');
+        const cancelComment = document.querySelector('#cancel-comment');
         if (commentButton) {
             commentButton.onclick = function() {
                 commentForm.classList.remove('hidden');
@@ -492,25 +469,21 @@
                 commentForm.classList.add('hidden');
             }
         }
-
-        if (watchListCheck) {
-            watchListChecker();
-        }
-
-        checkAndUpdate();
-    });
-
-
+    }
+    
+    // Check if item on user watchlist, display appropriate content
     function watchListChecker() {
+        const watchListCheckContentAdd = document.querySelector('#watchlist-check-content-add');
+        const watchListCheckContentRemove = document.querySelector('#watchlist-check-content-remove');
+
         if (watchListCheck.textContent === "not on watchlist") {
             watchListCheckContentAdd.classList.remove('hidden');
-            watchListCheckContentAdd.classList.add('visible');
         } else {
             watchListCheckContentRemove.classList.remove('hidden');
-            watchListCheckContentRemove.classList.add('visible');
         }
     }
     
+    // Function to check and update the countdown
     function checkAndUpdate() {
         var timeLeftCheck = "{{ time_left }}";
         if (timeLeftCheck.startsWith("Listing")) {
@@ -520,9 +493,7 @@
         }
     }
 
-    // Function to update the countdown
-    // time_left format = "{int(days_left)} days, {int(hours_left)} hours, {int(minutes_left)} minutes, {int(seconds_left)} seconds"
-    // OR "Listing expired on {closed_date.month}/{closed_date.day}/{closed_date.year}"
+    // Function to update the countdown live
     function updateCountdown() {    
         var countdownElement = document.getElementById('countdown');
         var timeLeft = "{{ time_left }}";
@@ -570,5 +541,17 @@
         }, 1000);
     }
 
+
+    document.addEventListener('DOMContentLoaded', function() {
+        handleCommentButton();
+
+        const watchListCheck = document.querySelector('#watchlist-check');
+        if (watchListCheck) {
+            watchListChecker();
+        }
+
+        checkAndUpdate();
+    });
+    
 </script>
 {% endblock %}
