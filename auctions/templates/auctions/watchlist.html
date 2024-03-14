@@ -18,11 +18,11 @@
     <div class="watchlist-listing">
       <a href="{% url 'listing' listing.id %}">
         {% if listing.image != "" %}
-            <div class="watchlist-thumb-div">
+            <div>
                 <img class="watchlist-thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
             </div>
         {% else %}
-            <div class="watchlist-thumb-div">
+            <div>
                 <img class="watchlist-thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
             </div>
         {% endif %}

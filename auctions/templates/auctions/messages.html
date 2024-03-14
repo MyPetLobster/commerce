@@ -68,14 +68,14 @@
           <p>No unread messages</p>
         </div>
       {% else %}
-        <div class="all-inbox-div">
+        <div>
           {% if inbox_messages %} 
           
           <!-- Start looping over all messages-->
           {% for message in inbox_messages %}
 
           <!-- hidden check for unread/read -->
-          <div class="is-message-read hidden">
+          <div class="hidden">
             {% if message.read == True %}True{% else %}False{% endif %}
           </div>
 
@@ -121,14 +121,14 @@
                 {% endif %}
               </span>
             </p>
-            <p class="message-date">
+            <p>
               Date: {{ message.date|date:"F j, Y, g:i a" }}
             </p>
-            <p class="message-subject">Subject: {{ message.subject }}</p>
-            <p class="message-content">{{ message.message }}</p>
+            <p>Subject: {{ message.subject }}</p>
+            <p>{{ message.message }}</p>
           </div>
 
-          <div class="reply-delete-container hidden">
+          <div class="hidden">
             <div class="reply-delete-div">
               <span class="reply-button">Reply</span>
               <div class="reply-form-div hidden">
@@ -199,16 +199,16 @@
 
           <div class="message-div-full hidden">
             <p class="message-sender">To: {{ message.recipient }}</p>
-            <p class="message-date">
+            <p>
               Date: {{ message.date|date:"F j, Y, g:i a" }}
             </p>
-            <p class="message-subject">Subject: {{ message.subject }}</p>
-            <p class="message-content">{{ message.message }}</p>
+            <p>Subject: {{ message.subject }}</p>
+            <p>{{ message.message }}</p>
           </div>
 
-          <div class="reply-delete-container hidden">
+          <div class="hidden">
             <div class="reply-delete-div">
-              <span class="delete-msg-button">
+              <span>
                 <a
                   class="delete-msg-button"
                   href="{% url 'delete_message' message.id %}"

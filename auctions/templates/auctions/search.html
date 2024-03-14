@@ -12,7 +12,7 @@
         <div class="center-container">
             <h3>Search</h3>
         </div>
-        <div class="search-form-div">
+        <div>
             <form action="{% url 'search' %}" method="post">
                 {% csrf_token %}
                 <div class="form-btn-box">
@@ -21,7 +21,7 @@
                 </div>
             </form>
         </div>
-        <div class="search-results">
+        <div>
             {% if listings %}
                 <h3>Results</h3>
                 <div class="search-results-div">

@@ -27,7 +27,7 @@
     <h1>{{ user.username }}'s Yard</h1>
     {% if user != current_user %}
         {% if current_user.is_authenticated %}
-            <div class="send-msg-div center-container">
+            <div class="center-container">
                 <button id="send-usr-msg-btn" class="btn btn-primary">Send Message</button>
             </div>
 
@@ -133,7 +133,7 @@
         <hr>
     </div>
     {% if current_user == user %}
-    <div class="user-bids">
+    <div>
         <h2 id="my-bids-header">My Bids</h2>
         <p class="center-container bids-section-element"><a id="bid-history-link" href="{% url 'transactions' current_user.id %}">View Full Bidding History</a></p>
         <div class="center-container bids-section-element">
@@ -141,7 +141,7 @@
             {% for bid_info in bid_info_list %}
                 {% if bid_info.is_old_bid == True %}
                 {% else %}
-                <li class="li-listing bid-item">
+                <li class="bid-item">
                 
                     {% if bid_info.user_bid.listing.active == True %}
                         <a class="bold" href="{% url 'listing' bid_info.user_bid.listing.id %}">{{ bid_info.user_bid.listing.title }}</a>
@@ -201,7 +201,7 @@
                 <ul class="no-list-style-center active-listings-element">
                     {% for listing in user.listings.all %}
                         {% if listing.active == True %}
-                            <li class="li-listing">  
+                            <li>  
                                 <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             </li>
                         {% endif %}
@@ -228,7 +228,7 @@
             <ul class="thin-list">
                 {% for listing in user.listings.all %}
                     {% if listing.active == False %}
-                        <li class="li-listing closed-listing-li">
+                        <li class="closed-listing-li">
                                 <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a></br>
                         
                         {% if listing.price == listing.starting_bid %}
@@ -252,7 +252,7 @@
 </div>
 <div class="divider-med"></div>
 <div class="center-container">
-    <button id="delete-account" class="del-acct-btn-base delete-account-button">Delete Account</button>
+    <button id="delete-account" class="del-acct-btn-base">Delete Account</button>
     <div class="delete-account-div hidden">
     {% if user_active_listings_count == 0 and user_active_bids_count == 0 %}
         <div class="delete-account-permitted">

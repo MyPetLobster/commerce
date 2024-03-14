@@ -42,7 +42,7 @@
             <h1 class="yard-sale">Yard Sale</h1>
             </a>
             <a class="hero-link" href="{% url 'index' %}">
-                <img id="standard-hero" class="visible" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
+                <img id="standard-hero" src="https://i.imgur.com/je1SZ7K.png" alt="Yard Sale" style="height:100px">
                 <img id="inverted-hero" class="hidden" src="https://i.imgur.com/w5pvWLp.png" alt="Yard Sale" style="height:100px">
             </a>
         </div>
@@ -86,7 +86,7 @@
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
                     <a class="balance-link status-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <div class="mail-icon-div">
-                        <span id="mail-icon-default" class="mail-icon visible"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;" alt="gray mail icon"></span>
+                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;" alt="gray mail icon"></span>
                         <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" style="width:25px;" alt="pink mail icon"></a></span>
                         <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" style="width:25px;" alt="dark pink mail icon"></span>&nbsp;&nbsp;
                     </div>

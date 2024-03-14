@@ -12,7 +12,7 @@
 {% block body %}
 
 <div class="page-content">
-    <div class="winner-funds-issue-div">
+    <div>
         {% if current_user == listing.user %} 
             {% if listing.active == False %}
                 {% if listing.cancelled == True and listing.price == listing.starting_bid %}
@@ -20,9 +20,9 @@
                         <p>Listing has been cancelled. No bids were placed.</p>
                     </div>
                 {% elif listing.shipped == False and listing.in_escrow == True %}
-                    <div class="confirm-shipping confirm-ship-div" style="width: 350px; text-align: center;">
-                        <h4 class="confirm-ship">Confirm Shipping</h4>
-                        <p class="confirm-ship">Bidding has closed on your listing, and there is a winner.
+                    <div class="confirm-ship-div" style="width: 350px; text-align: center;">
+                        <h4>Confirm Shipping</h4>
+                        <p>Bidding has closed on your listing, and there is a winner.
                             Please use the button below to generate a shipping label.
                             Follow the instructions you receive in the email.<br/><br/>
                             As soon as your shipping barcode is scanned, the funds will be
@@ -35,7 +35,7 @@
                         <p></p>
                     </div>
                 {% elif listing.shipped == True %}
-                    <div class="shipped seller-alert-div">
+                    <div class="seller-alert-div">
                         <h3>Item Shipped</h3>
                         <p>Item has been shipped. Thanks for using Yard Sale!</p>
                     </div>
@@ -90,13 +90,13 @@
             {% endif %}
         {% endif %}
     </div>
-    <h2 class="page-heading-h2">{{ listing.title }}</h2>
+    <h2>{{ listing.title }}</h2>
 
     {% if listing.image != "" %}
         <img class="listing-img" src="{{ listing.image }}" alt="image of {{ listing.title }}">
     {% endif %}
     <div class="listing-desc">
-        <p class="fields-div">
+        <p>
             <span class="bold">Seller:&nbsp;&nbsp;</span>
             <span class="lightweight">
                 {% if current_user.is_authenticated %}
@@ -475,7 +475,7 @@
     function watchListChecker() {
         const watchListCheckContentAdd = document.querySelector('#watchlist-check-content-add');
         const watchListCheckContentRemove = document.querySelector('#watchlist-check-content-remove');
-
+        const watchListCheck = document.querySelector('#watchlist-check');
         if (watchListCheck.textContent === "not on watchlist") {
             watchListCheckContentAdd.classList.remove('hidden');
         } else {

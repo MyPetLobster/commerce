@@ -73,20 +73,20 @@
             
             {% if listing.active == True %}
             <div class="li-listing-div hidden">
-                <li class="li-listing">
+                <li>
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
                             {% if listing.image != "" %}
-                                <div class="thumb-div">
+                                <div>
                                     <img class="thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
                                 </div>
                             {% else %}
-                                <div class="thumb-div">
+                                <div>
                                     <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
                                 </div>
                             {% endif %}
                         </a>
-                        <div class="list-desc-div">
+                        <div>
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Current Bid:&nbsp; </span>{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
@@ -120,13 +120,13 @@
         {% for listing in listings %}
             {% if listing.active == True %}
                 <li class="title-only-li" style="margin-bottom: 8px">
-                    <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                    <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
 
-    <h3 id="closed-listings" class="page-heading-h3">Closed Listings</h3>
+    <h3 id="closed-listings">Closed Listings</h3>
     <form
         class="sort-by-form"
         action="{% url 'sort' %}"
@@ -152,21 +152,21 @@
     <ul class="long-listings">
         {% for listing in listings %}
             {% if listing.active == False %}
-            <div class="li-listing-closed-div ">
-                <li class="li-listing">
+            <div class="li-listing-closed-div">
+                <li>
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
                             {% if listing.image != "" %}
-                                <div class="thumb-div">
+                                <div>
                                     <img class="thumb-img" src="{{ listing.image }}" alt="thumbnail image of {{ listing.title }}">
                                 </div>
                             {% else %}
-                                <div class="thumb-div">
+                                <div>
                                     <img class="thumb-img" src="{% static 'images/No_Image_Available.jpg' %}" alt="no image available">
                                 </div>
                             {% endif %}
                         </a>
-                        <div class="list-desc-div">
+                        <div>
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Final Bid:&nbsp; </span>{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
@@ -190,7 +190,7 @@
         {% for listing in listings %}
             {% if listing.active == False %}
                 <li class="title-only-li" style="margin-bottom: 8px">
-                    <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                    <a href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
                 </li>
             {% endif %}
         {% endfor %}

@@ -1755,6 +1755,10 @@ input {
   font-size: 0.3em;
 }
 
+.finer-print {
+  font-size: 0.2em;
+}
+
 .expanded-fine-print {
   position: fixed;
   top: 50%;
