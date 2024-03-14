@@ -290,14 +290,12 @@
 </div>
 <div class="divider-small"></div>
 <script>
-    // Set the localStorage value of the transactionsPageSection. Used on transactions page to determine 
-    // which section to scroll into view
+    // Set the localStorage value of the activePage to highlight on navbar
     localStorage.setItem('activePage', 'profile');
     
-
+    // Report user button and popup 
     const reportUserText = document.querySelector("#report-user-text")
     const cancelReportUserBtn = document.querySelector(".cancel-report-user-btn")
-
     if (reportUserText) {
         reportUserText.addEventListener("click", () => {
             document.querySelector(".report-user-form").classList.remove("hidden");
@@ -307,16 +305,14 @@
         })
     }
     
-
-
+    
+    // Delete account button and popups
     const deleteAccountButton = document.getElementById('delete-account');
     const deleteAccountDiv = document.querySelector('.delete-account-div');
-    
     const submitDeleteBtn = document.getElementById('submit-delete-btn');
     const deleteAcctPermittedDiv = document.querySelector('.delete-account-permitted');
     const etTuBruteDiv = document.querySelector('.et-tu-brute');
     const bruteCancelDeleteBtn = document.getElementById('brute-cancel-delete-account');
-
     const cancelDeleteAccount = document.getElementById('cancel-delete-account');
 
     deleteAccountButton.addEventListener('click', () => {
@@ -324,22 +320,16 @@
         deleteAccountDiv.classList.toggle('popup-form');
         deleteAcctPermittedDiv.classList.remove('hidden');
     });
-
-
     cancelDeleteAccount.addEventListener('click', () => {
         deleteAccountDiv.classList.toggle('hidden');
         deleteAccountDiv.classList.toggle('popup-form');
     });
-
-
-
 
     if (submitDeleteBtn) {
         submitDeleteBtn.addEventListener('click', () => {
             deleteAcctPermittedDiv.classList.add('hidden');
             etTuBruteDiv.classList.remove('hidden');
         });
-
         bruteCancelDeleteBtn.addEventListener('click', () => {
             etTuBruteDiv.classList.add('hidden');
             deleteAcctPermittedDiv.classList.toggle('hidden');
@@ -348,68 +338,66 @@
         });
     }
 
-
+    // Limit display to first 10 bidItems
     const bidItem = document.querySelectorAll('.bid-item');
-    // display only the first 10 bidItems
     for (let i = 0; i < bidItem.length; i++) {
         if (i > 9) {
             bidItem[i].classList.add('hidden');
         }
     }
 
+    // Limit display to 10 closed listings
     const closedListingLi = document.querySelectorAll('.closed-listing-li');
-    // display only the first 10 closedListingLi
     for (let i = 0; i < closedListingLi.length; i++) {
         if (i > 9) {
             closedListingLi[i].classList.add('hidden');
         }
     }
 
+    // Set local storage value to scroll to section on transactions page
     const transactionHistoryLink = document.getElementById('transaction-history-link');
     const bidHistoryLink = document.getElementById('bid-history-link');
-
     if (transactionHistoryLink) {
         transactionHistoryLink.addEventListener('click', () => {
             localStorage.setItem('transactionsPageSection', 'transactions');
         });
     }
-
     if (bidHistoryLink) {
         bidHistoryLink.addEventListener('click', () => {
             localStorage.setItem('transactionsPageSection', 'bids');
         });
     }
 
+    // Send message to user from profile page
     const sendMsgButton = document.getElementById('send-usr-msg-btn');
     const sendMsgForm = document.getElementById('send-usr-msg-form');
     const cancelMsg = document.getElementById('cancel-usr-msg');
-
     if (sendMsgButton) {
         sendMsgButton.addEventListener('click', () => {
-        sendMsgForm.classList.remove('hidden');
-        sendMsgForm.classList.add('visible');
-    });
-
+            sendMsgForm.classList.remove('hidden');
+        });
         cancelMsg.addEventListener('click', () => {
-        sendMsgForm.classList.add('hidden');
-        sendMsgForm.classList.remove('visible');
-    });
+            sendMsgForm.classList.add('hidden');
+        });
     }
 
 
-
+    // Deposit button and form
     const depositButton = document.getElementById('deposit-btn');
     const depositForm = document.querySelector('.deposit-form');
     const cancelDeposit = document.getElementById('cancel-deposit-btn');
 
+    // Withdraw button and form
     const withdrawButton = document.getElementById('withdraw-btn');
     const withdrawForm = document.querySelector('.withdraw-form');
     const cancelWithdraw = document.getElementById('cancel-withdraw-btn');
 
+    // Edit profile button and form
     const editButton = document.getElementById('edit-button');
     const editProfile = document.getElementById('edit-profile');
     const cancelButton = document.getElementById('cancel-edit-profile-button');
 
+    // Change password button and form
     const changePassword = document.getElementById('change-password');
     const changePasswordForm = document.getElementById('change-password-form');
     const cancelPassword = document.getElementById('cancel-password-btn');
@@ -417,47 +405,35 @@
     if (depositButton) {
         depositButton.addEventListener('click', () => {
             depositForm.classList.remove('hidden');
-            depositForm.classList.add('visible');
         });
-
         cancelDeposit.addEventListener('click', () => {
             depositForm.classList.add('hidden');
-            depositForm.classList.remove('visible');
         });
 
         withdrawButton.addEventListener('click', () => {
             withdrawForm.classList.remove('hidden');
-            withdrawForm.classList.add('visible');
         });
-
         cancelWithdraw.addEventListener('click', () => {
             withdrawForm.classList.add('hidden');
-            withdrawForm.classList.remove('visible');
         });
 
         editButton.addEventListener('click', () => {
             editProfile.classList.remove('hidden');
-            editProfile.classList.add('visible');
         });
-
         cancelButton.addEventListener('click', () => {
             editProfile.classList.add('hidden');
-            editProfile.classList.remove('visible');
         });
-
 
         changePassword.addEventListener('click', () => {
             changePasswordForm.classList.remove('hidden');
-            changePasswordForm.classList.add('visible');
         });
-
         cancelPassword.addEventListener('click', () => {
             changePasswordForm.classList.add('hidden');
-            changePasswordForm.classList.remove('visible');
         });
     }
 
-
+    
+    // Collapse all main sections of profile page
     const acctBalanceHeader = document.getElementById('acct-balance-header');
     const acctSectionElements = document.querySelectorAll('.acct-section-element');
     acctBalanceHeader.addEventListener('click', () => {
@@ -496,17 +472,12 @@
         closedListingsElement.classList.toggle('hidden');
     });
 
-
+    // Scroll to account balance section if user is coming from balance link
     if (localStorage.getItem('fromBalanceLink') === 'true') {
         acctBalanceHeader.scrollIntoView();
         window.scrollBy(0, -230);
         localStorage.setItem('fromBalanceLink', 'false');
     }
-
-
-
-
-
 
 </script>
 
