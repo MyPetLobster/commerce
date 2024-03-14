@@ -127,7 +127,8 @@
     }
 
 
-    // Only display the first bid for each listing id. Add a click event listener to the visible rows to toggle the display of the remaining bids by using class "hidden".
+    // Only display the first bid for each listing id. Add a click event listener to the visible rows 
+    // to toggle the display of the remaining bids by using class "hidden".
     var visibleBids = {};
     var bidRows = document.querySelectorAll('#bids-table tbody tr');
 
@@ -152,11 +153,11 @@
                 return bid.classList.contains('hidden');
             });
             
-            if (hiddenBids.length > 0) { // Check if there are hidden bids
+            if (hiddenBids.length > 0) { 
                 hiddenBids.forEach(function(hiddenBid) {
-                    hiddenBid.classList.toggle('hidden'); // Toggle the 'hidden' class
+                    hiddenBid.classList.toggle('hidden'); 
                 });
-                visibleBids[listingId] = !visibleBids[listingId]; // Toggle the visibility status
+                visibleBids[listingId] = !visibleBids[listingId];
             } else {
                 listingBids.forEach(function(bid) {
                     if (bid !== row) {
@@ -184,8 +185,6 @@
         }
     });
 
-
-    
 </script>
 
 {% endblock %}
