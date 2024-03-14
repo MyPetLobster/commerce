@@ -700,8 +700,7 @@ def sort_messages(request):
         request.session["sort_by_direction"] = sort_by_direction
 
     sent_messages, inbox_messages, show_read_messages = helpers.show_hide_read_messages(request)
-    sent_messages, inbox_messages, sort_by_direction = helpers.set_message_sort(request, sent_messages, inbox_messages)
-
+    sent_messages, inbox_messages, sort_by_direction = helpers.set_message_sort(sort_by_direction, sent_messages, inbox_messages)
     return render(request, "auctions/messages.html", {
         'sent_messages': sent_messages,
         'inbox_messages': inbox_messages,

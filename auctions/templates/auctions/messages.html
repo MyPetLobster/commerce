@@ -238,9 +238,9 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
 
+    // Show/Hide entire section Inbox/Sent
     const inboxHeader = document.getElementById("inbox-messages-header");
     const sentHeader = document.getElementById("sent-messages-header");
-
     inboxHeader.addEventListener("click", () => {
       const inboxHiddenDiv = document.getElementById("inbox-hidden-div");
       if (inboxHiddenDiv.classList.contains("hidden")) {
@@ -249,7 +249,6 @@
         inboxHiddenDiv.classList.add("hidden");
       }
     });
-
     sentHeader.addEventListener("click", () => {
       const sentHiddenDiv = document.getElementById("sent-hidden-div");
       if (sentHiddenDiv.classList.contains("hidden")) {
@@ -259,11 +258,11 @@
       }
     });
 
+    // Show/Hide Read Messages
     const showHideButton = document.querySelector(".show-hide-button");
     const showHideForm = document.getElementById("show-hide-form");
     const showHideValue = document.getElementById("show-hide-value");
     const showHideInput = document.getElementById("show-hide-input");
-
     showHideButton.addEventListener("click", () => {
       if (showHideValue.textContent === "True") {
         showHideInput.value = "hide";
@@ -273,40 +272,36 @@
       showHideForm.submit();
     });
 
-
+    // Reply to messages popup form
     const replyButtons = document.querySelectorAll(".reply-button");
     const replyForms = document.querySelectorAll(".reply-form-div");
     const cancelButtons = document.querySelectorAll(".cancel-reply");
-
     replyButtons.forEach((button, index) => {
       button.addEventListener("click", () => {
         replyForms[index].classList.toggle("hidden");
       });
     });
-
     cancelButtons.forEach((button, index) => {
       button.addEventListener("click", () => {
         replyForms[index].classList.toggle("hidden");
       });
     });
 
+    // Sort Messages
     const sortMsgForm = document.getElementById("sort-msg-form");
     const sortMsgDirection = document.getElementById("sort-by-direction");
     const newestFirst = document.getElementById("newest-first");
     const oldestFirst = document.getElementById("oldest-first");
-
     newestFirst.addEventListener("click", () => {
       sortMsgDirection.value = "newest-first";
       localStorage.setItem("messageSort", "newest-first");
       sortMsgForm.submit();
     });
-
     oldestFirst.addEventListener("click", () => {
       sortMsgDirection.value = "oldest-first";
       localStorage.setItem("messageSort", "oldest-first");
       sortMsgForm.submit();
     });
-
     if (localStorage.getItem("messageSort") === "oldest-first") {
       newestFirst.classList.remove("bold-underline");
       oldestFirst.classList.add("bold-underline");
