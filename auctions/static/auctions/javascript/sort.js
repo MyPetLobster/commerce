@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
   const sortByOptions = document.querySelectorAll(".sort-by-option");
-  // window.scrollTo(0, localStorage.getItem("scrollY"));
+
+  const handleSortByOptionClick = (event) => {
+    const sortBy = event.target.dataset.sortBy;
+    const direction =
+      localStorage.getItem("sort-by-direction") === "asc" ? "desc" : "asc";
+    localStorage.setItem("sort-by", sortBy);
+    localStorage.setItem("sort-by-direction", direction);
+    document.querySelector("#sort-by").value = sortBy;
+    document.querySelector("#sort-by-direction").value = direction;
+    document.querySelector(".sort-by-form").submit();
+  };
 
   sortByOptions.forEach((option) => {
-    option.addEventListener("click", function () {
-      const sortBy = this.dataset.sortBy;
-      const direction =
-        localStorage.getItem("sort-by-direction") === "asc" ? "desc" : "asc";
-      localStorage.setItem("sort-by", sortBy);
-      localStorage.setItem("sort-by-direction", direction);
-      // localStorage.setItem("scrollY", window.scrollY);
-      document.querySelector("#sort-by").value = sortBy;
-      document.querySelector("#sort-by-direction").value = direction;
-      document.querySelector(".sort-by-form").submit();
-    });
+    option.addEventListener("click", handleSortByOptionClick);
   });
 
   const updateSortUI = () => {
@@ -24,25 +24,17 @@ document.addEventListener("DOMContentLoaded", function () {
       const optionSortBy = option.dataset.sortBy;
       if (optionSortBy === sortBy) {
         option.classList.add("sort-by-active");
+        let directionText = "";
         if (sortBy === "title" || sortBy === "seller") {
-          option.innerHTML = `${
-            direction === "asc"
-              ? `&darr; ${option.innerHTML} (A-Z)`
-              : `&uarr; ${option.innerHTML} (Z-A)`
-          }`;
+          directionText = direction === "asc" ? "A-Z" : "Z-A";
         } else if (sortBy === "date") {
-          option.innerHTML = `${
-            direction === "asc"
-              ? `&uarr; ${option.innerHTML} (Old-New)`
-              : `&darr; ${option.innerHTML} (New-Old)`
-          }`;
+          directionText = direction === "asc" ? "Old-New" : "New-Old";
         } else if (sortBy === "price") {
-          option.innerHTML = `${
-            direction === "asc"
-              ? `&darr; ${option.innerHTML} (Low-High)`
-              : `&uarr; ${option.innerHTML} (High-Low)`
-          }`;
+          directionText = direction === "asc" ? "Low-High" : "High-Low";
         }
+        option.innerHTML = `${direction === "asc" ? "&darr;" : "&uarr;"} ${
+          option.innerHTML
+        } (${directionText})`;
       } else {
         option.classList.remove("sort-by-active");
       }
@@ -56,34 +48,29 @@ document.addEventListener("DOMContentLoaded", function () {
   const goToClosed = document.getElementById("go-to-closed");
   const backToTop = document.getElementById("back-to-top");
 
+  const handleGoToClosedClick = () => {
+    closedListings.scrollIntoView();
+  };
+
+  const handleBackToTopClick = () => {
+    activeListings.scrollIntoView();
+  };
+
   if (goToClosed) {
-    goToClosed.addEventListener("click", () => {
-      closedListings.scrollIntoView();
-    });
+    goToClosed.addEventListener("click", handleGoToClosedClick);
   }
 
-  backToTop.addEventListener("click", () => {
-    activeListings.scrollIntoView();
-  });
+  backToTop.addEventListener("click", handleBackToTopClick);
 
-  // if user clicks on navbar, reset sort by to date
   const navBar = document.querySelectorAll(".nav");
 
+  const handleNavBarClick = () => {
+    localStorage.setItem("sort-by", "date");
+    localStorage.setItem("sort-by-direction", "desc");
+    updateSortUI();
+  };
+
   navBar.forEach((nav) => {
-    nav.addEventListener("click", () => {
-      localStorage.setItem("sort-by", "date");
-      localStorage.setItem("sort-by-direction", "desc");
-      updateSortUI();
-    });
+    nav.addEventListener("click", handleNavBarClick);
   });
-
-  // if user clicks away from page, save scroll position
-  // window.addEventListener("beforeunload", () => {
-  //   localStorage.setItem("scrollY", window.scrollY);
-  // });
 });
-
-
-
-
-
