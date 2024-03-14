@@ -49,7 +49,7 @@
                 <span class="title-only opt-not-selected ">Show Title Only</span>
             </p>
         </div>
-        <ul class="long-listings visible">
+        <ul class="long-listings">
             {% for listing in listings %}
                 {% if listing.active == True %}
                     <div class="li-listing-div hide-listing"
@@ -70,7 +70,7 @@
                                 <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                                 <p>
                                     <span class="bold">Current Bid:&nbsp; </span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} </br>
-                                    <div class="full-description visible">
+                                    <div class="full-description">
                                         <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
                                     </div>
                                     <div class="truncated-description hidden">
