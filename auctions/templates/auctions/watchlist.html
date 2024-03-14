@@ -74,27 +74,29 @@
   }
 
   const watchlistThumbImgs = document.querySelectorAll('.watchlist-thumb-img');
-  watchlistThumbImgs.forEach((img) => {
-    img.addEventListener('mouseover', () => {
-      // give title link class "pink"
-      img.parentElement.parentElement.nextElementSibling.classList.add('pink');
+  if (watchlistThumbImgs) {
+    watchlistThumbImgs.forEach((img) => {
+      img.addEventListener('mouseover', () => {
+        // give title link class "pink"
+        img.parentElement.parentElement.nextElementSibling.classList.add('pink');
+      });
+      img.addEventListener('mouseout', () => {
+        // remove title class "pink"
+        img.parentElement.parentElement.nextElementSibling.classList.remove('pink');
+      });
     });
-    img.addEventListener('mouseout', () => {
-      // remove title class "pink"
-      img.parentElement.parentElement.nextElementSibling.classList.remove('pink');
-    });
-  });
 
-  const titleTexts = document.querySelectorAll('.watchlist-item-title');
-  titleTexts.forEach((title) => {
-    title.addEventListener('mouseover', () => {
-      // give thumb img class "pink"
-      title.previousElementSibling.firstElementChild.classList.add('hover-img');
+    const titleTexts = document.querySelectorAll('.watchlist-item-title');
+    titleTexts.forEach((title) => {
+      title.addEventListener('mouseover', () => {
+        // give thumb img class "pink"
+        title.previousElementSibling.firstElementChild.classList.add('hover-img');
+      });
+      title.addEventListener('mouseout', () => {
+        // remove thumb img class "pink"
+        title.previousElementSibling.firstElementChild.classList.remove('hover-img');
+      });
     });
-    title.addEventListener('mouseout', () => {
-      // remove thumb img class "pink"
-      title.previousElementSibling.firstElementChild.classList.remove('hover-img');
-    });
-  });
+  }
 </script>
 {% endblock %}
