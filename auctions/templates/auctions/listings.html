@@ -68,11 +68,11 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul class="long-listings visible">
+    <ul class="long-listings">
         {% for listing in listings %}
             
             {% if listing.active == True %}
-            <div class="li-listing-div hide-listing">
+            <div class="li-listing-div hidden">
                 <li class="li-listing">
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
@@ -90,7 +90,7 @@
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Current Bid:&nbsp; </span>{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
-                                <div class="full-description visible">
+                                <div class="full-description">
                                     <span class="bold">Description:&nbsp; </span> {{ listing.description }}</br>
                                 </div>
                                 <div class="truncated-description hidden">
@@ -149,10 +149,10 @@
         <p class="sort-by-option" data-sort-by="date">Listing Date</p>
         <p class="sort-by-option" data-sort-by="price">Price</p>
     </div>
-    <ul class="long-listings visible">
+    <ul class="long-listings">
         {% for listing in listings %}
             {% if listing.active == False %}
-            <div class="li-listing-closed-div hide-listing">
+            <div class="li-listing-closed-div ">
                 <li class="li-listing">
                     <div class="thumb-title-div">
                         <a href="{% url 'listing' listing.id %}">
@@ -185,7 +185,7 @@
 
         {% endfor %}
     </ul>
-        <div class="center-container"><span id="show-more-closed">Show next 10 closed listings</span></div>
+        <div class="center-container"><span id="show-more-closed" class="hidden">Show next 10 closed listings</span></div>
     <ul class="short-listings hidden">
         {% for listing in listings %}
             {% if listing.active == False %}

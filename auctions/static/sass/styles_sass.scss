@@ -837,29 +837,7 @@ input {
     left: 20px;
   }
 }
-// .watchlist-listing {
-//   @include flex-column;
-//   width: 600px;
-//   gap: 0px;
-//   align-items: flex-start;
-//   div {
-//     font-size: 0.8em;
-//   }
-//   a {
-//     font-size: 0.9em;
-//   }
-//   a,
-//   div {
-//     width: 100%;
-//     text-align: center;
-//   }
-//   form {
-//     width: 100%;
-//     display: flex;
-//     justify-content: center;
-//     margin-bottom: 12px;
-//   }
-// }
+
 
 
 /* CATEGORY and CATEGORIES PAGES */
@@ -1204,19 +1182,6 @@ input {
   margin-bottom: 20px;
 }
 
-
-
-
-
-
-
-
-.hide-listing {
-  display: none;
-}
-.display-listing {
-  display: inherit;
-}
 
 
 #show-more,

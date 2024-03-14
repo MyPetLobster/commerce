@@ -1432,14 +1432,6 @@ input {
   margin-bottom: 20px;
 }
 
-.hide-listing {
-  display: none;
-}
-
-.display-listing {
-  display: inherit;
-}
-
 #show-more,
 #show-more-closed {
   cursor: pointer;

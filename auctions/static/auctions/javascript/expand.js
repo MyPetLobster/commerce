@@ -90,8 +90,7 @@ const numberOfListings = 10;
 function handleShowMore(listingListItems, showMore, visibleListings) {
     listingListItems.forEach((listing, index) => {
         if (index < visibleListings) {
-            listing.classList.add('display-listing');
-            listing.classList.remove('hide-listing');
+            listing.classList.remove('hidden');
             showMore.classList.remove('hidden');
         }
     });
