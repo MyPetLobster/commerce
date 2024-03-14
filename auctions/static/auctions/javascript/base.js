@@ -246,7 +246,7 @@ function checkForUnreadMessages() {
 // layout.html - nav item active class
 document.onreadystatechange = () => {
   if (document.readyState === "complete") {
-    
+
     // Get localStorage value for activePage and make the appropriate link bold. 
     const activePage = localStorage.getItem("activePage");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -269,11 +269,7 @@ document.onreadystatechange = () => {
 
 
 
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
+function handleMailIconDisplay() {
   const mailIconDefault = document.getElementById("mail-icon-default");
   const mailIconHover = document.getElementById("mail-icon-hover");
   const mailIconUnread = document.getElementById("mail-icon-unread");
@@ -281,53 +277,42 @@ document.addEventListener("DOMContentLoaded", function () {
   const unreadMessageCount = checkForUnreadMessages();
   const unreadMessageDisplay = document.getElementById("unread-count");
 
-  let unreadMessages = false;
-  if (unreadMessageCount > 0) {
-    unreadMessages = true;
-  }
+  const unreadMessages = unreadMessageCount > 0;
 
   if (unreadMessages) {
     mailIconDefault.classList.add("hidden");
-    mailIconDefault.classList.remove("visible");
-    mailIconUnread.classList.add("visible");
     mailIconUnread.classList.remove("hidden");
   }
 
-  if (unreadMessages) {
-    mailIconDiv.onmouseover = function () {
-      mailIconDefault.classList.add("hidden");
-      mailIconDefault.classList.remove("visible");
+  const handleMouseOver = () => {
+    mailIconDefault.classList.add("hidden");
+    mailIconHover.classList.remove("hidden");
+    if (unreadMessages) {
       mailIconUnread.classList.add("hidden");
-      mailIconUnread.classList.remove("visible");
-      mailIconHover.classList.remove("hidden");
-      mailIconHover.classList.add("visible");
-      unreadMessageDisplay.classList.add("visible");
       unreadMessageDisplay.classList.remove("hidden");
-    };
-    mailIconDiv.onmouseout = function () {
-      mailIconUnread.classList.add("visible");
+    }
+  };
+
+  const handleMouseOut = () => {
+    mailIconHover.classList.add("hidden");
+    if (unreadMessages) {
       mailIconUnread.classList.remove("hidden");
       unreadMessageDisplay.classList.add("hidden");
-      unreadMessageDisplay.classList.remove("visible");
-      mailIconHover.classList.add("hidden");
-      mailIconHover.classList.remove("visible");
-    };
-  } else {
-    mailIconDiv.onmouseover = function () {
-      mailIconDefault.classList.add("hidden");
-      mailIconDefault.classList.remove("visible");
-      mailIconUnread.classList.add("hidden");
-      mailIconUnread.classList.remove("visible");
-      mailIconHover.classList.remove("hidden");
-      mailIconHover.classList.add("visible");
-    };
-    mailIconDiv.onmouseout = function () {
+    } else {
       mailIconDefault.classList.remove("hidden");
-      mailIconDefault.classList.add("visible");
-      mailIconHover.classList.add("hidden");
-      mailIconHover.classList.remove("visible");
     }
-  }
+  };
+
+  mailIconDiv.addEventListener("mouseover", handleMouseOver);
+  mailIconDiv.addEventListener("mouseout", handleMouseOut);
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  handleMailIconDisplay();
 
   deleteMsg = document.querySelector(".del-msg");
   if (deleteMsg) {
