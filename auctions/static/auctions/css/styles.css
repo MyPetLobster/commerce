@@ -1411,6 +1411,23 @@ input {
   color: #c55176;
 }
 
+#remove-watchlist-listing {
+  font-size: 0.8em;
+  color: #7a7575;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid #7a7575;
+  transition: 0.3s;
+}
+
+#remove-watchlist-listing:hover,
+#remove-watchlist-listing:active,
+#remove-watchlist-listing:focus,
+#remove-watchlist-listing:visited {
+  color: #f4f4f4;
+  background-color: #a90000;
+  border: 1px solid #a90000;
+}
+
 /* Watchlist Page - Small Buttons */
 #remove-from-watchlist-button {
   font-size: 0.7em;

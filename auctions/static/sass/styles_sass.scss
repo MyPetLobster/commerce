@@ -1148,6 +1148,22 @@ input {
 .watchlist-item-title:hover {
   color: $primary-pink;
 }
+
+#remove-watchlist-listing {
+  font-size: 0.8em;
+  color: $nav-color;
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid $nav-color;
+  transition: 0.3s;
+}
+#remove-watchlist-listing:hover,
+#remove-watchlist-listing:active,
+#remove-watchlist-listing:focus,
+#remove-watchlist-listing:visited {
+  color: $text-color-light;
+  background-color: $cancel-color;
+  border: 1px solid $cancel-color;
+}
 /* Watchlist Page - Small Buttons */
 #remove-from-watchlist-button {
   font-size: 0.7em;
