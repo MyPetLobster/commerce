@@ -162,43 +162,5 @@
                 </li>
             </ul>
         </footer>
-
-        <script>
-
-            // Scroll to balance part of profile page if user clicked balance link
-            const balanceLink = document.querySelector('.balance-link');
-            balanceLink.addEventListener('click', () => {
-                localStorage.setItem('fromBalanceLink', 'true');
-            });
-
-            
-
-
-
-            // Dropdown Logout/My Yard links
-            const fullDropDownDiv = document.querySelector("#full-dropdown-div");
-            const statusProfile = document.querySelector("#status-profile");
-
-            // "hi, username" text highlighted on hover
-            fullDropDownDiv.addEventListener("mouseover", () => {
-                statusProfile.classList.add("active-dropdown-header");
-            });
-            fullDropDownDiv.addEventListener("mouseout", () => {
-                statusProfile.classList.remove("active-dropdown-header");
-            });
-
-            
-            const dropdown = document.querySelector(".dropdown")
-            dropdown.onclick = function() {
-                dropdown.classList.toggle("active")
-            }
-
-            document.addEventListener('click', function(event) {
-                const dropdown = document.querySelector('.dropdown');
-                if (!dropdown.contains(event.target)) {
-                    dropdown.classList.remove('active');
-                }
-            });
-        </script>
     </body>
 </html>

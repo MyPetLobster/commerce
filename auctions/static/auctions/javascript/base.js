@@ -292,6 +292,44 @@ function handleMailIconDisplay() {
   mailIconDiv.addEventListener("mouseout", handleMouseOut);
 }
 
+// layout.html - navbar - dropdown menu
+function handleNavDropdown() {
+  
+  // Dropdown Logout/My Yard links
+  const fullDropDownDiv = document.querySelector("#full-dropdown-div");
+  const statusProfile = document.querySelector("#status-profile");
+
+  // "hi, username" text highlighted on hover
+  fullDropDownDiv.addEventListener("mouseover", () => {
+      statusProfile.classList.add("active-dropdown-header");
+  });
+  fullDropDownDiv.addEventListener("mouseout", () => {
+      statusProfile.classList.remove("active-dropdown-header");
+  });
+
+  const dropdown = document.querySelector(".dropdown")
+  dropdown.onclick = function() {
+      dropdown.classList.toggle("active")
+  }
+
+  // click anywhere outside the dropdown to close it
+  document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.dropdown');
+    if (!dropdown.contains(event.target)) {
+        dropdown.classList.remove('active');
+    }
+  });
+}
+
+// layout.html - navbar - if user clicks balance link, scroll to balance part of profile page
+function scrollToBalance() {
+    // Scroll to balance part of profile page if user clicks balance link
+    const balanceLink = document.querySelector('.balance-link');
+    balanceLink.addEventListener('click', () => {
+        localStorage.setItem('fromBalanceLink', 'true');
+    });
+}
+
 // layout.html, about.html - message admin form
 function handleMessageAdmin() {
   const messageAdminBtn = document.querySelector("#msg-admin-link");
@@ -367,12 +405,14 @@ function showHideFullMessage() {
 // Run all functions when the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
   setActiveNavItem();
+  handleNavDropdown();
   closeDjangoAlert();
   handleMailIconDisplay();
   handleMessageAdmin();
   showHideFullMessage();
 
   setBodyTheme();
+  scrollToBalance();
   toggleDeleteAccountButtonTheme();
   toggleMessagePageTheme();
   toggleSearchResultColorTheme();
