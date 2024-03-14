@@ -170,6 +170,7 @@
                     can to ensure that your experience on Yard Sale is a positive one.</br></br>
                 </p>
             </li>
+            {% if current_user.is_authenticated %}
             <li>
                 <h3 class="faq-question">I have a question that isn't answered here, how can I get in touch with Yard Sale?</h3>
                 <p class="faq-answer hidden">
@@ -178,6 +179,7 @@
                     the "Send us a message" right below the navbar. We look forward to hearing from you!
                 </p>
             </li>
+            {% endif %}
         </ul>
 
         <div class="center-container"><span id="show-terms-conditions">Show Terms and Conditions</span></div>

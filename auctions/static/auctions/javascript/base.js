@@ -218,12 +218,14 @@ function closeDjangoAlert() {
 
 // layout.html - navbar - hidden message count passed from Django
 function checkForUnreadMessages() {
-  const isUnreadMessages = document.getElementById("unread-message-count");
-  const unreadMessages = parseInt(isUnreadMessages.innerText);
-  if (unreadMessages > 0) {
-    return unreadMessages;
-  } else {
-    return 0;
+  const isUnreadMessages = document.getElementById("unread-message-count"); 
+  if (isUnreadMessages) {
+    const unreadMessages = parseInt(isUnreadMessages.innerText);
+    if (unreadMessages > 0) {
+      return unreadMessages;
+    } else {
+      return 0;
+    }
   }
 }
 
@@ -288,8 +290,10 @@ function handleMailIconDisplay() {
     }
   };
 
-  mailIconDiv.addEventListener("mouseover", handleMouseOver);
-  mailIconDiv.addEventListener("mouseout", handleMouseOut);
+  if (mailIconDiv) {
+    mailIconDiv.addEventListener("mouseover", handleMouseOver);
+    mailIconDiv.addEventListener("mouseout", handleMouseOut);
+  }
 }
 
 // layout.html - navbar - dropdown menu
@@ -300,34 +304,41 @@ function handleNavDropdown() {
   const statusProfile = document.querySelector("#status-profile");
 
   // "hi, username" text highlighted on hover
-  fullDropDownDiv.addEventListener("mouseover", () => {
-      statusProfile.classList.add("active-dropdown-header");
-  });
-  fullDropDownDiv.addEventListener("mouseout", () => {
-      statusProfile.classList.remove("active-dropdown-header");
-  });
-
-  const dropdown = document.querySelector(".dropdown")
-  dropdown.onclick = function() {
-      dropdown.classList.toggle("active")
+  if (fullDropDownDiv) {
+    fullDropDownDiv.addEventListener("mouseover", () => {
+        statusProfile.classList.add("active-dropdown-header");
+    });
+    fullDropDownDiv.addEventListener("mouseout", () => {
+        statusProfile.classList.remove("active-dropdown-header");
+    });
   }
 
-  // click anywhere outside the dropdown to close it
-  document.addEventListener('click', function(event) {
-    const dropdown = document.querySelector('.dropdown');
-    if (!dropdown.contains(event.target)) {
-        dropdown.classList.remove('active');
-    }
-  });
+  const dropdown = document.querySelector(".dropdown")
+  if (dropdown) {
+    dropdown.addEventListener("click", () => {
+        dropdown.classList.toggle("active")
+    });
+  
+
+    // click anywhere outside the dropdown to close it
+    document.addEventListener('click', function(event) {
+      const dropdown = document.querySelector('.dropdown');
+      if (!dropdown.contains(event.target)) {
+          dropdown.classList.remove('active');
+      }
+    });
+  }
 }
 
 // layout.html - navbar - if user clicks balance link, scroll to balance part of profile page
 function scrollToBalance() {
     // Scroll to balance part of profile page if user clicks balance link
     const balanceLink = document.querySelector('.balance-link');
-    balanceLink.addEventListener('click', () => {
-        localStorage.setItem('fromBalanceLink', 'true');
-    });
+    if (balanceLink) {
+      balanceLink.addEventListener('click', () => {
+          localStorage.setItem('fromBalanceLink', 'true');
+      });
+    }
 }
 
 // layout.html, about.html - message admin form
@@ -336,25 +347,27 @@ function handleMessageAdmin() {
   const messageAdminForm = document.querySelector("#msg-admin-form");
   const cancelMsgAdminBtn = document.querySelector("#cancel-msg-admin");
 
-  messageAdminBtn.addEventListener("click", () => {
-    messageAdminForm.classList.remove("hidden");
-    messageAdminForm.classList.add("send-msg-form");
-  });
+  if (messageAdminBtn) {
+    messageAdminBtn.addEventListener("click", () => {
+      messageAdminForm.classList.remove("hidden");
+      messageAdminForm.classList.add("send-msg-form");
+    });
 
-  cancelMsgAdminBtn.addEventListener("click", () => {
-    messageAdminForm.classList.add("hidden");
-    messageAdminForm.classList.remove("send-msg-form");
-  });
+    cancelMsgAdminBtn.addEventListener("click", () => {
+      messageAdminForm.classList.add("hidden");
+      messageAdminForm.classList.remove("send-msg-form");
+    });
 
-  const helpSubmitBtn = document.querySelector("#help-submit");
-  const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");
+    const helpSubmitBtn = document.querySelector("#help-submit");
+    const helpSubmitBtnFaux = document.querySelector("#help-submit-faux");
 
-  helpSubmitBtnFaux.addEventListener("click", () => {
-    const subjectValue = document.querySelector("#subject").value;
-    const subjectText = `-- HELP -- ${subjectValue}`;
-    document.querySelector("#subject").value = subjectText;
-    helpSubmitBtn.click();
-  });
+    helpSubmitBtnFaux.addEventListener("click", () => {
+      const subjectValue = document.querySelector("#subject").value;
+      const subjectText = `-- HELP -- ${subjectValue}`;
+      document.querySelector("#subject").value = subjectText;
+      helpSubmitBtn.click();
+    });
+  }
 
   // Message admin link in FAQ
   const messageAdminLinkTwo = document.querySelector("#msg-admin-link-two");

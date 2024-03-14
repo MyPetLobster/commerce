@@ -207,12 +207,15 @@ def search(request):
 
 
 def about(request):
-    current_user = request.user
-    return render(request, "auctions/about.html", {
-        "current_user": current_user,
-        "messages": contrib_messages.get_messages(request),
-        "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
-    })
+    if request.user.is_authenticated:
+        current_user = request.user
+        return render(request, "auctions/about.html", {
+            "current_user": current_user,
+            "messages": contrib_messages.get_messages(request),
+            "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count()
+        })
+    else:
+        return render(request, "auctions/about.html")
 
 
 
