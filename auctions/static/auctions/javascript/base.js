@@ -7,35 +7,6 @@ setTimeout(function () {
 }, 4500);
 
 
-
-// DARK and LIGHT MODES
-// Check if the user has a theme preference and set it when page loads
-if (localStorage.getItem("theme") === "dark") {
-  document.querySelector("body").classList.add("dark-mode");
-  document.querySelector("body").classList.remove("light-mode");
-  document.querySelector("#standard-hero").classList.add("hidden");;
-  document.querySelector("#inverted-hero").classList.remove("hidden");
-  if (document.querySelector("#this-is-transactions-page")) {
-    toggleTransactionMode();
-  }
-  toggleDeleteAccountButtonColor();
-  setSearchResultDescColor();
-
-}
-
-if (localStorage.getItem("theme") === "light") {
-  document.querySelector("body").classList.add("light-mode");
-  document.querySelector("body").classList.remove("dark-mode");
-  document.querySelector("#standard-hero").classList.remove("hidden");
-  document.querySelector("#inverted-hero").classList.add("hidden");
-  if (document.querySelector("#this-is-transactions-page")) {
-    toggleTransactionMode();
-  }
-  toggleDeleteAccountButtonColor();
-  setSearchResultDescColor();
-
-}
-
 // TOGGLE the theme mode when the footer button is clicked
 document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("dark-mode");
@@ -50,44 +21,49 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
       : "light"
   );
 
-  // transactions.html - toggle the table colors
-  if (document.querySelector("#this-is-transactions-page")) {
-    toggleTransactionMode();
-  }
-
-  // messages.html - change the colors of the message divs 
-  const messagePageCheck = document.querySelector("#this-is-message-page");
-  if (messagePageCheck) {
-    changeMessageColors();
-    setSeparateTextColor();
-  }
-
   // Other theme mode toggles
-  toggleDeleteAccountButtonColor();
-  setSearchResultDescColor();
-  toggleTimeLeftTextColor();
+  toggleTransactionTheme();
+  toggleDeleteAccountButtonTheme();
+  toggleSearchResultColorTheme();
+  toggleTimeLeftTextTheme();
+  toggleMessagePageTheme()
 };
 
-// transactions.html - toggle the table colors
-function toggleTransactionMode() {
+// Body background, text, and hero image color toggle
+function setBodyTheme () {
   if (localStorage.getItem("theme") === "dark") {
-    document.querySelector("#bids-table").classList.add("dark-mode-table");
-    document.querySelector("#bids-table").classList.remove("light-mode-table");
-    document.querySelector("#transactions-table").classList.add("dark-mode-table");
-    document.querySelector("#transactions-table").classList.remove("light-mode-table");
-} else {
-    document.querySelector("#bids-table").classList.add("light-mode-table");
-    document.querySelector("#bids-table").classList.remove("dark-mode-table");
-    document.querySelector("#transactions-table").classList.add("light-mode-table");
-    document.querySelector("#transactions-table").classList.remove("dark-mode-table");
+    document.querySelector("body").classList.add("dark-mode");
+    document.querySelector("body").classList.remove("light-mode");
+    document.querySelector("#standard-hero").classList.add("hidden");
+    document.querySelector("#inverted-hero").classList.remove("hidden");
+  } else {
+    document.querySelector("body").classList.add("light-mode");
+    document.querySelector("body").classList.remove("dark-mode");
+    document.querySelector("#standard-hero").classList.remove("hidden");
+    document.querySelector("#inverted-hero").classList.add("hidden");
+  }
+}
 
+// transactions.html - toggle the table colors
+function toggleTransactionTheme() {
+  if (document.querySelector("#this-is-transactions-page")) {
+    if (localStorage.getItem("theme") === "dark") {
+      document.querySelector("#bids-table").classList.add("dark-mode-table");
+      document.querySelector("#bids-table").classList.remove("light-mode-table");
+      document.querySelector("#transactions-table").classList.add("dark-mode-table");
+      document.querySelector("#transactions-table").classList.remove("light-mode-table");
+  } else {
+      document.querySelector("#bids-table").classList.add("light-mode-table");
+      document.querySelector("#bids-table").classList.remove("dark-mode-table");
+      document.querySelector("#transactions-table").classList.add("light-mode-table");
+      document.querySelector("#transactions-table").classList.remove("dark-mode-table");
+
+    } 
   } 
 }
 
-
-// Assorted Theme Mode Functions
-// messages.html - change the colors of sender links
-function setSeparateTextColor() {
+// messages.html - sender link theme 
+function toggleMessageSenderLinkTheme() {
   if (localStorage.getItem("theme") === "dark") {
     document.querySelector(".msg-sender-link").classList.remove("msg-sender-link-light");
     document.querySelector(".msg-sender-link").classList.add("msg-sender-link-dark");
@@ -96,12 +72,56 @@ function setSeparateTextColor() {
     document.querySelector(".msg-sender-link").classList.add("msg-sender-link-light");
   }
 }
+// messages.html - select every other .message-div and darken the background slightly
+function toggleMessageColors() {
+  messageDivs = document.querySelectorAll(".message-div");
+  if (messageDivs.length !== 0) {
+    lightModeColorOne = "#efefef";
+    lightModeColorTwo = "#d0d0d0";
+    darkModeColorOne = "#2b2c2e";
+    darkModeColorTwo = "#353638";
 
-// Theme support for time left text color - Index, Listings, Profile bids section
-function toggleTimeLeftTextColor() {
+    if (localStorage.getItem("theme") === "dark") {
+      modColorOne = darkModeColorOne;
+      modColorTwo = darkModeColorTwo;
+    } else {
+      modColorOne = lightModeColorOne;
+      modColorTwo = lightModeColorTwo;
+    }
+
+
+    messageDivs.forEach((div, index) => {
+      if (index % 2 === 0) {
+        div.style.backgroundColor = modColorOne;
+      } else {
+        div.style.backgroundColor = modColorTwo;
+      }
+    });
+  }
+  messageDivsFull = document.querySelectorAll(".message-div-full");
+  if (messageDivsFull.length !== 0) {
+    messageDivsFull.forEach((div, index) => {
+      if (index % 2 === 0) {
+        div.style.backgroundColor = modColorOne;
+      } else {
+        div.style.backgroundColor = modColorTwo;
+      }
+    });
+  }
+}
+// messages.html - all theme
+function toggleMessagePageTheme() { 
+  const messagePageCheck = document.querySelector("#this-is-message-page");
+  if (messagePageCheck) {
+    toggleMessageColors();
+    toggleMessageSenderLinkTheme();
+  }
+}
+
+// index.html, listings.html, profile.html (bids) - time left text theme
+function toggleTimeLeftTextTheme() {
   const timeLeftText = document.querySelectorAll(".dynamic-time-left-text");
   if (timeLeftText) {
-
     if (localStorage.getItem("theme") === "dark") {
       timeLeftText.forEach((text) => {
         text.classList.add("time-left-dark-mode")
@@ -116,8 +136,8 @@ function toggleTimeLeftTextColor() {
   }
 }
 
-// Theme support for delete account buttons
-function toggleDeleteAccountButtonColor() {
+// profile.html - delete account button theme
+function toggleDeleteAccountButtonTheme() {
   const deleteAccountButton = document.getElementById('delete-account');
   const submitDeleteButton = document.getElementById('submit-delete-btn');
   const reallySubmitDeleteButton = document.getElementById('really-submit-delete-btn');
@@ -156,23 +176,99 @@ function toggleDeleteAccountButtonColor() {
 
 }
 
-
-// Search Page Theme Mode Functions
-
-function setSearchResultDescColor() {
+// search.html - search result color theme
+function toggleSearchResultColorTheme() {
   const searchResultDesc = document.querySelectorAll('.search-result-desc');
-  if (localStorage.getItem('theme') === 'dark') {
-      searchResultDesc.forEach(desc => {
-          desc.classList.add('search-result-desc-dark');
-          desc.classList.remove('search-result-desc-light');  
-      });
-  } else {
-      searchResultDesc.forEach(desc => {  
-          desc.classList.add('search-result-desc-light');
-          desc.classList.remove('search-result-desc-dark');
-      });
+  if (searchResultDesc) {
+    if (localStorage.getItem('theme') === 'dark') {
+        searchResultDesc.forEach(desc => {
+            desc.classList.add('search-result-desc-dark');
+            desc.classList.remove('search-result-desc-light');  
+        });
+    } else {
+        searchResultDesc.forEach(desc => {  
+            desc.classList.add('search-result-desc-light');
+            desc.classList.remove('search-result-desc-dark');
+        });
+    }
   }
 }
+
+
+
+// FUNCTIONS
+function showHideFullMessage() {
+  const messageDivs = document.querySelectorAll(".message-div");
+  messageDivs.forEach((div) => {
+    div.onclick = function (event) {
+      const fullMessage = this.nextElementSibling;
+      const rect = this.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+
+      // Exclude top right corner (e.g., 10px from the top and 10px from the right)
+      if (clickX > rect.width - 120 && clickY < 75) {
+        return;
+      }
+
+      const replyDeleteDivs = this.nextElementSibling.nextElementSibling;
+      replyDeleteDivs.classList.toggle("hidden");
+
+      fullMessage.classList.toggle("hidden");
+      fullMessage.classList.toggle("visible");
+      div.classList.toggle("hidden");
+
+      fullMessage.onclick = function () {
+        fullMessage.classList.toggle("hidden");
+        fullMessage.classList.toggle("visible");
+        div.classList.toggle("hidden");
+        replyDeleteDivs.classList.toggle("hidden");
+      };
+    };
+  });
+}
+
+function checkForUnreadMessages() {
+  const isUnreadMessages = document.getElementById("unread-message-count");
+  const unreadMessages = parseInt(isUnreadMessages.innerText);
+  if (unreadMessages > 0) {
+    return unreadMessages;
+  } else {
+    return 0;
+  }
+}
+
+
+
+document.onreadystatechange = () => {
+  if (document.readyState === "complete") {
+    // Get localStorage value for activePage and make the appropriate link bold. 
+    const activePage = localStorage.getItem("activePage");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    if (activePage !== null && activePage !== 'non-nav') {
+      navLinks.forEach((link) => {
+        if (link.id === `nav-${activePage}`) {
+          link.classList.add("active-nav");
+        } else {
+          link.classList.remove("active-nav");
+        }
+      });
+    } else {
+      
+      return;
+    }
+    
+  } else {
+    return;
+  }
+}
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const mailIconDefault = document.getElementById("mail-icon-default");
@@ -270,120 +366,8 @@ document.addEventListener("DOMContentLoaded", function () {
     helpSubmitBtn.click();
   };
 
-  const messagePageCheck = document.querySelector("#this-is-message-page");
-  if (messagePageCheck) {
-    changeMessageColors();
-    showHideFullMessage();
-  }
-
-  toggleTransactionMode();
+  setBodyTheme();
+  toggleTransactionTheme();
+  toggleDeleteAccountButtonTheme();
+  toggleSearchResultColorTheme();
 });
-
-// FUNCTIONS
-
-// select every other .message-div and darken the background slightly
-function changeMessageColors() {
-  messageDivs = document.querySelectorAll(".message-div");
-  if (messageDivs.length !== 0) {
-    lightModeColorOne = "#efefef";
-    lightModeColorTwo = "#d0d0d0";
-    darkModeColorOne = "#2b2c2e";
-    darkModeColorTwo = "#353638";
-
-    if (localStorage.getItem("theme") === "dark") {
-      modColorOne = darkModeColorOne;
-      modColorTwo = darkModeColorTwo;
-    } else {
-      modColorOne = lightModeColorOne;
-      modColorTwo = lightModeColorTwo;
-    }
-
-
-    messageDivs.forEach((div, index) => {
-      if (index % 2 === 0) {
-        div.style.backgroundColor = modColorOne;
-      } else {
-        div.style.backgroundColor = modColorTwo;
-      }
-    });
-  }
-  messageDivsFull = document.querySelectorAll(".message-div-full");
-  if (messageDivsFull.length !== 0) {
-    messageDivsFull.forEach((div, index) => {
-      if (index % 2 === 0) {
-        div.style.backgroundColor = modColorOne;
-      } else {
-        div.style.backgroundColor = modColorTwo;
-      }
-    });
-  }
-}
-
-function showHideFullMessage() {
-  const messageDivs = document.querySelectorAll(".message-div");
-  messageDivs.forEach((div) => {
-    div.onclick = function (event) {
-      const fullMessage = this.nextElementSibling;
-      const rect = this.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const clickY = event.clientY - rect.top;
-
-      // Exclude top right corner (e.g., 10px from the top and 10px from the right)
-      if (clickX > rect.width - 120 && clickY < 75) {
-        return;
-      }
-
-      const replyDeleteDivs = this.nextElementSibling.nextElementSibling;
-      replyDeleteDivs.classList.toggle("hidden");
-
-      fullMessage.classList.toggle("hidden");
-      fullMessage.classList.toggle("visible");
-      div.classList.toggle("hidden");
-
-      fullMessage.onclick = function () {
-        fullMessage.classList.toggle("hidden");
-        fullMessage.classList.toggle("visible");
-        div.classList.toggle("hidden");
-        replyDeleteDivs.classList.toggle("hidden");
-      };
-    };
-  });
-}
-
-function checkForUnreadMessages() {
-  const isUnreadMessages = document.getElementById("unread-message-count");
-  const unreadMessages = parseInt(isUnreadMessages.innerText);
-  if (unreadMessages > 0) {
-    return unreadMessages;
-  } else {
-    return 0;
-  }
-}
-
-
-
-document.onreadystatechange = () => {
-  if (document.readyState === "complete") {
-    // Get localStorage value for activePage and make the appropriate link bold. 
-    const activePage = localStorage.getItem("activePage");
-    const navLinks = document.querySelectorAll(".nav-link");
-
-    if (activePage !== null && activePage !== 'non-nav') {
-      navLinks.forEach((link) => {
-        if (link.id === `nav-${activePage}`) {
-          link.classList.add("active-nav");
-        } else {
-          link.classList.remove("active-nav");
-        }
-      });
-    } else {
-      
-      return;
-    }
-    
-  } else {
-    return;
-  }
-}
-
-
