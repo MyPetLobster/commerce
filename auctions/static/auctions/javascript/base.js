@@ -16,7 +16,7 @@ if (localStorage.getItem("theme") === "dark") {
   document.querySelector("#standard-hero").classList.add("hidden");;
   document.querySelector("#inverted-hero").classList.remove("hidden");
   if (document.querySelector("#this-is-transactions-page")) {
-    setTransactionDarkMode();
+    toggleTransactionMode();
   }
   toggleDeleteAccountButtonColor();
   setSearchResultDescColor();
@@ -29,7 +29,7 @@ if (localStorage.getItem("theme") === "light") {
   document.querySelector("#standard-hero").classList.remove("hidden");
   document.querySelector("#inverted-hero").classList.add("hidden");
   if (document.querySelector("#this-is-transactions-page")) {
-    setTransactionLightMode();
+    toggleTransactionMode();
   }
   toggleDeleteAccountButtonColor();
   setSearchResultDescColor();
@@ -42,6 +42,13 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   document.querySelector("body").classList.toggle("light-mode");
   document.querySelector("#standard-hero").classList.toggle("hidden");
   document.querySelector("#inverted-hero").classList.toggle("hidden");
+  
+  localStorage.setItem(
+    "theme",
+    document.querySelector("body").classList.contains("dark-mode")
+      ? "dark"
+      : "light"
+  );
 
   // transactions.html - toggle the table colors
   if (document.querySelector("#this-is-transactions-page")) {
@@ -59,36 +66,24 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   toggleDeleteAccountButtonColor();
   setSearchResultDescColor();
   toggleTimeLeftTextColor();
-
-  localStorage.setItem(
-    "theme",
-    document.querySelector("body").classList.contains("dark-mode")
-      ? "dark"
-      : "light"
-  );
 };
 
-// TRANSACTIONS PAGE THEME MODE FUNCTIONS
-function setTransactionDarkMode() {
-  document.querySelector("#bids-table").classList.add("dark-mode-table");
-  document.querySelector("#bids-table").classList.remove("light-mode-table");
-  document.querySelector("#transactions-table").classList.add("dark-mode-table");
-  document.querySelector("#transactions-table").classList.remove("light-mode-table"); 
-}
-
-function setTransactionLightMode() {
-  document.querySelector("#bids-table").classList.add("light-mode-table");
-  document.querySelector("#bids-table").classList.remove("dark-mode-table");
-  document.querySelector("#transactions-table").classList.add("light-mode-table");
-  document.querySelector("#transactions-table").classList.remove("dark-mode-table");
-}
-
+// transactions.html - toggle the table colors
 function toggleTransactionMode() {
-  document.querySelector("#bids-table").classList.toggle("dark-mode-table");
-  document.querySelector("#bids-table").classList.toggle("light-mode-table");
-  document.querySelector("#transactions-table").classList.toggle("dark-mode-table");
-  document.querySelector("#transactions-table").classList.toggle("light-mode-table");
+  if (localStorage.getItem("theme") === "dark") {
+    document.querySelector("#bids-table").classList.add("dark-mode-table");
+    document.querySelector("#bids-table").classList.remove("light-mode-table");
+    document.querySelector("#transactions-table").classList.add("dark-mode-table");
+    document.querySelector("#transactions-table").classList.remove("light-mode-table");
+} else {
+    document.querySelector("#bids-table").classList.add("light-mode-table");
+    document.querySelector("#bids-table").classList.remove("dark-mode-table");
+    document.querySelector("#transactions-table").classList.add("light-mode-table");
+    document.querySelector("#transactions-table").classList.remove("dark-mode-table");
+
+  } 
 }
+
 
 // Assorted Theme Mode Functions
 // messages.html - change the colors of sender links
@@ -280,6 +275,8 @@ document.addEventListener("DOMContentLoaded", function () {
     changeMessageColors();
     showHideFullMessage();
   }
+
+  toggleTransactionMode();
 });
 
 // FUNCTIONS
