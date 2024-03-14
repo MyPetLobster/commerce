@@ -26,7 +26,10 @@
         <tbody>
             {% for transaction in transactions %}
             <tr>
-                <td>{{ transaction.date|date:"F j, Y, g:i a" }}</td>
+                <td>
+                    <span class="full-date">{{ transaction.date|date:"F j, Y, g:i a" }}</span>
+                    <span class="short-date hidden">{{ transaction.date|date:"n/j/y" }}</span>
+                </td>
                 {% if transaction.listing %}
                     <td><a href="{% url 'listing' transaction.listing.id %}">{{ transaction.listing.title }}</a></td>
                 {% else %}
@@ -46,7 +49,7 @@
         </tbody>
     </table>
     <div class="center-container">
-        <p>Your current balance is: {% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+        <p class="current-balance">Your current balance is: {% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
     </div>
 
     <div class="center-container">
@@ -78,7 +81,10 @@
             {% elif bid.listing.active == False and bid.amount != bid.listing.price %}
                 <tr class="losing-bid-closed _{{ bid.listing.id }}">
             {% endif %}
-                <td>{{ bid.date|date:"F j, Y, g:i a" }}</td>
+                <td>
+                    <span class="full-date">{{ bid.date|date:"F j, Y, g:i a" }}</span>
+                    <span class="short-date hidden">{{ bid.date|date:"n/j/y" }}</span>
+                </td>
                 <td><a href="{% url 'listing' bid.listing.id %}">{{ bid.listing.title }}</a></td>
                 <td class="bid-amt">{% with formatted_currency=bid.amount|format_currency %}{{ formatted_currency }}{% endwith %}</td>
                 <td>

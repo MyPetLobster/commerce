@@ -1590,6 +1590,10 @@ input {
   text-align: center;
 }
 
+.short-date {
+  display: none;
+}
+
 /* MESSAGES PAGE */
 .msg-sender-link-dark {
   cursor: pointer;
@@ -1963,6 +1967,9 @@ input {
   h3 {
     font-size: 1.8em;
   }
+  h6 {
+    font-size: 0.8em;
+  }
   #go-to-closed {
     font-size: 0.8em;
   }
@@ -2003,6 +2010,9 @@ input {
   #inverted-hero {
     height: 60px !important;
     width: 60px;
+  }
+  .footer-links {
+    font-size: 0.6em;
   }
   .thumb-img {
     height: 150px;
@@ -2046,6 +2056,44 @@ input {
   }
   .watchlist-item-title:hover {
     font-size: 0.7em;
+  }
+  .message-div,
+  .collapsed-message-div,
+  .all-sent-messages,
+  .all-inbox-messages,
+  .message-summary,
+  #sent-hidden-div {
+    width: 380px;
+    font-size: 0.9em;
+    overflow: hidden;
+  }
+  .message-summary {
+    max-width: 100%;
+    margin: 0;
+  }
+}
+@media (max-width: 680px) {
+  #transactions-section-head {
+    font-size: 1.5em;
+  }
+  .current-balance {
+    font-size: 0.8em;
+  }
+  .transactions-table {
+    max-width: 100%;
+    font-size: 0.5em;
+  }
+}
+@media (max-width: 500px) {
+  .transactions-table {
+    max-width: 100%;
+    font-size: 0.4em;
+  }
+  .short-date {
+    display: inherit;
+  }
+  .full-date {
+    display: none;
   }
 }
 
