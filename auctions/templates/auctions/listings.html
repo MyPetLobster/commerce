@@ -86,7 +86,7 @@
                                 </div>
                             {% endif %}
                         </a>
-                        <div>
+                        <div class="list-desc-div">
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Current Bid:&nbsp; </span>{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
@@ -166,7 +166,7 @@
                                 </div>
                             {% endif %}
                         </a>
-                        <div>
+                        <div class="list-desc-div">
                             <a class="big-a bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
                             <p>
                                 <span class="bold">Final Bid:&nbsp; </span>{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>

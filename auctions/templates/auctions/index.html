@@ -52,7 +52,7 @@
         <ul class="long-listings">
             {% for listing in listings %}
                 {% if listing.active == True %}
-                    <div class="li-listing-div hidden"
+                    <div class="li-listing-div hidden">
                     <li class="li-listing">
                         <div class="thumb-title-div">
                             <a href="{% url 'listing' listing.id %}">

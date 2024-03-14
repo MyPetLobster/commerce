@@ -86,9 +86,9 @@
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
                     <a class="balance-link status-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
                     <div class="mail-icon-div">
-                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" style="width:25px;" alt="gray mail icon"></span>
-                        <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" style="width:25px;" alt="pink mail icon"></a></span>
-                        <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" style="width:25px;" alt="dark pink mail icon"></span>&nbsp;&nbsp;
+                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" alt="gray mail icon"></span>
+                        <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" alt="pink mail icon"></a></span>
+                        <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" alt="dark pink mail icon"></span>&nbsp;&nbsp;
                     </div>
                     <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>
 
@@ -97,8 +97,14 @@
                             <input id="full-dropdown-div" class="text-box" type="text" readonly><a id="status-profile" class="status-link" href="{% url 'profile' current_user.id %}"><strong>hi, {{ current_user.username }}!</strong></a>
                         </div>
                         <div id="dropdown-options" class="options">
-                            <div><a class="profile-dropdown-link nav" href="{% url 'profile' current_user.id %}">My Yard</a></div>
-                            <div><a class="logout-dropdown-link nav" href="{% url 'logout' %}">Log Out</a></div>
+                            <div class="nav-dropdown-item"><a href="{% url 'profile' current_user.id %}">My Yard</a></div>
+                            <div class="nav-dropdown-item"><a href="{% url 'logout' %}">Log Out</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'listings' %}">All Listings</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'create' %}">Create Listing</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'categories' %}">Categories</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'watchlist' %}">Watchlist</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'search' %}">Search</a></div>
+                            <div class="mobile-dropdown-item"><a  href="{% url 'about' %}">About</a></div>
                         </div>
                     </div>                    
                 {% else %}
@@ -119,7 +125,7 @@
         {% if current_user.is_authenticated %}
             <div class="center-container">
                 <p style="text-align:center;"><span class="bold">🥴 from clutter to cash 🤑<br /><br />
-                <span style="font-size:0.8em;">Have any questions or comments? <a id="msg-admin-link">Send us a message,</a> we're here to help!</span></p>
+                <span id="message-admin-span">Have any questions or comments? <a id="msg-admin-link">Send us a message,</a> we're here to help!</span></p>
             </div>
         {% endif %}
     <p></p>
