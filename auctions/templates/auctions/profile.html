@@ -188,9 +188,15 @@
         {% endif %}
         
         {% if user_active_listings_count == 0 %}
+            {% if current_user == user %}
             <div class="center-container active-listings-element">
                 <p class="no-listings">No active listings. <a href="{% url 'create' %}">Want to change that?</a></p>
             </div>
+            {% else %}
+            <div class="center-container active-listings-element">
+                <p class="no-listings">No active listings</p>
+            </div>        
+            {% endif %}
         {% else %}
             <div class="profile-listings">
                 {% if user.listings.all.count == 0 %}
@@ -251,6 +257,7 @@
     {% endif %}
 </div>
 <div class="divider-med"></div>
+{% if current_user == user %}
 <div class="center-container">
     <button id="delete-account" class="del-acct-btn-base">Delete Account</button>
     <div class="delete-account-div hidden">
@@ -289,6 +296,7 @@
     </div>
 </div>
 <div class="divider-small"></div>
+{% endif %}
 <script>
     // Set the localStorage value of the activePage to highlight on navbar
     localStorage.setItem('activePage', 'profile');
@@ -436,19 +444,24 @@
     // Collapse all main sections of profile page
     const acctBalanceHeader = document.getElementById('acct-balance-header');
     const acctSectionElements = document.querySelectorAll('.acct-section-element');
-    acctBalanceHeader.addEventListener('click', () => {
-        acctSectionElements.forEach((element) => {
-            element.classList.toggle('hidden');
+    if (acctBalanceHeader) {
+        acctBalanceHeader.addEventListener('click', () => {
+            acctSectionElements.forEach((element) => {
+                element.classList.toggle('hidden');
+            });
         });
-    });
+    }
 
+    
     const bidsHeader = document.getElementById('my-bids-header');
     const bidsSectionElements = document.querySelectorAll('.bids-section-element');
-    bidsHeader.addEventListener('click', () => {
-        bidsSectionElements.forEach((element) => {
-            element.classList.toggle('hidden');
+    if (bidsHeader) {
+        bidsHeader.addEventListener('click', () => {
+            bidsSectionElements.forEach((element) => {
+                element.classList.toggle('hidden');
+            });
         });
-    });
+    }
 
     const profileInfoHeader = document.getElementById('information-header');
     const profileInfoElements = document.querySelectorAll('.info-section-element');

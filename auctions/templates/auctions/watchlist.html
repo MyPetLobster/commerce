@@ -67,9 +67,10 @@
   localStorage.setItem('activePage', 'watchlist');
 
   removeAllInactiveWatchlist = document.getElementById('remove-all-inactive-watchlist');
-
-  removeAllInactiveWatchlist.addEventListener('click', () => {
-      window.location.href = '{% url "remove_inactive_from_watchlist" %}';
-  });
+  if (removeAllInactiveWatchlist) {
+    removeAllInactiveWatchlist.addEventListener('click', () => {
+        window.location.href = '{% url "remove_inactive_from_watchlist" %}';
+    });
+  }
 </script>
 {% endblock %}
