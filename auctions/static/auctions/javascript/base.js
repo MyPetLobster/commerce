@@ -26,7 +26,7 @@ document.querySelector("#theme-mode-toggle").onclick = function () {
   toggleDeleteAccountButtonTheme();
   toggleSearchResultColorTheme();
   toggleTimeLeftTextTheme();
-  toggleMessagePageTheme()
+  toggleMessagePageTheme();
 };
 
 // Body background, text, and hero image color toggle
@@ -197,6 +197,8 @@ function toggleSearchResultColorTheme() {
 
 
 // FUNCTIONS
+
+// messages.html - show/hide full message
 function showHideFullMessage() {
   const messageDivs = document.querySelectorAll(".message-div");
   messageDivs.forEach((div) => {
@@ -206,21 +208,22 @@ function showHideFullMessage() {
       const clickX = event.clientX - rect.left;
       const clickY = event.clientY - rect.top;
 
-      // Exclude top right corner (e.g., 10px from the top and 10px from the right)
+      // Exclude top right corner where mark-as-read button is
       if (clickX > rect.width - 120 && clickY < 75) {
         return;
       }
 
+      // Toggle visibility of the div below each msg with reply and delete buttons
       const replyDeleteDivs = this.nextElementSibling.nextElementSibling;
       replyDeleteDivs.classList.toggle("hidden");
 
+      // Hide the collapsed message and show the full message
       fullMessage.classList.toggle("hidden");
-      fullMessage.classList.toggle("visible");
       div.classList.toggle("hidden");
 
+      // Click to hide the full message and show the collapsed message
       fullMessage.onclick = function () {
         fullMessage.classList.toggle("hidden");
-        fullMessage.classList.toggle("visible");
         div.classList.toggle("hidden");
         replyDeleteDivs.classList.toggle("hidden");
       };
@@ -228,6 +231,7 @@ function showHideFullMessage() {
   });
 }
 
+// layout.html - hidden message count passed from Django
 function checkForUnreadMessages() {
   const isUnreadMessages = document.getElementById("unread-message-count");
   const unreadMessages = parseInt(isUnreadMessages.innerText);
@@ -239,9 +243,10 @@ function checkForUnreadMessages() {
 }
 
 
-
+// layout.html - nav item active class
 document.onreadystatechange = () => {
   if (document.readyState === "complete") {
+    
     // Get localStorage value for activePage and make the appropriate link bold. 
     const activePage = localStorage.getItem("activePage");
     const navLinks = document.querySelectorAll(".nav-link");
@@ -255,10 +260,8 @@ document.onreadystatechange = () => {
         }
       });
     } else {
-      
       return;
     }
-    
   } else {
     return;
   }
@@ -370,4 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
   toggleTransactionTheme();
   toggleDeleteAccountButtonTheme();
   toggleSearchResultColorTheme();
+  toggleMessagePageTheme();
+
+  showHideFullMessage();
 });
