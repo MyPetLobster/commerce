@@ -190,6 +190,8 @@ def get_listing_values(request, listing):
                 watchlist_item = "on watchlist"
         except Watchlist.DoesNotExist:
             pass
+    else:
+        watchlist_item = "not on watchlist"
             
     return winner, user_bid, difference, watchlist_item
 
