@@ -167,7 +167,6 @@ def get_listing_values(request, listing):
     winner = None
     user_bid = None
     difference = None
-    watchlist_item = "not on watchlist"
 
 
     try:
@@ -185,6 +184,10 @@ def get_listing_values(request, listing):
     if request.user.is_authenticated:
         try:
             watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing)
+            if not watchlist_item:
+                watchlist_item = "not on watchlist"
+            else:
+                watchlist_item = "on watchlist"
         except Watchlist.DoesNotExist:
             pass
             
