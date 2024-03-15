@@ -103,8 +103,18 @@
 
           <!-- Full Message Div -->
           <div class="message-div-full hidden">
-            <p class="message-sender">
-              <span>From: <a class="msg-sender-link" href="{% url 'profile' message.sender.id %}">{{ message.sender }}</a></span>
+            <div class="message-sender">
+              <div class="message-profile-picture-container">
+                <img
+                  class="message-profile-picture"
+                  {% if message.sender.profile_picture %}
+                    src="{{ message.sender.profile_picture }}"
+                  {% else %}
+                    src="../../static/images/vecteezy_default-avatar-profile.jpg"
+                  {% endif %}
+                  alt="profile-picture"
+                />
+              </div>
               <span class="read-unread">
                 {% if message.read == True %}
                 <a
@@ -120,7 +130,8 @@
                 >
                 {% endif %}
               </span>
-            </p>
+            </div>
+            <p>From: <a class="msg-sender-link" href="{% url 'profile' message.sender.id %}">{{ message.sender }}</a></p>
             <p>
               Date: {{ message.date|date:"F j, Y, g:i a" }}
             </p>
