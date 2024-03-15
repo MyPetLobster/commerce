@@ -388,6 +388,30 @@ def file_dispute(request, listing_id):
 
 
 # PROFILE FUNCTIONS
+
+# Profile - Change Profile Picture
+@login_required
+def change_profile_picture(request, user_id):
+    '''
+    This function is called when the user submits the change profile picture form on the profile page. 
+    It saves the new profile picture to the user object and redirects to the profile page.
+
+    Args: 
+            request (HttpRequest): The request object
+            user_id (int): The ID of the user to change the profile picture for
+    Returns: 
+            HttpResponseRedirect: Redirects to the profile page
+
+    Called by: profile.html
+    Functions Called: None
+    '''
+
+    user = User.objects.get(pk=user_id)
+    user.profile_picture = request.POST["profile_picture"]
+    user.save()
+    return HttpResponseRedirect(reverse("profile", args=(user_id,)))
+
+
 # Profile - Report User
 @login_required
 def report_user(request, user_id):

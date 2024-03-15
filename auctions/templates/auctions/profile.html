@@ -29,11 +29,32 @@
         {% if current_user.is_authenticated %}
             <div class="center-container">
                 <button id="send-usr-msg-btn" class="btn btn-primary">Send Message</button>
-            </div>
-
-            
+            </div>            
         {% endif %}
     {% endif %}
+    <div class="center-container">
+        <div class="profile-picture-div">
+            {% if user.profile_picture %}
+                <img class="profile-picture" src="{{ user.profile_picture }}" alt="Profile Picture">
+                <span id="change-profile-pic" class="profile-picture-text">Change your profile picture</span>
+            {% else %}
+                <img class="profile-picture" src="../../static/images/vecteezy_default-avatar-profile.jpg" alt="vecteezy default avatar profile">
+                <span id="add-profile-pic" class="profile-picture-text">Add a profile picture</span>
+            {% endif %}
+        </div>
+
+        <div id="change-profile-pic-form" class="hidden">
+            <form class="popup-form" action="{% url 'change_profile_picture' current_user.id %}" method="post">
+                {% csrf_token %}
+                <h4 class="form-title">Upload a profile picture!</h4>
+                <input class="form-control" type="url" name="profile_picture" placeholder="Image URL" maxlength="200">
+                <div class="form-btn-box">
+                    <button class="btn btn-primary" type="submit" style="align-self:center">Upload</button>
+                    <button class="btn btn-primary cancel-btn" type="button" id="cancel-change-profile-pic" style="align-self:center">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <p></p>
     <h2 id="information-header">Information</h2>
     <div class="profile-info">
@@ -301,6 +322,24 @@
     // Set the localStorage value of the activePage to highlight on navbar
     localStorage.setItem('activePage', 'profile');
     
+    // Add or change profile picture 
+
+    const changeProfilePicText = document.querySelector("#change-profile-pic")
+    const addProfilePicText = document.querySelector("#add-profile-pic")
+    const profilePicForm = document.querySelector("#change-profile-pic-form")
+    const cancelChangeProfilePicBtn = document.querySelector("#cancel-change-profile-pic")
+
+    changeProfilePicText.addEventListener("click", () => {
+        profilePicForm.classList.remove("hidden");
+    })
+    addProfilePicText.addEventListener("click", () => {
+        profilePicForm.classList.remove("hidden");
+    })
+    cancelChangeProfilePicBtn.addEventListener("click", () => {
+        profilePicForm.classList.add("hidden");
+    })
+    
+
     // Report user button and popup 
     const reportUserText = document.querySelector("#report-user-text")
     const cancelReportUserBtn = document.querySelector(".cancel-report-user-btn")

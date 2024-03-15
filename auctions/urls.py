@@ -22,6 +22,7 @@ urlpatterns = [
     path("listings", views.listings, name="listings"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
+    path("change_profile_picture/<int:user_id>", actions.change_profile_picture, name="change_profile_picture"),
     path("delete_comment/<int:comment_id>", actions.delete_comment, name="delete_comment"),
     path("file_dispute/<int:listing_id>", actions.file_dispute, name="file_dispute"),
     path("mark_all_as_read/<int:user_id>", actions.mark_all_as_read, name="mark_all_as_read"),
