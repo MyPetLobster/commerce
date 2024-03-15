@@ -97,7 +97,7 @@
             {% for listing in listings %}
                 {% if listing.active == True %}
                     <li class="title-only-li" style="margin-bottom: 8px">
-                        <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- <a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>
+                        <a class="little-links" href="{% url 'listing' listing.id %}">{{ listing.title }}</a> -- {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} -- {% if current_user.is_authenticated %}<a class="little-links" href="{% url 'profile' listing.user.id %}">{{ listing.user.username }}</a>{% else %}{{ listing.user.username }}{% endif %}
                     </li>
                 {% endif %}
             {% endfor %}
