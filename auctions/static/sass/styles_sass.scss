@@ -217,7 +217,6 @@ $universal-form-color: #7a9196;
 footer {
   position: absolute;
   bottom: 0;
-
   margin-bottom: 20px;
   margin-top: 40px;
 
@@ -514,7 +513,7 @@ a:hover {
 .vis-cat-auth {
   display: block;
   position: absolute;
-  top: 47%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -524,7 +523,7 @@ a:hover {
 .vis-cat-no-auth {
   display: block;
   position: absolute;
-  top: 40%;
+  top: 39%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
@@ -605,6 +604,7 @@ legend {
   border-radius: 6px;
   font-size: 1em;
   border: none;
+  margin-bottom: 40px;
   background-color: $nav-color;
   color: $background-color-dark;
 }
@@ -816,6 +816,7 @@ input {
   @include universal-form;
   width: 500px;
   margin-top: 20px;
+  margin-bottom: 40px;
 }
 .create-listing-form {
   @include flex-column;
