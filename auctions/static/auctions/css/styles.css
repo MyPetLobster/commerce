@@ -1996,7 +1996,7 @@ input {
 @media screen and (max-width: 1080px) {
   .nav-link,
   .user-status {
-    font-size: 0.8em;
+    font-size: 12px;
   }
   #mail-svg {
     width: 20px;
@@ -2005,7 +2005,7 @@ input {
 @media screen and (max-width: 870px) {
   .nav-link,
   .user-status {
-    font-size: 0.7em;
+    font-size: 11px;
   }
   .nav-link {
     padding-right: 0;
@@ -2062,6 +2062,9 @@ input {
   }
   .nav-link {
     display: none;
+  }
+  .noauth-nav-link {
+    display: block;
   }
   .yard-sale {
     font-size: 2em;
