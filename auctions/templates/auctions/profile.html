@@ -33,13 +33,17 @@
         {% endif %}
     {% endif %}
     <div class="center-container">
-        <div class="profile-picture-div">
+        <div id="profile-picture-div">
             {% if user.profile_picture %}
-                <img class="profile-picture" src="{{ user.profile_picture }}" alt="Profile Picture">
-                <span id="change-profile-pic" class="profile-picture-text">Change your profile picture</span>
+                <div class="profile-picture-container">
+                    <img class="profile-picture" src="{{ user.profile_picture }}" alt="Profile Picture">
+                </div>
+                <span id="change-profile-pic" class="profile-picture-text hidden">Change your profile picture</span>
             {% else %}
-                <img class="profile-picture" src="../../static/images/vecteezy_default-avatar-profile.jpg" alt="vecteezy default avatar profile">
-                <span id="add-profile-pic" class="profile-picture-text">Add a profile picture</span>
+                <div class="profile-picture-container">
+                    <img class="profile-picture" src="../../static/images/vecteezy_default-avatar-profile.jpg" alt="vecteezy default avatar profile">
+                </div>
+                <span id="add-profile-pic" class="profile-picture-text hidden">Add a profile picture</span>
             {% endif %}
         </div>
 
@@ -57,6 +61,7 @@
     </div>
     <p></p>
     <h2 id="information-header">Information</h2>
+    <p>profile picture - {{ current_user.profile_picture }}</p>
     <div class="profile-info">
         <ul class="info-section-element">
             <li>Username: {{ user.username }}</li>
@@ -323,22 +328,40 @@
     localStorage.setItem('activePage', 'profile');
     
     // Add or change profile picture 
-
+    const profilePictureDiv = document.querySelector("#profile-picture-div")
     const changeProfilePicText = document.querySelector("#change-profile-pic")
     const addProfilePicText = document.querySelector("#add-profile-pic")
     const profilePicForm = document.querySelector("#change-profile-pic-form")
     const cancelChangeProfilePicBtn = document.querySelector("#cancel-change-profile-pic")
 
-    changeProfilePicText.addEventListener("click", () => {
-        profilePicForm.classList.remove("hidden");
-    })
-    addProfilePicText.addEventListener("click", () => {
-        profilePicForm.classList.remove("hidden");
-    })
+    
+
+    if (changeProfilePicText) {
+        profilePictureDiv.addEventListener("mouseover", () => {
+            changeProfilePicText.classList.remove("hidden");
+        })
+        profilePictureDiv.addEventListener("mouseout", () => {
+            changeProfilePicText.classList.add("hidden");
+        })
+        changeProfilePicText.addEventListener("click", () => {
+            profilePicForm.classList.remove("hidden");
+        })
+    }
+    if (addProfilePicText) {
+        profilePictureDiv.addEventListener("mouseover", () => {
+            addProfilePicText.classList.remove("hidden");
+        })
+        profilePictureDiv.addEventListener("mouseout", () => {
+            addProfilePicText.classList.add("hidden");
+        })
+        addProfilePicText.addEventListener("click", () => {
+            profilePicForm.classList.remove("hidden");
+        })
+    }
     cancelChangeProfilePicBtn.addEventListener("click", () => {
         profilePicForm.classList.add("hidden");
     })
-    
+
 
     // Report user button and popup 
     const reportUserText = document.querySelector("#report-user-text")

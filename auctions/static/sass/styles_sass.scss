@@ -1098,11 +1098,11 @@ input {
 
 
 /* PROFILE PAGE */
-.profile-picture-div {
+#profile-picture-div {
   @include flex-column;
 }
 
-.profile-picture {
+.profile-picture-container {
   margin-top: 20px;
   margin-bottom: 20px;
   width: 240px;
@@ -1110,8 +1110,15 @@ input {
   border-radius: 50%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
+.profile-picture {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
 .profile-picture-text {
+  @include cursor-pointer-transition;
   text-align: center;
   font-size: 0.9em;
 }
