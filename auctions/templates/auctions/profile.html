@@ -323,15 +323,17 @@
     const bruteCancelDeleteBtn = document.getElementById('brute-cancel-delete-account');
     const cancelDeleteAccount = document.getElementById('cancel-delete-account');
 
-    deleteAccountButton.addEventListener('click', () => {
-        deleteAccountDiv.classList.toggle('hidden');
-        deleteAccountDiv.classList.toggle('popup-form');
-        deleteAcctPermittedDiv.classList.remove('hidden');
-    });
-    cancelDeleteAccount.addEventListener('click', () => {
-        deleteAccountDiv.classList.toggle('hidden');
-        deleteAccountDiv.classList.toggle('popup-form');
-    });
+    if (deleteAccountButton) {
+        deleteAccountButton.addEventListener('click', () => {
+            deleteAccountDiv.classList.toggle('hidden');
+            deleteAccountDiv.classList.toggle('popup-form');
+            deleteAcctPermittedDiv.classList.remove('hidden');
+        });
+        cancelDeleteAccount.addEventListener('click', () => {
+            deleteAccountDiv.classList.toggle('hidden');
+            deleteAccountDiv.classList.toggle('popup-form');
+        });
+    }
 
     if (submitDeleteBtn) {
         submitDeleteBtn.addEventListener('click', () => {
