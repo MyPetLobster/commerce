@@ -428,15 +428,15 @@ a:hover {
 }
 
 .info-div {
-  background-color: #343a40;
+  background-color: rgba(52, 58, 64, 0.95);
 }
 
 .success-div {
-  background-color: #1f3f1a;
+  background-color: rgba(30, 62, 25, 0.95);
 }
 
 .error-div {
-  background-color: #80052c;
+  background-color: rgba(128, 5, 44, 0.95);
 }
 
 .del-msg {

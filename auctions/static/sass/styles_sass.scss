@@ -432,13 +432,15 @@ a:hover {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 .info-div {
-  background-color: $dark-gray; 
+  background-color: rgba(52, 58, 64, 0.95); 
 }
 .success-div {
-  background-color: $money-green-hover;
+  background-color: rgba(30, 62, 25, 0.95);
+
 }
 .error-div {
-  background-color: $cancel-color-hover;
+  background-color: rgba(128, 5, 44, 0.95);
+
 }
 .del-msg {
   @include cursor-pointer-transition;
