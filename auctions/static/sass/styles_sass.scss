@@ -376,6 +376,9 @@ ul {
   color: $green;
 }
 .dark-green {
+  color: $money-green;
+}
+.dark-green {
   color: $money-green-hover;
 }
 .pink {
@@ -681,6 +684,31 @@ legend {
   transition: 3s;
 }
 
+/* File Dispute Form */
+#file-dispute {
+  @include cursor-pointer-transition;
+}
+
+#dispute-form {
+  @include floating-form;
+  width: 450px;
+
+  textarea {
+    font-size: 0.8em;
+    border-radius: 8px;
+    width: 100%;
+    height: 100px;
+    background-color: $text-color-light;
+  }
+  textarea:focus {
+    border: 2px solid $primary-pink;
+    outline: 1px solid $text-color-light;
+  }
+}
+.dispute-paragraph {
+  font-size: 0.9em;
+  margin-bottom: 20px;
+}
 
 
 

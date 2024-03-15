@@ -426,3 +426,10 @@ def send_error_msg_to_admin(error_message):
         logger.error(f"SMTP related error occurred while sending error notification: {str(e)}")
     except Exception as e:
         logger.error(f"An unexpected error occurred while sending error notification: {str(e)}")
+
+
+def message_admin_dispute(current_user, listing, reason):
+    admin = User.objects.get(pk=2)
+    subject = f"{current_user.username} has initiated a dispute for {listing.title}"
+    message = f"{current_user.username} has initiated a dispute for {listing.title} for the following reason: {reason}."
+    send_message(current_user, admin, subject, message)

@@ -371,10 +371,23 @@ def report_listing(request, listing_id):
 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
+def file_dispute(request, listing_id):
+    '''
+    This function is called when the user clicks the "File Dispute" button on the listing page.
+    The option will only appear for winners once the listing has been closed and seller has 
+    shipped the item. It sends a message to the admin to notify them of the dispute.
+    '''
+    current_user = request.user
+    listing = Listing.objects.get(pk=listing_id)
+    reason = request.POST["reason"]
+    a_msg.message_admin_dispute(current_user, listing, reason)
+
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
+
+
 
 
 # PROFILE FUNCTIONS
-
 # Profile - Report User
 @login_required
 def report_user(request, user_id):

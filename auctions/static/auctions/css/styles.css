@@ -363,6 +363,10 @@ ul {
 }
 
 .dark-green {
+  color: #3a7635;
+}
+
+.dark-green {
   color: #1f3f1a;
 }
 
@@ -786,6 +790,37 @@ legend {
   border-color: none !important;
   box-shadow: none !important;
   transition: 3s;
+}
+
+/* File Dispute Form */
+#file-dispute {
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+#dispute-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  width: 450px;
+}
+#dispute-form textarea {
+  font-size: 0.8em;
+  border-radius: 8px;
+  width: 100%;
+  height: 100px;
+  background-color: #f4f4f4;
+}
+#dispute-form textarea:focus {
+  border: 2px solid #c55176;
+  outline: 1px solid #f4f4f4;
+}
+
+.dispute-paragraph {
+  font-size: 0.9em;
+  margin-bottom: 20px;
 }
 
 /* ALL BUTTON STYLES */

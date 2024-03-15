@@ -69,26 +69,44 @@
                 </div>
             {% elif listing.active == False and listing.cancelled == False and listing.shipped == True %}
                 <div class="center-container winner-alert-div">
-                    <h4 style="text-align:center;">Congratulations! You won the auction!</h4>
+                    <h4 style="text-align:center;" class="dark-green">Congratulations! You won the auction!</h4>
                     <p>Item has been shipped. Thanks for using Yard Sale!</p>
                     <p>
                         At Yard Sale, we strive for 100% customer satisfaction. If you are anything less than satisfied with this purchase,
-                        please use our <span id="file-dispute" class="bold">dispute form</span> and one of our wonderful customer service
+                        please use our... <span id="file-dispute" class="bold">dispute form</span> ...and one of our wonderful customer service
                         representatives will be in touch with you in less than 24 hours, or we will refund your purchase price.</br></br>
 
-                        <span class="fine-print">
+                        <span class="small-font">
                             *Note: a dispute will only be valid if filed within 24 hours of receiving the item. If you know beforehand that 
                             you will not be able to receive shipment within that time window or make trusted arrangements to receive the item, 
                             contact the admins to see if arrangements can be made. DO NOT CONTACT THE SELLER DIRECTLY for any disputes.
                         </span>
-                        <span class="finer-print">
+                        <span class="smaller-font">
                             **Note: Yard Sale and Co reserves the rights to deny any and all disputes without reason. By signing up for our 
                             site and using our services, you have agreed to these terms.
                         </span>
                     </p>
                 </div>
+                <form id="dispute-form" class="hidden center-container" action="/file_dispute/{{ listing.id }}" method="post">
+                    {% csrf_token %}
+                    <h4 style="text-align:center;" class="red">File a Dispute</h4>
+                    <p class="dispute-paragraph" style="text-align:center;">
+                        If you are anything less than satisfied with this purchase, please use the form below to file a dispute. One of our 
+                        wonderful customer service representatives will be in touch with you in less than 24 hours. Thanks for using Yard Sale!
+                    </p>
+                    <input type="text" name="listing_title" value="{{ listing.title }}" hidden>
+                    <input type="text" name="seller" value="{{ listing.user.username }}" hidden>
+                    <input type="text" name="winner" value="{{ listing.winner.user.username }}" hidden>
+                    <textarea name="reason" placeholder="Please describe the issue you are having with this purchase."></textarea>
+                    <div class="form-btn-box">
+                        <button class="btn btn-primary" type="submit">File Dispute</button>
+                        <button id="cancel-dispute" class="btn btn-primary cancel-btn" type="button">Cancel</button>
+                    </div>
+                </form>
             {% endif %}
         {% endif %}
+        
+
     </div>
     <h2>{{ listing.title }}</h2>
 
@@ -357,6 +375,21 @@
 </div>
 
 <script>
+    // Popup Dispute Form
+    const fileDispute = document.querySelector('#file-dispute');
+    const disputeForm = document.querySelector('#dispute-form');
+    const cancelDispute = document.querySelector('#cancel-dispute');
+    if (fileDispute) {
+        fileDispute.addEventListener('click', function() {
+            disputeForm.classList.remove('hidden');
+            disputeForm.classList.add('popup-form');
+        });
+        cancelDispute.addEventListener('click', function() {
+            disputeForm.classList.add('hidden');
+            disputeForm.classList.remove('popup-form');
+        });
+    }
+
     // Report Listings
     const reportListingText = document.querySelector('#report-listing-text');
     const reportListingForm = document.querySelector('.report-listing-form');
