@@ -311,7 +311,7 @@ p {
 }
 ul {
   padding: 0;
-  margin: 0;
+  margin-bottom: 40px;
 }
 
 
@@ -436,11 +436,9 @@ a:hover {
 }
 .success-div {
   background-color: rgba(30, 62, 25, 0.95);
-
 }
 .error-div {
   background-color: rgba(128, 5, 44, 0.95);
-
 }
 .del-msg {
   @include cursor-pointer-transition;
@@ -756,7 +754,6 @@ legend {
 
 
 
-
 /* CREATE LISTING PAGE */
 .category-checkbox {
   accent-color: $primary-pink !important;
@@ -876,8 +873,6 @@ input {
   margin-bottom: 8px;
 }
 .short-listings {
-  position: relative;
-  right: 20px;
   width: 100%;
   text-align: center;
 }
@@ -899,7 +894,7 @@ input {
   @include flex-row;
   font-size: 0.8em;
   gap: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 0;;
 
   p {
     @include cursor-pointer-transition;
@@ -1071,6 +1066,9 @@ input {
 #active-listings-header,
 #closed-listings-header {
   cursor: pointer;
+}
+#closed-listings {
+  margin-top: 40px;
 }
 .profile-page-content {
   @include flex-column;
