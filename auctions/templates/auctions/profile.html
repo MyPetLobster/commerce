@@ -25,25 +25,23 @@
 </div>
 <div class="profile-page-content">
     <h1>{{ user.username }}'s Yard</h1>
-    {% if user != current_user %}
-        {% if current_user.is_authenticated %}
-            <div class="center-container">
-                <button id="send-usr-msg-btn" class="btn btn-primary">Send Message</button>
-            </div>            
-        {% endif %}
-    {% endif %}
+
     <div class="center-container">
         <div id="profile-picture-div">
             {% if user.profile_picture %}
                 <div class="profile-picture-container">
                     <img class="profile-picture" src="{{ user.profile_picture }}" alt="Profile Picture">
                 </div>
-                <span id="change-profile-pic" class="profile-picture-text hidden">Change your profile picture</span>
+                {% if current_user == user %}
+                    <span id="change-profile-pic" class="profile-picture-text hidden">Change your profile picture</span>
+                {% endif %}
             {% else %}
                 <div class="profile-picture-container">
                     <img class="profile-picture" src="../../static/images/vecteezy_default-avatar-profile.jpg" alt="vecteezy default avatar profile">
                 </div>
-                <span id="add-profile-pic" class="profile-picture-text hidden">Add a profile picture</span>
+                {% if current_user == user %}
+                    <span id="add-profile-pic" class="profile-picture-text hidden">Add a profile picture</span>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -58,6 +56,14 @@
                 </div>
             </form>
         </div>
+
+        {% if user != current_user %}
+        {% if current_user.is_authenticated %}
+            <div class="center-container">
+                <button id="send-usr-msg-btn" class="btn btn-primary">Send Message</button>
+            </div>            
+        {% endif %}
+    {% endif %}
     </div>
     <p></p>
     <h2 id="information-header">Information</h2>
