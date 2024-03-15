@@ -512,17 +512,11 @@ a:hover {
 
 /* listing.html - confirm close listing */
 .confirmation-popup {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  display: block;
   color: #f4f4f4;
   background-color: #7a9196;
   height: auto;

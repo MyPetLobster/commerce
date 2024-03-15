@@ -490,9 +490,18 @@ a:hover {
 }
 /* listing.html - confirm close listing */ 
 .confirmation-popup {
-  @include flex-column;
   @include floating-form;
-  @include universal-form;
+  color: $text-color-light;
+  background-color: #7a9196;
+  height: auto;
+  min-width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid $text-color-light;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.524);
+  input {
+    margin-bottom: 10px;
+  }
   width: 400px;
   text-align: center;
   font-size: 0.9em;
