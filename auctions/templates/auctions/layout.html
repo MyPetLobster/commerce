@@ -85,12 +85,6 @@
                 {% if current_user.is_authenticated %}
                     <span id="unread-message-count" class="hidden">{{ unread_message_count }}</span>
                     <a class="balance-link status-link" href="{% url 'profile' current_user.id %}">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }} {% endwith %} &nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    <div class="mail-icon-div">
-                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" alt="gray mail icon"></span>
-                        <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" alt="pink mail icon"></a></span>
-                        <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" alt="dark pink mail icon"></span>&nbsp;&nbsp;
-                    </div>
-                    <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>
 
                     <div class="dropdown">
                         <div class="center-container">
@@ -106,7 +100,13 @@
                             <div class="mobile-dropdown-item"><a  href="{% url 'search' %}">Search</a></div>
                             <div class="mobile-dropdown-item"><a  href="{% url 'about' %}">About</a></div>
                         </div>
-                    </div>                    
+                    </div>        
+                    <div class="mail-icon-div">
+                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" alt="gray mail icon"></span>
+                        <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" alt="pink mail icon"></a></span>
+                        <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" alt="dark pink mail icon"></span>&nbsp;&nbsp;
+                    </div>
+                    <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>            
                 {% else %}
                     <ul class="nav">
                         <li class="nav-item">

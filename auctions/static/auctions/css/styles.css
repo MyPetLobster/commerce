@@ -57,7 +57,7 @@
 .dropdown .options {
   position: absolute;
   top: 70px;
-  right: -5px;
+  right: -60px;
   min-width: 150px;
   background-color: rgba(0, 0, 0, 0);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
@@ -197,12 +197,13 @@ footer li {
   cursor: pointer;
   transition: 0.15s;
   align-items: center;
+  margin-left: 10px;
 }
 
 #unread-count {
   position: absolute;
   top: 80px;
-  right: 110px;
+  right: 30px;
   background-color: rgba(197, 81, 118, 0.563);
   color: #f4f4f4;
   border-radius: 20px;
@@ -422,15 +423,16 @@ a:hover {
   padding: 10px;
   text-align: center;
   font-size: 0.9em;
+  color: #f4f4f4;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 
 .info-div {
-  background-color: #c55176;
+  background-color: #343a40;
 }
 
 .success-div {
-  background-color: #3a7635;
+  background-color: #1f3f1a;
 }
 
 .error-div {
@@ -854,6 +856,14 @@ legend {
 
 #deposit-btn:hover {
   background-color: #3a7635;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(43, 131, 49, 0.823) !important;
+}
+
+#deposit-btn:focus,
+#deposit-btn:active,
+#deposit-btn:visited {
+  background-color: #1f3f1a !important;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 4px rgba(17, 58, 20, 0.823) !important;
 }
 
 #withdraw-btn:hover {

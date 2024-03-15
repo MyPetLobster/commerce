@@ -127,7 +127,7 @@ $universal-form-color: #7a9196;
 .dropdown .options {
     position: absolute;
     top: 70px;
-    right: -5px;
+    right: -60px;
     min-width: 150px;
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
@@ -236,11 +236,12 @@ footer {
   @include flex-row;
   @include cursor-pointer-transition;
   align-items: center;
+  margin-left: 10px;
 }
 #unread-count {
   position: absolute;
   top: 80px;
-  right: 110px;
+  right: 30px;
   background-color: rgba(197, 81, 118, 0.563);
   color: $text-color-light;
   border-radius: 20px;
@@ -427,13 +428,14 @@ a:hover {
   padding: 10px;
   text-align: center;
   font-size: 0.9em;
+  color: $text-color-light;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 .info-div {
-  background-color: $primary-pink;
+  background-color: $dark-gray;
 }
 .success-div {
-  background-color: $money-green;
+  background-color: $money-green-hover;
 }
 .error-div {
   background-color: $cancel-color-hover;
@@ -737,10 +739,18 @@ legend {
 }
 #deposit-btn:hover {
   background-color: $money-green;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 10px rgba(43, 131, 49, 0.823) !important;
+}
+#deposit-btn:focus,
+#deposit-btn:active,
+#deposit-btn:visited {
+  background-color: $money-green-hover !important;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.075), 0 0 4px rgba(17, 58, 20, 0.823) !important;
 }
 #withdraw-btn:hover {
   background-color: $cancel-color-hover;
 }
+
 
 
 

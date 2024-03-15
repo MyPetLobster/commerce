@@ -616,7 +616,7 @@ def withdraw(request, user_id):
     elif amount > user.balance:
         contrib_messages.error(request, "Insufficient funds")
     else:
-        status, total_funds_24, total_funds_72, first_listing_to_close = helpers.validate_withdrawal(user_id, amount)
+        status, total_funds_24, total_funds_72, first_listing_to_close = helpers.validate_withdrawal_request(request, amount)
 
         if status == "denied":
             contrib_messages.error(request, "Insufficient funds. You have active bids closing in less than 24 hours.")

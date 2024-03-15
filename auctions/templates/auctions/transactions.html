@@ -49,7 +49,11 @@
         </tbody>
     </table>
     <div class="center-container">
-        <p class="current-balance">Your current balance is: {% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+        {% if current_user.balance < 0 %}
+            <p class="current-balance">Your current balance is: <span class="red">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</span></p>
+        {% else %}
+            <p class="current-balance">Your current balance is: {% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+        {% endif %}
     </div>
 
     <div class="center-container">
