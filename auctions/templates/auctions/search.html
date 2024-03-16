@@ -23,7 +23,8 @@
         </div>
         <div>
             {% if listings %}
-                <h3>Results</h3>
+                <h3 id="search-results-header">Results</h3>
+                <div class="divider-medium"></div>
                 <div class="search-results-div">
                     {% for listing in listings %}
                         <a class="search-listing-div" href="{% url 'listing' listing.id %}">
