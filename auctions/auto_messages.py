@@ -161,6 +161,18 @@ def message_losing_bidders(listing_id):
                     and issues confirming the sale, the next highest bid will be contacted. Thank you for using Yard Sale!"""
         send_message(site_account, user, subject, message)
 
+
+# helpers.declare_winner()
+def notify_seller_closed_no_bids(listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    site_account = User.objects.get(pk=12)
+    seller = listing.user
+    subject = f"Your listing '{listing.title}' has been closed"
+    message = f"""Your listing '{listing.title}' has been closed. Unfortunately, there were no bids on your item. 
+                You may relist your item at any time. Thank you for using Yard Sale!"""
+    send_message(site_account, seller, subject, message)
+
+
 # actions.close_listing()
 def notify_all_early_closing(listing_id):
     listing = Listing.objects.get(pk=listing_id)

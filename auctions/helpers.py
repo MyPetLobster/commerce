@@ -291,6 +291,9 @@ def declare_winner(listing):
         
         transfer_to_escrow(winner, listing.id)
         a_msg.notify_all_closed_listing(listing.id)
+
+    else: 
+        a_msg.notify_seller_closed_no_bids(listing.id)
         
         
 # views.listing() - check_valid_bid -> place_bid -> check_bids_funds

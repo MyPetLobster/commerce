@@ -147,6 +147,14 @@ def check_if_bids_funded():
         if now > cutoff_date and user.balance < listing.price:
             bid.delete()
 
+            next_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+            if next_bid:
+                listing.price = next_bid.amount
+            else:
+                listing.price = listing.starting_bid
+                
+            listing.save()
+
             time_left = listing_closing_date - now
             hours_left = time_left.total_seconds() // 3600
             minutes_left = (time_left.total_seconds() % 3600) // 60

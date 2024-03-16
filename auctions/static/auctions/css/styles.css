@@ -308,6 +308,13 @@ ul {
   font-size: 0.2em;
 }
 
+.expanded-fine-print-title {
+  width: 100%;
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
 .expanded-fine-print {
   position: fixed;
   top: 50%;
