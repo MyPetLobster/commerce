@@ -84,7 +84,7 @@ def message_previous_high_bidder(listing_id, previous_high_bidder, previous_high
 def send_bid_success_message_bidder(request, amount, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
     highest_bid_amount = format_as_currency(amount)
-    subject = f"Success! You've placed a bid on {listing.title}"
+    subject = f"Success! You've placed a bid on '{listing.title}'"
     message = f"Your bid of {highest_bid_amount} on '{listing.title}' has been placed successfully. This item has been added to your watchlist. Good luck!"
     send_message(site_account, current_user, subject, message)
     contrib_messages.add_message(request, contrib_messages.SUCCESS, f"Your bid of {highest_bid_amount} on '{listing.title}' has been placed successfully.")
@@ -123,7 +123,7 @@ def message_winner(listing_id):
     listing = Listing.objects.get(pk=listing_id)
     winner = listing.winner
 
-    subject = f"Congratulations! You won the auction for {listing.title}"
+    subject = f"Congratulations! You won the auction for '{listing.title}'"
     message = f"""If you have sufficient funds already deposited in your account, then you're all set and you should 
                 have already received a message confirming funds have been moved to escrow. You will receive a message 
                 with tracking information once the seller has shipped your item. If there is any further action 
@@ -137,9 +137,9 @@ def message_seller_on_sale(listing_id):
     seller = listing.user
 
     subject = f"Congratulations! Your item has been sold!"
-    message = f"""Your item, {listing.title}, has been sold! Please ship the item to the buyer as soon as possible.
+    message = f"""Your item, '{listing.title}', has been sold! Please ship the item to the buyer as soon as possible.
                 We make the process easy! A shipping label as been emailed to you. As soon as you ship the item, navigate back to
-                the listing page via this link: <a href="/index/{listing.id}">{listing.id}</a> and click the 'Confirm Shipping' 
+                the listing page and click the 'Confirm Shipping' 
                 button to confirm the sale. Once the item has been shipped, you will receive a message with tracking information. 
                 Thank you for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
@@ -173,8 +173,8 @@ def notify_all_early_closing(listing_id):
 
     if all_unique_bidders.exists():
         subject = f"An auction you been on is being closed early"
-        message = f"""The listing for {listing.title} is being closed early by the seller. You have 
-                    24 hours to continue bidding on this item. {listing.title} will be closed on 
+        message = f"""The listing for '{listing.title}' is being closed early by the seller. You have 
+                    24 hours to continue bidding on this item. '{listing.title}' will be closed on 
                     {new_closing_date}. Thank you for using Yard Sale!"""
 
         for bidder in all_unique_bidders:
@@ -196,7 +196,7 @@ def send_fee_failure_message(listing, fee_amount):
     fee_amount_str = format_as_currency(fee_amount)
     seller = listing.user
     subject = f"Failed to charge early closing fee for '{listing.title}'"
-    message = f"""The listing for {listing.title} was closed early. You have been charged a 5% fee in the amount of 
+    message = f"""The listing for '{listing.title}' was closed early. You have been charged a 5% fee in the amount of 
                 {fee_amount_str}. We were unable to charge your account for this fee. Please deposit funds to cover this fee 
                 within 7 business days to avoid additional fees. Thank you for your understanding and for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
@@ -225,7 +225,7 @@ def notify_mentions(comment):
         try:
             mention_user = User.objects.get(username=mention)
             subject = f"Someone's talking about you!"
-            message = f"You've been mentioned by {comment.user} in a comment on '{listing.title}'."
+            message = f"You've been mentioned by '{comment.user}' in a comment on '{listing.title}'."
             send_message(site_account, mention_user, subject, message)
         except User.DoesNotExist:
             pass
@@ -234,27 +234,27 @@ def notify_mentions(comment):
 # CANCELLED BID MESSAGES - actions.cancel_bid() 
 def send_bid_cancelled_message_confirmation(request, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
-    subject_cancelled_bid = f"Your bid on {listing.title} has been cancelled."
-    message_cancelled_bid = f"Your bid on {listing.title} has been cancelled. This process automatically removes older bids on the same listing."
+    subject_cancelled_bid = "Cancelled Bid Successfully"
+    message_cancelled_bid = f"Your bid on '{listing.title}' has been cancelled. This process automatically removes older bids on the same listing."
     send_message(site_account, current_user, subject_cancelled_bid, message_cancelled_bid)
 
 def send_bid_cancelled_message_new_high_bidder(request, listing_id, highest_bid):
     current_user, site_account, listing = get_msg_info(request, listing_id)
-    subject_new_high_bidder = f"Your bid on {listing.title} is now the highest bid."
-    message_new_high_bidder = f"A user has cancelled their bid on {listing.title}. Your bid is now the highest bid. Good luck!"
+    subject_new_high_bidder = f"Your bid on '{listing.title}' is now the highest bid."
+    message_new_high_bidder = f"A user has cancelled their bid on '{listing.title}'. Your bid is now the highest bid. Good luck!"
     send_message(site_account, highest_bid.user, subject_new_high_bidder, message_new_high_bidder)
 
 def get_bid_cancelled_message_seller_bids(request, listing_id, highest_bid):
     current_user, site_account, listing = get_msg_info(request, listing_id)  
     highest_bid_amount = format_as_currency(highest_bid.amount)
-    subject_seller = f"A user has cancelled their bid on {listing.title}."
-    message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. The current high bid is now {highest_bid_amount}." 
+    subject_seller = f"A user has cancelled their bid on '{listing.title}'."
+    message_seller = f"{current_user.username} has cancelled their bid on '{listing.title}'. The current high bid is now {highest_bid_amount}." 
     return subject_seller, message_seller
 
 def get_bid_cancelled_message_seller_no_bids(request, listing_id):
     current_user, site_account, listing = get_msg_info(request, listing_id)
-    subject_seller = f"A user has cancelled their bid on {listing.title}."
-    message_seller = f"{current_user.username} has cancelled their bid on {listing.title}. There are no current bids."
+    subject_seller = f"A user has cancelled their bid on '{listing.title}'."
+    message_seller = f"{current_user.username} has cancelled their bid on '{listing.title}'. There are no current bids."
     return subject_seller, message_seller
 
 
