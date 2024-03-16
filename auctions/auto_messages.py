@@ -269,7 +269,7 @@ def send_message_withdrawal_success(user_id, amount):
 def send_message_withdrawal_72(user_id, amount, total_funds_72, first_listing_to_close):
     site_account = User.objects.get(pk=12)
     user = User.objects.get(pk=user_id)
-    subject = "Withdrawal Request Denied"
+    subject = "Withdrawal Request Processed - Insufficient Funds for Bids"
     message = f"""Your withdrawal request for {format_as_currency(amount)} has been processed. However, this has left your account with 
                 insufficient funds to cover active bids you've made on listings closing in less than 72 hours. As of the time of this message,
                 your minimum balance needed to cover these bids is {format_as_currency(total_funds_72)} and your current balance is 

@@ -657,10 +657,21 @@ def withdraw(request, user_id):
 
         if status == "denied":
             contrib_messages.error(request, "Insufficient funds. You have active bids closing in less than 24 hours.")
-            a_msg.send_message_deny_withdrawal(request, user_id, amount, total_funds_24)
+            a_msg.send_message_deny_withdrawal(user_id, amount, total_funds_24)
         elif status == "warn":
+            Transaction.objects.create(
+                amount=amount,
+                sender=user,
+                recipient=fake_bank_account,
+                notes="Withdrawal"
+            )
+            fake_bank_account.balance += amount
+            fake_bank_account.save()
+            user.balance -= amount
+            user.save()
+
             contrib_messages.info(request, "Successful withdrawal, but you have active bids closing in less than 72 hours. See messages for details.")
-            a_msg.send_message_withdrawal_72(request, user_id, amount, total_funds_72, first_listing_to_close)
+            a_msg.send_message_withdrawal_72(user_id, amount, total_funds_72, first_listing_to_close)
         else:
             Transaction.objects.create(
                 amount=amount,
