@@ -261,8 +261,8 @@ def profile(request, user_id):
         "messages": contrib_messages.get_messages(request),
         "unread_message_count": Message.objects.filter(recipient=current_user, read=False).count(),
         "bid_info_list": bid_info_list,
-        "user_active_listings_count": Bid.objects.filter(user=user, listing__active=True).count(),
-        "user_inactive_listings_count": Bid.objects.filter(user=user, listing__active=False).count(),
+        "user_active_listings_count": Listing.objects.filter(user=user, active=True).count(),
+        "user_inactive_listings_count": Listing.objects.filter(user=user, active=False).count(),
         "user_active_bids_count": Bid.objects.filter(user=user, listing__active=True).count()
     })
 

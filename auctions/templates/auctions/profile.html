@@ -130,7 +130,11 @@
 
         <div class="account-balance">
             <h2 id="acct-balance-header">Account Balance</h2>
-            <p class="acct-section-element" style="font-size: 1.3em">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+            {% if current_user.balance < 0 %}
+                <p class="acct-section-element red" style="font-size:1.3em;">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+            {% else %}
+                <p class="acct-section-element" style="font-size: 1.3em">{% with formatted_currency=current_user.balance|format_currency %}{{ formatted_currency }}{% endwith %}</p>
+            {% endif %}
             <p><a class="acct-section-element" id="transaction-history-link" href="{% url 'transactions' current_user.id %}">View Transaction History</a></p>
             <button id="deposit-btn" class="btn btn-primary acct-section-element">Deposit Funds</button>
             <button id="withdraw-btn" class="btn btn-primary acct-section-element">Withdraw Funds</button>
