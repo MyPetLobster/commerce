@@ -25,7 +25,7 @@ def set_inactive():
     should be set on creation of listing. Calls declare_winner helper function to handle all the
     logic for handing the closing of a listing.
 
-    Frequency: Every 15 minutes
+    Frequency: Every 60 seconds
 
     Args: None
     Returns: None
@@ -58,7 +58,7 @@ def check_user_fees():
         If the user has a negative balance after 30 days, the account is closed and negative balance paid 
         by legal department.
 
-        Frequency: Every 24 hours
+        Frequency: Every 12 hours
 
         Args: None
         Returns: None
@@ -112,7 +112,7 @@ def check_if_bids_funded():
     This task checks if bids on active listings are funded. If there are less than 24 hours left before the listing closes
     and the bid is not funded, the bid is deleted and the user is notified.
 
-    Frequency: Every 60 minutes
+    Frequency: Every 15 minutes
 
     Args: None
     Returns: None
@@ -152,7 +152,7 @@ def check_if_bids_funded():
                 listing.price = next_bid.amount
             else:
                 listing.price = listing.starting_bid
-                
+
             listing.save()
 
             time_left = listing_closing_date - now

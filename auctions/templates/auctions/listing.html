@@ -129,22 +129,35 @@
                 
             </span></br>
             <div class="fields-item">
-                <span class="bold">Current Bid:&nbsp;&nbsp;</span><span class="lightweight">{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} </span></br> 
+                {% if listing.active == True %}
+                    <span class="bold">Current Bid:&nbsp;&nbsp;</span>
+                {% else %}
+                    <span class="bold">Final Price:&nbsp;&nbsp;</span>
+                {% endif %}
+                <span class="lightweight">{% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %} </span></br> 
             </div>
             {% if user_bid != None %}
                 {% if user_bid.amount == listing.price %}
                     <div id="user-bid-div" class="fields-item">
+                        {% if listing.active == True %}
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You are the current highest bidder!)</span></br>
                         <div id="cancel-bid-div" class="center-container hidden">
                             <span class="bold" id="cancel-bid-link">Cancel Bid</span>
                         </div>
+                        {% else %}
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="green">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You Won!!!)</span></br>
+                        {% endif %}
                     </div>
                 {% else %}
                     <div id="user-bid-div" class="fields-item">
+                        {% if listing.active == True %}
                         <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (Your bid is {% with formatted_currency=difference|format_currency %}{{ formatted_currency }}{% endwith %} less than the current highest bid)</span></br>
                         <div id="cancel-bid-div" class="center-container hidden">
                             <span class="bold" id="cancel-bid-link">Cancel Bid</span>
                         </div>
+                        {% else %}
+                        <span class="bold">Your Bid:&nbsp;&nbsp;</span><span class="red">{% with formatted_currency=user_bid.amount|format_currency %}{{ formatted_currency }}{% endwith %} (You Lost)</span></br>
+                        {% endif %}
                     </div>
                 {% endif %} 
                     <div id="confirm-cancel-bid" class="hidden">
@@ -274,12 +287,12 @@
         {% else %}
         <div class="bidding-closed">
             -- BIDDING CLOSED -- </br>
-            {% if winner.user == current_user %}
-                You Won! (See email for details on how to proceed.)
+            {% if listing.winner == current_user %}
+                <span class="green">You Won! (See email for details on how to proceed.)</span>
             {% elif listing.price == listing.starting_bid %}
                 No Bids
             {% else %}
-                Winner: {{ winner.user.username }}
+                Winner: {{ listing.winner.username }}
             {% endif %}
         </div>
         {% endif %}

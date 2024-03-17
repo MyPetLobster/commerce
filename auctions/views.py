@@ -94,9 +94,9 @@ def index(request):
     # maintenance.force_set_closing_dates()
     
     # Celery periodic task here for now
-    tasks.check_if_bids_funded()
-    tasks.set_inactive()
-    tasks.check_user_fees()
+    # tasks.check_if_bids_funded()
+    # tasks.set_inactive()
+    # tasks.check_user_fees()
 
     current_user = request.user
     listings = Listing.objects.all().order_by("-date")

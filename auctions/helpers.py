@@ -289,7 +289,7 @@ def declare_winner(listing):
         listing.winner = winner
         listing.save()
         
-        transfer_to_escrow(winner, listing.id)
+        transfer_to_escrow(listing.id)
         a_msg.notify_all_closed_listing(listing.id)
 
     else: 
@@ -600,7 +600,7 @@ def create_bid_info_object_list(user_active_bids):
 
 # MONEY TRANSFER FUNCTIONS
 
-def transfer_to_escrow(winner, listing_id):
+def transfer_to_escrow(listing_id):
     '''
     This function transfers the winning bid amount from the winner's account to the escrow account.
     It is called by the declare_winner() function when a listing closes and a winner is declared.
@@ -615,7 +615,7 @@ def transfer_to_escrow(winner, listing_id):
     '''
 
     listing = Listing.objects.get(pk=listing_id)
-    buyer = winner.user
+    buyer = listing.winner
     amount = listing.price
     escrow_account = User.objects.get(pk=11)
     site_account = User.objects.get(pk=12)

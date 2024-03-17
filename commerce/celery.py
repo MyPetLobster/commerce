@@ -21,7 +21,7 @@ app.conf.beat_schedule = {
     },
     'check_if_bids_funded': {
         'task': 'auctions.tasks.check_if_bids_funded',
-        'schedule': 3600.0,
+        'schedule': 900.0,
     },
 }
 

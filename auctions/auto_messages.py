@@ -148,8 +148,6 @@ def message_seller_on_sale(listing_id):
 def message_losing_bidders(listing_id):
     site_account = User.objects.get(pk=12)
     listing = Listing.objects.get(pk=listing_id)
-    all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
-
     winner = listing.winner
     all_unique_bidders = Bid.objects.filter(listing=listing).values('user').distinct()
     all_unique_bidders = all_unique_bidders.exclude(user=winner)
@@ -313,8 +311,8 @@ def get_escrow_fail_message(listing):
 
 def get_escrow_success_message(listing):
     subject = f"Your funds have been deposited in escrow for {listing.title}"
-    message = f"""As soon as the buyer ships the item, you will receive confirmation and tracking information. 
-    Thank you for using Yard Sale!"""
+    message = f"""As soon as the seller ships the item, you will receive confirmation and tracking information. 
+    Thank you for using Yard Sale, and congratulations!"""
     return subject, message
 
 # helpers.transfer_to_seller()
