@@ -680,24 +680,12 @@ def transfer_to_seller(listing_id):
             fee_amount = round(sale_price * decimal.Decimal(0.10), 2)
             sale_price -= fee_amount
 
-            # Create Transaction objects for the fee and the sale
-            fee_transaction = Transaction.objects.create(
-                sender=escrow_account,
-                recipient=site_account,
-                amount=fee_amount,
-                listing=listing,
-                notes="Sale Fee"
-            )
-            fee_transaction.save()
-
-            sell_transaction = Transaction.objects.create(
-                sender=escrow_account,
-                recipient=seller,
-                amount=sale_price,
-                listing=listing,
-                notes="Escrow to Seller Transfer"
-            )
-            sell_transaction.save()
+            
+            # Update the balances for the site account and the escrow account
+            escrow_account.balance -= fee_amount
+            escrow_account.save()
+            site_account.balance += fee_amount
+            site_account.save()
 
             # Update the balances for the seller and the escrow account
             escrow_account.balance -= sale_price
@@ -706,6 +694,24 @@ def transfer_to_seller(listing_id):
             seller.save()
 
             listing.in_escrow = False
+            listing.save()
+
+            # Create Transaction objects for the fee and the sale
+            Transaction.objects.create(
+                sender=escrow_account,
+                recipient=site_account,
+                amount=fee_amount,
+                listing=listing,
+                notes="Sale Fee"
+            )
+
+            Transaction.objects.create(
+                sender=escrow_account,
+                recipient=seller,
+                amount=sale_price,
+                listing=listing,
+                notes="Escrow to Seller Transfer"
+            )
 
             # Send confirmation message to seller and buyer after shipping confirmed
             a_msg.send_shipping_confirmation_messages(listing.id)
