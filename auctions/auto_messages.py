@@ -154,8 +154,8 @@ def message_losing_bidders(listing_id):
 
     for bidder in all_unique_bidders:
         user = User.objects.get(pk=bidder['user'])
-        subject = f"Sorry, you lost the auction for {listing.title}"
-        message = f"""Sorry, you lost the auction for {listing.title}. The winning bid was {winner.amount}. If there are 
+        subject = f"Sorry, you lost the auction for '{listing.title}'"
+        message = f"""Sorry, you lost the auction for '{listing.title}'. The winning bid was {format_as_currency(listing.price)} If there are 
                     and issues confirming the sale, the next highest bid will be contacted. Thank you for using Yard Sale!"""
         send_message(site_account, user, subject, message)
 
@@ -389,7 +389,7 @@ def send_bid_removed_message(user, listing, time_left_str):
 def email_winner(winner, listing):
     try:
         # Get the winner's email
-        winner_username = winner.username
+        winner_username = listing.winner
 
         # Create the email subject
         subject = f"Congratulations! You have the winning bid for '{listing.title}' (ID: {listing.id})"
