@@ -179,6 +179,7 @@ def close_listing(request, listing_id):
         if highest_bid > starting_bid:
             # If there are active bids, there will be 24 hour delay before closing
             listing.closing_date = timezone.now() + timezone.timedelta(hours=24)
+            listing.cancelled = True
             listing.save()
             contrib_messages.info(request, "You have active bids on this listing. There will be a 24 hour delay before closing.")
             a_msg.notify_all_early_closing(listing.id)

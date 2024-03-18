@@ -707,7 +707,11 @@ def transfer_to_seller(listing_id):
             logger.error(f"(Err01989) Escrow account is empty for {listing.title}")
             return False
         else:
-            fee_amount = round(sale_price * decimal.Decimal(0.10), 2)
+            if listing.cancelled == True:
+                fee_amount = round(sale_price * decimal.Decimal(0.15), 2)
+            else:
+                fee_amount = round(sale_price * decimal.Decimal(0.10), 2)
+                
             sale_price -= fee_amount
 
             
@@ -722,13 +726,9 @@ def transfer_to_seller(listing_id):
             escrow_account.save()
             seller.balance += sale_price
             seller.save()
-            print("***************************************")
-            print (f"listing.in_escrow: {listing.in_escrow}")
-            print("***************************************")
+
             listing.in_escrow = False
             listing.save()
-            print("***************************************")
-            print (f"listing.in_escrow: {listing.in_escrow}")
             
             # Create Transaction objects for the fee and the sale
             Transaction.objects.create(
