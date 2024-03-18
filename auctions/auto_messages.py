@@ -203,6 +203,7 @@ def notify_all_early_closing(listing_id):
         
         send_message(site_account, seller, subject_seller, message_seller)
 
+
 # helpers.charge_early_closing_fee()
 def send_fee_failure_message(listing, fee_amount):
     site_account = User.objects.get(pk=12)
@@ -213,7 +214,6 @@ def send_fee_failure_message(listing, fee_amount):
                 {fee_amount_str}. We were unable to charge your account for this fee. Please deposit funds to cover this fee 
                 within 7 business days to avoid additional fees. Thank you for your understanding and for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
-
 
 
 # helpers.charge_early_closing_fee()
