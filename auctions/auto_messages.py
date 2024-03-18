@@ -185,7 +185,10 @@ def notify_all_early_closing(listing_id):
         subject = f"An auction you been on is being closed early"
         message = f"""The listing for '{listing.title}' is being closed early by the seller. You have 
                     24 hours to continue bidding on this item. '{listing.title}' will be closed on 
-                    {new_closing_date}. Thank you for using Yard Sale!"""
+                    {new_closing_date}. Because of the early closure, you will not be required to have 
+                    enough funds deposited when this listing is 24 hours away from closing. Instead, 
+                    you have up until the time the listing closes to deposit sufficient funds into your
+                    account. Thank you for using Yard Sale!"""
 
         for bidder in all_unique_bidders:
             user = User.objects.get(pk=bidder.id)

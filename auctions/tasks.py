@@ -141,7 +141,10 @@ def check_if_bids_funded():
         listing_closing_date = listing.closing_date
 
         # Get cutoff date for unfunded bids, 1 day before listing closing date
-        cutoff_date = listing_closing_date - timezone.timedelta(days=1)
+        if listing.cancelled == False:
+            cutoff_date = listing_closing_date - timezone.timedelta(days=1)
+        else:
+            cutoff_date = listing_closing_date
 
         # If the bid is unfunded and the listing is closing within the next 24 hours, delete the bid and notify the user
         if now > cutoff_date and user.balance < listing.price:
