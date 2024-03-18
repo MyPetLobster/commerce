@@ -144,7 +144,7 @@
             <form class="popup-form" action="{% url 'deposit' current_user.id %}" method="post">
                 {% csrf_token %}
                 <h4 class="form-title">Deposit Funds</h4>
-                <input class="form-control" type="number" name="amount" placeholder="Amount">
+                <input class="form-control" type="number" name="amount" step="0.01" placeholder="Amount">
                 <div class="form-btn-box">
                     <button class="btn btn-primary" type="submit" style="align-self:center">Deposit</button>
                     <button class="btn btn-primary cancel-btn" type="button" id="cancel-deposit-btn" style="align-self:center">Cancel</button>
@@ -155,7 +155,7 @@
             <form class="popup-form" action="{% url 'withdraw' current_user.id %}" method="post">
                 {% csrf_token %}
                 <h4 class="form-title">Withdraw Funds</h4>
-                <input class="form-control" type="number" name="amount" placeholder="Amount">
+                <input class="form-control" type="number" name="amount" step="0.01" placeholder="Amount">
                 <div class="form-btn-box">
                     <button class="btn btn-primary" type="submit" style="align-self:center">Withdraw</button>
                     <button class="btn btn-primary cancel-btn" type="button" id="cancel-withdraw-btn" style="align-self:center">Cancel</button>
