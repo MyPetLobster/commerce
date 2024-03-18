@@ -1119,6 +1119,10 @@ input {
   color: #c55176;
 }
 
+.listing-desc-div > * {
+  margin-bottom: 8px;
+}
+
 /* LISTING PAGE */
 .winner-alert-div,
 .seller-alert-div {

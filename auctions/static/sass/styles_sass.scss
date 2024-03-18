@@ -952,7 +952,9 @@ input {
   color: $primary-pink;
 }
 
-
+.listing-desc-div > * {
+  margin-bottom: 8px;
+}
 
 
 /* LISTING PAGE */
