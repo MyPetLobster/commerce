@@ -692,10 +692,14 @@ def transfer_to_seller(listing_id):
             escrow_account.save()
             seller.balance += sale_price
             seller.save()
-
+            print("***************************************")
+            print (f"listing.in_escrow: {listing.in_escrow}")
+            print("***************************************")
             listing.in_escrow = False
             listing.save()
-
+            print("***************************************")
+            print (f"listing.in_escrow: {listing.in_escrow}")
+            
             # Create Transaction objects for the fee and the sale
             Transaction.objects.create(
                 sender=escrow_account,

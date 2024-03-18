@@ -742,6 +742,7 @@ def confirm_shipping(request, listing_id):
     listing = Listing.objects.get(pk=listing_id)
     if listing.shipped == False:
         if helpers.transfer_to_seller(listing_id):
+            listing = Listing.objects.get(pk=listing_id)
             listing.shipped = True
             listing.save()    
             contrib_messages.success(request, "Shipping confirmed")
