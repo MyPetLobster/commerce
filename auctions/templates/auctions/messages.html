@@ -141,6 +141,7 @@
 
           <div class="hidden">
             <div class="reply-delete-div">
+              {% if message.sender.id != 12 %}
               <span class="reply-button">Reply</span>
               <div class="reply-form-div hidden">
                 <form
@@ -179,7 +180,7 @@
                   </div>
                 </form>
               </div>
-
+              {% endif %}
               <span
                 ><a
                   class="delete-msg-button"
