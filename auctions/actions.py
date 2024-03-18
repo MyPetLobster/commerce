@@ -289,7 +289,11 @@ def move_to_escrow(request, listing_id):
 
     if winner == current_user:
         if listing.active == False and listing.in_escrow == False and listing.shipped == False:
-            helpers.transfer_to_escrow(winner, listing_id)
+            if winner.balance >= listing.price:
+                helpers.transfer_to_escrow(winner, listing_id)
+                contrib_messages.success(request, "Funds transferred to escrow")
+            else:
+                contrib_messages.error(request, "Insufficient funds")
             
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 

@@ -67,7 +67,7 @@
         {% endif %}
 
         {% if listing.winner == current_user %}
-            {% if listing.active == False and listing.cancelled == False and listing.shipped == False and listing.in_escrow == False %}
+            {% if listing.active == False and listing.shipped == False and listing.in_escrow == False %}
                 <div class="center-container winner-alert-div">
                     <h4 style="text-align:center;">Congratulations! You won the auction!</h4>
                     <p style="text-align:center;">

@@ -89,7 +89,7 @@ def check_user_fees():
             user.save()
         
         if user.balance < 0 and days_overdue > 28 and days_overdue <= 30:
-            a_msg.send_account_closure_message(user)
+            a_msg.send_account_closure_message(user.id)
 
         if user.balance < 0 and days_overdue > 30:
             user.username = f"inactive_{user.username}"
@@ -140,11 +140,12 @@ def check_if_bids_funded():
         now = timezone.now()
         listing_closing_date = listing.closing_date
 
-        # Get cutoff date for unfunded bids, 1 day before listing closing date
+        # Get cutoff date for unfunded bids, 1 day before listing closing date if listing is not cancelled
+        # If listing is cancelled, get cutoff date 1 day after listing closing date
         if listing.cancelled == False:
             cutoff_date = listing_closing_date - timezone.timedelta(days=1)
         else:
-            cutoff_date = listing_closing_date
+            cutoff_date = listing_closing_date + timezone.timedelta(days=1)
 
         # If the bid is unfunded and the listing is closing within the next 24 hours, delete the bid and notify the user
         if now > cutoff_date and user.balance < listing.price:

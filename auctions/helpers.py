@@ -278,7 +278,7 @@ def declare_winner(listing):
 
     Returns: None
 
-    Called by: check_expiration()
+    Called by: set_inactive()
     Function Calls: transfer_to_escrow(), notify_all_closed_listing()
     '''
     if listing.winner:
@@ -288,12 +288,9 @@ def declare_winner(listing):
     if highest_bid:
         winner = highest_bid.user
 
-        # In case of cancellation where time to deposit extends to closing date
+        # In case of cancellation where time to deposit extends to 24 hours after closing date (see tasks.check_if_bids_funded)
         if winner.balance < highest_bid.amount:
-            winner = get_highest_backed_bid(listing)
-            if winner == None:
-                a_msg.notify_seller_closed_no_bids(listing.id)
-                return
+            return
             
         listing.winner = winner
         listing.save()
@@ -650,7 +647,7 @@ def transfer_to_escrow(listing_id):
     escrow_account = User.objects.get(pk=11)
     site_account = User.objects.get(pk=12)
 
-    if amount > buyer.balance: 
+    if buyer.balance < amount: 
         if listing.in_escrow == False:
             subject, message = a_msg.get_escrow_fail_message(listing)
         else: 
@@ -711,7 +708,7 @@ def transfer_to_seller(listing_id):
                 fee_amount = round(sale_price * decimal.Decimal(0.15), 2)
             else:
                 fee_amount = round(sale_price * decimal.Decimal(0.10), 2)
-                
+
             sale_price -= fee_amount
 
             

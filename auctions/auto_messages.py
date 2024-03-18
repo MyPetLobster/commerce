@@ -185,10 +185,8 @@ def notify_all_early_closing(listing_id):
         subject = f"An auction you been on is being closed early"
         message = f"""The listing for '{listing.title}' is being closed early by the seller. You have 
                     24 hours to continue bidding on this item. '{listing.title}' will be closed on 
-                    {new_closing_date}. Because of the early closure, you will not be required to have 
-                    enough funds deposited when this listing is 24 hours away from closing. Instead, 
-                    you have up until the time the listing closes to deposit sufficient funds into your
-                    account. Thank you for using Yard Sale!"""
+                    {new_closing_date}. Because of the early closure, you will have 24 hours after the auction ends to
+                    deposit sufficient funds. Thank you for using Yard Sale!"""
 
         for bidder in all_unique_bidders:
             user = User.objects.get(pk=bidder.id)
@@ -214,6 +212,17 @@ def send_fee_failure_message(listing, fee_amount):
                 {fee_amount_str}. We were unable to charge your account for this fee. Please deposit funds to cover this fee 
                 within 7 business days to avoid additional fees. Thank you for your understanding and for using Yard Sale!"""
     send_message(site_account, seller, subject, message)
+
+
+# tasks.check_user_fees()
+def send_account_closure_message(user_id):
+    site_account = User.objects.get(pk=12)
+    user = User.objects.get(pk=user_id)
+    subject = "Imminent account closure"
+    message = f"""Your account has a negative balance and has been overdue for 28 days. If your account balance is not 
+                brought to a positive value within 2 business days, your account will be closed and the negative balance 
+                will be forwarded to our legal department. Please contact support immediately to resolve this issue."""
+    send_message(site_account, user, subject, message)
 
 
 # helpers.charge_early_closing_fee()
@@ -309,7 +318,8 @@ def get_escrow_fail_message(listing):
     message = f"""You have won the bid for {listing.title}, but you do not have sufficient 
     funds to complete the transaction. Please add funds to your account to complete the purchase.
     Then navigate back to the listing page and click the 'Complete Purchase' button to complete 
-    the transaction."""   
+    the transaction. You have 24 hours from the closing time to complete the transaction before 
+    your bid is cancelled and the next highest bidder is contacted. Thank you for using Yard Sale!"""   
     return subject, message
 
 def get_escrow_success_message(listing):
