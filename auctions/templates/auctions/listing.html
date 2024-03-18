@@ -17,7 +17,29 @@
             {% if listing.active == False %}
                 {% if listing.cancelled == True and listing.price == listing.starting_bid %}
                     <div class="listing-cancelled-div seller-alert-div">
-                        <p>Listing has been cancelled. No bids were placed.</p>
+                        <p>
+                            Listing has been cancelled. No bids were placed.</br>
+                            <span id="renew-listing-text" class="bold">Want to renew this listing?</span>
+                        </p>
+                        
+                        <form id="renew-listing-form" class="hidden confirmation-popup" action="/renew_listing/{{ listing.id }}" method="post">
+                            {% csrf_token %}
+                            <h4 style="text-align:center;">Are you sure you want to renew this listing?</h4>
+                            <p style="text-align:center; font-size:1em;">
+                                By renewing this listing, you are agreeing to the original terms. The listing will be 
+                                reactivated and remain live for 7 days.</br></br>
+                                You may enter a new price for the listing below, but if you want to change any other 
+                                details, you will have to start over.
+                            </p>
+                        
+                            <div class="center-container">
+                                <input class="form-control renew-price" type="number" name="price" placeholder="Enter Starting Bid" default="{{ listing.price }}">
+                            </div>
+                            <div class="renew-btn-box">
+                                <button class="btn btn-primary" type="submit">Renew Listing</button>
+                                <button id="cancel-renew" class="btn btn-primary cancel-btn" type="button">Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 {% elif listing.shipped == False and listing.in_escrow == True %}
                     <div class="confirm-ship-div" style="width: 350px; text-align: center;">
@@ -387,6 +409,20 @@
 </div>
 
 <script>
+
+    // Renew Listing
+    const renewListingText = document.querySelector('#renew-listing-text');
+    const renewListingForm = document.querySelector('#renew-listing-form');
+    const cancelRenew = document.querySelector('#cancel-renew');
+    if (renewListingText) {
+        renewListingText.addEventListener('click', function() {
+            renewListingForm.classList.remove('hidden');
+        });
+        cancelRenew.addEventListener('click', function() {
+            renewListingForm.classList.add('hidden');
+        });
+    }
+
     // Popup Dispute Form
     const fileDispute = document.querySelector('#file-dispute');
     const disputeForm = document.querySelector('#dispute-form');

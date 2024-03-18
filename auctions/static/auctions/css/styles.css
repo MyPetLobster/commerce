@@ -1124,6 +1124,33 @@ input {
 }
 
 /* LISTING PAGE */
+#renew-listing-form {
+  text-align: center;
+}
+
+#renew-listing-text {
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+#renew-listing-text:hover {
+  color: #c55176;
+}
+
+.renew-price {
+  width: 60%;
+}
+
+.renew-btn-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  width: 100%;
+}
+
 .winner-alert-div,
 .seller-alert-div {
   display: flex;

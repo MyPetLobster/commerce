@@ -371,6 +371,8 @@ def report_listing(request, listing_id):
 
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
+
+@login_required
 def file_dispute(request, listing_id):
     '''
     This function is called when the user clicks the "File Dispute" button on the listing page.
@@ -385,6 +387,37 @@ def file_dispute(request, listing_id):
     return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
+@login_required
+def renew_listing(request, listing_id):
+    '''
+    This function is called when the user clicks the "Renew Listing" button on the listing page.
+    It sets the closing_date of the listing to 7 days from the current time and then redirects to
+    the listing page.
+
+    Args: 
+            request (HttpRequest): The request object
+            listing_id (int): The ID of the listing to be renewed
+    Returns: 
+            HttpResponseRedirect: Redirects to the listing page
+
+    Called by: listing.html
+    Functions Called: None
+    '''
+    new_price = request.POST["price"]
+    if not new_price:
+        new_price = Listing.objects.get(pk=listing_id).price
+    else:
+        new_price = decimal.Decimal(new_price)
+    listing = Listing.objects.get(pk=listing_id)
+    listing.starting_bid = new_price
+    listing.price = new_price
+    listing.date = timezone.now()
+    listing.closing_date = timezone.now() + timezone.timedelta(days=7)
+    listing.cancelled = False
+    listing.active = True
+    listing.save()
+
+    return HttpResponseRedirect(reverse("listing", args=(listing_id,)))
 
 
 # PROFILE FUNCTIONS

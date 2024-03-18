@@ -958,6 +958,24 @@ input {
 
 
 /* LISTING PAGE */
+#renew-listing-form {
+  text-align: center;
+}
+#renew-listing-text {
+  @include cursor-pointer-transition;
+}
+#renew-listing-text:hover {
+  color: $primary-pink;
+}
+.renew-price {
+  width: 60%;
+}
+.renew-btn-box {
+  @include flex-column;
+  margin: 0;
+  width: 100%;
+}
+
 .winner-alert-div,
 .seller-alert-div {
   @include flex-column;
