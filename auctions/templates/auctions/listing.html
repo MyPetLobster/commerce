@@ -44,7 +44,7 @@
             {% endif %}
         {% endif %}
 
-        {% if winner.user == current_user %}
+        {% if listing.winner == current_user %}
             {% if listing.active == False and listing.cancelled == False and listing.shipped == False and listing.in_escrow == False %}
                 <div class="center-container winner-alert-div">
                     <h4 style="text-align:center;">Congratulations! You won the auction!</h4>
@@ -235,7 +235,7 @@
                             <option value="other">Other</option>
                         </select>
                         <button class="btn btn-primary cancel-btn" type="submit">Report</button>
-                        <button class="btn btn-primary cancel-report-listing-btn" type="button">Nevermind</button>
+                        <button class="btn btn-primary cancel-report-listing-btn" type="button">Never mind</button>
                 </form>
                 <div class="confirm-bid-popup-content hidden">
                     <div class="center-container" style="text-align:center; width:400px;">
@@ -318,7 +318,7 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <button class="btn btn-primary cancel-btn" type="submit">Report</button>
-                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Never mind</button>
                         </form>
                     </li>
                     {% elif comment.user == current_user %}
@@ -330,7 +330,7 @@
                                 <h4 style="text-align:center;">Are you sure you want to delete this comment?</h4>
                                 <p>We all say things that we regret. Good thing you can delete this comment and no one will ever know.</p>
                                 <button class="btn btn-primary cancel-btn" type="submit">Delete Comment</button>
-                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Never mind</button>
                         </form>
                     </li>
                     {% elif comment.user == listing.user %}
@@ -346,7 +346,7 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <button class="btn btn-primary cancel-btn" type="submit">Report</button>
-                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Never mind</button>
                         </form>
                     </li>
                     {% else %}
@@ -363,7 +363,7 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <button class="btn btn-primary cancel-btn" type="submit">Report</button>
-                                <button class="btn btn-primary cancel-report-btn" type="button">Nevermind</button>
+                                <button class="btn btn-primary cancel-report-btn" type="button">Never mind</button>
                         </form>
                     </li>
                     {% endif %}

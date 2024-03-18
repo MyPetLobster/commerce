@@ -389,7 +389,7 @@ def send_bid_removed_message(user, listing, time_left_str):
 def email_winner(winner, listing):
     try:
         # Get the winner's email
-        winner_username = listing.winner
+        winner_username = listing.winner.username
 
         # Create the email subject
         subject = f"Congratulations! You have the winning bid for '{listing.title}' (ID: {listing.id})"
