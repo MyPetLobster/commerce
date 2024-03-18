@@ -243,7 +243,14 @@
                     {% for listing in user.listings.all %}
                         {% if listing.active == True %}
                             <li>  
-                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                                <a class="bold active-header" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                                <div class="hidden profile-desc-font">
+                                    {% if listing.price == listing.starting_bid %}
+                                        <span class="bold">Starting Bid:</span> {% with formatted_currency=listing.starting_bid|format_currency %}{{ formatted_currency }}{% endwith %}
+                                    {% else %}
+                                        <span class="bold">Current Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}
+                                    {% endif %}
+                                </div>
                             </li>
                         {% endif %}
                     {% endfor %}
@@ -267,21 +274,23 @@
         <div id="closed-listings-element">
         <div class="profile-listings profile-closed-listings">
             <ul class="thin-list">
-                {% for listing in user.listings.all %}
+                {% for listing in listings %}
                     {% if listing.active == False %}
                         <li class="closed-listing-li">
-                                <a class="bold" href="{% url 'listing' listing.id %}">{{ listing.title }}</a></br>
-                        
-                        {% if listing.price == listing.starting_bid %}
-                            <p style="display:inline" class="bold">No bids</p>
-                        {% else %}
-                        <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
-                                {% if listing.winner %}
-                                    <span class="bold">Winner:</span> {{ listing.winner.username }}
+                            <a class="bold closed-header" href="{% url 'listing' listing.id %}">{{ listing.title }}</a>
+                            <div class="hidden profile-desc-font">
+                                {% if listing.price == listing.starting_bid %}
+                                <p style="display:inline" class="bold">No bids</p>
+                            
                                 {% else %}
-                                    No winner
-                                {% endif %}
-                        </p>
+                                <p style="display:inline"><span class="bold">Final Bid:</span> {% with formatted_currency=listing.price|format_currency %}{{ formatted_currency }}{% endwith %}</br>
+                                    {% if listing.winner %}
+                                        <span class="bold">Winner:</span> {{ listing.winner.username }}
+                                    {% else %}
+                                        No winner
+                                    {% endif %}
+                                </p>
+                            </div>
                         </li>
                         {% endif %}
                     {% endif %}
@@ -336,6 +345,32 @@
     // Set the localStorage value of the activePage to highlight on navbar
     localStorage.setItem('activePage', 'profile');
     
+
+    // Show details about active listings
+    const activeHeaders = document.querySelectorAll(".active-header")
+    activeHeaders.forEach((element) => {
+        element.addEventListener("mouseover", () => {
+            element.nextElementSibling.classList.remove("hidden");
+        })
+        element.addEventListener("mouseout", () => {
+            element.nextElementSibling.classList.add("hidden");
+        })
+    })
+
+
+    // Show details about closed listings 
+    const closedHeaders = document.querySelectorAll(".closed-header")
+    
+    closedHeaders.forEach((element) => {
+        element.addEventListener("mouseover", () => {
+            element.nextElementSibling.classList.remove("hidden");
+        })
+        element.addEventListener("mouseout", () => {
+            element.nextElementSibling.classList.add("hidden");
+        })
+    })
+
+
     // Add or change profile picture 
     const profilePictureDiv = document.querySelector("#profile-picture-div")
     const changeProfilePicText = document.querySelector("#change-profile-pic")

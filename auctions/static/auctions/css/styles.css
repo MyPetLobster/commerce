@@ -1434,11 +1434,17 @@ input {
 
 .thin-list {
   width: 250px;
+  list-style-type: none;
+  text-align: center;
 }
 
 .no-listings {
   font-style: italic;
   color: #7a7575;
+}
+
+.profile-desc-font {
+  font-size: 0.8em;
 }
 
 /* WATCHLIST PAGE */
