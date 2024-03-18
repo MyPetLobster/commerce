@@ -263,6 +263,7 @@ def check_expiration(listing_id):
         else:
             return "closed - by seller"
 
+
 def declare_winner(listing):
     '''
     Called when a listing is closed and no winner has been set. This function 
@@ -286,6 +287,14 @@ def declare_winner(listing):
     highest_bid = Bid.objects.filter(listing=listing).order_by("-amount").first()
     if highest_bid:
         winner = highest_bid.user
+
+        # In case of cancellation where time to deposit extends to closing date
+        if winner.balance < highest_bid.amount:
+            winner = get_highest_backed_bid(listing)
+            if winner == None:
+                a_msg.notify_seller_closed_no_bids(listing.id)
+                return
+            
         listing.winner = winner
         listing.save()
         
@@ -295,7 +304,28 @@ def declare_winner(listing):
     else: 
         a_msg.notify_seller_closed_no_bids(listing.id)
         
-        
+
+def get_highest_backed_bid(listing):
+    '''
+    This function is called by the declare_winner() function to determine the winner
+    if the highest bid is not fully funded. It returns the user with the highest
+    bid that is fully funded.
+
+    Args: 
+            listing (Listing): the listing object
+    Returns:
+            User: the user with the highest fully funded bid
+
+    Called by: declare_winner()
+    Function Calls: None
+    '''
+    bids = Bid.objects.filter(listing=listing).order_by("-amount")
+    for bid in bids:
+        if bid.user.balance >= bid.amount:
+            return bid.user
+    return None
+
+
 # views.listing() - check_valid_bid -> place_bid -> check_bids_funds
 @login_required
 def check_valid_bid(request, listing_id, amount):
