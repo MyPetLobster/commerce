@@ -362,7 +362,7 @@ ul {
 }
 
 .yellow {
-  color: #e6d00c !important;
+  color: #c7b40a !important;
 }
 
 .green {
@@ -609,7 +609,7 @@ a:hover {
 }
 
 /* category.html - Listing Hover Description */
-.visible-desc {
+.visible-desc-dark {
   position: absolute;
   transform: translate(-20%, -180%);
   display: block;
@@ -621,6 +621,23 @@ a:hover {
   width: 600px;
   padding: 20px;
   font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
+
+.visible-desc-light {
+  position: absolute;
+  transform: translate(-20%, -180%);
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  background-color: rgba(197, 81, 118, 0.831);
+  color: #f4f4f4;
+  border-radius: 8px;
+  border: 1px solid #f4f4f4;
+  width: 600px;
+  padding: 20px;
+  font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 
 /* profile.html - Send User Message Form */

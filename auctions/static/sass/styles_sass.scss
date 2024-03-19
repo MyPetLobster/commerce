@@ -64,7 +64,7 @@ $money-green: #3a7635;
 $money-green-hover: #1f3f1a;
 $green: #247b1c;
 $pale-pink: #976f7b;
-$yellow: #e6d00c;
+$yellow: #c7b40a;
 $orange: #b36f1b;
 $universal-form-color: #7a9196;
 
@@ -558,7 +558,7 @@ a:hover {
   @include cursor-pointer-transition;
 }
 /* category.html - Listing Hover Description */
-.visible-desc {
+.visible-desc-dark {
   position: absolute;
   transform: translate(-20%, -180%);
   display: block;
@@ -570,6 +570,22 @@ a:hover {
   width: 600px;
   padding: 20px;
   font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
+}
+.visible-desc-light {
+  position: absolute;
+  transform: translate(-20%, -180%);
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  background-color: rgba(197, 81, 118, 0.831);
+  color: $text-color-light;
+  border-radius: 8px;
+  border: 1px solid $text-color-light;
+  width: 600px;
+  padding: 20px;
+  font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.274);
 }
 /* profile.html - Send User Message Form */
 .send-usr-msg-form-div {

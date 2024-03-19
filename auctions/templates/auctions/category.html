@@ -25,16 +25,29 @@
 </div>
 
 <script>
-  document.querySelectorAll(".title-link").forEach((link) => {
-    link.addEventListener("mouseover", () => {
-      link.nextElementSibling.classList.toggle("hidden");
-      link.nextElementSibling.classList.toggle("visible-desc");
-      
+  if (localStorage.getItem("theme") === "light") {
+    document.querySelectorAll(".title-link").forEach((link) => {
+      link.addEventListener("mouseover", () => {
+        link.nextElementSibling.classList.toggle("hidden");
+        link.nextElementSibling.classList.toggle("visible-desc-light");
+      });
+      link.addEventListener("mouseout", () => {
+        link.nextElementSibling.classList.toggle("hidden");
+        link.nextElementSibling.classList.toggle("visible-desc-light");
+      });
     });
-    link.addEventListener("mouseout", () => {
-      link.nextElementSibling.classList.toggle("hidden");
-      link.nextElementSibling.classList.toggle("visible-desc");
+  } else {
+    document.querySelectorAll(".title-link").forEach((link) => {
+      link.addEventListener("mouseover", () => {
+        link.nextElementSibling.classList.toggle("hidden");
+        link.nextElementSibling.classList.toggle("visible-desc-dark");
+      });
+      link.addEventListener("mouseout", () => {
+        link.nextElementSibling.classList.toggle("hidden");
+        link.nextElementSibling.classList.toggle("visible-desc-dark");
+      });
     });
-  });
+  }
+
 </script>
 {% endblock %}

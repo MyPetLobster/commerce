@@ -84,12 +84,12 @@
                         </div>
                     </form>
                 </div>
-            {% elif listing.active == False and listing.cancelled == False and listing.shipped == False and listing.in_escrow == True %}
+            {% elif listing.active == False and listing.shipped == False and listing.in_escrow == True %}
                 <div class="center-container winner-alert-div">
                     <h4 style="text-align:center;">Congratulations! You won the auction!</h4>
                     <p>Once the seller confirms shipping, the funds will be released from escrow.</p>
                 </div>
-            {% elif listing.active == False and and listing.shipped == True %}
+            {% elif listing.active == False and listing.shipped == True %}
                 <div class="center-container winner-alert-div">
                     <h4 style="text-align:center;" class="dark-green">Congratulations! You won the auction!</h4>
                     <p>Item has been shipped. Thanks for using Yard Sale!</p>
