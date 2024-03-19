@@ -105,7 +105,51 @@ Yard Sale is a Django web application that allows users to create auction listin
     - Admin can update the closing dates for all listings
 
 
+## Usage
+
+### Optional -- Included Test Database
+- A test database is included with sample data for testing and demonstration purposes.
+- You must update the listing dates or else the auctions will all be closed. 
+    - From github repo, be sure to include the db.sqlite3 file in the commerce directory.
+    - Inside of commerce/auctions/views.py, uncomment the following lines: 
+        - `# from . import maintenance`
+        - `# maintenance.randomize_dates()`
+    - Run the server and navigate to or refresh the index page.
+    - Comment out the lines again and restart the server.
+- Use django admin to view all users, if you want to access a user account the password is lowercase username and email is lowercase username '@email.com'.
+- If you want to erase the bids, messages, comments, and transactions, you can use the admin interface to delete all objects of those types.
+
+
+### Installation and startup
+1. Install Django and required dependencies.
+2. Clone the project repository.
+3. Set up the database and run migrations. (Optional: use the included test database)
+4. Run the Django development server.
+5. Run Redis server, Celery worker, and Celery beat for recurring tasks.
+
+```bash
+pip install -r requirements.txt
+git clone https://github.com/MyPetLobster/commerce
+cd commerce
+python manage.py migrate
+python manage.py createsuperuser (or use the included admin account)
+python manage.py runserver
+
+**In a new terminal window**
+redis-server
+
+**In a new terminal window**
+celery -A commerce worker -l info
+
+**In a new terminal window**
+celery -A commerce beat -l info
+```
+
+
+
 ## Auction Flow and Messaging
+
+I wrote all this out to help me wrap my head around my own system and test all the automated actions. If you're curious about the inner workings of Yard Sale, read on!
 
 ### Placing Bids
 - User clicks on the "Place Bid" button on the listing page.
@@ -125,7 +169,7 @@ Yard Sale is a Django web application that allows users to create auction listin
 
 ### Closing Auctions
 
-#### Close auction early (seller action)
+#### Close Auction Early (seller action)
 - User clicks on the "Close Auction" button on the listing page.
 - If there are less than 24 hours left, the auction cannot be closed early.
 - If there are no active bids, the listing is closed immediately.
@@ -145,7 +189,7 @@ Yard Sale is a Django web application that allows users to create auction listin
   - `listing.cancelled` set to True.
   - Message the seller and bidders: `notify_all_early_closing()` -- includes new closing date and fee notice for seller.
 
-#### Auction Expiration (automatic)
+#### Auction Expiration (automated action)
 - `tasks.set_inactive()`, runs every 60 seconds and is the main task for closing auctions.
   - Calls `helpers.declare_winner()`.
   - If `highest_bid.user.balance < highest_bid.amount`, `declare_winner()` returns without assigning a winner.
@@ -190,44 +234,6 @@ Yard Sale is a Django web application that allows users to create auction listin
   - If no active bids or sufficient funds to cover the bids, the withdrawal is accepted:
     - `send_message_withdrawal_success()`.
     - Update user.balance, record transaction.
-
-
-
-## Usage
-
-### Optional -- Included Test Database
-- A test database is included with sample data for testing and demonstration purposes.
-- You must update the listing dates or else the auctions will all be closed. 
-    - From github repo, be sure to include the db.sqlite3 file in the commerce directory.
-    - Inside of commerce/auctions/views.py, uncomment the following lines: 
-        - `# from . import maintenance`
-        - `# maintenance.randomize_dates()`
-    - Run the server and navigate to or refresh the index page.
-    - Comment out the lines again and restart the server.
-- Use django admin to view all users, if you want to access a user account the password is lowercase username and email is lowercase username '@email.com'.
-- If you want to erase the bids, messages, comments, and transactions, you can use the admin interface to delete all objects of those types.
-
-
-### Installation and startup
-1. Install Django and required dependencies.
-2. Clone the project repository.
-3. Set up the database and run migrations.
-4. Run the Django development server.
-5. Run Redis server, Celery worker, and Celery beat for recurring tasks.
-
-```bash
-pip install -r requirements.txt
-git clone <repository-url>
-cd commerce
-python manage.py migrate
-python manage.py runserver
-redis-server
-celery -A commerce worker -l info
-celery -A commerce beat -l info
-```
-
-
-
 
 
 
@@ -303,7 +309,7 @@ celery -A commerce beat -l info
         - If escrow is empty when it should not be, admin alerted with message send_escrow_empty_alert_message()
 
 
-- **Cancel Bid**
+#### **Cancel Bid** 
     - User clicks on the "Cancel Bid" button on the listing page
     - If the listing expires in less than 24 hours, the bid cannot be cancelled
     - If the cancelled bid was the highest bid:
@@ -320,7 +326,7 @@ celery -A commerce beat -l info
         - message sent to bidder who has bid removed, send_bid_removed_message()
 
 
-- **Withdraw Funds**
+#### **Withdraw Funds**
     - User clicks on the "Withdraw Funds" button on the user's account page
     - Users cannot overdraw their account intentionally from the front end
     - If the user has insufficient funds, the withdrawal is rejected by the form
