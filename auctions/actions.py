@@ -625,7 +625,7 @@ def deposit(request, user_id):
                 notes="Deposit for Fees"
             )
 
-            contrib_messages.success(request, "Deposit successful")
+            contrib_messages.success(request, f"Deposit of ${amount} successful. ${negative_balance} was used to pay off your negative balance.")
             return redirect("profile", user_id=user_id)
         else:
             '''
@@ -662,7 +662,7 @@ def deposit(request, user_id):
             recipient=user,
             notes="Deposit"
         )
-        contrib_messages.success(request, "Deposit successful")
+        contrib_messages.success(request, f"Deposit of ${amount} successful")
 
         return redirect("profile", user_id=user_id)
 

@@ -208,7 +208,7 @@
             <div class="fields-item">
                 <span class="bold">Categories:</span> 
                 {% for category in listing.categories.all %}
-                    <a href="{% url 'category' category.id %}">{{ category.category }}</a> 
+                    <a href="{% url 'category' category.id %}">{{ category.category }}</a>{% if not forloop.last %},&nbsp;{% endif %}
                 {% endfor %}
             </div>
         {% endif %}
