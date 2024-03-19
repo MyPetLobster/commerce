@@ -43,7 +43,8 @@ def filter_profanity(text):
     Function Calls: None
     '''
     banned_words = banned_words_list() 
-    words = re.findall(r'\b[\w\'\-]+\b|[.,!?;: ]', text)  # Split text into words and retain punctuation and whitespace
+    # Split text into words (including '@' for mentions) and retain punctuation and whitespace
+    words = re.findall(r'[\w@\'\-]+|[.,!?;: ]', text)
     censored_text = []
 
     for word in words:
