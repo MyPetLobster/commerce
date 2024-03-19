@@ -19,7 +19,7 @@ class Category(models.Model):
     
 
 class Listing(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     active = models.BooleanField(default=True)
     in_escrow = models.BooleanField(default=False)
