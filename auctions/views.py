@@ -92,6 +92,7 @@ def index(request):
 
     # Uncomment the following lines to use the maintenance functions
     # maintenance.force_set_closing_dates()
+    # maintenance.randomize_dates()
     
     # Celery periodic task here for now
     tasks.check_if_bids_funded()

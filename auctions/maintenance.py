@@ -1,3 +1,6 @@
+from django.utils import timezone
+
+import random
 from datetime import timedelta
 
 from .models import Listing
@@ -31,3 +34,23 @@ def force_set_closing_dates():
             listing.save()
 
 
+def randomize_dates():
+    '''
+    This view is used to randomize the closing dates for all listings,
+    allowing for testing of the website with the included sample data.
+    '''
+
+    listings = Listing.objects.all()
+    now = timezone.now()
+
+    for listing in listings:
+        random_timedelta = timedelta(days=random.randint(0, 6), hours=random.randint(0, 23), minutes=random.randint(0, 59))
+        listing_date = now - random_timedelta
+        listing.date = listing_date
+        listing.closing_date = listing_date + timedelta(days=7)
+        listing.active = True
+        listing.closed = False
+        listing.in_escrow = False
+        listing.shipped = False
+        listing.cancelled = False
+        listing.save()
