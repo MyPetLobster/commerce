@@ -103,7 +103,6 @@ def check_user_fees():
             )
             user.balance = 0
             user.save()
-            # TODO: Send email to user to notify them and give contact info for collections department
 
 
 @shared_task
