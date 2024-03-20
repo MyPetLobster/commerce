@@ -354,6 +354,10 @@ ul {
 }
 
 /* COLORS */
+.light-red {
+  color: rgba(196, 8, 8, 0.616);
+}
+
 .red {
   color: #a90000 !important;
 }
