@@ -2263,6 +2263,10 @@ input {
   body {
     font-size: 0.8em;
   }
+  .popup-form {
+    width: 80vw;
+    left: 50vw;
+  }
   .title-container {
     width: 100%;
     text-align: center;
