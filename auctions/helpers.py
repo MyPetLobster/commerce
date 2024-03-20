@@ -109,7 +109,7 @@ def charge_early_closing_fee(listing_id):
             notes="Early Closing Fee"
         )
 
-        a_msg.send_early_closing_fee_message(listing_id, seller.id, fee_amount)
+        a_msg.send_early_closing_fee_message(listing, fee_amount)
 
 
 
