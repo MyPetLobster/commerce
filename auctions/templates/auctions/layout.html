@@ -104,9 +104,11 @@
                         </div>
                     </div>        
                     <div class="mail-icon-div">
-                        <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" alt="gray mail icon"></span>
-                        <span id="mail-icon-hover" class="mail-icon hidden"><a href="{% url 'messages' current_user.id %}"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" alt="pink mail icon"></a></span>
-                        <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" alt="dark pink mail icon"></span>&nbsp;&nbsp;
+                        <a href="{% url 'messages' current_user.id %}">
+                            <span id="mail-icon-default" class="mail-icon"><img src="{% static 'images/mail-icon-default.png' %}" id="mail-svg" alt="gray mail icon"></span>
+                            <span id="mail-icon-hover" class="mail-icon hidden"><img src="{% static 'images/mail-icon-unread.png' %}" id="mail-svg" alt="pink mail icon"></span>
+                            <span id="mail-icon-unread" class="mail-icon hidden"><img src="{% static 'images/mail-icon-hover.png' %}" id="mail-svg" alt="dark pink mail icon"></span>&nbsp;&nbsp;
+                        </a>
                     </div>
                     <span id="unread-count" class="hidden">You have {{ unread_message_count }} unread messages</span>            
                 {% else %}

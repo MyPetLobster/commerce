@@ -1914,6 +1914,17 @@ input {
   }
 }
 @media (max-width: 500px) {
+  body {
+    font-size: 0.8em;
+  }
+  .title-container {
+    width: 100%;
+    text-align: center;
+  }
+  .thumb-img {
+    height: 100px;
+    width: 100px;
+  }
   .transactions-table {
     max-width: 100%;
     font-size: 0.4em;
@@ -1922,6 +1933,17 @@ input {
     display: inherit;
   }
   .full-date {
+    display: none;
+  }
+  .profile-picture-container {
+    width: 180px;
+    height: 180px;
+  }
+  .message-div,
+  .message-div-full {
+    max-width: 96vw;
+  }
+  #unread-count {
     display: none;
   }
 }
