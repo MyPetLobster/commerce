@@ -2011,7 +2011,8 @@ input {
 }
 
 .terms-conditions-paragraph {
-  width: 600px;
+  width: 100vw;
+  padding: 8px;
   margin-bottom: 40px;
   cursor: pointer;
 }
