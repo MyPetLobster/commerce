@@ -2124,6 +2124,10 @@ input {
   .comments-div {
     max-width: 80vw;
   }
+  .winner-alert-div,
+  .seller-alert-div {
+    max-width: 70vw;
+  }
   .nav-link,
   .user-status {
     font-size: 11px;
