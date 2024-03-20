@@ -2121,6 +2121,9 @@ input {
   }
 }
 @media screen and (max-width: 870px) {
+  .comments-div {
+    max-width: 80vw;
+  }
   .nav-link,
   .user-status {
     font-size: 11px;
