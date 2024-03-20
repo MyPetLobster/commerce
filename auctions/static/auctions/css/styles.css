@@ -86,6 +86,7 @@
 }
 
 #dropdown-options {
+  z-index: 1000;
   transition-duration: 1s;
 }
 
@@ -2222,7 +2223,7 @@ input {
     width: 100%;
   }
   .watchlist-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
   .watchlist-div {
     width: 100%;
@@ -2311,6 +2312,9 @@ input {
     max-width: 80vw;
   }
   .search-results-div {
+    grid-template-columns: 1fr 1fr;
+  }
+  .watchlist-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
