@@ -182,7 +182,7 @@ def notify_all_early_closing(listing_id):
     new_closing_date = f'{new_closing_date.month}/{new_closing_date.day}/{new_closing_date.year}'
 
     if all_unique_bidders.exists():
-        subject = f"An auction you been on is being closed early"
+        subject = f"An auction you bid on is being closed early"
         message = f"""The listing for '{listing.title}' is being closed early by the seller. You have 
                     24 hours to continue bidding on this item. '{listing.title}' will be closed on 
                     {new_closing_date}. Because of the early closure, you will have 24 hours after the auction ends to

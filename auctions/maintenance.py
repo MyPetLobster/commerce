@@ -3,7 +3,7 @@ from django.utils import timezone
 import random
 from datetime import timedelta
 
-from .models import Listing
+from .models import Listing, Bid, Transaction, Message, Watchlist, Comment, User
 
 
 # ADMIN ONLY FUNCTIONS
@@ -53,4 +53,25 @@ def randomize_dates():
         listing.in_escrow = False
         listing.shipped = False
         listing.cancelled = False
+        listing.winner = None
+        listing.price = listing.starting_bid
         listing.save()
+
+
+def reset_database():
+    '''
+    This maintenance function will erase all bids, transactions, messages, comments, and watch lists. 
+    It will also reset the balance of all users to $1000.00, and set the fee_failure_date to None.
+    Then it calls randomize_dates to randomize the dates of all listings.
+    '''
+    users = User.objects.all()
+    for user in users:
+        user.balance = 1000.00
+        user.fee_failure_date = None
+        user.save()
+    Bid.objects.all().delete()
+    Transaction.objects.all().delete()
+    Message.objects.all().delete()
+    Comment.objects.all().delete()
+    Watchlist.objects.all().delete()
+    randomize_dates()
