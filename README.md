@@ -1,4 +1,5 @@
 # Yard Sale - CS50W - Project 2 Commerce
+### By Cory Suzuki - March 2024
 
 This project was developed to satisfy the requirements for CS50W Project 2 Commerce. 
 
@@ -130,6 +131,9 @@ Yard Sale is a Django web application that allows users to create auction listin
 20. **Maintenance Tasks for Admin**
     - Admin can randomize listing dates for demonstration purposes.
     - Admin can update the closing dates for all listings
+    - Admin can use reset_database() to clear all bids, comments, messages, and transactions, while keeping
+      users and listings. This function will also give all users $1,000 and set a random listing date for 
+      all listings. Perfect for testing and demonstration purposes.
 
 
 ## Usage
